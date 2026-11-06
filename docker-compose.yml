@@ -18,6 +18,17 @@ services:
       timeout: 3s
       retries: 20
 
+  # Aplica las migraciones de Alembic y termina; la API espera a que acabe bien.
+  migrar:
+    build:
+      context: ./backend
+      target: ejecucion
+    env_file: .env
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      bd:
+        condition: service_healthy
+
   api:
     build:
       context: ./backend
@@ -26,6 +37,8 @@ services:
     depends_on:
       bd:
         condition: service_healthy
+      migrar:
+        condition: service_completed_successfully
     ports:
       - "127.0.0.1:${PUERTO_API:-8000}:8000"
     healthcheck:
@@ -35,12 +48,14 @@ services:
       retries: 20
       start_period: 5s
 
-  # docker compose run --rm pruebas   (usa un entorno propio, no necesita claves externas)
+  # docker compose run --rm --build pruebas   (usa un entorno propio, no necesita claves externas)
   pruebas:
     profiles: ["pruebas"]
     build:
       context: ./backend
       target: pruebas
+    volumes:
+      - ./docs:/docs:ro  # el diccionario de datos versionado se compara con los modelos
     environment:
       ENTORNO: pruebas
       URL_BD: postgresql+psycopg://${POSTGRES_USER:-sma}:${POSTGRES_PASSWORD:-x}@bd:5432/${POSTGRES_DB:-sma}

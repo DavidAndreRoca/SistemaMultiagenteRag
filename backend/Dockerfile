@@ -8,6 +8,8 @@ WORKDIR /app
 RUN python -m pip install --upgrade "pip>=26.2"
 COPY pyproject.toml ./
 COPY app ./app
+COPY alembic.ini ./
+COPY migraciones ./migraciones
 
 # --- Ejecución (desarrollo y producción) ---
 FROM base AS ejecucion

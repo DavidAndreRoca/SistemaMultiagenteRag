@@ -86,6 +86,10 @@ jobs:
           with psycopg.connect("postgresql://sma:sma_ci@localhost:5432/sma", autocommit=True) as c:
               c.execute("CREATE EXTENSION IF NOT EXISTS vector")
           PY
+      - name: Migraciones al día con los modelos
+        env:
+          URL_BD: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
+        run: alembic upgrade head && alembic check
       # Ninguna prueba de CI llama a un modelo real (apartado 4.7); `modelo_real` queda fuera.
       - name: Pruebas con cobertura mínima de 70 %
         run: pytest -m "not modelo_real" --cov --cov-report=term-missing --cov-report=xml

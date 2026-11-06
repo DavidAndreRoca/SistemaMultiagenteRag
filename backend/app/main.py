@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app import __version__
-from app.api import salud
+from app.api import caso, investigador, salud, sesion
 from app.bd.sesion import crear_fabrica_sesiones, crear_motor
 from app.comun.errores import RespuestaError, registrar_manejadores
 from app.comun.middleware import MiddlewareIncidencia
@@ -58,5 +58,6 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     aplicacion.state.ajustes = ajustes
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
-    aplicacion.include_router(salud.router)
+    for modulo in (salud, sesion, caso, investigador):
+        aplicacion.include_router(modulo.router)
     return aplicacion

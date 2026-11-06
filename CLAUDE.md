@@ -37,9 +37,13 @@ Todo se ejecuta en contenedor con Python 3.12 (igual que la integración continu
 
 ```bash
 docker compose up -d --wait bd api      # base con pgvector y API en http://127.0.0.1:8000
-docker compose run --rm pruebas         # suite completa con base real y cobertura
+docker compose run --rm --build pruebas # suite completa con base real y cobertura
 docker compose down                     # detener (añadir -v para borrar el volumen)
+docker compose run --rm --no-deps api python -m app.seguridad.crear_investigador INV-01
+docker compose run --rm --no-deps api python -m app.bd.semillas   # datos ficticios de desarrollo
 ```
+
+Esquema de datos: solo por migración de Alembic (`backend/migraciones/`). Tras cambiar un modelo, regenere `docs/diccionario-de-datos.md` con `python -m app.bd.diccionario`. Toda ruta nueva se añade a `backend/pruebas/matriz_autorizacion.py`; todo acceso a datos pasa por `app/repositorios/` con `ContextoAcceso` (`app/seguridad/dependencias.py` lo construye desde la sesión).
 
 Desarrollo local sin contenedor para análisis rápido (desde `backend/`, con entorno virtual):
 

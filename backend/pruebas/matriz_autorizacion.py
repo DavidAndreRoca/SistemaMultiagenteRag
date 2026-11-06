@@ -1,0 +1,64 @@
+"""Matriz automática de autorización (T05, apartado 4.5).
+
+**Toda ruta nueva se añade aquí en la misma solicitud de cambio.** Una prueba unitaria
+falla si la aplicación expone una ruta que no está en la matriz (o al revés), y una
+prueba de integración recorre la matriz con sesiones de cada rol y de otro caso.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import StrEnum
+from typing import Any
+
+
+class Politica(StrEnum):
+    PUBLICA = "publica"  # sin sesión
+    SESION = "sesion"  # cualquier sesión válida (incluso con contraseña inicial pendiente)
+    CASO = "caso"  # solo A1
+    INVESTIGADOR = "investigador"  # solo A2
+
+
+@dataclass(frozen=True)
+class Entrada:
+    politica: Politica
+    ejemplo: str | None = None  # ruta concreta si tiene parámetros; {CASO_A} = código del caso A
+    cuerpo: dict[str, Any] = field(default_factory=dict)
+    datos_de_caso: bool = False  # devuelve datos de un caso: otro caso no debe verlos
+
+
+MATRIZ: dict[tuple[str, str], Entrada] = {
+    ("GET", "/salud"): Entrada(Politica.PUBLICA),
+    ("POST", "/sesion"): Entrada(Politica.PUBLICA, cuerpo={"codigo": "X", "contrasena": "x"}),
+    ("GET", "/sesion"): Entrada(Politica.SESION),
+    ("DELETE", "/sesion"): Entrada(Politica.SESION),
+    ("POST", "/sesion/contrasena"): Entrada(
+        Politica.SESION, cuerpo={"contrasena_actual": "x", "contrasena_nueva": "y"}
+    ),
+    ("GET", "/caso"): Entrada(Politica.CASO, datos_de_caso=True),
+    ("GET", "/investigador/colecciones"): Entrada(Politica.INVESTIGADOR),
+    ("POST", "/investigador/colecciones/cientificas"): Entrada(
+        Politica.INVESTIGADOR, cuerpo={"tema": "TEMA-MATRIZ"}
+    ),
+    ("GET", "/investigador/casos"): Entrada(Politica.INVESTIGADOR),
+    ("POST", "/investigador/casos"): Entrada(
+        Politica.INVESTIGADOR,
+        cuerpo={"codigo": "CASO-MATRIZ", "tipo_autoria": "individual", "tema": "TEMA-A"},
+    ),
+    ("GET", "/investigador/casos/{codigo}"): Entrada(
+        Politica.INVESTIGADOR, ejemplo="/investigador/casos/{CASO_A}"
+    ),
+    ("POST", "/investigador/casos/{codigo}/desactivar"): Entrada(
+        Politica.INVESTIGADOR, ejemplo="/investigador/casos/{CASO_A}/desactivar"
+    ),
+    ("POST", "/investigador/casos/{codigo}/reactivar"): Entrada(
+        Politica.INVESTIGADOR, ejemplo="/investigador/casos/{CASO_A}/reactivar"
+    ),
+    ("PUT", "/investigador/casos/{codigo}/norma"): Entrada(
+        Politica.INVESTIGADOR,
+        ejemplo="/investigador/casos/{CASO_A}/norma",
+        cuerpo={"norma": "ieee"},
+    ),
+}
+
+RUTAS_EXCLUIDAS = {"/docs", "/docs/oauth2-redirect", "/openapi.json"}
