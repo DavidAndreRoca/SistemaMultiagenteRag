@@ -5,9 +5,6 @@ El motor se crea al arrancar la aplicación (``lifespan``) y se cierra al apagar
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator
-
-from fastapi import Request
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -29,10 +26,3 @@ def crear_motor(ajustes: Ajustes) -> AsyncEngine:
 
 def crear_fabrica_sesiones(motor: AsyncEngine) -> async_sessionmaker[AsyncSession]:
     return async_sessionmaker(motor, expire_on_commit=False)
-
-
-async def obtener_sesion(peticion: Request) -> AsyncIterator[AsyncSession]:
-    """Dependencia de FastAPI: una sesión por petición."""
-    fabrica: async_sessionmaker[AsyncSession] = peticion.app.state.fabrica_sesiones
-    async with fabrica() as sesion:
-        yield sesion

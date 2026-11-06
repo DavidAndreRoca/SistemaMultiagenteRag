@@ -2,17 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Literal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import __version__
-from app.bd.sesion import obtener_sesion
 from app.comun.registro import obtener_registrador
+from app.seguridad.dependencias import Unidad
 
 router = APIRouter(tags=["salud"])
 
@@ -31,16 +29,12 @@ class EstadoSalud(BaseModel):
     responses={503: {"model": EstadoSalud, "description": "Base o extensión no disponible"}},
     summary="Estado de la aplicación y de sus dependencias básicas",
 )
-async def salud(sesion: Annotated[AsyncSession, Depends(obtener_sesion)]) -> JSONResponse:
+async def salud(unidad: Unidad) -> JSONResponse:
     base_conectada = False
     version_vector: str | None = None
     try:
-        await sesion.execute(text("SELECT 1"))
+        version_vector = await unidad.salud.version_extension_vector()
         base_conectada = True
-        resultado = await sesion.execute(
-            text("SELECT extversion FROM pg_extension WHERE extname = 'vector'")
-        )
-        version_vector = resultado.scalar_one_or_none()
     except Exception as error:
         # Solo el tipo de error: el mensaje puede contener la URL de conexión.
         obtener_registrador("salud").warning(

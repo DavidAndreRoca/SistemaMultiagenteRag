@@ -63,12 +63,27 @@ class FormateadorJson(logging.Formatter):
         return json.dumps(evento, ensure_ascii=False, default=str)
 
 
+class _ManejadorSalidaEstandar(logging.StreamHandler):  # type: ignore[type-arg]
+    """Escribe en el ``sys.stdout`` vigente al emitir (no en el de la configuración)."""
+
+    def __init__(self) -> None:
+        super().__init__(sys.stdout)
+
+    @property
+    def stream(self) -> Any:
+        return sys.stdout
+
+    @stream.setter
+    def stream(self, _valor: Any) -> None:
+        pass
+
+
 def configurar_registro(nivel: str = "INFO") -> logging.Logger:
     """Configura el registrador raíz de la aplicación para emitir JSON por stdout."""
     registrador = logging.getLogger(NOMBRE_REGISTRADOR)
     registrador.setLevel(nivel)
     registrador.handlers.clear()
-    manejador = logging.StreamHandler(sys.stdout)
+    manejador = _ManejadorSalidaEstandar()
     manejador.setFormatter(FormateadorJson())
     registrador.addHandler(manejador)
     registrador.propagate = False
