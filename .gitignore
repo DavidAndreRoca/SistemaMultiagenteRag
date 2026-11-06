@@ -1,0 +1,38 @@
+# Secretos y entorno local (RNF-16)
+.env
+.env.*
+!.env.example
+
+# Datos de prueba y de trabajo (PDF, borradores): nunca en Git
+datos/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Cachés de modelos (servicio_modelos, T08)
+.cache/
+modelos_cache/
+*.safetensors
+*.onnx
+
+# Frontend
+node_modules/
+frontend/dist/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

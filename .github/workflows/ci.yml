@@ -1,0 +1,123 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analisis:
+    name: Análisis (Ruff)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: python -m pip install --upgrade "pip>=26.2" && pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+
+  tipado:
+    name: Tipado (mypy estricto)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: python -m pip install --upgrade "pip>=26.2" && pip install -e ".[dev]"
+      - run: mypy
+
+  pruebas:
+    name: Pruebas y cobertura (PostgreSQL con pgvector)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      bd:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: sma
+          POSTGRES_PASSWORD: sma_ci
+          POSTGRES_DB: sma
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sma -d sma"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      ENTORNO: pruebas
+      URL_BD: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
+      URL_BD_PRUEBAS: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
+      SECRETO_SESION: secreto-solo-para-pruebas-automaticas-0123456789
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: python -m pip install --upgrade "pip>=26.2" && pip install -e ".[dev]"
+      - name: Crear la extensión vector
+        run: |
+          python - <<'PY'
+          import psycopg
+          with psycopg.connect("postgresql://sma:sma_ci@localhost:5432/sma", autocommit=True) as c:
+              c.execute("CREATE EXTENSION IF NOT EXISTS vector")
+          PY
+      # Ninguna prueba de CI llama a un modelo real (apartado 4.7); `modelo_real` queda fuera.
+      - name: Pruebas con cobertura mínima de 70 %
+        run: pytest -m "not modelo_real" --cov --cov-report=term-missing --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cobertura
+          path: backend/coverage.xml
+
+  dependencias:
+    name: Escaneo de dependencias (pip-audit)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade "pip>=26.2" && pip install -e ".[dev]"
+      - run: pip-audit --local --skip-editable
+      # npm audit se añade cuando exista frontend/ (T13).
+
+  secretos:
+    name: Escaneo de secretos (gitleaks)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # Se usa la imagen oficial y no la acción, que exige licencia en organizaciones.
+      - name: gitleaks
+        run: |
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.21.2 \
+            detect --source /repo --redact --verbose --no-banner

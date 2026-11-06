@@ -1,0 +1,54 @@
+# Servicios de desarrollo. Cada integrante usa su propio COMPOSE_PROJECT_NAME y puertos
+# (ver .env.example). GROBID y el servicio de modelos van en un proyecto "compartido" (T08).
+services:
+  bd:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sma}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-sma}
+    ports:
+      - "127.0.0.1:${PUERTO_BD:-5432}:5432"
+    volumes:
+      - datos_bd:/var/lib/postgresql/data
+      - ./docker/postgres/01-extension-vector.sql:/docker-entrypoint-initdb.d/01-extension-vector.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ./backend
+      target: ejecucion
+    env_file: .env
+    depends_on:
+      bd:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${PUERTO_API:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/salud', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  # docker compose run --rm pruebas   (usa un entorno propio, no necesita claves externas)
+  pruebas:
+    profiles: ["pruebas"]
+    build:
+      context: ./backend
+      target: pruebas
+    environment:
+      ENTORNO: pruebas
+      URL_BD: postgresql+psycopg://${POSTGRES_USER:-sma}:${POSTGRES_PASSWORD:-x}@bd:5432/${POSTGRES_DB:-sma}
+      URL_BD_PRUEBAS: postgresql+psycopg://${POSTGRES_USER:-sma}:${POSTGRES_PASSWORD:-x}@bd:5432/${POSTGRES_DB:-sma}
+      SECRETO_SESION: secreto-solo-para-pruebas-automaticas-0123456789
+    depends_on:
+      bd:
+        condition: service_healthy
+
+volumes:
+  datos_bd:
