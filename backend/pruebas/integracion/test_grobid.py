@@ -1,16 +1,19 @@
-"""T08: GROBID operativo (marca ``servicios_compartidos``).
+"""T08 y T09: GROBID operativo y el cliente de la aplicación (marca ``servicios_compartidos``).
 
 Se ejecuta solo si está definida ``URL_GROBID_PRUEBAS`` (por ejemplo,
-``http://127.0.0.1:8070``). El cliente de GROBID de la aplicación llega en T09; aquí
-solo se comprueba que el servicio extrae la cabecera de un PDF ficticio.
+``http://127.0.0.1:8070``).
 """
 
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import httpx
 import pytest
+
+from app.corpus.esquemas import Autor
+from app.corpus.grobid import ClienteGrobid
 
 pytestmark = pytest.mark.servicios_compartidos
 
@@ -83,3 +86,16 @@ def test_grobid_extrae_la_cabecera_de_un_pdf(url: str) -> None:
     assert "<TEI" in tei
     assert "Ansiedad ante los examenes" in tei
     assert "Quispe" in tei
+
+
+def test_el_cliente_de_la_aplicacion_lee_la_cabecera_del_articulo_de_muestra(url: str) -> None:
+    """T09: misma respuesta que la grabada en pruebas/contrato/grobid."""
+    pdf = Path(__file__).resolve().parents[1] / "datos" / "pdf" / "articulo_es.pdf"
+    cliente = ClienteGrobid(url, tiempo_maximo_s=600)
+    try:
+        metadatos = cliente.cabecera(pdf)
+    finally:
+        cliente.cerrar()
+    assert metadatos.titulo is not None and metadatos.titulo.startswith("Tutoría entre pares")
+    assert metadatos.autores[0] == Autor(nombres="Lucía", apellidos="Mendoza Vargas")
+    assert (metadatos.doi, metadatos.idioma) == ("10.5555/rfes.2026.0042", "es")

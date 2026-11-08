@@ -57,6 +57,12 @@ python -m app.diagnostico               # prueba las claves de Groq y OpenAlex (
 
 Servicios compartidos (T08): GROBID y `servicio_modelos/` (bge-m3 y bge-reranker-v2-m3 en CPU) van en `compartido/docker-compose.yml`, proyecto `sma_compartido`, una sola vez por servidor. `servicio_modelos/` es un paquete aparte (`servicio/`), con su propio `pyproject.toml`, pruebas y trabajo de CI. Revisiones de los modelos fijadas en `servicio/catalogo.py`; versiones de inferencia en `restricciones.txt`. En `app/`, solo se usan las interfaces de `app/inferencia/interfaces.py`.
 
+Canal de PDF (T09): `app/corpus/` (`procesar_pdf` en `extraccion.py`, sin acceso a la base). Docling y el tokenizador van en el extra `corpus`, con el árbol fijado en `backend/restricciones-corpus.txt` (PyTorch en CPU). Sus recursos (modelo de diseño de página y tokenizador de bge-m3) tienen revisión y huella en `app/corpus/recursos.py`. Los PDF de muestra son ficticios y se regeneran con `python -m pruebas.datos.generar_pdf_muestra`.
+
+```bash
+docker compose --profile pruebas run --rm --no-deps pruebas python -m app.corpus.recursos /recursos  # una vez, 190 MB
+```
+
 ```bash
 docker compose -f compartido/docker-compose.yml --profile descarga run --rm --build descargar_modelos  # una vez, 4,6 GB
 docker compose -f compartido/docker-compose.yml up -d --wait   # modelos en :8001, GROBID en :8070

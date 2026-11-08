@@ -142,6 +142,44 @@ jobs:
           sed 's/+cpu//' restricciones.txt > "$RUNNER_TEMP/restricciones.txt"
           pip-audit --requirement "$RUNNER_TEMP/restricciones.txt" --no-deps --disable-pip
 
+  # T09. Canal de PDF con Docling y el tokenizador de bge-m3 reales sobre los PDF de
+  # muestra; GROBID con sus respuestas grabadas. Árbol fijado con PyTorch en CPU. Los
+  # recursos (modelo de diseño de página y tokenizador) se descargan con revisión y huella
+  # fijadas y se guardan en caché.
+  corpus:
+    name: Canal de PDF (Docling, tokenizador y dependencias)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DIRECTORIO_RECURSOS_CORPUS: /tmp/recursos-corpus
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/restricciones-corpus.txt
+      - name: Instalar la API con el extra corpus y el árbol fijado
+        run: |
+          python -m pip install --upgrade "pip>=26.2"
+          pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+            -c restricciones-corpus.txt -e ".[dev,corpus]"
+      - uses: actions/cache@v4
+        with:
+          path: /tmp/recursos-corpus
+          key: recursos-corpus-${{ hashFiles('backend/app/corpus/recursos.py') }}
+      - name: Descargar y verificar los recursos del canal
+        run: python -m app.corpus.recursos "$DIRECTORIO_RECURSOS_CORPUS"
+      - name: Pruebas del canal con Docling real
+        run: pytest -m corpus pruebas/integracion/test_canal_pdf.py
+      # Sin la etiqueta local "+cpu", que PyPI no conoce, torch también se audita.
+      - name: Escaneo del árbol fijado (Docling, torch, transformers)
+        run: |
+          sed 's/+cpu//' restricciones-corpus.txt > "$RUNNER_TEMP/restricciones-corpus.txt"
+          pip-audit --requirement "$RUNNER_TEMP/restricciones-corpus.txt" --no-deps --disable-pip
+
   secretos:
     name: Escaneo de secretos (gitleaks)
     runs-on: ubuntu-24.04

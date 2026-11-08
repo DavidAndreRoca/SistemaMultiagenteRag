@@ -56,8 +56,12 @@ services:
       target: pruebas
     volumes:
       - ./docs:/docs:ro  # el diccionario de datos versionado se compara con los modelos
+      # Recursos del canal de PDF (T09). Se llenan una vez con:
+      # docker compose run --rm --no-deps pruebas python -m app.corpus.recursos /recursos
+      - recursos_corpus:/recursos
     environment:
       ENTORNO: pruebas
+      DIRECTORIO_RECURSOS_CORPUS: /recursos
       URL_BD: postgresql+psycopg://${POSTGRES_USER:-sma}:${POSTGRES_PASSWORD:-x}@bd:5432/${POSTGRES_DB:-sma}
       URL_BD_PRUEBAS: postgresql+psycopg://${POSTGRES_USER:-sma}:${POSTGRES_PASSWORD:-x}@bd:5432/${POSTGRES_DB:-sma}
       SECRETO_SESION: secreto-solo-para-pruebas-automaticas-0123456789
@@ -67,3 +71,4 @@ services:
 
 volumes:
   datos_bd:
+  recursos_corpus:

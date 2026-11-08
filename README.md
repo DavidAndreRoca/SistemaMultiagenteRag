@@ -127,6 +127,18 @@ URL_SERVICIO_MODELOS_PRUEBAS=http://127.0.0.1:8001 URL_GROBID_PRUEBAS=http://127
 
 Decisiones y mediciones: `docs/decisiones/T08-servicios-compartidos.md`.
 
+## Canal de extracción de PDF (T09)
+
+`app/corpus/` convierte un PDF de artículo en fragmentos IMRaD con sección, título original, páginas y tokens, más los metadatos de cabecera de GROBID, sin tocar la base (`procesar_pdf` en `extraccion.py`). Docling y el tokenizador de bge-m3 van en el extra `corpus` de `backend/pyproject.toml`; la imagen de la API y la de pruebas lo instalan con el árbol fijado (`backend/restricciones-corpus.txt`, PyTorch en CPU).
+
+Los recursos del canal (modelo de diseño de página de Docling y tokenizador) se descargan una vez, con revisión y huella verificadas, al volumen `recursos_corpus`:
+
+```bash
+docker compose --profile pruebas run --rm --no-deps pruebas python -m app.corpus.recursos /recursos
+```
+
+Con eso, `docker compose run --rm --build pruebas` incluye las pruebas del canal con Docling real (marca `corpus`). Los PDF de muestra de `backend/pruebas/datos/pdf/` son ficticios y se regeneran con `python -m pruebas.datos.generar_pdf_muestra`. Decisiones: `docs/decisiones/T09-extraccion-y-segmentacion.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:
@@ -153,4 +165,4 @@ Ver `docs/operacion/servidor-desarrollo.md` (T01).
 
 ## Integración continua
 
-`.github/workflows/ci.yml` ejecuta: análisis (Ruff), tipado (mypy estricto), pruebas con PostgreSQL con pgvector y cobertura mínima de 70 %, escaneo de dependencias (`pip-audit`) y escaneo de secretos (gitleaks).
+`.github/workflows/ci.yml` ejecuta: análisis (Ruff), tipado (mypy estricto), pruebas con PostgreSQL con pgvector y cobertura mínima de 70 %, escaneo de dependencias (`pip-audit`), escaneo de secretos (gitleaks), el servicio de modelos (T08) y el canal de PDF con Docling real y su árbol fijado (T09).

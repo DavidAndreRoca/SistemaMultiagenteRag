@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Respuesta construida a mano con la forma de GROBID 0.9.1, para probar campos que las
+     cabeceras grabadas de los PDF de muestra no traen (fecha y revista). Datos ficticios. -->
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:lang="es">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Título   ficticio
+					en dos líneas</title>
+			</titleStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">María</forename><forename type="middle">José</forename><surname>Paredes Lima</surname></persName>
+						</author>
+						<author>
+							<persName><surname>Sin Nombre</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Solo</forename></persName>
+						</author>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Revista Ficticia de Educación Superior</title>
+						<imprint>
+							<date type="submitted" when="2020-01-10">10 de enero de 2020</date>
+							<date type="published" when="2021-03-15">15 de marzo de 2021</date>
+						</imprint>
+					</monogr>
+					<idno type="DOI">https://doi.org/10.5555/RFES.2021.0099</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+	</teiHeader>
+	<text xml:lang="es"/>
+</TEI>

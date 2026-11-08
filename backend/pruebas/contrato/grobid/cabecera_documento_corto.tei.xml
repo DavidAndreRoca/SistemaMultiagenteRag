@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="es">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Nota breve ficticia sobre hábitos de estudio en primer ciclo</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Equipo</forename><surname>De Investigación</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Ficticio</forename><surname>Introducción</surname></persName>
+						</author>
+						<title level="a" type="main">Nota breve ficticia sobre hábitos de estudio en primer ciclo</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">95392696D5166D8E6E90EA8983486118</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.1" ident="GROBID" when="2026-11-08T22:19+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.1</label>
+					<label type="parameters">startPage=0, endPage=2, consolidateCitations=0, consolidateHeader=0, consolidateFunders=0, includeRawAffiliations=false, includeRawCitations=false, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=null, flavor=null, debugLabelingCollector=disabled</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+				<p>Esta nota breve y ficticia describe en pocas líneas los hábitos de estudio de un grupo de estudiantes de primer ciclo. No presenta métodos ni resultados completos, por lo que no alcanza la extensión mínima que se espera de un artículo empírico. Los estudiantes indicaron que estudian sobre todo la noche anterior a las evaluaciones y que prefieren repasar con compañeros antes que en solitario.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="es">
+	</text>
+</TEI>
