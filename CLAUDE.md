@@ -55,6 +55,14 @@ pytest                                  # las pruebas de integración se omiten 
 python -m app.diagnostico               # prueba las claves de Groq y OpenAlex (necesita las variables cargadas)
 ```
 
+Servicios compartidos (T08): GROBID y `servicio_modelos/` (bge-m3 y bge-reranker-v2-m3 en CPU) van en `compartido/docker-compose.yml`, proyecto `sma_compartido`, una sola vez por servidor. `servicio_modelos/` es un paquete aparte (`servicio/`), con su propio `pyproject.toml`, pruebas y trabajo de CI. Revisiones de los modelos fijadas en `servicio/catalogo.py`; versiones de inferencia en `restricciones.txt`. En `app/`, solo se usan las interfaces de `app/inferencia/interfaces.py`.
+
+```bash
+docker compose -f compartido/docker-compose.yml --profile descarga run --rm --build descargar_modelos  # una vez, 4,6 GB
+docker compose -f compartido/docker-compose.yml up -d --wait   # modelos en :8001, GROBID en :8070
+docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --build pruebas_modelos  # pesos reales
+```
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

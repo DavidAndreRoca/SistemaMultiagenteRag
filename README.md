@@ -95,6 +95,38 @@ Toda la configuración sale de variables de entorno validadas al arrancar. Si fa
 
 Los parámetros funcionales (umbrales, normas de citación, modelos) no son variables de entorno: vivirán en la configuración versionada (T04 y T35).
 
+## Servicios compartidos: GROBID y modelos de embeddings y reranking (T08)
+
+GROBID y el servicio de modelos (`servicio_modelos/`, con bge-m3 y bge-reranker-v2-m3 en CPU) corren una sola vez por servidor, en el proyecto de Compose `compartido`. La primera vez:
+
+```bash
+cp compartido/.env.example compartido/.env
+```
+
+```bash
+docker compose -f compartido/docker-compose.yml --profile descarga run --rm --build descargar_modelos
+```
+
+La descarga baja unos 4,6 GB de pesos, con revisiones fijas y huellas verificadas, al volumen `sma_modelos`. Después:
+
+```bash
+docker compose -f compartido/docker-compose.yml up -d --wait
+```
+
+El servicio de modelos responde en `http://127.0.0.1:8001` (`/embeber`, `/reordenar`, `/salud`) y GROBID en `http://127.0.0.1:8070`. Necesitan unos 6 GB de memoria entre los dos. Las pruebas con los pesos reales (determinismo, memoria y tiempo) se ejecutan bajo demanda:
+
+```bash
+docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --build pruebas_modelos
+```
+
+Las pruebas de la API contra los servicios en marcha también se ejecutan bajo demanda. Desde `backend/`, con el entorno virtual:
+
+```bash
+URL_SERVICIO_MODELOS_PRUEBAS=http://127.0.0.1:8001 URL_GROBID_PRUEBAS=http://127.0.0.1:8070 pytest -m servicios_compartidos
+```
+
+Decisiones y mediciones: `docs/decisiones/T08-servicios-compartidos.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

@@ -77,8 +77,17 @@ class Ajustes(BaseModel):
         default=None, validation_alias=AliasChoices("CLAVE_GEMINI")
     )
 
+    # Servicio compartido de modelos (T08). Opcional hasta que la indexación lo use (T10).
+    url_servicio_modelos: str | None = Field(
+        default=None, validation_alias=AliasChoices("URL_SERVICIO_MODELOS")
+    )
+
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:
+        if self.url_servicio_modelos and not self.url_servicio_modelos.startswith(
+            ("http://", "https://")
+        ):
+            raise ValueError("URL_SERVICIO_MODELOS debe empezar con http:// o https://")
         faltantes: list[str] = []
         if _vacia(self.url_bd):
             faltantes.append("URL_BD")

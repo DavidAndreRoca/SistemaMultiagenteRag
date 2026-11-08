@@ -58,6 +58,7 @@ addopts = "-ra --strict-markers"
 markers = [
     "integracion: requiere PostgreSQL real (URL_BD_PRUEBAS)",
     "modelo_real: llama a un modelo de lenguaje real; solo bajo demanda, nunca en la integracion continua",
+    "servicios_compartidos: usa el servicio de modelos real (URL_SERVICIO_MODELOS_PRUEBAS); solo bajo demanda",
 ]
 
 [tool.coverage.run]
