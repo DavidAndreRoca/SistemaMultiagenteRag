@@ -113,6 +113,35 @@ jobs:
       - run: pip-audit --local --skip-editable
       # npm audit se añade cuando exista frontend/ (T13).
 
+  # T08. Sin pesos ni PyTorch: el contrato se prueba con motores de prueba; las pruebas con
+  # los pesos reales (marca modelos_locales) se ejecutan bajo demanda en el servidor.
+  servicio_modelos:
+    name: Servicio de modelos (análisis, tipado, pruebas y dependencias)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: servicio_modelos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: servicio_modelos/pyproject.toml
+      - run: python -m pip install --upgrade "pip>=26.2" && pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+      - name: Pruebas con cobertura mínima de 70 %
+        run: pytest -m "not modelos_locales" --cov
+      - name: Escaneo de dependencias instaladas
+        run: pip-audit --local --skip-editable
+      # Sin la etiqueta local "+cpu", que PyPI no conoce, torch también se audita.
+      - name: Escaneo del árbol fijado de inferencia (torch, transformers)
+        run: |
+          sed 's/+cpu//' restricciones.txt > "$RUNNER_TEMP/restricciones.txt"
+          pip-audit --requirement "$RUNNER_TEMP/restricciones.txt" --no-deps --disable-pip
+
   secretos:
     name: Escaneo de secretos (gitleaks)
     runs-on: ubuntu-24.04

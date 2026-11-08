@@ -59,7 +59,21 @@ Resultado de la última ejecución (6 de noviembre de 2026): `pgvector/pgvector:
 
 ## 5. Servicios compartidos y bases por integrante
 
-* **Proyecto de Compose `compartido`** (GROBID y servicio de modelos, T08): se ejecuta una sola vez para ambos integrantes, para no duplicar memoria (R-02).
+* **Proyecto de Compose `compartido`** (GROBID y servicio de modelos, T08): se ejecuta una sola vez para ambos integrantes, para no duplicar memoria (R-02). Lo levanta uno de los dos, desde su copia del repositorio:
+
+```bash
+cp compartido/.env.example compartido/.env
+```
+
+```bash
+docker compose -f compartido/docker-compose.yml --profile descarga run --rm --build descargar_modelos
+```
+
+```bash
+docker compose -f compartido/docker-compose.yml up -d --wait
+```
+
+  La descarga baja unos 4,6 GB al volumen `sma_modelos`, verifica las huellas y solo hace falta una vez. Luego compruebe `curl http://127.0.0.1:8001/salud` (modelos, revisiones y memoria) y `curl http://127.0.0.1:8070/api/isalive` (GROBID). Para medir la memoria del conjunto: `docker stats --no-stream` y `free -m` (el criterio de T08 exige que no haya intercambio a disco). Las pruebas con los pesos reales: `docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --build pruebas_modelos`. Detalle en `docs/decisiones/T08-servicios-compartidos.md`.
 * **Proyecto de Compose por integrante** (base de datos y API de este repositorio): cada uno define en su `.env` un `COMPOSE_PROJECT_NAME` propio (`sma_david`, `sma_angel`) y puertos distintos (`PUERTO_BD`, `PUERTO_API`). El `docker-compose.yml` de este repositorio publica los puertos solo en `127.0.0.1`; para ver la API desde su equipo use un túnel SSH:
 
 ```bash
@@ -83,3 +97,4 @@ Oracle puede reclamar las instancias Always Free con uso muy bajo durante un per
 | `docker run` de PostgreSQL con pgvector funciona en ARM | `scripts/verificar-herramientas.sh` | Pendiente |
 | Claude Code se inicia en la carpeta de cada usuario | `claude --version` y arranque en la carpeta | Pendiente |
 | Imágenes previstas existen para ARM | `scripts/verificar-imagenes-arm.sh` | **Verificado** (con la salvedad de GROBID) |
+| (De T08) Servicios compartidos sanos y sin intercambio a disco con dos bases | `compartido/docker-compose.yml` (`up`, `pruebas_modelos`), `docker stats` y `free -m` | Pendiente: instancia en trámite con Oracle (incidente 261107-001540); ver `docs/decisiones/T08-emulacion-arm64.md` |

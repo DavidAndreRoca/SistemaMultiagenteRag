@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 6 de noviembre de 2026 (Fase 2: T04 a T07, y contraste de T04 con la especificación de la Fase 1, apartado 10.9).
+**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 en la rama `t08-servicios-compartidos` (apartado 11).
 
 ## Resumen
 
@@ -10,13 +10,14 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | --- | --- | --- |
 | T00 (F0) | Cuentas, accesos y secretos | Fuera de esta sesión: lo realizan los integrantes. Sin verificar |
 | **T01 (F1)** | Servidor de desarrollo en Oracle | **Parcial**: documentación y verificación de imágenes ARM hechas; la instancia no existe aún |
-| **T02 (F1)** | Repositorio, calidad de código e integración continua | **Implementada**; el repositorio ya está en GitHub (`DavidAndreRoca/SistemaMultiagenteRag`, confirmación `84f444c`). No se pudo consultar el resultado de la CI desde esta sesión (credenciales de `gh` inválidas) |
+| **T02 (F1)** | Repositorio, calidad de código e integración continua | **Implementada**; el repositorio está en GitHub (`DavidAndreRoca/SistemaMultiagenteRag`). La CI de `84f444c` terminó en verde (ejecución 42281717057). Falta la protección de la rama principal (T00) |
 | **T03 (F1)** | Infraestructura base de la aplicación (H0) | **Completa y verificada** (criterios de aceptación cumplidos) |
 | **T04 (F2)** | Modelo de datos, diccionario y migraciones | **Completa y verificada**. Contrastada con la especificación de la Fase 1 y la ficha de métricas (migraciones 0005 y 0006, apartado 10.9). Queda provisional tau = 0.5 hasta T34 |
 | **T05 (F2)** | Repositorios con aislamiento por caso | **Completa y verificada** |
 | **T06 (F2)** | Autenticación, roles y sesiones | **Completa y verificada** |
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
-| T08 en adelante | | No iniciadas |
+| **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada y verificada en local**. Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
+| T09 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -36,7 +37,7 @@ Entorno de la máquina de trabajo: Windows 11, Docker 27.5.1 (amd64), Git 2.46, 
 
 | Actividad | Estado | Evidencia |
 | --- | --- | --- |
-| 1. Crear la instancia ARM | **Pendiente** (requiere la cuenta de Oracle de David) | |
+| 1. Crear la instancia ARM | **Pendiente**: en trámite con Oracle (incidente 261107-001540) | |
 | 2. Endurecer SSH (solo llave) | **Pendiente**; procedimiento documentado | `docs/operacion/servidor-desarrollo.md`, apartado 2 |
 | 3. Usuarios Linux por integrante | **Pendiente**; procedimiento documentado | idem, apartado 3 |
 | 4. Instalar Docker, Compose, Git, Python 3.12, Node LTS, Claude Code | **Pendiente**; script de verificación listo | `scripts/verificar-herramientas.sh` |
@@ -46,7 +47,7 @@ Entorno de la máquina de trabajo: Windows 11, Docker 27.5.1 (amd64), Git 2.46, 
 
 ### Hallazgo: GROBID sin arm64 en la serie 0.8.x (riesgo R-03)
 
-La consulta de manifiestos mostró que `grobid/grobid:0.8.x` (todas sus variantes), `0.9.0` y `0.9.1-full` son **solo amd64**. Solo `grobid/grobid:0.9.0-crf` y `0.9.1-crf` publican arm64. Como pide T01, quedó registrado en `docs/decisiones/T01-grobid-arm64.md` con una **propuesta** (usar `0.9.1-crf` y medir su calidad en T09) que **deben confirmar los integrantes** antes de T08.
+La consulta de manifiestos mostró que `grobid/grobid:0.8.x` (todas sus variantes), `0.9.0` y `0.9.1-full` son **solo amd64**. Solo `grobid/grobid:0.9.0-crf` y `0.9.1-crf` publican arm64. Quedó registrado en `docs/decisiones/T01-grobid-arm64.md`. Los autores **confirmaron** usar `0.9.1-crf` el 6 de noviembre de 2026, y su calidad se mide en T09.
 
 ### Criterios de aceptación
 
@@ -55,6 +56,7 @@ La consulta de manifiestos mostró que `grobid/grobid:0.8.x` (todas sus variante
 | Ambos integrantes entran por SSH con su usuario | Pendiente |
 | `docker run` de PostgreSQL con pgvector en ARM | Pendiente en ARM. La imagen publica arm64 (verificado) y funciona en amd64 local |
 | Claude Code se inicia en la carpeta de cada usuario | Pendiente |
+| (De T08) GROBID 0.9.1-crf y el servicio de modelos responden en la instancia ARM, y la memoria de los servicios compartidos más dos bases cabe sin intercambio | Pendiente. En emulación arm64, GROBID respondió y el servicio de modelos falló por una limitación del emulador (`docs/decisiones/T08-emulacion-arm64.md`). Se comprueba en cuanto Oracle entregue la instancia (incidente 261107-001540) |
 
 ---
 
@@ -82,7 +84,7 @@ La consulta de manifiestos mostró que `grobid/grobid:0.8.x` (todas sus variante
 | --- | --- | --- |
 | Una solicitud de cambio con una prueba que falla queda bloqueada | **Verificado en local; pendiente en GitHub** | Con una prueba `assert 1 == 2` añadida, pytest sale con código 1, lo que hace fallar el trabajo `pruebas`. El bloqueo efectivo requiere la protección de rama con verificaciones obligatorias |
 | Una solicitud de cambio con un secreto simulado es detectada | **Verificado en local; pendiente en GitHub** | gitleaks v8.21.2 sobre una copia con una clave AWS de ejemplo: `leaks found: 1`, código 1. Sobre el repositorio real: `no leaks found`, código 0 |
-| La integración continua termina en verde con el repositorio vacío | **Verificado en local (equivalente); pendiente en GitHub** | Los mismos comandos de cada trabajo pasan con Python 3.12 en contenedor; `actionlint` 1.7.7 valida el flujo sin errores |
+| La integración continua termina en verde con el repositorio vacío | **Cumplido en GitHub** | Los cinco trabajos pasan en GitHub Actions: en la publicación de `84f444c` en `main` (ejecución 42281717057) y en la solicitud de cambio #1 (ejecuciones 42308914645 y 42309565158) |
 
 ---
 
@@ -178,7 +180,7 @@ Archivos modificados: ninguno preexistente (`docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 
 ## 10. Fase 2 (F2): T04 a T07
 
-Trabajo hecho sobre `main` local, **sin confirmar** (los integrantes confirman y publican). Verificación en un contenedor con Python 3.12.16 y PostgreSQL 16 con pgvector 0.8.7.
+Integrado en `main` (confirmación `9b18700`, integración `7a569a0`) mediante la solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#1, con la CI en verde (apartado 10.10). Verificación local en un contenedor con Python 3.12.16 y PostgreSQL 16 con pgvector 0.8.7.
 
 ### 10.1. T04. Modelo de datos, diccionario y migraciones
 
@@ -261,8 +263,8 @@ Segunda barrera en la base: claves foráneas compuestas `(padre_id, caso_id)` (`
 1. ~~Falta la especificación de la Fase 1.~~ **Resuelto en 10.9**: `verificacion`, `documento` y los tipos de alcance se corrigieron con la migración 0005.
 2. ~~Falta la ficha de métricas.~~ **Resuelto en 10.9**: la columna "Alimenta" está completa.
 3. ~~Catálogo de hitos vacío, y tau y N en `null`.~~ **Resuelto en 10.9**: la migración 0006 carga los ocho hitos, N = 2 y tau = 0.5. Tau sigue provisional hasta T34.
-4. **Normas `ieee` y `apa7`**: propuesta de D-12, a confirmar antes de T20. Desde 0006 los códigos van en minúsculas.
-5. **CI en GitHub**: los cambios de la Fase 2 no están confirmados ni publicados. Tampoco se pudo ver desde esta sesión el resultado de la CI de la Fase 1.
+4. ~~Normas `ieee` y `apa7`, a confirmar.~~ **Cerrado**: los autores confirmaron la lista `ieee` (por defecto), `apa7` y `vancouver` (D-12, migración 0007). Los códigos van en minúsculas desde 0006.
+5. ~~CI en GitHub.~~ **Resuelto**: la Fase 2 pasó la CI en la solicitud de cambio #1 (apartado 10.10).
 
 ### 10.6. Pruebas ejecutadas
 
@@ -320,7 +322,7 @@ Fuentes:
 - `docs/especificacion-fase1/` (6.7, 18.2, 18.4, 18.6, RF-02, RF-25 y RN-18).
 - `docs/insumos/insumos-modelo-de-datos-y-configuracion.md`.
 
-Detalle de cada diferencia y su justificación en `docs/decisiones/T04-contraste-especificacion-fase1.md`. Trabajo sin confirmar en `main` local. Las migraciones 0001 a 0004 no se tocaron.
+Detalle de cada diferencia y su justificación en `docs/decisiones/T04-contraste-especificacion-fase1.md`. Integrado en la solicitud de cambio #1. Las migraciones 0001 a 0004 no se tocaron.
 
 | Actividad | Estado | Evidencia |
 | --- | --- | --- |
@@ -381,6 +383,138 @@ Otras verificaciones:
 
 **Sigue pendiente:**
 - tau = 0.5 es provisional hasta T34.
-- La lista de normas queda pendiente de confirmación antes de T20 (D-12).
+- ~~La lista de normas queda pendiente de confirmación antes de T20 (D-12).~~ Cerrada en 10.10.
 - Las instrucciones oficiales de cada hito llegan en T22.
 - La deduplicación por DOI y la confirmación de documentos incompletos se dejan para T09, T10 y T15, sin adelantarlas.
+
+### 10.10. Decisiones aceptadas, D-12 cerrada e integración en `main`
+
+**Decisiones aceptadas por los autores** (6 de noviembre de 2026), cada una en su archivo:
+- `docs/decisiones/T04-juicios-evaluador-y-humano.md`: dos columnas por juicio (evaluador y humano) para M2, M3 y M5.
+- `docs/decisiones/T04-fuentes-no-comprobables.md`: `verificacion.n_fuentes_no_comprobables` (RN-18).
+- `docs/decisiones/T04-metodo-mixto.md`: valor `mixto` en `verificacion.metodo`.
+
+**D-12 cerrada:** lista cerrada `ieee` (por defecto), `apa7` y `vancouver`.
+- Migración `0007_normas_d12_cerrada.py`: añade `vancouver` a la versión 1. Su descenso se detiene si algún caso usa `vancouver`.
+- `NORMAS_INICIALES` en `app/administracion/parametros.py`.
+- Pruebas: `test_la_migracion_0007_cierra_la_lista_de_normas_d12` y `test_lista_cerrada_de_normas_d12` (`Vancouver` se guarda como `vancouver`).
+- Consecuencia: el corpus de guías necesita también el manual de Vancouver (T22), y T20 debe cubrir las tres normas.
+
+**Sin cambios, por indicación de los autores:** tau = 0.5 sigue provisional hasta T34, y las instrucciones de cada hito llegan en T22.
+
+**Contraseñas iniciales impresas por las semillas.**
+- No están en ningún archivo del repositorio (búsqueda en todo el árbol, incluidos los archivos ignorados) ni en los registros de los contenedores.
+- Se borró un script temporal, fuera del repositorio, que contenía la contraseña nueva de `INV-DEV`.
+- Las cuentas ficticias de la base de desarrollo local conservan esas contraseñas.
+
+**Verificación local:**
+- `docker compose run --rm --build pruebas`: 179 superadas, cobertura del 97,16 %.
+- Ruff, mypy estricto y `alembic check` sin diferencias.
+- gitleaks sobre el árbol de trabajo: `no leaks found`.
+- 0007 sube, baja y vuelve a subir en la base de desarrollo.
+
+**Integración:**
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmación | `t04-contraste-especificacion`, confirmación `9b18700` (`T04-T07: implementar la Fase 2 y ajustar T04 a la especificación de la Fase 1`), sin línea de coautoría. Reemplaza a `d9254af`, que la llevaba |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#1 |
+| CI de la solicitud | **Verde**: análisis, tipado, pruebas con cobertura, `pip-audit` y gitleaks. Ejecuciones 42308914645 (`d9254af`) y 42309565158 (`9b18700`) |
+| Integración en `main` | Commit de integración `7a569a0` |
+| CI de `main` tras integrar | Ejecución 42310241343: **verde** |
+
+**Pendiente:**
+- Protección de la rama principal con verificaciones obligatorias (T00, la configuran los integrantes).
+- Hasta que exista, el criterio "una solicitud de cambio con una prueba que falla queda bloqueada" de T02 sigue verificado solo en local.
+
+---
+
+## 11. Fase 3 (F3): T08. Servicios de procesamiento compartidos
+
+Rama `t08-servicios-compartidos`. La verificación se hizo en el equipo de desarrollo: Windows 11, Docker Desktop amd64 con 8 GB y 16 CPU, y emulación arm64 con QEMU. La instancia ARM real está en trámite con Oracle (incidente 261107-001540). Decisiones:
+- `docs/decisiones/T08-servicios-compartidos.md`: inferencia, revisiones, determinismo, despliegue y mediciones.
+- `docs/decisiones/T08-emulacion-arm64.md`.
+- `docs/decisiones/T01-grobid-arm64.md`, confirmada.
+
+### 11.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. GROBID en el proyecto de Compose compartido y su funcionamiento en ARM | Hecha; ARM real pendiente | `compartido/docker-compose.yml` con `grobid/grobid:0.9.1-crf`. Responde y extrae la cabecera de un PDF ficticio en amd64 y en arm64 emulado (`test_grobid.py`, 2 pruebas) |
+| 2. `servicio_modelos/` con `/embeber` y `/reordenar` | Hecha | Paquete `servicio/` con FastAPI. Además expone `/salud` con los modelos, las revisiones y la memoria |
+| 3. Biblioteca de inferencia elegida y registrada | Hecha | transformers 5.20.2 con PyTorch 2.14.1 en CPU; árbol fijado en `servicio_modelos/restricciones.txt` (decisión T08-01, apartado 1) |
+| 4. Revisiones exactas y descarga a un volumen persistente | Hecha | `servicio/catalogo.py`: commits, tamaños y SHA-256. `python -m servicio.descargar` baja a `sma_modelos` y verifica las huellas. Probado dos veces desde un volumen vacío |
+| 5. Clientes en `app/` detrás de `ProveedorEmbeddings` y `Reordenador` | Hecha | `app/inferencia/interfaces.py` y `app/inferencia/servicio_modelos.py`; `URL_SERVICIO_MODELOS` opcional en los ajustes |
+| Tarea: lotes de tamaño configurable | Hecha | `TAMANO_LOTE`. Cada lote agrupa solo textos de igual longitud en tokens, sin relleno, para el determinismo (`servicio/lotes.py`) |
+| Tarea: identificador y revisión del modelo en cada respuesta | Hecha | Campos `modelo` y `revision`; el cliente rechaza mezclas de revisiones |
+| Tarea: límite de concurrencia | Hecha | `MAX_CONCURRENCIA` (1); en cola hasta `ESPERA_MAXIMA_S` y luego 503 `servicio_ocupado` |
+| Entregable: registro de memoria usada | Hecho | Mediciones en la decisión T08-01, apartado 7; `/salud` informa la memoria residente y el pico |
+
+### 11.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Ambos servicios responden en ARM | **Parcial**: GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real | En arm64 emulado, GROBID respondió y extrajo la cabecera. La imagen arm64 del servicio de modelos se construye, pero bajo QEMU oneDNN falla al leer `MIDR_EL1`, que el emulador no expone. Es una limitación del emulador, no de la imagen (decisión T08-02). Se confirma en la instancia real; pendiente añadido a T01 |
+| El mismo texto produce siempre el mismo vector | **Cumplido** | `test_el_mismo_texto_produce_siempre_el_mismo_vector`, con los pesos reales: igualdad bit a bit entre solicitudes, dentro de un lote con textos de otras longitudes y con el texto repetido en el mismo lote (diferencia máxima 0,0). `test_servicio_modelos.py` lo repite desde el cliente de la API |
+| La memoria de los servicios compartidos y dos bases cabe en la instancia sin intercambio a disco | **Medido en amd64; pendiente en la instancia** | Pico del servicio de modelos: 3,6 GB. GROBID: 2,2 a 2,5 GB. Cada base: unos 50 MB vacía. Estimación para la instancia de 12 GB: unos 9,5 GB en total, con 2,5 GB de margen (decisión T08-01, apartado 7). Falta medirlo con `free -m` en la instancia |
+
+### 11.3. Pruebas
+
+| Suite | Resultado |
+| --- | --- |
+| API (`docker compose run --rm --build pruebas`) | **195 superadas**, 3 omitidas (las de `servicios_compartidos`, que necesitan los servicios en marcha); cobertura de `app/` **97,12 %** |
+| `unitarias/test_inferencia.py` (nueva) | 16: cliente contra un servicio simulado (partes, orden, identidad, errores 503 y 422, revisión mezclada, registro sin textos, ajustes) |
+| `integracion/test_servicio_modelos.py` y `test_grobid.py` (nuevas, `servicios_compartidos`) | 3 superadas contra los servicios reales en amd64. GROBID también contra arm64 emulado |
+| `servicio_modelos` sin pesos (CI) | **26 superadas**: contrato, límites, 503 por concurrencia, arranque sin pesos, catálogo y lotes. Cobertura **97,58 %** |
+| `servicio_modelos` con pesos reales (`modelos_locales`, bajo demanda) | **4 superadas**: vectores normalizados y multilingües, determinismo, reordenamiento con sentido y medición |
+
+**Medición con un lote de prueba** (64 párrafos de unos 350 tokens y reranking de 30 candidatos, amd64, 8 hilos):
+
+| Medida | Valor |
+| --- | --- |
+| Embeber | 37,8 s (1,69 párrafos por segundo) |
+| Reordenar 30 candidatos | **18,6 s** |
+| Pico de memoria del proceso | 3,7 GB |
+| Carga de los dos modelos | 9 s |
+
+**Integración continua:** trabajo nuevo `servicio_modelos`, con Ruff, mypy, pruebas con cobertura, `pip-audit` del entorno y `pip-audit` de `restricciones.txt`, que audita también torch sin la etiqueta `+cpu`.
+
+**Otras verificaciones:**
+- Sin errores: Ruff, `ruff format --check` y mypy estricto en `backend/` (53 archivos) y en `servicio_modelos/` (12 archivos).
+- `pip-audit` sin vulnerabilidades, en ambos paquetes y en el árbol fijado.
+- `actionlint` sin errores y `docker compose config` válido.
+
+### 11.4. Problemas encontrados y soluciones
+
+| Problema | Solución |
+| --- | --- |
+| Un texto procesado en un lote con relleno difería en torno a 1,2e-7 del mismo texto procesado solo | Lotes solo de textos con igual cantidad de tokens. En CPU agrupar casi no acelera (1,49 textos por segundo de uno en uno frente a 1,60 en lotes de 4), así que no se pierde rendimiento |
+| La descarga fallaba con "Permission denied": el usuario sin privilegios no tiene carpeta personal para la caché de Hugging Face | `HF_HOME=/modelos/.cache-hf` dentro del volumen |
+| El `COMPOSE_PROJECT_NAME` del `.env` de la raíz tiene prioridad sobre `name:` y el proyecto compartido quedaba como `sma_rag` | El Compose compartido vive en `compartido/` con su propio `.env.example` |
+| La rueda de torch de PyPI para amd64 trae CUDA (varios GB) | Índice de CPU de PyTorch (`--extra-index-url`) |
+| `pip-audit` no audita `torch==2.14.1+cpu` porque PyPI no conoce la etiqueta local | La CI audita una copia de `restricciones.txt` sin `+cpu` |
+| Bajo emulación, la primera solicitud a GROBID superó 120 s | Plazo de 600 s en la prueba para la primera solicitud |
+| El servicio de modelos no arranca en arm64 emulado (oneDNN y `MIDR_EL1` con QEMU) | Limitación del emulador; no se sigue diagnosticando (decisión T08-02). Pendiente en la instancia real |
+| `pytest --cov` en el contenedor de pruebas del servicio fallaba al escribir `.coverage` (usuario sin permisos en `/srv`) | `COVERAGE_FILE=/tmp/.coverage` en el comando |
+
+### 11.5. Riesgos para fases posteriores
+
+- **T16, latencia del reordenamiento:** 18,6 s para 30 candidatos con 8 hilos x86. En 2 OCPU ARM será previsiblemente mayor. Opciones a evaluar en T16 y T34, sin adelantarlas: menos candidatos, menos tokens por par, cuantización int8 o la contingencia de R-02.
+- **T10, tiempo de indexación:** a 1,7 fragmentos por segundo, unos 50 000 fragmentos tardan unas 8 h en este equipo. La indexación es fuera de línea (18.5), pero hay que medirla en la instancia.
+- **T10:** la API se une a la red `sma_compartido` y fija `URL_SERVICIO_MODELOS`. En T08 aún no se conecta, porque nada la usa.
+
+### 11.6. Archivos
+
+**Creados:**
+- `servicio_modelos/`: `pyproject.toml`, `Dockerfile`, `.dockerignore`, `restricciones.txt`, `servicio/` (`ajustes`, `aplicacion`, `catalogo`, `descargar`, `esquemas`, `lotes`, `memoria`, `motores`, `motor_transformers`, `registro`, `__main__`) y `pruebas/` (`conftest`, `test_contrato`, `test_catalogo`, `test_lotes`, `test_modelos_reales`).
+- `compartido/docker-compose.yml` y `compartido/.env.example`.
+- `backend/app/inferencia/` (`interfaces`, `servicio_modelos`).
+- `backend/pruebas/unitarias/test_inferencia.py`, `backend/pruebas/integracion/test_servicio_modelos.py` y `test_grobid.py`.
+- `docs/decisiones/T08-servicios-compartidos.md` y `T08-emulacion-arm64.md`.
+
+**Modificados:**
+- `backend/app/configuracion/ajustes.py` (`URL_SERVICIO_MODELOS`) y `backend/pyproject.toml` (marca `servicios_compartidos`).
+- `.github/workflows/ci.yml` (trabajo `servicio_modelos`) y `.env.example`.
+- `README.md`, `CLAUDE.md`, `docs/operacion/servidor-desarrollo.md`, `docs/decisiones/T01-grobid-arm64.md` y este archivo.
+
+**Pendiente de T08, ligado a T01:** comprobar en la instancia ARM real que el servicio de modelos responde, repetir allí las pruebas `pruebas_modelos` y medir la memoria sin intercambio.

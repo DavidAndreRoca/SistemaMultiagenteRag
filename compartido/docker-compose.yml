@@ -1,0 +1,76 @@
+# Proyecto de Compose "compartido" (T01, T08): GROBID y el servicio de modelos corren una
+# sola vez por servidor para ambos integrantes. Cada integrante sigue usando
+# docker-compose.yml con su propio COMPOSE_PROJECT_NAME para la base y la API.
+#
+#   docker compose -f compartido/docker-compose.yml --profile descarga run --rm descargar_modelos
+#   docker compose -f compartido/docker-compose.yml up -d --wait
+#   docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --build pruebas_modelos
+#
+# Vive en su propia carpeta para no leer el .env de la raíz, cuyo COMPOSE_PROJECT_NAME
+# tiene prioridad sobre "name:". Sus variables van en compartido/.env (ver .env.example).
+# La red "sma_compartido" tiene nombre fijo para que la API se una a ella (T10).
+name: sma_compartido
+
+services:
+  grobid:
+    image: grobid/grobid:0.9.1-crf  # única variante con arm64 (decisión T01-01)
+    ports:
+      - "127.0.0.1:${PUERTO_GROBID:-8070}:8070"
+    networks: [compartido]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8070/api/isalive | grep -q true"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  servicio_modelos:
+    build:
+      context: ../servicio_modelos
+      target: ejecucion
+    environment:
+      TAMANO_LOTE: ${TAMANO_LOTE:-16}
+      MAX_CONCURRENCIA: ${MAX_CONCURRENCIA:-1}
+      HILOS_INFERENCIA: ${HILOS_INFERENCIA:-0}
+    volumes:
+      - modelos:/modelos:ro
+    ports:
+      - "127.0.0.1:${PUERTO_MODELOS:-8001}:8000"
+    networks: [compartido]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/salud', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 30
+      start_period: 60s
+
+  # Descarga única de los pesos fijados (unos 4,6 GB) al volumen "sma_modelos".
+  descargar_modelos:
+    profiles: ["descarga"]
+    build:
+      context: ../servicio_modelos
+      target: ejecucion
+    command: ["python", "-m", "servicio.descargar"]
+    environment:
+      HF_HUB_OFFLINE: "0"
+      TRANSFORMERS_OFFLINE: "0"
+    volumes:
+      - modelos:/modelos
+
+  # Pruebas con los pesos reales: contrato, determinismo, memoria y tiempo.
+  pruebas_modelos:
+    profiles: ["pruebas"]
+    build:
+      context: ../servicio_modelos
+      target: pruebas
+    command: ["pytest", "-m", "modelos_locales", "-s", "-p", "no:cacheprovider"]
+    volumes:
+      - modelos:/modelos:ro
+
+networks:
+  compartido:
+    name: sma_compartido
+
+volumes:
+  modelos:
+    name: sma_modelos
