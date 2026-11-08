@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Sleep duration and statistics exam performance among first-year university students: a fictitious cross-sectional study</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Daniel</forename><surname>Torres Medina</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">School of Health Sciences</orgName>
+								<orgName type="institution">Fictitious University of the South</orgName>
+								<address>
+									<settlement>Ica</settlement>
+									<country key="PE">Peru</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Ana</forename><forename type="middle">Huanca</forename><surname>Rojas</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">School of Health Sciences</orgName>
+								<orgName type="institution">Fictitious University of the South</orgName>
+								<address>
+									<settlement>Ica</settlement>
+									<country key="PE">Peru</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Sleep duration and statistics exam performance among first-year university students: a fictitious cross-sectional study</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">19B2E37051225C7D8A772F241C1CEF22</idno>
+					<idno type="DOI">10.5555/fjsh.2026.0007</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.1" ident="GROBID" when="2026-11-08T22:40+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.1</label>
+					<label type="parameters">startPage=0, endPage=2, consolidateCitations=0, consolidateHeader=0, consolidateFunders=0, includeRawAffiliations=false, includeRawCitations=false, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=null, flavor=null, debugLabelingCollector=disabled</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>sleep duration</term>
+					<term>academic performance</term>
+					<term>statistics education</term>
+					<term>first-year students</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Insufficient sleep is common among first-year university students and may impair the cognitive processes required to solve quantitative problems. This fictitious study examined the association between self-reported sleep duration in the week before an examination and performance on a statistics midterm exam. A total of 156 first-year students completed a sleep diary for seven nights and a brief questionnaire on study habits. Students who slept less than six hours per night obtained lower exam scores than those who slept seven hours or more, after adjusting for prior academic achievement and weekly study time. The association followed a dose-response pattern. These findings suggest that sleep hygiene programs could complement academic support during examination periods, although longitudinal designs are needed to establish the direction of the effect.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+	</text>
+</TEI>

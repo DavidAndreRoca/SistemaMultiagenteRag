@@ -82,12 +82,21 @@ class Ajustes(BaseModel):
         default=None, validation_alias=AliasChoices("URL_SERVICIO_MODELOS")
     )
 
+    # Canal de extracción de PDF (T09): GROBID compartido y carpeta con el modelo de diseño
+    # de página y el tokenizador (python -m app.corpus.recursos). Opcionales hasta T10.
+    url_grobid: str | None = Field(default=None, validation_alias=AliasChoices("URL_GROBID"))
+    directorio_recursos_corpus: str | None = Field(
+        default=None, validation_alias=AliasChoices("DIRECTORIO_RECURSOS_CORPUS")
+    )
+
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:
-        if self.url_servicio_modelos and not self.url_servicio_modelos.startswith(
-            ("http://", "https://")
+        for nombre, url in (
+            ("URL_SERVICIO_MODELOS", self.url_servicio_modelos),
+            ("URL_GROBID", self.url_grobid),
         ):
-            raise ValueError("URL_SERVICIO_MODELOS debe empezar con http:// o https://")
+            if url and not url.startswith(("http://", "https://")):
+                raise ValueError(f"{nombre} debe empezar con http:// o https://")
         faltantes: list[str] = []
         if _vacia(self.url_bd):
             faltantes.append("URL_BD")

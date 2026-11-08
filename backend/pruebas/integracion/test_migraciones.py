@@ -94,6 +94,8 @@ def test_la_semilla_es_la_configuracion_inicial_del_codigo(url_bd_migrada: str) 
     from app.administracion.parametros import ParametrosFuncionales, parametros_iniciales
 
     (parametros,) = consultar(url_bd_migrada, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict)
+    assert set(parametros) == set(ParametrosFuncionales.model_fields)
     assert ParametrosFuncionales.model_validate(parametros) == parametros_iniciales()
 
 
@@ -517,3 +519,16 @@ def test_la_migracion_0007_cierra_la_lista_de_normas_d12(base_vacia: str) -> Non
     command.downgrade(cfg, "0006")
     (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
     assert isinstance(parametros, dict) and parametros["normas_citacion"] == ["ieee", "apa7"]
+
+
+def test_la_migracion_0008_agrega_el_umbral_de_documento_incompleto(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0008")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and parametros["palabras_minimas_articulo"] == 1500
+    command.downgrade(cfg, "0007")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and "palabras_minimas_articulo" not in parametros
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    with pytest.raises(RuntimeError, match="congelada"):
+        command.upgrade(cfg, "0008")

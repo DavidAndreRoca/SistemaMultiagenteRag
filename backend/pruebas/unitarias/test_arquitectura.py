@@ -76,6 +76,21 @@ def test_la_prueba_estatica_detecta_una_consulta_fuera_de_la_capa(tmp_path: Path
     assert llamadas
 
 
+def test_el_canal_de_extraccion_no_accede_a_la_base() -> None:
+    """T09: procesar_pdf es una función pura sin acceso a la base (tareas técnicas de T09)."""
+    prohibidos = ("sqlalchemy", "psycopg", "app.bd.sesion", "app.repositorios")
+    hallazgos = []
+    for archivo in (RAIZ_APP / "corpus").glob("*.py"):
+        for nodo in ast.walk(ast.parse(archivo.read_text(encoding="utf-8"))):
+            modulos = []
+            if isinstance(nodo, ast.ImportFrom):
+                modulos = [nodo.module or ""]
+            elif isinstance(nodo, ast.Import):
+                modulos = [alias.name for alias in nodo.names]
+            hallazgos += [f"{archivo.name}: {m}" for m in modulos if m.startswith(prohibidos)]
+    assert hallazgos == []
+
+
 def test_sin_columnas_de_datos_personales() -> None:
     _ = modelos
     prohibidas = [

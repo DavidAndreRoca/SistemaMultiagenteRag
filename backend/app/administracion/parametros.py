@@ -90,6 +90,8 @@ class ParametrosFuncionales(_Estricto):
         default_factory=lambda: VentanaTokens(minimo=300, maximo=450, objetivo=400)
     )
     solapamiento_oraciones: int = Field(1, ge=0)
+    # Documento incompleto (Fase 1, 18.3): menos palabras que esto o sin secciones IMRaD
+    palabras_minimas_articulo: int = Field(1500, ge=1)
     # Verificación y límites de los agentes (6.3, 6.7, RF-07)
     umbral_fidelidad: float = Field(0.90, ge=0, le=1)
     limite_palabras_d3: int = Field(250, ge=1)

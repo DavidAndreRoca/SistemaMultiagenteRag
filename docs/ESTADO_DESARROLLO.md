@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 en la rama `t08-servicios-compartidos` (apartado 11).
+**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 en la rama `t09-extraccion-segmentacion` (apartado 12).
 
 ## Resumen
 
@@ -16,8 +16,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T05 (F2)** | Repositorios con aislamiento por caso | **Completa y verificada** |
 | **T06 (F2)** | Autenticación, roles y sesiones | **Completa y verificada** |
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
-| **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada y verificada en local**. Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
-| T09 en adelante | | No iniciadas |
+| **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
+| **T09 (F3)** | Extracción y segmentación de documentos | **Implementada y verificada en local** con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
+| T10 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -518,3 +519,131 @@ Rama `t08-servicios-compartidos`. La verificación se hizo en el equipo de desar
 - `README.md`, `CLAUDE.md`, `docs/operacion/servidor-desarrollo.md`, `docs/decisiones/T01-grobid-arm64.md` y este archivo.
 
 **Pendiente de T08, ligado a T01:** comprobar en la instancia ARM real que el servicio de modelos responde, repetir allí las pruebas `pruebas_modelos` y medir la memoria sin intercambio.
+
+### 11.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmación | `t08-servicios-compartidos`, confirmación `aa93a69` (`T08: agregar servicios de procesamiento compartidos`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#2 |
+| CI de la solicitud | **Verde**, ejecución 42522009898: análisis, tipado, pruebas con cobertura, `pip-audit`, gitleaks y el trabajo nuevo `servicio_modelos` |
+| Integración en `main` | Commit de integración `b7dcd69` |
+| CI de `main` tras integrar | Ejecución 42527989955: **verde** (6 de 6 trabajos) |
+
+---
+
+## 12. Fase 3 (F3): T09. Extracción y segmentación de documentos
+
+Rama `t09-extraccion-segmentacion`, desde `main` con T08 (`b7dcd69`). Decisión: `docs/decisiones/T09-extraccion-y-segmentacion.md` (T09-01). La verificación se hizo en el equipo de desarrollo (amd64), en contenedores con Python 3.12. Se usaron Docling y el tokenizador de bge-m3 reales y el GROBID 0.9.1 del proyecto compartido.
+
+### 12.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Extracción con Docling: texto, títulos, orden de lectura y páginas | Hecha | `app/corpus/extractor_docling.py`. `docling-slim` 2.149.0 sin OCR ni tablas, con el modelo de diseño de página fijado por revisión y huella (`app/corpus/recursos.py`) |
+| 2. Metadatos de cabecera con GROBID | Hecha | `app/corpus/grobid.py`: título, autores (nombres y apellidos), año, DOI, revista e idioma, sin consolidación externa |
+| 3. Limpieza | Hecha | `app/corpus/limpieza.py`: Unicode (NFC, ligaduras, invisibles), encabezados y pies repetidos aunque estén mal etiquetados o pegados dentro de un párrafo, números de página, guiones de corte, párrafos partidos por salto de página o columna |
+| 4. Normalización de secciones a IMRaD | Hecha | `app/corpus/secciones.py`: títulos en español e inglés, subsecciones que heredan su sección, títulos que el extractor dejó dentro de un párrafo |
+| 5. Segmentación por sección y párrafos con ventana y una oración de solapamiento | Hecha | `app/corpus/segmentacion.py`; ventana y solapamiento leídos de la configuración versionada; tokens contados con el tokenizador de bge-m3 |
+| 6. Exclusión de referencias y agradecimientos | Hecha | Por título y por la etiqueta `reference` de Docling |
+| 7. Regla de documento incompleto | Hecha | Menos de `palabras_minimas_articulo` (1 500, migración 0008) o sin introducción, métodos, resultados, discusión ni conclusiones |
+| 8. Detección y exclusión de PDF escaneado | Hecha | `app/corpus/validacion.py`: menos de la mitad de las páginas con texto extraíble produce `sin_capa_de_texto` |
+| Tarea: función pura `procesar_pdf(ruta) -> DocumentoProcesado` sin acceso a la base | Hecha | `CanalPdf.procesar_pdf` en `app/corpus/extraccion.py`; prueba de arquitectura `test_el_canal_de_extraccion_no_accede_a_la_base` |
+| Tarea: validación previa (tipo real, 25 MB, 60 páginas; RN-16) | Hecha | Firma `%PDF-`, tamaño antes de leer, cifrado con contraseña de apertura, páginas; límites de la configuración |
+| Tarea: el contenido del PDF es dato (RN-23) | Hecha | Nada se interpreta; el registro guarda estados y cantidades, nunca texto (probado) |
+| Entregable: `corpus/extraccion.py` y `corpus/segmentacion.py` | Hecho | Más `bloques`, `esquemas`, `limpieza`, `secciones`, `validacion`, `grobid`, `recursos`, `tokenizador` y `extractor_docling` |
+| Entregable: PDF de muestra en `pruebas/datos/` | Hecho | Siete PDF ficticios generados con `pruebas/datos/generar_pdf_muestra.py`: artículo en español (una columna) y en inglés (dos columnas), corto, sin secciones IMRaD, escaneado, cifrado y con solo restricción de permisos |
+
+### 12.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Cada fragmento lleva sección normalizada, título original y páginas | **Cumplido** | `test_canal_pdf.py` (`comprobar_fragmentos`) sobre los dos artículos con Docling real; el esquema `FragmentoProcesado` lo exige |
+| Un PDF escaneado o con texto insuficiente produce estado y motivo, no fragmentos silenciosos | **Cumplido** | Escaneado: `excluido` con `sin_capa_de_texto` y sin fragmentos. Corto: `incompleto` con `texto_insuficiente`. Sin secciones: `incompleto` con `sin_secciones_imrad`. El esquema `DocumentoProcesado` rechaza estados sin motivo |
+| La sección de referencias no aparece en ningún fragmento | **Cumplido** | Frases que solo existen en las referencias y en los agradecimientos de cada artículo no aparecen en ningún fragmento, incluido el caso en que Docling dejó el título "Referencias" dentro de un párrafo |
+
+### 12.3. Pruebas
+
+| Suite | Resultado |
+| --- | --- |
+| API completa (`docker compose run --rm --build pruebas`, con recursos del canal) | **363 superadas**, 5 omitidas (servicios compartidos y una comparación que necesita el árbol completo del repositorio); cobertura de `app/` **97,21 %** |
+| Unitarias nuevas del canal | 159: limpieza (37), secciones (50), segmentación (22), validación (10), GROBID con respuestas grabadas (16), canal con dobles (17), recursos (7) |
+| `integracion/test_canal_pdf.py` (marca `corpus`, Docling real) | **8 superadas**: los dos artículos, corto, sin IMRaD, solo permisos, escaneado, cifrado y determinismo |
+| `integracion/test_grobid.py` contra el GROBID real | 3 superadas (incluye el cliente de T09) |
+| `integracion/test_migraciones.py` | La configuración guardada tiene exactamente los parámetros del esquema; 0008 sube, baja y se niega con la versión 1 congelada |
+
+**Integración continua:** trabajo nuevo `corpus`. Instala el extra con el árbol fijado, descarga y verifica los recursos (en caché), corre las pruebas con Docling real y audita el árbol fijado con `pip-audit`, incluido torch.
+
+**Otras verificaciones:**
+- Ruff, `ruff format --check` y mypy estricto sin errores (65 archivos).
+- `pip-audit` sin vulnerabilidades en el árbol fijado y en el entorno instalado.
+- `actionlint` sin errores y `docker compose config` válido.
+- La descarga de recursos (4 archivos, 13 s) se verificó dos veces; la segunda no descargó nada.
+
+**Revisión manual de la segmentación** (artículo de muestra en español, 4 páginas, 1 718 palabras):
+
+| # | Sección | Título original | Páginas | Tokens | Observación |
+| --- | --- | --- | --- | --- | --- |
+| 0 | resumen | Resumen | 1 | 225 | Título separado del párrafo; incluye las palabras clave |
+| 1 | introduccion | 1. Introducción | 1 | 441 | Cuatro párrafos completos |
+| 2 | metodos | 2.1. Diseño y participantes | 1 y 2 | 417 | Une 2.1 a 2.3; el párrafo partido al pie de la página 1 quedó entero |
+| 3 | metodos | 2.4. Análisis de datos | 2 | 155 | Empieza con la última oración del fragmento anterior |
+| 4 y 5 | resultados | 3. Resultados | 2 a 4 | 337 y 157 | Título recuperado de dentro de un bloque; páginas amplias (apartado 12.4) |
+| 6 y 7 | discusion | 4. Discusión | 3 y 4 | 432 y 127 | |
+| 8 | conclusiones | 5. Conclusiones | 3 y 4 | 102 | |
+
+Sin preliminares (título, autores, afiliación), encabezados, pies, agradecimientos ni referencias. El artículo en inglés, a dos columnas, dio 8 fragmentos de 65 a 442 tokens y respetó el orden de lectura.
+
+**Mediciones** (amd64):
+
+| Medida | Valor |
+| --- | --- |
+| Carga del extractor y del tokenizador | 3,5 s |
+| Artículo de 4 páginas | 8,8 s |
+| Artículo de 3 páginas a dos columnas | 3,3 s |
+| Documento de 5 páginas | 5,7 s |
+| Pico de memoria de Docling | 1,1 GB |
+| Árbol de dependencias instalado | 1,6 GB |
+
+### 12.4. Problemas encontrados y soluciones
+
+| Problema | Solución |
+| --- | --- |
+| Docling marcó el encabezado de la revista como mobiliario en unas páginas y como título de sección en otra | Se quita todo texto igual a un encabezado o pie (con los números reemplazados) o repetido en la mitad de las páginas |
+| Docling pegó el encabezado de la página siguiente al final de un párrafo que continúa en ella | El texto del mobiliario se quita también de dentro de los párrafos |
+| Docling partió un párrafo en una pieza por línea al pie de la página y tomó por título la última línea de un párrafo que pasaba de columna | Se unen los bloques que continúan una oración; un "título" en minúscula vuelve a ser texto |
+| Al alargar el artículo de muestra, el modelo de diseño de página tomó casi dos páginas como un solo párrafo, con los títulos y las referencias dentro | Se separan los títulos completos reconocibles que quedaron dentro de un párrafo. Las páginas de ese tramo quedan amplias; registrado como límite en T09-01 |
+| Los textos ficticios de muestra no llegaban a 1 500 palabras, y el canal marcó correctamente "incompleto" un artículo | Se alargaron los textos; los PDF y las cabeceras grabadas de GROBID se regeneraron |
+| El `.gitignore` excluía toda carpeta `datos/`, también `backend/pruebas/datos/` | Se ancló a la raíz (`/datos/`), como dice la hoja de ruta (4.1) |
+| La prueba de arquitectura marcó `httpx.Client.stream()` como consulta a la base | Se usó `send(..., stream=True)` y la prueba sigue estricta |
+| La regla para unir un último fragmento corto con el anterior nunca se ejecutaba | Se quitó; el último fragmento de una sección puede quedar corto |
+
+### 12.5. Riesgos para fases posteriores
+
+- **T10, memoria en la instancia:** Docling suma un pico de 1,1 GB a los servicios de T08. La estimación de unos 10,6 GB durante la ingesta, sobre 12 GB, deja poco margen. Hay que medirla en la instancia.
+- **T10, imagen de la API:** la imagen crece con PyTorch y Docling (1,6 GB de paquetes). Si en T10 la ingesta corre en un proceso aparte, puede evaluarse una imagen sin el extra para la API.
+- **T10 y T34, calidad de la extracción en artículos reales:** los PDF de muestra son ficticios. La primera ingesta del corpus provisional (T10, actividad 7) debe revisar cuántos documentos quedan incompletos y por qué, y si aparecen referencias en los fragmentos.
+- **T14 y T15:** GROBID partió mal un nombre con dos apellidos y no halló el año. Los metadatos de cabecera deben completarse con Crossref y OpenAlex.
+
+### 12.6. Archivos
+
+**Creados:**
+- `backend/app/corpus/` (`bloques`, `esquemas`, `extraccion`, `extractor_docling`, `grobid`, `limpieza`, `recursos`, `secciones`, `segmentacion`, `tokenizador`, `validacion`).
+- `backend/migraciones/versiones/0008_umbral_documento_incompleto.py`.
+- `backend/restricciones-corpus.txt`.
+- `backend/pruebas/datos/` (generador, textos y siete PDF ficticios) y `backend/pruebas/contrato/grobid/` (tres cabeceras grabadas de GROBID 0.9.1 y una construida a mano).
+- `backend/pruebas/unitarias/test_corpus_*.py` (7) y `backend/pruebas/integracion/test_canal_pdf.py`.
+- `docs/decisiones/T09-extraccion-y-segmentacion.md`.
+
+**Modificados:**
+- `backend/app/administracion/parametros.py` (`palabras_minimas_articulo`) y `backend/app/configuracion/ajustes.py` (`URL_GROBID`, `DIRECTORIO_RECURSOS_CORPUS`).
+- `backend/pyproject.toml` (pypdf, extra `corpus`, reportlab, marca `corpus`, mypy), `backend/Dockerfile` (árbol fijado, sin red para modelos) y `docker-compose.yml` (volumen `recursos_corpus` para las pruebas).
+- `.github/workflows/ci.yml` (trabajo `corpus`), `.env.example` y `.gitignore`.
+- `backend/pruebas/integracion/test_grobid.py`, `test_migraciones.py` y `backend/pruebas/unitarias/test_arquitectura.py`.
+- `README.md`, `CLAUDE.md` y este archivo.
+
+### 12.7. Pendiente
+
+- **Confirmar la lectura de RN-16** (decisión T09-01, apartado 3.2): se rechaza el PDF con contraseña de apertura y se admite el que solo restringe permisos.
+- La base de desarrollo recibe la migración 0008 al levantar el proyecto (`migrar`); no se aplicó a mano.
+- Integración: solicitud de cambio y CI.

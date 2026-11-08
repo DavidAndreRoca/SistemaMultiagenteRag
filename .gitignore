@@ -3,8 +3,9 @@
 .env.*
 !.env.example
 
-# Datos de prueba y de trabajo (PDF, borradores): nunca en Git
-datos/
+# Datos de trabajo (PDF, borradores) de la carpeta raíz datos/: nunca en Git (hoja de ruta,
+# 4.1). Los documentos ficticios de backend/pruebas/datos/ sí se versionan (T09).
+/datos/
 
 # Python
 __pycache__/

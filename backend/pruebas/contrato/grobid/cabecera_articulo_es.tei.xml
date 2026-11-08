@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="es">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Tutoría entre pares y ansiedad ante la estadística en estudiantes de Psicología de una universidad privada de Ica</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct status="extracted">
+					<analytic>
+						<author>
+							<persName><forename type="first">Lucía</forename><surname>Mendoza Vargas</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Facultad de Psicología</orgName>
+								<orgName type="institution">Universidad Ficticia del Sur</orgName>
+								<address>
+									<settlement>Ica</settlement>
+									<country>Perú Resumen</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Rafael</forename><forename type="middle">Quispe</forename><surname>Huamán</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Facultad de Psicología</orgName>
+								<orgName type="institution">Universidad Ficticia del Sur</orgName>
+								<address>
+									<settlement>Ica</settlement>
+									<country>Perú Resumen</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Tutoría entre pares y ansiedad ante la estadística en estudiantes de Psicología de una universidad privada de Ica</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">12CF8D814838A204BD13BDFE5A72008A</idno>
+					<idno type="DOI">10.5555/rfes.2026.0042</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.9.1" ident="GROBID" when="2026-11-08T22:40+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<label type="revision">0.9.1</label>
+					<label type="parameters">startPage=0, endPage=2, consolidateCitations=0, consolidateHeader=0, consolidateFunders=0, includeRawAffiliations=false, includeRawCitations=false, includeRawCopyrights=false, generateTeiIds=false, generateTeiCoordinates=null, flavor=null, debugLabelingCollector=disabled</label>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+				<p>La ansiedad ante la estadística es una dificultad frecuente en estudiantes de Psicología y se asocia con menor rendimiento en los cursos de métodos. El objetivo de este estudio ficticio fue evaluar el efecto de un programa de tutoría entre pares sobre la ansiedad ante la estadística en estudiantes de tercer ciclo. Se empleó un diseño cuasiexperimental con grupo control no equivalente y mediciones antes y después de la intervención. Participaron 84 estudiantes, 42 en cada grupo. El programa duró ocho semanas y combinó sesiones semanales de resolución de problemas con acompañamiento de estudiantes de ciclos superiores. Tras la intervención, el grupo experimental redujo su puntaje de ansiedad de manera significativa en comparación con el grupo control, con un tamaño del efecto moderado. Los resultados sugieren que la tutoría entre pares es una estrategia de bajo costo para disminuir la ansiedad ante la estadística, aunque se requieren estudios con asignación aleatoria para confirmar el hallazgo. Palabras clave: ansiedad ante la estadística, tutoría entre pares, educación superior, estudiantes de Psicología.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="es">
+	</text>
+</TEI>
