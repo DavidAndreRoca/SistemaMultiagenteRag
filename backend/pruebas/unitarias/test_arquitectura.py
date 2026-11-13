@@ -15,6 +15,7 @@ from app.bd.base import Base
 from app.bd.diccionario import RUTA_DICCIONARIO, alimenta, generar, indice_de_metricas
 from app.bd.metricas import CODIGOS
 from app.repositorios import caso as repos_caso
+from app.repositorios import corpus as repos_corpus
 from app.repositorios import investigador as repos_investigador
 from app.repositorios.base import RepositorioDeCaso
 from app.repositorios.contexto import ContextoAcceso
@@ -76,11 +77,30 @@ def test_la_prueba_estatica_detecta_una_consulta_fuera_de_la_capa(tmp_path: Path
     assert llamadas
 
 
+MODULOS_DEL_CANAL = (
+    "bloques",
+    "esquemas",
+    "extraccion",
+    "extractor_docling",
+    "grobid",
+    "limpieza",
+    "recursos",
+    "secciones",
+    "segmentacion",
+    "tokenizador",
+    "validacion",
+    "almacen",
+)
+
+
 def test_el_canal_de_extraccion_no_accede_a_la_base() -> None:
-    """T09: procesar_pdf es una función pura sin acceso a la base (tareas técnicas de T09)."""
+    """T09: procesar_pdf es una función pura sin acceso a la base (tareas técnicas de T09).
+
+    La indexación (T10: ``indexacion``, ``ingesta``, ``reindexar``) sí guarda en la base,
+    siempre a través de la unidad de trabajo y los repositorios."""
     prohibidos = ("sqlalchemy", "psycopg", "app.bd.sesion", "app.repositorios")
     hallazgos = []
-    for archivo in (RAIZ_APP / "corpus").glob("*.py"):
+    for archivo in (RAIZ_APP / "corpus" / f"{m}.py" for m in MODULOS_DEL_CANAL):
         for nodo in ast.walk(ast.parse(archivo.read_text(encoding="utf-8"))):
             modulos = []
             if isinstance(nodo, ast.ImportFrom):
@@ -202,7 +222,8 @@ def test_ninguna_columna_alimenta_una_metrica_inexistente() -> None:
         c
         for _, c in inspect.getmembers(repos_investigador, inspect.isclass)
         if c.__module__ == repos_investigador.__name__
-    ],
+    ]
+    + [repos_corpus.RepositorioCorpus],
 )
 def test_todo_metodo_de_repositorio_exige_contexto(clase: type) -> None:
     metodos = {

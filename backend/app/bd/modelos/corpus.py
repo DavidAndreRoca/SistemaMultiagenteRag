@@ -11,10 +11,12 @@ from sqlalchemy import (
     CheckConstraint,
     Computed,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
     UniqueConstraint,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import Mapped
@@ -23,6 +25,8 @@ from app.bd.base import Base, clave_primaria, enumeracion, momento
 from app.bd.enumeraciones import (
     EstadoAccesoAbierto,
     EstadoDocumento,
+    MotivoExclusionCorpus,
+    ObjetoExclusion,
     OrigenDocumento,
     SeccionNormalizada,
 )
@@ -40,6 +44,14 @@ class Documento(Base):
         CheckConstraint(
             "isbn IS NULL OR isbn ~ '^(97[89][0-9]{10}|[0-9]{9}[0-9X])$'", name="isbn_normalizado"
         ),
+        CheckConstraint(
+            "huella_archivo IS NULL OR huella_archivo ~ '^[0-9a-f]{64}$'",
+            name="huella_archivo_hex",
+        ),
+        CheckConstraint(
+            "confirmado_en IS NULL OR estado <> 'activo'", name="confirmacion_solo_si_incompleto"
+        ),
+        Index("ix_documento_coleccion_id_huella_archivo", "coleccion_id", "huella_archivo"),
         {
             "comment": "Documento indexado en una colección, con metadatos"
             " bibliográficos (Fase 1, 18.2)."
@@ -106,6 +118,37 @@ class Documento(Base):
         comentario="ingesta, importacion_o1 o aporte.",
     )
     num_paginas: Mapped[int | None] = col(Integer, nullable=True, comentario="Páginas del PDF.")
+    huella_archivo: Mapped[str | None] = col(
+        String(64),
+        nullable=True,
+        comentario="Huella SHA-256 del archivo subido: la ingesta es idempotente (T10).",
+    )
+    archivo_original: Mapped[str | None] = col(
+        Text, nullable=True, comentario="Nombre con que se subió el archivo, para el investigador."
+    )
+    indexado_por_id: Mapped[uuid.UUID | None] = col(
+        UUID(as_uuid=True),
+        ForeignKey("cuenta.id", ondelete="SET NULL"),
+        nullable=True,
+        comentario="Cuenta del investigador que lo indexó (Fase 1, 19.1: quién y cuándo).",
+    )
+    confirmado_en: Mapped[datetime | None] = momento(
+        "Si está incompleto: cuándo el investigador confirmó indexarlo (18.3).", nulo=True
+    )
+    confirmado_por_id: Mapped[uuid.UUID | None] = col(
+        UUID(as_uuid=True),
+        ForeignKey("cuenta.id", ondelete="SET NULL"),
+        nullable=True,
+        comentario="Cuenta del investigador que confirmó el documento incompleto.",
+    )
+    modelo_embeddings: Mapped[str | None] = col(
+        String(120), nullable=True, comentario="Modelo de embeddings de sus vectores (RNF-21)."
+    )
+    revision_embeddings: Mapped[str | None] = col(
+        String(64),
+        nullable=True,
+        comentario="Revisión exacta del modelo de embeddings; si cambia, se reindexa (18.5).",
+    )
     creado_en: Mapped[datetime] = momento("Fecha y hora de indexación.")
     retirado_en: Mapped[datetime | None] = momento("Fecha y hora de retiro.", nulo=True)
 
@@ -118,6 +161,16 @@ class Fragmento(Base):
             "pagina_inicio IS NULL OR pagina_fin IS NULL OR pagina_inicio <= pagina_fin",
             name="paginas_ordenadas",
         ),
+        # Índices de la recuperación (T10; Fase 1, 18.2): HNSW con distancia coseno sobre el
+        # vector, GIN sobre el vector léxico y compuesto por colección para el filtro.
+        Index(
+            "ix_fragmento_embedding_hnsw",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
+        Index("ix_fragmento_texto_lexico_gin", "texto_lexico", postgresql_using="gin"),
+        Index("ix_fragmento_coleccion_id_documento_id", "coleccion_id", "documento_id"),
         {"comment": "Fragmento IMRaD de un documento, con vector denso y texto léxico."},
     )
 
@@ -154,3 +207,65 @@ class Fragmento(Base):
         comentario="Vector léxico tsvector con configuración simple, generado desde el texto.",
     )
     creado_en: Mapped[datetime] = momento("Fecha y hora de creación.")
+
+
+class ExclusionCorpus(Base):
+    __tablename__ = "exclusion_corpus"
+    __table_args__ = (
+        CheckConstraint(
+            "huella_archivo IS NULL OR huella_archivo ~ '^[0-9a-f]{64}$'",
+            name="huella_archivo_hex",
+        ),
+        CheckConstraint(
+            "(motivo = 'duplicado') = (duplicado_de_id IS NOT NULL)",
+            name="duplicado_con_original",
+        ),
+        # Un mismo archivo se registra una sola vez por colección: la ingesta es idempotente.
+        Index(
+            "uq_exclusion_corpus_coleccion_id_huella_archivo",
+            "coleccion_id",
+            "huella_archivo",
+            unique=True,
+            postgresql_where=text("huella_archivo IS NOT NULL"),
+        ),
+        {
+            "comment": "Archivo o referencia que no entró al corpus, con su motivo"
+            " (RF-15, CP-21; Fase 1, 18.3 y 18.9)."
+        },
+    )
+
+    id: Mapped[uuid.UUID] = clave_primaria()
+    coleccion_id: Mapped[uuid.UUID] = col(
+        UUID(as_uuid=True),
+        ForeignKey("coleccion.id", ondelete="RESTRICT"),
+        index=True,
+        comentario="Colección a la que se intentó agregar.",
+    )
+    objeto: Mapped[ObjetoExclusion] = col(
+        enumeracion(ObjetoExclusion, "objeto_exclusion"),
+        comentario="archivo (subido o de la ingesta) o referencia (importador del artículo O1).",
+    )
+    identificador: Mapped[str] = col(
+        Text, comentario="Nombre del archivo, DOI o texto de la referencia."
+    )
+    huella_archivo: Mapped[str | None] = col(
+        String(64), nullable=True, comentario="Huella SHA-256 del archivo, si lo hubo."
+    )
+    motivo: Mapped[MotivoExclusionCorpus] = col(
+        enumeracion(MotivoExclusionCorpus, "motivo_exclusion_corpus"),
+        comentario="Motivo de la exclusión.",
+        alimenta="Informe del corpus por tema (RF-15)",
+    )
+    duplicado_de_id: Mapped[uuid.UUID | None] = col(
+        UUID(as_uuid=True),
+        ForeignKey("documento.id", ondelete="CASCADE"),
+        nullable=True,
+        comentario="Documento ya indexado del que es duplicado (por texto o por DOI).",
+    )
+    registrado_por_id: Mapped[uuid.UUID | None] = col(
+        UUID(as_uuid=True),
+        ForeignKey("cuenta.id", ondelete="SET NULL"),
+        nullable=True,
+        comentario="Cuenta del investigador que intentó agregarlo.",
+    )
+    registrada_en: Mapped[datetime] = momento("Fecha y hora del registro.")

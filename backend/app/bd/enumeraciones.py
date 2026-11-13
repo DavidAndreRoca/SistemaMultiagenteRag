@@ -33,6 +33,26 @@ class OrigenDocumento(StrEnum):
     APORTE = "aporte"
 
 
+class ObjetoExclusion(StrEnum):
+    """Qué se excluyó del corpus: un archivo subido o una referencia (importador, T15)."""
+
+    ARCHIVO = "archivo"
+    REFERENCIA = "referencia"
+
+
+class MotivoExclusionCorpus(StrEnum):
+    """Motivo de exclusión del corpus (RF-15, CP-21; Fase 1, 18.3 y 18.9)."""
+
+    NO_ES_PDF = "no_es_pdf"
+    PDF_ILEGIBLE = "pdf_ilegible"
+    PDF_CIFRADO = "pdf_cifrado"
+    EXCEDE_TAMANO = "excede_tamano"
+    EXCEDE_PAGINAS = "excede_paginas"
+    SIN_CAPA_DE_TEXTO = "sin_capa_de_texto"
+    DUPLICADO = "duplicado"
+    SIN_ACCESO_ABIERTO = "sin_acceso_abierto"
+
+
 class EstadoAccesoAbierto(StrEnum):
     """Estados de Unpaywall más ``desconocido`` (aún no consultado)."""
 

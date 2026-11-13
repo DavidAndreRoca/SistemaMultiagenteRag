@@ -27,6 +27,8 @@ class Entrada:
     datos_de_caso: bool = False  # devuelve datos de un caso: otro caso no debe verlos
 
 
+ID_FICTICIO = "00000000-0000-4000-8000-000000000000"  # basta para comprobar 401 y 403
+
 MATRIZ: dict[tuple[str, str], Entrada] = {
     ("GET", "/salud"): Entrada(Politica.PUBLICA),
     ("POST", "/sesion"): Entrada(Politica.PUBLICA, cuerpo={"codigo": "X", "contrasena": "x"}),
@@ -58,6 +60,22 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         Politica.INVESTIGADOR,
         ejemplo="/investigador/casos/{CASO_A}/norma",
         cuerpo={"norma": "ieee"},
+    ),
+    # Corpus científico (T10)
+    ("GET", "/investigador/colecciones/{coleccion_id}/documentos"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/documentos"
+    ),
+    ("POST", "/investigador/colecciones/{coleccion_id}/documentos"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/documentos"
+    ),
+    ("GET", "/investigador/colecciones/{coleccion_id}/exclusiones"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/exclusiones"
+    ),
+    ("POST", "/investigador/documentos/{documento_id}/confirmar"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/documentos/{ID_FICTICIO}/confirmar"
+    ),
+    ("POST", "/investigador/documentos/{documento_id}/retirar"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/documentos/{ID_FICTICIO}/retirar"
     ),
 }
 

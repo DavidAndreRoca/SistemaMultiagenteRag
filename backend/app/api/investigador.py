@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import uuid
 from datetime import datetime
 
 from fastapi import APIRouter, status
@@ -20,6 +21,7 @@ class SolicitudColeccion(BaseModel):
 
 
 class ColeccionVista(BaseModel):
+    id: uuid.UUID
     tipo: TipoColeccion
     tema: str | None
     n_incluidas: int
@@ -29,6 +31,7 @@ class ColeccionVista(BaseModel):
     @classmethod
     def desde(cls, coleccion: Coleccion) -> ColeccionVista:
         return cls(
+            id=coleccion.id,
             tipo=coleccion.tipo,
             tema=coleccion.tema,
             n_incluidas=coleccion.n_incluidas,

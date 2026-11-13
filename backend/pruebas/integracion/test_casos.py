@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import uuid
+
 import httpx
 import pytest
 
@@ -94,6 +96,7 @@ async def test_tema_inexistente_y_tema_repetido(investigador: httpx.AsyncClient)
     )
     assert repetido.status_code == 409
     colecciones = (await investigador.get("/investigador/colecciones")).json()
+    assert isinstance(uuid.UUID(colecciones[0].pop("id")), uuid.UUID)  # T10: id para las rutas
     assert colecciones == [
         {
             "tipo": "cientifica",

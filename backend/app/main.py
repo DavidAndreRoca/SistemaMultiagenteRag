@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
 from app import __version__
-from app.api import caso, investigador, salud, sesion
+from app.api import caso, corpus, investigador, salud, sesion
 from app.bd.sesion import crear_fabrica_sesiones, crear_motor
 from app.comun.errores import RespuestaError, registrar_manejadores
 from app.comun.middleware import MiddlewareIncidencia
@@ -56,8 +57,12 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
         },
     )
     aplicacion.state.ajustes = ajustes
+    # El indexador del corpus (Docling) se crea al primer uso; las pruebas lo sustituyen.
+    aplicacion.state.indexador = None
+    aplicacion.state.embebedor = None
+    aplicacion.state.candado_corpus = asyncio.Lock()
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
-    for modulo in (salud, sesion, caso, investigador):
+    for modulo in (salud, sesion, caso, investigador, corpus):
         aplicacion.include_router(modulo.router)
     return aplicacion

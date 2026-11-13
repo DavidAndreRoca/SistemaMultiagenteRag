@@ -4,6 +4,7 @@
 #     torch==2.14.1+cpu torchvision==0.29.2+cpu ".[corpus]"
 #   pip freeze --exclude sistema-multiagente-rag
 # torch y torchvision vienen del índice de CPU de PyTorch (--extra-index-url).
+# T10: se añadió python-multipart (sin dependencias) para la subida de PDF a la API.
 accelerate==1.15.0
 alembic==1.20.1
 annotated-doc==0.0.5
@@ -66,6 +67,7 @@ pypdf==7.0.0
 pypdfium2==5.15.1
 python-dateutil==4.0.0
 python-dotenv==1.2.4
+python-multipart==0.0.33
 PyYAML==6.0.3
 referencing==0.37.0
 regex==2026.11.8

@@ -63,6 +63,8 @@ Canal de PDF (T09): `app/corpus/` (`procesar_pdf` en `extraccion.py`, sin acceso
 docker compose --profile pruebas run --rm --no-deps pruebas python -m app.corpus.recursos /recursos  # una vez, 190 MB
 ```
 
+Indexación (T10): `app/corpus/indexacion.py` (`Indexador`: ingerir, indexar, confirmar, retirar, reindexar), `app/repositorios/corpus.py` (A2, incluye las consultas de prueba densa y léxica), rutas en `app/api/corpus.py`, comandos `python -m app.corpus.ingesta` y `python -m app.corpus.reindexar`. Solo colecciones científicas (guías en T22, aportes en T32). La API llega a GROBID y al servicio de modelos con `-f docker-compose.yml -f docker-compose.corpus.yml`. En pruebas, `pruebas/dobles_corpus.py` sustituye el canal y los embeddings.
+
 ```bash
 docker compose -f compartido/docker-compose.yml --profile descarga run --rm --build descargar_modelos  # una vez, 4,6 GB
 docker compose -f compartido/docker-compose.yml up -d --wait   # modelos en :8001, GROBID en :8070

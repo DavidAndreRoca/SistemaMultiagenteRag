@@ -3,7 +3,7 @@
 from app.bd.modelos.administracion import CacheMetadatos, Configuracion, EventoTecnico
 from app.bd.modelos.borradores import VersionBorrador
 from app.bd.modelos.casos import CambioNorma, Caso, Coleccion
-from app.bd.modelos.corpus import Documento, Fragmento
+from app.bd.modelos.corpus import Documento, ExclusionCorpus, Fragmento
 from app.bd.modelos.seguridad import Cuenta, Sesion
 from app.bd.modelos.solicitudes import (
     Decision,
@@ -24,6 +24,7 @@ __all__ = [
     "Decision",
     "Documento",
     "EventoTecnico",
+    "ExclusionCorpus",
     "Fragmento",
     "FragmentoRecuperado",
     "FuenteAportada",
