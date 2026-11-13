@@ -88,6 +88,11 @@ class CanalPdf:
         self._contador = contador
         self._parametros = parametros
 
+    def con_parametros(self, parametros: ParametrosCanal) -> CanalPdf:
+        """El mismo canal (Docling, GROBID y tokenizador ya cargados) con otros parámetros,
+        por ejemplo los de la versión vigente de la configuración en el momento de ingerir."""
+        return CanalPdf(self._extractor, self._cabecera, self._contador, parametros)
+
     def procesar_pdf(self, ruta: Path) -> DocumentoProcesado:
         inicio = time.perf_counter()
         documento = self._procesar(ruta)

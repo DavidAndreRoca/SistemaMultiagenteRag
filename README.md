@@ -139,6 +139,28 @@ docker compose --profile pruebas run --rm --no-deps pruebas python -m app.corpus
 
 Con eso, `docker compose run --rm --build pruebas` incluye las pruebas del canal con Docling real (marca `corpus`). Los PDF de muestra de `backend/pruebas/datos/pdf/` son ficticios y se regeneran con `python -m pruebas.datos.generar_pdf_muestra`. Decisiones: `docs/decisiones/T09-extraccion-y-segmentacion.md`.
 
+## Indexación del corpus científico (T10)
+
+La API indexa PDF en la colección científica de un tema: los guarda con nombre aleatorio en el volumen `archivos` (nunca los sirve), los embebe con el servicio de modelos y registra con su motivo lo que excluye (escaneados, ilegibles, cifrados, duplicados). Para alcanzar GROBID y el servicio de modelos, la API se une a la red de los servicios compartidos con `docker-compose.corpus.yml`:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.corpus.yml up -d --wait bd api
+```
+
+Rutas del investigador: `GET /investigador/colecciones` (con el `id` de cada colección), `GET` y `POST /investigador/colecciones/{id}/documentos` (subir un PDF), `GET /investigador/colecciones/{id}/exclusiones`, y `POST /investigador/documentos/{id}/confirmar` y `/retirar`.
+
+Ingesta en lote de una carpeta (idempotente: puede repetirse) y reindexación si cambia el modelo de embeddings:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-deps -v /ruta/a/los/pdf:/entrada:ro api python -m app.corpus.ingesta /entrada --tema TEMA-01 --investigador INV-01
+```
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-deps api python -m app.corpus.reindexar --investigador INV-01
+```
+
+Decisiones: `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

@@ -34,6 +34,14 @@ services:
       context: ./backend
       target: ejecucion
     env_file: .env
+    # Corpus (T10): recursos del canal (solo lectura) y PDF guardados. Para que la API
+    # alcance GROBID y el servicio de modelos, sume docker-compose.corpus.yml (README).
+    environment:
+      DIRECTORIO_RECURSOS_CORPUS: /recursos
+      DIRECTORIO_ARCHIVOS: /archivos
+    volumes:
+      - recursos_corpus:/recursos:ro
+      - archivos:/archivos
     depends_on:
       bd:
         condition: service_healthy
@@ -72,3 +80,4 @@ services:
 volumes:
   datos_bd:
   recursos_corpus:
+  archivos:

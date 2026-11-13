@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 en la rama `t09-extraccion-segmentacion` (apartado 12).
+**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 en la rama `t10-indexacion-corpus` (apartado 13).
 
 ## Resumen
 
@@ -17,8 +17,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T06 (F2)** | Autenticación, roles y sesiones | **Completa y verificada** |
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
 | **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
-| **T09 (F3)** | Extracción y segmentación de documentos | **Implementada y verificada en local** con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
-| T10 en adelante | | No iniciadas |
+| **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
+| **T10 (F3)** | Indexación y gestión del corpus | **Implementada y verificada en local** con la base y los servicios reales; CP-21 superado y criterios cumplidos. **Pendiente la actividad 7**: el corpus provisional lo entrega el equipo (apartado 13) |
+| T11 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -646,4 +647,112 @@ Sin preliminares (título, autores, afiliación), encabezados, pies, agradecimie
 
 - **Confirmar la lectura de RN-16** (decisión T09-01, apartado 3.2): se rechaza el PDF con contraseña de apertura y se admite el que solo restringe permisos.
 - La base de desarrollo recibe la migración 0008 al levantar el proyecto (`migrar`); no se aplicó a mano.
-- Integración: solicitud de cambio y CI.
+
+### 12.8. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmación | `t09-extraccion-segmentacion`, confirmación `69d1ffa` (`T09: implementar el canal de extracción y segmentación de PDF`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#4 |
+| CI de la solicitud | **Verde**, ejecución 42532738205: 7 de 7 trabajos. El trabajo nuevo `corpus` verificó los recursos, pasó las 8 pruebas con Docling real y no encontró vulnerabilidades en el árbol fijado |
+| Integración en `main` | Commit de integración `3bfd8e1` |
+| CI de `main` tras integrar | Ejecución 42534017010: **verde** |
+
+---
+
+## 13. Fase 3 (F3): T10. Indexación y gestión del corpus
+
+Rama `t10-indexacion-corpus`, desde `main` con T09 (`3bfd8e1`). Decisión: `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md` (T10-01).
+
+Decisiones del equipo del 12 de noviembre de 2026:
+- El corpus provisional lo entrega el equipo después; T10 se implementa y prueba con los PDF ficticios de muestra.
+- Las exclusiones se registran en una tabla de detalle, no solo en contadores.
+
+### 13.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Migración de índices HNSW (coseno), GIN sobre `tsvector` y compuesto por colección | Hecha | `0009_indices_y_exclusiones_del_corpus.py`; `alembic check` sin diferencias; 0009 baja y vuelve a subir |
+| 2. `indexar(documento_procesado, coleccion)`: deduplica por huella, guarda documento y fragmentos, pide vectores al servicio de modelos y guarda el `tsvector` | Hecha | `Indexador.indexar` e `Indexador.ingerir` en `app/corpus/indexacion.py`. El `tsvector` es una columna generada (T04). Deduplica por huella del archivo, del texto normalizado y por DOI |
+| 3. Retiro de documentos | Hecha | `POST /investigador/documentos/{id}/retirar`: deja de recuperarse y conserva los fragmentos |
+| 4. Comando de ingesta en lote, idempotente, con informe | Hecha | `python -m app.corpus.ingesta`. Una línea por archivo y un resumen, sin texto de los documentos |
+| 5. Rutas del investigador (listar, subir, confirmar incompleto, retirar) | Hecha | `app/api/corpus.py`: cinco rutas nuevas en la matriz de autorización. `GET /investigador/colecciones` muestra ahora el `id` |
+| 6. Registrar por tema las referencias excluidas por no tener acceso abierto | Hecha la estructura | Tabla `exclusion_corpus` con el motivo `sin_acceso_abierto`, contadores y `GET /investigador/colecciones/{id}/exclusiones`. Quien detecta la falta de acceso abierto es el importador de T15 (Unpaywall, T14) |
+| 7. Ingerir el corpus provisional del carril de insumos | **Pendiente** | El corpus provisional aún no existe (R-08). Se ingerirá con el comando de la actividad 4 cuando el equipo lo entregue |
+| Tarea: reindexación completa si cambia el modelo de embeddings | Hecha | `python -m app.corpus.reindexar [--forzar]`. Cada documento guarda modelo y revisión de sus vectores |
+| Tarea: el documento guarda la URL de acceso abierto y la licencia; fragmentos breves con enlace | Parcial | Las columnas existen desde T04 y ninguna ruta sirve el PDF. Los valores los obtiene T15 con Unpaywall; los fragmentos breves se muestran desde T16 y T19 |
+
+### 13.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| CP-21 superado (documento ilegible, escaneado sin texto o duplicado: rechazo con motivo) | **Cumplido** | `test_corpus.py` con la base real: escaneado e ilegible se rechazan con su motivo una sola vez; duplicado por texto y por DOI. `test_corpus_real.py` con Docling real sobre los siete PDF de muestra: cifrado y escaneado excluidos, y el PDF con solo restricción de permisos detectado como duplicado del documento corto |
+| Reingerir el mismo PDF no duplica documentos ni fragmentos | **Cumplido** | Por la ruta (`ya_registrado`, sin volver a procesar) y por el comando: la segunda pasada sobre la misma carpeta da `ya_registrado` en los 7 archivos, con la base real y Docling real |
+| Una consulta densa y una léxica de prueba devuelven fragmentos con sección y páginas de la colección indicada | **Cumplido** | `test_corpus.py` con dos temas: solo fragmentos del tema consultado, con sección, título original y páginas. Verificado también con bge-m3 real (apartado 13.3) |
+
+### 13.3. Pruebas y verificación
+
+| Suite | Resultado |
+| --- | --- |
+| API completa (`docker compose run --rm --build pruebas`, con recursos del canal) | **391 superadas**, 5 omitidas (servicios compartidos y una comparación que necesita el árbol completo); cobertura de `app/` **97,02 %** |
+| `integracion/test_corpus.py` (nueva) | 14: indexación con trazabilidad, idempotencia, duplicados, exclusiones, incompletos y confirmación, retiro, consultas densa y léxica por colección, reindexación, colecciones admitidas, límite de tamaño, ingesta sin configurar (503), comando y contexto de consola |
+| `integracion/test_corpus_real.py` (nueva, marcas `corpus` e `integracion`) | 1: CP-21 con Docling real y la base real sobre los siete PDF de muestra |
+| `integracion/test_comandos_corpus.py` (nueva) | 3: comandos de ingesta y reindexación de punta a punta, errores y fábrica |
+| `unitarias/test_corpus_almacen.py` (nueva) | 9: almacén con nombre aleatorio, nombres seguros y mensajes de los motivos |
+| `alembic check` y ciclo de 0009 | Sin diferencias entre modelos y migraciones; 0009 baja y sube |
+
+**Verificación de punta a punta con los servicios reales**, en un proyecto de Compose aislado (`sma_verif`), borrado al terminar, y con el GROBID y el servicio de modelos del proyecto compartido:
+
+| Paso | Resultado |
+| --- | --- |
+| Ingesta de los siete PDF de muestra con el comando | 2 indexados (8 y 9 fragmentos), 2 incompletos, 2 excluidos (cifrado y escaneado) y 1 duplicado, en 62 s (incluye cargar Docling y los modelos) |
+| Segunda pasada | 7 `ya_registrado` en 10 s |
+| Consulta densa con bge-m3: "¿La tutoría entre pares reduce la ansiedad ante la estadística?" | Resumen (0,858), conclusiones (0,843) y discusión (0,802) del artículo en español, con sección, título y páginas, en 0,3 s |
+| Consulta densa: "Does short sleep before an exam lower statistics scores?" | Discusión, introducción y conclusión del artículo en inglés |
+| Consulta densa en español: "cuántos estudiantes participaron en el estudio" | Métodos de los dos artículos ("2.1. Diseño y participantes" y "2.1. Participants"): la búsqueda funciona entre idiomas |
+| Consultas léxicas "covarianza", "Cronbach" y "actigraphy" | El fragmento exacto de métodos o discusión |
+
+**Integración continua:** el trabajo `corpus` suma PostgreSQL con pgvector y corre también `test_corpus_real.py`. Las pruebas con dobles corren en el trabajo de pruebas.
+
+**Otras verificaciones:**
+- Ruff, `ruff format --check` y mypy estricto sin errores (73 archivos).
+- Diccionario de datos regenerado.
+
+### 13.4. Problemas encontrados y soluciones
+
+| Problema | Solución |
+| --- | --- |
+| Docling se carga una sola vez, pero los parámetros del canal salen de la configuración vigente, que puede cambiar | `CanalPdf.con_parametros` aplica en cada ingesta los parámetros vigentes sobre el mismo extractor |
+| La prueba de arquitectura no permite `AsyncSession` fuera de `repositorios/` | La fábrica de unidades para los comandos vive en `repositorios/unidad.py` |
+| La red `sma_compartido` solo existe si los servicios compartidos están levantados | La API se une a ella con `docker-compose.corpus.yml`, aparte, para no romper `docker compose up` |
+| La prueba del límite de tamaño cambiaba la configuración versión 1 y la limpieza entre pruebas no la restaura | La prueba restaura el valor |
+| Una prueba de T07 comparaba la lista de colecciones sin `id` | Se actualizó |
+
+### 13.5. Riesgos para fases posteriores
+
+- **Memoria en la instancia:** la primera subida de un PDF carga Docling en la API (pico de 1,1 GB). En el equipo de desarrollo, GROBID ocupó 2,6 a 3,2 GB y el servicio de modelos 1,7 GB durante la verificación. Si en la instancia no alcanza, la ingesta puede quedar solo en el comando.
+- **T15:** el importador debe registrar las referencias sin acceso abierto en `exclusion_corpus` (`objeto = referencia`, motivo `sin_acceso_abierto`) y llevar `n_pendientes`.
+- **T16:** la recuperación debe filtrar por documentos recuperables (`repositorios/corpus.recuperable`) y por las colecciones permitidas al caso (RN-03). Las consultas de prueba de T10 no reemplazan esa recuperación.
+- **T22:** abrir la ingesta al corpus de guías con su segmentación por apartado y revisar RN-11.
+
+### 13.6. Archivos
+
+**Creados:**
+- `backend/app/corpus/` (`almacen`, `fabrica`, `indexacion`, `ingesta`, `reindexar`), `backend/app/api/corpus.py`, `backend/app/repositorios/corpus.py` y `backend/app/seguridad/consola.py`.
+- `backend/migraciones/versiones/0009_indices_y_exclusiones_del_corpus.py`.
+- `backend/pruebas/dobles_corpus.py`, `backend/pruebas/unitarias/test_corpus_almacen.py` y `backend/pruebas/integracion/` (`test_corpus`, `test_corpus_real`, `test_comandos_corpus`).
+- `docker-compose.corpus.yml`.
+- `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md`.
+
+**Modificados:**
+- `backend/app/bd/modelos/corpus.py` y `enumeraciones.py` (tabla `exclusion_corpus`, columnas de `documento` e índices).
+- `backend/app/api/investigador.py` (`id` en las colecciones), `backend/app/main.py`, `backend/app/repositorios/unidad.py`, `backend/app/corpus/extraccion.py` (`con_parametros`) y `backend/app/configuracion/ajustes.py` (`DIRECTORIO_ARCHIVOS`).
+- `backend/pyproject.toml` y `backend/restricciones-corpus.txt` (`python-multipart`), `backend/Dockerfile` (carpeta `/archivos`) y `docker-compose.yml` (volúmenes de la API).
+- `.github/workflows/ci.yml` (base en el trabajo `corpus`) y `.env.example`.
+- `backend/pruebas/matriz_autorizacion.py`, `unitarias/test_arquitectura.py` e `integracion/test_casos.py`.
+- `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.
+
+### 13.7. Pendiente
+
+- **Actividad 7:** ingerir el corpus provisional cuando el equipo lo entregue, con `python -m app.corpus.ingesta` (README).
+- **Integración:** solicitud de cambio y CI.

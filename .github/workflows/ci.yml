@@ -146,14 +146,33 @@ jobs:
   # muestra; GROBID con sus respuestas grabadas. Árbol fijado con PyTorch en CPU. Los
   # recursos (modelo de diseño de página y tokenizador) se descargan con revisión y huella
   # fijadas y se guardan en caché.
+  # T10: la ingesta de los PDF de muestra con el canal real y la base real (CP-21).
   corpus:
     name: Canal de PDF (Docling, tokenizador y dependencias)
     runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: backend
+    services:
+      bd:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: sma
+          POSTGRES_PASSWORD: sma_ci
+          POSTGRES_DB: sma
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sma -d sma"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
     env:
       DIRECTORIO_RECURSOS_CORPUS: /tmp/recursos-corpus
+      ENTORNO: pruebas
+      URL_BD: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
+      URL_BD_PRUEBAS: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
+      SECRETO_SESION: secreto-solo-para-pruebas-automaticas-0123456789
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -172,8 +191,15 @@ jobs:
           key: recursos-corpus-${{ hashFiles('backend/app/corpus/recursos.py') }}
       - name: Descargar y verificar los recursos del canal
         run: python -m app.corpus.recursos "$DIRECTORIO_RECURSOS_CORPUS"
-      - name: Pruebas del canal con Docling real
-        run: pytest -m corpus pruebas/integracion/test_canal_pdf.py
+      - name: Crear la extensión vector
+        run: |
+          python - <<'PY'
+          import psycopg
+          with psycopg.connect("postgresql://sma:sma_ci@localhost:5432/sma", autocommit=True) as c:
+              c.execute("CREATE EXTENSION IF NOT EXISTS vector")
+          PY
+      - name: Pruebas del canal y de la ingesta con Docling real
+        run: pytest -m corpus pruebas/integracion/test_canal_pdf.py pruebas/integracion/test_corpus_real.py
       # Sin la etiqueta local "+cpu", que PyPI no conoce, torch también se audita.
       - name: Escaneo del árbol fijado (Docling, torch, transformers)
         run: |

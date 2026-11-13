@@ -5,7 +5,8 @@ Los servicios reciben una ``UnidadDeTrabajo`` y nunca la sesión de base (4.2).
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
 
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -22,6 +23,7 @@ from app.repositorios.caso import (
     RepositorioVersiones,
 )
 from app.repositorios.colecciones import RepositorioColecciones
+from app.repositorios.corpus import RepositorioCorpus
 from app.repositorios.investigador import (
     RepositorioCasosInvestigador,
     RepositorioColeccionesInvestigador,
@@ -51,12 +53,27 @@ class UnidadDeTrabajo:
         self.casos_investigador = RepositorioCasosInvestigador(sesion)
         self.colecciones_investigador = RepositorioColeccionesInvestigador(sesion)
         self.cuentas_investigador = RepositorioCuentasInvestigador(sesion)
+        self.corpus = RepositorioCorpus(sesion)
 
     async def confirmar(self) -> None:
         await self._sesion.commit()
 
     async def revertir(self) -> None:
         await self._sesion.rollback()
+
+
+FabricaUnidades = Callable[[], AbstractAsyncContextManager[UnidadDeTrabajo]]
+
+
+def fabrica_de_unidades(fabrica: async_sessionmaker[AsyncSession]) -> FabricaUnidades:
+    """Abre una unidad de trabajo por operación (comandos de consola, T10)."""
+
+    @asynccontextmanager
+    async def abrir() -> AsyncIterator[UnidadDeTrabajo]:
+        async with fabrica() as sesion:
+            yield UnidadDeTrabajo(sesion)
+
+    return abrir
 
 
 async def abrir_unidad(fabrica: async_sessionmaker[AsyncSession]) -> AsyncIterator[UnidadDeTrabajo]:

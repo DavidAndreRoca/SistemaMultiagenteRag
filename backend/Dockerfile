@@ -20,7 +20,11 @@ COPY migraciones ./migraciones
 
 # --- Ejecución (desarrollo y producción) ---
 FROM base AS ejecucion
-RUN pip install --no-deps . && useradd --system --no-create-home --uid 10001 sma
+# /archivos: PDF del corpus (T10); un volumen nuevo hereda este dueño. El usuario no tiene
+# carpeta personal: las cachés de PyTorch y Docling van a /tmp.
+RUN pip install --no-deps . && useradd --system --no-create-home --uid 10001 sma \
+    && mkdir -p /archivos /recursos && chown sma:sma /archivos
+ENV HOME=/tmp
 USER sma
 EXPOSE 8000
 CMD ["python", "-m", "app"]

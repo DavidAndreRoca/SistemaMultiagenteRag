@@ -173,12 +173,21 @@ Documento indexado en una colección, con metadatos bibliográficos (Fase 1, 18.
 | `motivo_estado` | text | sí |  |  | Motivo si está incompleto o retirado. |  |
 | `origen` | texto (enumeración) | no | `ingesta`, `importacion_o1`, `aporte` |  | ingesta, importacion_o1 o aporte. |  |
 | `num_paginas` | integer | sí |  |  | Páginas del PDF. |  |
+| `huella_archivo` | varchar(64) | sí |  |  | Huella SHA-256 del archivo subido: la ingesta es idempotente (T10). |  |
+| `archivo_original` | text | sí |  |  | Nombre con que se subió el archivo, para el investigador. |  |
+| `indexado_por_id` | uuid | sí |  | FK cuenta.id | Cuenta del investigador que lo indexó (Fase 1, 19.1: quién y cuándo). |  |
+| `confirmado_en` | timestamp with time zone | sí |  |  | Si está incompleto: cuándo el investigador confirmó indexarlo (18.3). |  |
+| `confirmado_por_id` | uuid | sí |  | FK cuenta.id | Cuenta del investigador que confirmó el documento incompleto. |  |
+| `modelo_embeddings` | varchar(120) | sí |  |  | Modelo de embeddings de sus vectores (RNF-21). |  |
+| `revision_embeddings` | varchar(64) | sí |  |  | Revisión exacta del modelo de embeddings; si cambia, se reindexa (18.5). |  |
 | `creado_en` | timestamp with time zone | no |  |  | Fecha y hora de indexación. |  |
 | `retirado_en` | timestamp with time zone | sí |  |  | Fecha y hora de retiro. |  |
 
 Restricciones e índices parciales:
 
 - anio IS NULL OR anio BETWEEN 1500 AND 2100
+- confirmado_en IS NULL OR estado <> 'activo'
+- huella_archivo IS NULL OR huella_archivo ~ '^[0-9a-f]{64}$'
 - huella_sha256 ~ '^[0-9a-f]{64}$'
 - isbn IS NULL OR isbn ~ '^(97[89][0-9]{10}/[0-9]{9}[0-9X])$'
 - única (coleccion_id, huella_sha256)
@@ -200,6 +209,28 @@ Evento técnico por etapa: latencia, tokens, costo y error (separado del registr
 | `tokens_salida` | integer | sí |  |  | Tokens de salida. | Costos (RNF-24) |
 | `costo_estimado` | numeric(12, 6) | sí |  |  | Costo estimado en USD. | Tope de gasto y modo protegido (RN-22) |
 | `error` | varchar(120) | sí |  |  | Tipo de error, sin contenido. | Tasa de errores (RF-24) |
+
+## `exclusion_corpus`
+
+Archivo o referencia que no entró al corpus, con su motivo (RF-15, CP-21; Fase 1, 18.3 y 18.9).
+
+| Columna | Tipo | Nulo | Valores permitidos | Claves | Descripción | Alimenta |
+| --- | --- | --- | --- | --- | --- | --- |
+| `id` | uuid | no |  | PK | Identificador interno (UUID). |  |
+| `coleccion_id` | uuid | no |  | FK coleccion.id | Colección a la que se intentó agregar. |  |
+| `objeto` | texto (enumeración) | no | `archivo`, `referencia` |  | archivo (subido o de la ingesta) o referencia (importador del artículo O1). |  |
+| `identificador` | text | no |  |  | Nombre del archivo, DOI o texto de la referencia. |  |
+| `huella_archivo` | varchar(64) | sí |  |  | Huella SHA-256 del archivo, si lo hubo. |  |
+| `motivo` | texto (enumeración) | no | `no_es_pdf`, `pdf_ilegible`, `pdf_cifrado`, `excede_tamano`, `excede_paginas`, `sin_capa_de_texto`, `duplicado`, `sin_acceso_abierto` |  | Motivo de la exclusión. | Informe del corpus por tema (RF-15) |
+| `duplicado_de_id` | uuid | sí |  | FK documento.id | Documento ya indexado del que es duplicado (por texto o por DOI). |  |
+| `registrado_por_id` | uuid | sí |  | FK cuenta.id | Cuenta del investigador que intentó agregarlo. |  |
+| `registrada_en` | timestamp with time zone | no |  |  | Fecha y hora del registro. |  |
+
+Restricciones e índices parciales:
+
+- (motivo = 'duplicado') = (duplicado_de_id IS NOT NULL)
+- huella_archivo IS NULL OR huella_archivo ~ '^[0-9a-f]{64}$'
+- uq_exclusion_corpus_coleccion_id_huella_archivo: único en (coleccion_id, huella_archivo) donde huella_archivo IS NOT NULL
 
 ## `fragmento`
 

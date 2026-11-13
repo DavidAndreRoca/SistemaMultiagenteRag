@@ -1,0 +1,16 @@
+# Une la API a los servicios compartidos (T08) para la ingesta del corpus (T10).
+# Requiere el proyecto compartido en marcha (compartido/docker-compose.yml), que crea
+# la red sma_compartido. Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.corpus.yml up -d --wait bd api
+services:
+  api:
+    environment:
+      URL_GROBID: http://grobid:8070
+      URL_SERVICIO_MODELOS: http://servicio_modelos:8000
+    networks:
+      - default
+      - sma_compartido
+
+networks:
+  sma_compartido:
+    external: true

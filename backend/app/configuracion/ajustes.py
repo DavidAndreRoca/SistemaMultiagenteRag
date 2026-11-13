@@ -88,6 +88,10 @@ class Ajustes(BaseModel):
     directorio_recursos_corpus: str | None = Field(
         default=None, validation_alias=AliasChoices("DIRECTORIO_RECURSOS_CORPUS")
     )
+    # Carpeta privada de los PDF del corpus (T10); nunca se sirve por la API.
+    directorio_archivos: str | None = Field(
+        default=None, validation_alias=AliasChoices("DIRECTORIO_ARCHIVOS")
+    )
 
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:
