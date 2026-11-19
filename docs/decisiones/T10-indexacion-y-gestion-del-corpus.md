@@ -11,7 +11,7 @@ T10 lleva el `DocumentoProcesado` de T09 a la base, con vectores y texto léxico
 - un comando de ingesta en lote;
 - un comando de reindexación.
 
-**Actividad 7 (ingerir el corpus provisional):** queda pendiente. El corpus provisional no existe todavía en el carril de insumos (hoja de ruta, apartado 1, y riesgo R-08). El equipo decidió el 12 de noviembre de 2026 que lo entregará después. Todo T10 se implementa y prueba con los PDF ficticios de muestra. Cuando llegue el corpus, se ingiere con el comando del apartado 7.
+**Actividad 7 (ingerir el corpus provisional):** queda pendiente. El corpus provisional no existe todavía en el carril de insumos (hoja de ruta, apartado 1, y riesgo R-08). El equipo decidió el 12 de noviembre de 2026 que lo entregará después. Todo T10 se implementa y prueba con los PDF ficticios de muestra. Cuando llegue el corpus, se ingiere con el comando del apartado 7. **Actualización del 19 de noviembre de 2026:** el corpus llegó y se ingirió (ESTADO, apartado 13.8), después de optimizar el flujo de desarrollo (decisión T10-02).
 
 ## 2. Solo colecciones científicas
 

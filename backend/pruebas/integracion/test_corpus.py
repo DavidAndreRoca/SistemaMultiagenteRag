@@ -19,7 +19,9 @@ import pytest
 
 from app.bd.enumeraciones import Rol
 from app.corpus.almacen import AlmacenArchivos
-from app.corpus.indexacion import Indexador, Resultado
+from app.corpus.esquemas import DocumentoProcesado
+from app.corpus.extraccion import huella_de_texto
+from app.corpus.indexacion import CambioSegmentacion, Indexador, Resegmentacion, Resultado
 from app.corpus.ingesta import ingerir_carpeta
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.corpus import Encontrado
@@ -342,7 +344,9 @@ async def test_comando_de_ingesta_es_idempotente(corpus: Corpus, tmp_path: Path)
         abrir, indexador, corpus.contexto, "TEMA-A", carpeta, lineas.append
     )
     assert primera == Counter({"indexado": 2, "incompleto": 1, "excluido": 1, "duplicado": 1})
-    assert len(lineas) == 5 and all("ansiedad" not in linea for linea in lineas)
+    # Una línea por archivo y el tiempo por etapa; nunca texto de los documentos.
+    assert len(lineas) == 6 and all("ansiedad" not in linea for linea in lineas)
+    assert lineas[0].startswith("[1/5  20 % |") and lineas[-1].startswith("Tiempo por etapa")
     segunda = await ingerir_carpeta(
         abrir, indexador, corpus.contexto, "TEMA-A", carpeta, lineas.append
     )
@@ -382,3 +386,110 @@ def test_los_resultados_de_la_ingesta_son_un_contrato_estable() -> None:
         "duplicado",
         "ya_registrado",
     ]
+
+
+async def test_la_ingesta_detenida_se_reanuda_donde_quedo(corpus: Corpus, tmp_path: Path) -> None:
+    await corpus.coleccion("TEMA-A")
+    carpeta = tmp_path / "entrada"
+    carpeta.mkdir()
+    (carpeta / "a_tutoria.pdf").write_bytes(contenido("TUTORIA"))
+    (carpeta / "b_sueno.pdf").write_bytes(contenido("SUENO"))
+    indexador: Indexador = corpus.entorno.aplicacion.state.indexador
+    abrir = fabrica_de_unidades(corpus.entorno.aplicacion.state.fabrica_sesiones)
+    lineas: list[str] = []
+
+    def detener_tras_el_primero(texto: str) -> None:
+        lineas.append(texto)
+        if len(lineas) == 1:
+            raise KeyboardInterrupt  # Ctrl+C mientras se informa el primer documento
+
+    with pytest.raises(KeyboardInterrupt):
+        await ingerir_carpeta(
+            abrir, indexador, corpus.contexto, "TEMA-A", carpeta, detener_tras_el_primero
+        )
+    assert lineas[0].startswith("[1/2  50 % |") and "indexado" in lineas[0]
+    assert "detenida tras 1 de 2" in lineas[1] and lineas[2].startswith("Tiempo por etapa")
+    assert consultar(corpus.entorno.url_bd, "SELECT count(*) FROM documento") == [(1,)]
+
+    lineas.clear()
+    segunda = await ingerir_carpeta(
+        abrir, indexador, corpus.contexto, "TEMA-A", carpeta, lineas.append
+    )
+    assert segunda == Counter({"ya_registrado": 1, "indexado": 1})
+    assert corpus.canal.procesados == 2  # el primero no se volvió a procesar
+    assert "extraccion" in lineas[-1] and "embeddings" in lineas[-1]
+
+
+async def test_resegmentar_reutiliza_los_vectores_del_texto_que_no_cambia(
+    corpus: Corpus, tmp_path: Path
+) -> None:
+    coleccion = await corpus.coleccion("TEMA-A")
+    documento_id = uuid.UUID(
+        (await corpus.subir(coleccion, contenido("TUTORIA"))).json()["documento_id"]
+    )
+    ruta = tmp_path / "tutoria.pdf"
+    ruta.write_bytes(contenido("TUTORIA"))
+    igual = corpus.canal.procesar_pdf(ruta)
+    primero, segundo, _ = igual.fragmentos
+    cambiado = segundo.model_copy(update={"texto": "Texto ficticio corregido sin la referencia."})
+    nuevos = [primero, cambiado]
+    procesado = igual.model_copy(
+        update={
+            "fragmentos": nuevos,
+            "huella_texto": huella_de_texto("\n".join(f.texto for f in nuevos)),
+        }
+    )
+    indexador: Indexador = corpus.entorno.aplicacion.state.indexador
+    fabrica = corpus.entorno.aplicacion.state.fabrica_sesiones
+
+    async def resegmentar(procesado: DocumentoProcesado, aplicar: bool) -> Resegmentacion:
+        async with fabrica() as sesion:
+            unidad = UnidadDeTrabajo(sesion)
+            documento = await unidad.corpus.documento(corpus.contexto, documento_id)
+            assert documento is not None
+            return await indexador.resegmentar(
+                unidad, corpus.contexto, documento, procesado, aplicar=aplicar
+            )
+
+    assert (await resegmentar(igual, aplicar=True)).cambio is CambioSegmentacion.SIN_CAMBIOS
+    llamadas = corpus.embeddings.llamadas
+    simulado = await resegmentar(procesado, aplicar=False)
+    assert (simulado.cambio, simulado.reutilizados, simulado.embebidos) == (
+        CambioSegmentacion.CAMBIARIA,
+        1,
+        1,
+    )
+    assert corpus.embeddings.llamadas == llamadas  # la simulación no embebe
+    assert consultar(corpus.entorno.url_bd, "SELECT count(*) FROM fragmento") == [(3,)]
+
+    corpus.embeddings.textos.clear()
+    aplicado = await resegmentar(procesado, aplicar=True)
+    assert (aplicado.cambio, aplicado.fragmentos_antes, aplicado.fragmentos_despues) == (
+        CambioSegmentacion.ACTUALIZADO,
+        3,
+        2,
+    )
+    assert corpus.embeddings.textos == [cambiado.texto]  # solo se embebe lo nuevo
+    filas = consultar(
+        corpus.entorno.url_bd,
+        "SELECT f.texto, f.embedding IS NOT NULL, d.huella_sha256 = %s, c.n_incluidas"
+        " FROM fragmento f JOIN documento d ON d.id = f.documento_id"
+        " JOIN coleccion c ON c.id = d.coleccion_id ORDER BY f.orden",
+        procesado.huella_texto,
+    )
+    assert [fila[0] for fila in filas] == [primero.texto, cambiado.texto]
+    assert all(fila[1:] == (True, True, 1) for fila in filas)
+    assert await _lexica(corpus, coleccion, "corregido")
+
+    # Otra revisión del modelo: no se mezclan vectores, se embebe todo de nuevo.
+    corpus.embeddings.revision = "rev-2"
+    corpus.embeddings.textos.clear()
+    otra = await resegmentar(igual, aplicar=True)
+    assert otra.cambio is CambioSegmentacion.ACTUALIZADO
+    assert set(corpus.embeddings.textos) == {f.texto for f in igual.fragmentos}
+    assert consultar(corpus.entorno.url_bd, "SELECT revision_embeddings FROM documento") == [
+        ("rev-2",)
+    ]
+
+    await corpus.cliente.post(f"/investigador/documentos/{documento_id}/retirar")
+    assert (await resegmentar(procesado, aplicar=True)).cambio is CambioSegmentacion.RETIRADO

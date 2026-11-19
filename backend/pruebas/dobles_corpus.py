@@ -27,6 +27,7 @@ from app.corpus.esquemas import (
     MotivoIncompleto,
 )
 from app.corpus.extraccion import ParametrosCanal, huella_de_texto
+from app.corpus.medicion import Etapas
 from app.inferencia.interfaces import Embeddings, IdentidadModelo
 
 TEXTOS = {
@@ -64,8 +65,11 @@ class CanalFicticio:
         self.parametros = parametros
         return self
 
-    def procesar_pdf(self, ruta: Path) -> DocumentoProcesado:
+    def procesar_pdf(self, ruta: Path, etapas: Etapas | None = None) -> DocumentoProcesado:
         self.procesados += 1
+        if etapas is not None:
+            with etapas.medir("extraccion"):
+                pass
         datos = ruta.read_bytes()
         texto = datos.decode(errors="replace")
         huella_archivo = hashlib.sha256(datos).hexdigest()

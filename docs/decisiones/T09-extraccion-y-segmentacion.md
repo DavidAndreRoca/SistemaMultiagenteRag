@@ -100,6 +100,13 @@ RN-16 dice que se rechazan los archivos cifrados. Muchos PDF de editoriales est�
 - **Títulos no reconocidos:** dentro del cuerpo (introducción a conclusiones) son subsecciones y heredan la sección. Fuera del cuerpo abren "otra". Un "Summary" dentro del cuerpo no es el resumen.
 - **Preliminares:** lo anterior a la primera sección reconocida no se segmenta: título, autores, afiliaciones y la portada que añaden algunos repositorios. Son metadatos y los da GROBID. Si el documento no tiene ninguna sección reconocida, todo su texto es "otra".
 - **Exclusiones:** las referencias y los agradecimientos se excluyen (18.3).
+- **Entradas bibliográficas por su forma** (agregado el 13 de noviembre de 2026, apartado 10):
+  - **Qué se excluye:** todo bloque que tenga la forma de una o varias entradas de bibliografía, esté donde esté. Tras uno así, también se excluyen los trozos cortos con alguna señal (una referencia partida en dos bloques).
+  - **Señales bibliográficas:** el año entre paréntesis tras las iniciales ("Mayer, R. E. (2017).") o seguido del título entre comillas, o con el nombre de pila ("Toepoel, Vera (2016)."); "vol.", "pp." o "no."; "37(9), 1579-1590"; "2021;12(3)" (Vancouver); el título IEEE tras el autor (`Apellido, "Título,"`) y el recuadro "Citation:" o "Cómo citar".
+  - **Señales de apoyo:** DOI o URL y "Apellido, A.". Suman, pero por sí solas no hacen una entrada.
+  - **Umbral:** 3 señales o más, con al menos una cada 25 palabras y al menos una bibliográfica.
+  - **Sin falsos positivos con las citas en el texto:** "(Pérez, 2020)" no cuenta, porque el año debe ir solo entre paréntesis; "Zhu et al. (2006)," tampoco, porque el año sigue a un apellido y no a las iniciales.
+- **Más títulos de referencias** (mismo día): "Reference" y "Referencia" en singular, "Bibliographic references" y "Lista de referencias".
 - **`seccion_original`:** guarda el título más cercano (por ejemplo, "2.1. Diseño y participantes"), que es lo que el estudiante busca en el PDF.
 
 ## 5. Segmentación (`segmentacion.py`)
@@ -144,6 +151,33 @@ La segunda es la de 18.9 para deduplicar en T10. Como no incluye preliminares, u
 - **Nombres propios tras un fin de oración:** una oración que empieza con un título reconocido seguido de un nombre propio ("Método Delphi…") se separaría como título si está justo después de un punto. No se observó en las muestras.
 - **Memoria:** Docling suma un pico de 1,1 GB. Con los servicios de T08 (3,7 GB y 2,5 GB) y dos bases, la estimación para la instancia de 12 GB pasa de 9,5 GB a unos 10,6 GB mientras se ingiere. Hay que medirlo en la instancia y, si hace falta, ingerir con el servicio de modelos detenido (la ingesta no lo necesita hasta embeber).
 - **Guiones de compuestos:** un compuesto partido justo en su guion al final de línea ("well-known") queda unido ("wellknown") si Docling dejó un espacio después del guion.
-- **Referencias sin marca:** una lista de referencias sin título reconocible ni etiqueta `reference` de Docling se segmentaría como parte de la sección anterior. En los PDF de muestra Docling reconoció ambos títulos.
+- **Referencias sin marca:** el riesgo se materializó con el corpus real y se corrigió (apartado 10). Puede quedar alguna entrada aislada con pocas señales.
 - **Tablas:** las tablas no reconocidas aportan filas cortas como párrafos.
 - **Calibración:** la ventana (300 a 450 tokens) y el umbral de 1 500 palabras son los iniciales; T34 calibra la ventana con el conjunto de prueba.
+
+## 10. Referencias sin título reconocible (13 de noviembre de 2026)
+
+**Qué se observó.** Al ingerir el corpus provisional (T10, actividad 7), 44 fragmentos de 8 documentos eran listas de referencias. En esos artículos la lista no empezaba con un título reconocido por el apartado 4.2, por una de tres razones:
+- el título estaba en singular o en otra variante ("Reference", "Referencia", "Bibliographic references", "Lista de referencias");
+- Docling no lo marcó como título y quedó unido al primer párrafo;
+- la lista seguía a un apartado "otra" (anexos, contribuciones) o se partía en varios bloques sin título.
+
+Esos fragmentos dañan la recuperación: comparten vocabulario con cualquier consulta del tema y no son evidencia (18.3 excluye las referencias).
+
+**Qué se cambió (`secciones.py`):**
+- se agregaron las variantes del título (apartado 4.2);
+- se excluye todo bloque con la forma de entradas bibliográficas, esté donde esté, con las señales y el umbral del apartado 4.2, y los trozos cortos con alguna señal que lo siguen.
+
+**Cómo se comprobó:**
+- con los mismos 8 documentos, los fragmentos con forma de referencia pasaron de 44 a 1 (una entrada aislada con dos señales). En todo el corpus, tras el ajuste del 19 de noviembre, los fragmentos con 3 DOI o más son 1 de 2 785;
+- las pruebas unitarias cubren APA, IEEE, Vancouver, varias entradas en un bloque, listas desordenadas y casos negativos (prosa con citas "(Pérez, 2020)", cifras y porcentajes).
+
+**Ajuste tras auditar el corpus completo (19 de noviembre de 2026).** Con la caché de extracción (T10-02) se revisaron, en los 102 documentos ingeridos, todos los bloques que la regla excluía fuera de una sección de referencias (258). La mayoría eran listas sin título reconocido, recuadros de cita y encabezados de página con la cita del artículo. Pero 19 eran prosa del cuerpo, en 9 documentos (introducción, métodos, resultados y discusión):
+- párrafos con muchas citas narrativas ("Quispe y Torres (2006), Arias et al. (2006), …"), porque el año entre paréntesis seguido de coma o punto contaba como señal;
+- una lista de autores en un resultado bibliométrico, solo con "Apellido, A.";
+- una lista de enlaces a herramientas, solo con URL;
+- una lista de términos entre comillas con la coma dentro, al estilo estadounidense.
+
+Se ajustaron las señales como dice el apartado 4.2. Resultado, comparando bloque por bloque con la regla anterior: los 19 párrafos de prosa vuelven a segmentarse, no se pierde ninguna entrada bibliográfica y se excluyen además 4 recuadros "Citation:". Cada caso tiene una prueba unitaria con texto ficticio.
+
+**Efecto en el corpus ya ingerido.** Los documentos ingeridos antes del cambio se volvieron a segmentar el 19 de noviembre de 2026 (ESTADO, apartado 13.8) con `python -m app.corpus.resegmentar --tema TEMA --investigador INV --aplicar` (decisión T10-02, apartado 3), que reutiliza la extracción en caché y los vectores de los fragmentos que no cambian.

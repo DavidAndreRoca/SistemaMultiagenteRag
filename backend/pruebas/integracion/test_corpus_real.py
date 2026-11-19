@@ -73,7 +73,12 @@ async def test_cp21_ingesta_de_los_pdf_de_muestra(
     assert primera == Counter({"indexado": 2, "incompleto": 2, "excluido": 2, "duplicado": 1}), (
         lineas
     )
-    por_archivo = {linea.split()[1]: linea.split()[0] for linea in lineas}
+    # Cada línea: "[i/n % | transcurrido | restante] resultado archivo | ...".
+    por_archivo = {
+        linea.split("] ", 1)[1].split()[1]: linea.split("] ", 1)[1].split()[0]
+        for linea in lineas
+        if linea.startswith("[")
+    }
     assert por_archivo == {
         "articulo_en.pdf": "indexado",
         "articulo_es.pdf": "indexado",

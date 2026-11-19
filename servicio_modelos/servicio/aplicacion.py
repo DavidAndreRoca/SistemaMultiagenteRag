@@ -229,7 +229,10 @@ def crear_aplicacion(
             version=__version__,
             modelos=[
                 ModeloCargado(
-                    **_identidad(m.modelo), tipo=m.modelo.tipo.value, licencia=m.modelo.licencia
+                    **_identidad(m.modelo),
+                    tipo=m.modelo.tipo.value,
+                    licencia=m.modelo.licencia,
+                    en_memoria=getattr(m, "cargado", True),
                 )
                 for m in (estado.embeddings, estado.reordenador)
             ],

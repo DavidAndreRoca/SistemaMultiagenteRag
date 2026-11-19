@@ -8,8 +8,9 @@ Se comprueba, en este orden y sin ejecutar nada del documento (RN-23):
    permisos (imprimir, copiar) se abre con contraseña vacía y se admite (decisión
    T09-01, apartado 3).
 4. Páginas (60).
-5. Capa de texto: si menos de la mitad de las páginas tiene texto, el PDF se considera
-   escaneado y se excluye del corpus científico (18.3, actividad 8).
+5. Capa de texto: si menos de la mitad de las páginas revisadas tiene texto, el PDF se
+   considera escaneado y se excluye del corpus científico (18.3, actividad 8). Se
+   revisan todas las páginas de un PDF corto y una muestra repartida de uno largo.
 """
 
 from __future__ import annotations
@@ -29,6 +30,7 @@ FIRMA_PDF = b"%PDF-"
 BYTES_CABECERA = 1024
 MIN_CARACTERES_PAGINA_CON_TEXTO = 40
 FRACCION_MINIMA_PAGINAS_CON_TEXTO = 0.5
+MAX_PAGINAS_MUESTRA = 12
 BYTES_POR_MB = 1024 * 1024
 
 logging.getLogger("pypdf").setLevel(logging.ERROR)  # sus avisos citan texto del PDF
@@ -75,12 +77,23 @@ def validar_pdf(ruta: Path, limites: LimitesPdf) -> InformeValidacion:
         return InformeValidacion(firma_archivo, MotivoExclusion.PDF_ILEGIBLE, 0)
     if paginas > limites.paginas_max:
         return InformeValidacion(firma_archivo, MotivoExclusion.EXCEDE_PAGINAS, paginas)
-    con_texto = sum(1 for pagina in lector.pages if _tiene_texto(pagina))
-    if con_texto < paginas * FRACCION_MINIMA_PAGINAS_CON_TEXTO:
+    muestra = paginas_de_muestra(paginas)
+    con_texto = sum(1 for indice in muestra if _tiene_texto(lector.pages[indice]))
+    if con_texto < len(muestra) * FRACCION_MINIMA_PAGINAS_CON_TEXTO:
         return InformeValidacion(
             firma_archivo, MotivoExclusion.SIN_CAPA_DE_TEXTO, paginas, con_texto
         )
     return InformeValidacion(firma_archivo, None, paginas, con_texto)
+
+
+def paginas_de_muestra(paginas: int) -> list[int]:
+    """Índices de las páginas que se revisan para la capa de texto: todas si son pocas;
+    si no, ``MAX_PAGINAS_MUESTRA`` repartidas entre la primera y la última (T10-02).
+    Extraer el texto de un PDF de 52 páginas tomaba 19 s; con la muestra, unos 4 s."""
+    if paginas <= MAX_PAGINAS_MUESTRA:
+        return list(range(paginas))
+    paso = (paginas - 1) / (MAX_PAGINAS_MUESTRA - 1)
+    return sorted({round(i * paso) for i in range(MAX_PAGINAS_MUESTRA)})
 
 
 def _tiene_texto(pagina: PageObject) -> bool:

@@ -6,7 +6,13 @@ import pytest
 
 from app.bd.enumeraciones import SeccionNormalizada as S
 from app.corpus.bloques import Bloque, TipoBloque
-from app.corpus.secciones import SeccionExcluida, clasificar_titulo, seccionar, titulo_completo
+from app.corpus.secciones import (
+    SeccionExcluida,
+    clasificar_titulo,
+    es_referencia_bibliografica,
+    seccionar,
+    titulo_completo,
+)
 
 T = TipoBloque
 
@@ -88,6 +94,99 @@ def test_no_reconoce_titulos_que_no_son_secciones(texto: str) -> None:
 )
 def test_titulo_completo_no_admite_palabras_de_mas(frase: str, clase: object) -> None:
     assert titulo_completo(frase) == clase
+
+
+@pytest.mark.parametrize(
+    "texto",
+    [
+        # APA (caso real del corpus provisional, con DOI)
+        "Molla, A., & Licker, P. S. (2005). eCommerce adoption in developing countries: a"
+        " model and instrument. Information & Management, 42(6), 877-899."
+        " https://doi.org/10.1016/j.im.2004.09.002",
+        # IEEE (caso real)
+        'T. Adiguzel, M. H. Kaya, and F. K. Cansu, "Revolutionizing education with AI,"'
+        " Contemporary Educational Technology, vol. 15, no. 3, pp. 1-13, 2023. Available:"
+        " https://doi.org/10.30935/cedtech/13152",
+        # Varias entradas APA sin DOI en un mismo bloque
+        "Pérez, J. (2019). Título ficticio uno. Revista Ficticia, 3(2), 10-20. Gómez, A. B."
+        " (2020). Título ficticio dos. Editorial Imaginaria.",
+        # Vancouver
+        "Quispe R, Torres A. Ansiedad y estadística. Rev Fict Educ. 2021;12(3):45-61."
+        " doi:10.5555/rfe.2021.12",
+        # Harvard con el nombre de pila y el título entre comillas
+        'Quispe, Rosa and Torres, Ana (2016). "Ansiedad ante la estadística en primer año".'
+        " Revista Ficticia, 4 (2), 35-48. <https://doi.org/10.5555/rf.2016.4>",
+        # Recuadro de cita del propio artículo
+        "Citation: Quispe, R.; Torres, A. Ansiedad ante la estadística. Educ. Fict. 2023, 13,"
+        " 856. https://doi.org/10.5555/ef13090856",
+    ],
+)
+def test_reconoce_entradas_bibliograficas_por_su_forma(texto: str) -> None:
+    assert es_referencia_bibliografica(texto)
+
+
+@pytest.mark.parametrize(
+    "texto",
+    [
+        "La ansiedad ante la estadística es frecuente (Pérez, 2020; Gómez et al., 2021) y se"
+        " asocia con menor rendimiento, como mostraron estudios previos (Arias, 2019).",
+        "Se aplicó el coeficiente alfa de Cronbach (1951), que fue de 0,91 en el pretest y de"
+        " 0,93 en el postest, con una muestra de 84 estudiantes de tercer ciclo.",
+        "Los datos están disponibles en https://osf.io/ficticio para quien quiera replicar el"
+        " análisis descrito en esta sección.",
+        "Participaron 84 estudiantes (42 en cada grupo) con una edad media de 20,4 años.",
+        # Casos del corpus provisional (decisión T09-01, apartado 10), con nombres ficticios:
+        # citas narrativas en serie,
+        "Así, Quispe y Torres (2006), Arias et al. (2006), Gómez-Rivas y Lera (2007), Salas,"
+        " Tello y Mena (2007) y Paz (2008) midieron el tamaño de la empresa. Rojas y Vera"
+        " (2002) usaron el número de empleados, como Gómez-Rivas y Lera (2007).",
+        # una lista de autores en un resultado bibliométrico,
+        "La figura 4 muestra los autores con más producción: Quispe, R.C., Torres, L.,"
+        " Arias, M., Gómez, A., Salas, S. y Tello, D.R., con al menos tres artículos cada uno.",
+        # enlaces a las herramientas usadas
+        "Se usaron Escritor (https://escritor.example, consultado el 8 de julio de 2024),"
+        " Imagina (https://imagina.example) y Dibuja (https://dibuja.example) en las tareas.",
+        # y una lista entre comillas con la coma dentro, al estilo estadounidense.
+        'We used terms such as "dynamic pricing in retail," "AI impact on retail," "data'
+        ' usage in retail," and "retail efficiency," in the search of industry reports.',
+    ],
+)
+def test_no_confunde_prosa_con_citas_con_una_referencia(texto: str) -> None:
+    assert not es_referencia_bibliografica(texto)
+
+
+def test_excluye_referencias_sin_titulo_o_desordenadas() -> None:
+    """Caso real: Docling dejó el título "5. Conclusion" después de la lista de
+    referencias, y otra lista aparece al final de la discusión sin título."""
+    referencia = (
+        'E. Agbaglo and E. M. Bonsu, "The role of digital technologies," Cogent Education,'
+        " vol. 9, no. 1, pp. 1-12, 2022. Available: https://doi.org/10.1080/2331186X.2022.2"
+    )
+    bloques = [
+        titulo("Introducción"),
+        parrafo("Texto de introducción sin referencias."),
+        titulo("4. Discussion"),
+        parrafo("Discusión de los hallazgos (Pérez, 2020)."),
+        parrafo(referencia),
+        parrafo("Industrial Management & Data Systems, 109(2), 224-244."),  # resto partido
+        titulo("5. Conclusion"),
+        parrafo("La conclusión del estudio."),
+        parrafo(referencia),
+    ]
+    textos = [p.texto for s in seccionar(bloques).secciones for p in s.parrafos]
+    assert textos == [
+        "Texto de introducción sin referencias.",
+        "Discusión de los hallazgos (Pérez, 2020).",
+        "La conclusión del estudio.",
+    ]
+
+
+@pytest.mark.parametrize(
+    "titulo_texto",
+    ["Reference", "Referencia", "Bibliographic references", "Lista de referencias"],
+)
+def test_titulos_de_referencias_en_singular_y_variantes(titulo_texto: str) -> None:
+    assert clasificar_titulo(titulo_texto) is SeccionExcluida.REFERENCIAS
 
 
 def test_secciona_un_articulo_y_excluye_referencias_y_agradecimientos() -> None:

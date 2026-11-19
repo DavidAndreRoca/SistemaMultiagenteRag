@@ -92,6 +92,11 @@ class Ajustes(BaseModel):
     directorio_archivos: str | None = Field(
         default=None, validation_alias=AliasChoices("DIRECTORIO_ARCHIVOS")
     )
+    # Hilos de Docling (modelo de diseño de página): en un portátil compartido conviene
+    # dejar núcleos libres (decisión T10-02). No cambia el resultado de la extracción.
+    hilos_docling: int = Field(
+        default=4, ge=1, le=32, validation_alias=AliasChoices("HILOS_DOCLING")
+    )
 
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:

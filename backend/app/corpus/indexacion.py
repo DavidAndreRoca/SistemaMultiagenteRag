@@ -51,6 +51,7 @@ from app.corpus.esquemas import (
     MotivoExclusion,
 )
 from app.corpus.extraccion import ParametrosCanal
+from app.corpus.medicion import Etapas
 from app.corpus.validacion import huella
 from app.inferencia.interfaces import IdentidadModelo, ProveedorEmbeddings
 from app.repositorios.contexto import ContextoAcceso
@@ -66,7 +67,7 @@ class ProcesadorPdf(Protocol):
 
     def con_parametros(self, parametros: ParametrosCanal) -> ProcesadorPdf: ...
 
-    def procesar_pdf(self, ruta: Path) -> DocumentoProcesado: ...
+    def procesar_pdf(self, ruta: Path, etapas: Etapas | None = None) -> DocumentoProcesado: ...
 
 
 class Resultado(StrEnum):
@@ -84,6 +85,27 @@ class ResultadoIngesta(BaseModel):
     motivos: list[str] = []
     mensajes: list[str] = []
     fragmentos: int = 0
+    tiempos_s: dict[str, float] = {}  # por etapa: validacion, extraccion, ..., base
+    memoria_mb: dict[str, float] = {}  # pico de memoria residente del proceso por etapa
+
+
+class CambioSegmentacion(StrEnum):
+    SIN_CAMBIOS = "sin_cambios"
+    CAMBIARIA = "cambiaria"  # simulación: se actualizaría con --aplicar
+    ACTUALIZADO = "actualizado"
+    EN_USO = "en_uso"  # sus fragmentos alimentaron solicitudes: no se tocan
+    CONFLICTO = "conflicto"  # el nuevo texto coincide con otro documento de la colección
+    RETIRADO = "retirado"
+    SIN_TEXTO = "sin_texto"  # la nueva segmentación no deja texto: se revisa a mano
+
+
+class Resegmentacion(BaseModel):
+    archivo: str
+    cambio: CambioSegmentacion
+    fragmentos_antes: int
+    fragmentos_despues: int
+    reutilizados: int = 0  # fragmentos con el mismo texto: se conserva su vector
+    embebidos: int = 0  # fragmentos nuevos que se embeben
 
 
 MENSAJE_DUPLICADO = "La colección ya tiene un documento con el mismo texto o el mismo DOI."
@@ -129,10 +151,12 @@ class Indexador:
         # Docling ocupa más de 1 GB al convertir: un PDF a la vez por proceso.
         self._candado = threading.Lock()
 
-    def _procesar(self, ruta: Path, parametros: ParametrosCanal) -> DocumentoProcesado:
+    def _procesar(
+        self, ruta: Path, parametros: ParametrosCanal, etapas: Etapas
+    ) -> DocumentoProcesado:
         assert self._procesador is not None, "indexador creado sin canal de extracción"
         with self._candado:
-            return self._procesador.con_parametros(parametros).procesar_pdf(ruta)
+            return self._procesador.con_parametros(parametros).procesar_pdf(ruta, etapas)
 
     async def ingerir(
         self,
@@ -152,6 +176,7 @@ class Indexador:
         if previo is not None:
             return self._informar(
                 coleccion,
+                None,
                 ResultadoIngesta(
                     archivo=nombre,
                     resultado=Resultado.YA_REGISTRADO,
@@ -159,9 +184,16 @@ class Indexador:
                     mensajes=[MENSAJE_YA_REGISTRADO],
                 ),
             )
-        procesado = await asyncio.to_thread(self._procesar, ruta, parametros)
+        etapas = Etapas()
+        procesado = await asyncio.to_thread(self._procesar, ruta, parametros, etapas)
         return await self.indexar(
-            unidad, contexto, coleccion, procesado, ruta=ruta, archivo_original=nombre
+            unidad,
+            contexto,
+            coleccion,
+            procesado,
+            ruta=ruta,
+            archivo_original=nombre,
+            etapas=etapas,
         )
 
     async def indexar(
@@ -173,8 +205,10 @@ class Indexador:
         *,
         ruta: Path,
         archivo_original: str,
+        etapas: Etapas | None = None,
     ) -> ResultadoIngesta:
         exigir_cientifica(coleccion)
+        etapas = etapas if etapas is not None else Etapas()
         if procesado.estado is EstadoProcesamiento.EXCLUIDO:
             assert procesado.motivo_exclusion is not None
             await self._excluir(
@@ -187,6 +221,7 @@ class Indexador:
             )
             return self._informar(
                 coleccion,
+                etapas,
                 ResultadoIngesta(
                     archivo=archivo_original,
                     resultado=Resultado.EXCLUIDO,
@@ -212,6 +247,7 @@ class Indexador:
             )
             return self._informar(
                 coleccion,
+                etapas,
                 ResultadoIngesta(
                     archivo=archivo_original,
                     resultado=Resultado.DUPLICADO,
@@ -225,7 +261,8 @@ class Indexador:
         vectores: list[list[float]] | None = None
         identidad: IdentidadModelo | None = None
         if completo:
-            embebidos = await self._embeddings.embeber([f.texto for f in procesado.fragmentos])
+            with etapas.medir("embeddings"):
+                embebidos = await self._embeddings.embeber([f.texto for f in procesado.fragmentos])
             vectores, identidad = embebidos.vectores, embebidos.identidad
 
         documento = _documento(coleccion, procesado, archivo_original, contexto, identidad)
@@ -244,18 +281,20 @@ class Indexador:
         ]
         almacen = self._almacen
         assert almacen is not None, "indexador creado sin almacén"
-        guardado = await asyncio.to_thread(almacen.guardar, ruta)
-        documento.ruta_archivo = guardado
-        try:
-            await unidad.corpus.agregar_documento(contexto, documento, fragmentos)
-            await unidad.corpus.recontar(contexto, coleccion)
-            await unidad.confirmar()
-        except BaseException:
-            await unidad.revertir()
-            almacen.borrar(guardado)
-            raise
+        with etapas.medir("base"):
+            guardado = await asyncio.to_thread(almacen.guardar, ruta)
+            documento.ruta_archivo = guardado
+            try:
+                await unidad.corpus.agregar_documento(contexto, documento, fragmentos)
+                await unidad.corpus.recontar(contexto, coleccion)
+                await unidad.confirmar()
+            except BaseException:
+                await unidad.revertir()
+                almacen.borrar(guardado)
+                raise
         return self._informar(
             coleccion,
+            etapas,
             ResultadoIngesta(
                 archivo=archivo_original,
                 resultado=Resultado.INDEXADO if completo else Resultado.INCOMPLETO,
@@ -292,7 +331,13 @@ class Indexador:
         await unidad.confirmar()
 
     @staticmethod
-    def _informar(coleccion: Coleccion, resultado: ResultadoIngesta) -> ResultadoIngesta:
+    def _informar(
+        coleccion: Coleccion, etapas: Etapas | None, resultado: ResultadoIngesta
+    ) -> ResultadoIngesta:
+        if etapas is not None:
+            resultado = resultado.model_copy(
+                update={"tiempos_s": dict(etapas.segundos), "memoria_mb": dict(etapas.memoria_mb)}
+            )
         _registro.info(
             "ingesta de documento",
             extra={
@@ -378,6 +423,110 @@ class Indexador:
             extra={"tipo_evento": "corpus", "documentos": len(documentos), "forzar": forzar},
         )
         return len(documentos)
+
+    async def resegmentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        documento: Documento,
+        procesado: DocumentoProcesado,
+        *,
+        aplicar: bool,
+    ) -> Resegmentacion:
+        """Reemplaza los fragmentos de un documento por los de una nueva segmentación.
+
+        Reutiliza el vector de todo fragmento cuyo texto no cambió y embebe solo los
+        nuevos. No toca documentos retirados, ni los que ya alimentaron una solicitud
+        (sus fragmentos son trazas, 18.9). Con ``aplicar=False`` solo informa.
+        """
+        anteriores = list(await unidad.corpus.fragmentos(contexto, documento))
+        informe = Resegmentacion(
+            archivo=documento.archivo_original or str(documento.id),
+            cambio=CambioSegmentacion.SIN_CAMBIOS,
+            fragmentos_antes=len(anteriores),
+            fragmentos_despues=len(procesado.fragmentos),
+        )
+        if documento.estado is EstadoDocumento.RETIRADO:
+            return informe.model_copy(update={"cambio": CambioSegmentacion.RETIRADO})
+        if procesado.estado is EstadoProcesamiento.EXCLUIDO:
+            return informe.model_copy(update={"cambio": CambioSegmentacion.SIN_TEXTO})
+        estado = (
+            EstadoDocumento.ACTIVO
+            if procesado.estado is EstadoProcesamiento.PROCESADO
+            else EstadoDocumento.INCOMPLETO
+        )
+        textos = [f.texto for f in procesado.fragmentos]
+        if textos == [f.texto for f in anteriores] and estado is documento.estado:
+            return informe
+        if await unidad.corpus.fragmentos_en_uso(contexto, documento):
+            return informe.model_copy(update={"cambio": CambioSegmentacion.EN_USO})
+        assert procesado.huella_texto is not None
+        if (
+            procesado.huella_texto != documento.huella_sha256
+            and await unidad.corpus.otro_con_huella(contexto, documento, procesado.huella_texto)
+        ):
+            return informe.model_copy(update={"cambio": CambioSegmentacion.CONFLICTO})
+
+        confirmado = estado is EstadoDocumento.INCOMPLETO and documento.confirmado_en is not None
+        recuperable = estado is EstadoDocumento.ACTIVO or confirmado
+        guardados = {f.texto: f.embedding for f in anteriores if f.embedding is not None}
+        nuevos = [t for t in dict.fromkeys(textos) if t not in guardados] if recuperable else []
+        informe = informe.model_copy(
+            update={
+                "cambio": CambioSegmentacion.ACTUALIZADO
+                if aplicar
+                else CambioSegmentacion.CAMBIARIA,
+                "reutilizados": len([t for t in textos if t in guardados]) if recuperable else 0,
+                "embebidos": len(nuevos),
+            }
+        )
+        if not aplicar:
+            return informe
+
+        vectores: dict[str, list[float]] = {t: list(v) for t, v in guardados.items()}
+        identidad = (
+            IdentidadModelo(
+                modelo=documento.modelo_embeddings, revision=documento.revision_embeddings
+            )
+            if documento.modelo_embeddings and documento.revision_embeddings
+            else None
+        )
+        if nuevos:
+            embebidos = await self._embeddings.embeber(nuevos)
+            if identidad is not None and embebidos.identidad != identidad:
+                # Otro modelo o revisión: no se mezclan vectores, se embebe todo de nuevo.
+                vectores, nuevos = {}, list(dict.fromkeys(textos))
+                embebidos = await self._embeddings.embeber(nuevos)
+            vectores.update(zip(nuevos, embebidos.vectores, strict=True))
+            identidad = embebidos.identidad
+        fragmentos = [
+            Fragmento(
+                orden=f.orden,
+                texto=f.texto,
+                seccion_normalizada=f.seccion_normalizada,
+                seccion_original=f.seccion_original,
+                pagina_inicio=f.pagina_inicio,
+                pagina_fin=f.pagina_fin,
+                tokens=f.tokens,
+                embedding=vectores.get(f.texto) if recuperable else None,
+            )
+            for f in procesado.fragmentos
+        ]
+        await unidad.corpus.reemplazar_fragmentos(contexto, documento, fragmentos)
+        documento.huella_sha256 = procesado.huella_texto
+        documento.estado = estado
+        documento.motivo_estado = ", ".join(m.value for m in procesado.motivos_incompleto) or None
+        if not confirmado:
+            documento.confirmado_en = None
+            documento.confirmado_por_id = None
+        if recuperable and identidad is not None:
+            documento.modelo_embeddings = identidad.modelo
+            documento.revision_embeddings = identidad.revision
+        coleccion = await unidad.corpus.coleccion(contexto, documento.coleccion_id)
+        assert coleccion is not None
+        await unidad.corpus.recontar(contexto, coleccion)
+        await unidad.confirmar()
+        return informe
 
     async def _embeber(self, fragmentos: Sequence[Fragmento]) -> IdentidadModelo:
         if not fragmentos:

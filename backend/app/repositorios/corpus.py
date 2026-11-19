@@ -14,11 +14,11 @@ import uuid
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from sqlalchemy import ColumnElement, and_, func, or_, select, update
+from sqlalchemy import ColumnElement, and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bd.enumeraciones import EstadoDocumento
-from app.bd.modelos import Coleccion, Documento, ExclusionCorpus, Fragmento
+from app.bd.modelos import Coleccion, Documento, ExclusionCorpus, Fragmento, FragmentoRecuperado
 from app.repositorios.contexto import ContextoAcceso
 
 
@@ -133,6 +133,42 @@ class RepositorioCorpus:
             .order_by(Documento.creado_en, Documento.id)
         )
         return [(fila[0], int(fila[1])) for fila in resultado.all()]
+
+    async def fragmentos_en_uso(self, contexto: ContextoAcceso, documento: Documento) -> bool:
+        """Algún fragmento del documento fue recuperado por una solicitud (trazabilidad)."""
+        contexto.exigir_investigador()
+        usado = await self._sesion.scalar(
+            select(FragmentoRecuperado.id)
+            .join(Fragmento, Fragmento.id == FragmentoRecuperado.fragmento_id)
+            .where(Fragmento.documento_id == documento.id)
+            .limit(1)
+        )
+        return usado is not None
+
+    async def reemplazar_fragmentos(
+        self, contexto: ContextoAcceso, documento: Documento, nuevos: Sequence[Fragmento]
+    ) -> None:
+        """Cambia los fragmentos de un documento (re-segmentación sin trazas que conservar)."""
+        contexto.exigir_investigador()
+        await self._sesion.execute(delete(Fragmento).where(Fragmento.documento_id == documento.id))
+        for fragmento in nuevos:
+            fragmento.documento_id = documento.id
+            fragmento.coleccion_id = documento.coleccion_id
+            self._sesion.add(fragmento)
+        await self._sesion.flush()
+
+    async def otro_con_huella(
+        self, contexto: ContextoAcceso, documento: Documento, huella_texto: str
+    ) -> bool:
+        contexto.exigir_investigador()
+        otro = await self._sesion.scalar(
+            select(Documento.id).where(
+                Documento.coleccion_id == documento.coleccion_id,
+                Documento.huella_sha256 == huella_texto,
+                Documento.id != documento.id,
+            )
+        )
+        return otro is not None
 
     async def listar_exclusiones(
         self, contexto: ContextoAcceso, coleccion_id: uuid.UUID

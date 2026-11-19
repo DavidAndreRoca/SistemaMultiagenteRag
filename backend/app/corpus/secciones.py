@@ -44,11 +44,12 @@ COMIENZOS: tuple[tuple[ClaseSeccion, tuple[str, ...]], ...] = (
     (
         SeccionExcluida.REFERENCIAS,
         (
-            "referencias",
-            "referencia bibliografica",
+            "referencia",  # también "referencias" (sufijo corto)
+            "lista de referencia",
             "bibliografia",
-            "references",
-            "reference list",
+            "reference",  # también "references"
+            "bibliographic reference",
+            "bibliographical reference",
             "bibliography",
             "literatura citada",
             "literature cited",
@@ -232,6 +233,63 @@ def titulo_completo(frase: str) -> ClaseSeccion | None:
     return None
 
 
+# Señales de una entrada bibliográfica (APA, Harvard, IEEE, Vancouver). Las citas en el texto
+# no cuentan: en "(Pérez, 2020)" el año no va solo, y en "Zhu et al. (2006)," o "Mayer
+# (2017)." el año sigue a un apellido, no a las iniciales (decisión T09-01, apartado 10).
+_ANIO = r"\((?:19|20)\d{2}[a-z]?(?:,\s[^()]{1,25})?\)"
+_MAYUSCULA = r"[A-Z\u00c1\u00c9\u00cd\u00d3\u00da\u00d1]"
+SENALES_BIBLIOGRAFICAS = (
+    re.compile(
+        rf"(?<={_MAYUSCULA}\.)\s?{_ANIO}\s?[.,]"  # tras las iniciales: Mayer, R. E. (2017).
+        rf"|{_ANIO}\s?[.,]\s?[\"\u201c]"  # con el título entre comillas: (2016). "Título"
+        rf"|{_MAYUSCULA}[\w'-]+,\s{_MAYUSCULA}[a-z]+(?:\s{_MAYUSCULA}\.)?\s{_ANIO}\s?\."
+    ),  # Harvard con el nombre: Toepoel, Vera (2016).
+    re.compile(r"\bvol\.\s?\d+|\bpp\.\s?\d+|\bno\.\s?\d+", re.IGNORECASE),
+    # 37(9), 1579-1590 (guion o semirraya entre páginas)
+    re.compile(r"\b\d{1,4}\s?\(\d{1,4}\)\s?[,:]\s?(?:e)?\d+(?:\s?[-\u2013]\s?\d+)?"),
+    re.compile(r"\b(?:19|20)\d{2}\s?;\s?\d+"),  # Vancouver: 2021;12(3):45-61
+    # IEEE: Apellido, "Título," (en la prosa la lista entre comillas no sigue a "Apellido, ")
+    re.compile(r"(?<=\w,\s)[\"\u201c][^\"\u201c\u201d]{10,250},[\"\u201d]"),
+    # Recuadro de cita del artículo: "Citation:", "Cómo citar este artículo:"
+    re.compile(
+        r"^\s*(?:citation|recommended citation|cite this article"
+        r"|c[o\u00f3]mo citar|para citar)(?:\s+este\s+art[i\u00ed]culo)?\s?:",
+        re.IGNORECASE,
+    ),
+)
+# Por sí solas no hacen una entrada: un párrafo puede nombrar autores o enlazar herramientas.
+SENALES_DE_APOYO = (
+    re.compile(r"https?://\S+|\bdoi:\s?\S+|\b10\.\d{4,9}/\S+", re.IGNORECASE),
+    re.compile(
+        rf"{_MAYUSCULA}[\w'\u2019-]+,\s(?:{_MAYUSCULA}\.\s?(?:-\s?)?){{1,3}}(?=[,&(y]|and|\s)"
+    ),
+)
+SENALES_DE_REFERENCIA = SENALES_BIBLIOGRAFICAS + SENALES_DE_APOYO
+MIN_SENALES_REFERENCIA = 3
+PALABRAS_POR_SENAL = 25
+MAX_PALABRAS_RESTO = 60
+
+
+def _senales(texto: str) -> int:
+    return sum(len(patron.findall(texto)) for patron in SENALES_DE_REFERENCIA)
+
+
+def es_referencia_bibliografica(texto: str) -> bool:
+    """El bloque es una o varias entradas de una lista de referencias (no prosa con citas)."""
+    senales = _senales(texto)
+    palabras = len(texto.split())
+    return (
+        senales >= MIN_SENALES_REFERENCIA
+        and senales * PALABRAS_POR_SENAL >= palabras
+        and any(patron.search(texto) for patron in SENALES_BIBLIOGRAFICAS)
+    )
+
+
+def parece_resto_de_referencia(texto: str) -> bool:
+    """Trozo corto con alguna señal, tras una entrada: la referencia partida en dos bloques."""
+    return _senales(texto) >= 1 and len(texto.split()) <= MAX_PALABRAS_RESTO
+
+
 @dataclass(frozen=True)
 class Parrafo:
     texto: str
@@ -270,8 +328,10 @@ def seccionar(bloques: Sequence[Bloque]) -> DocumentoSeccionado:
     actual: ClaseSeccion | None = None
     hubo_reconocida = False
 
+    tras_referencia = False  # el bloque anterior era una entrada bibliográfica
     for bloque in bloques:
         if bloque.tipo is TipoBloque.TITULO_SECCION:
+            tras_referencia = False
             clase = clasificar_titulo(bloque.texto)
             if clase is S.RESUMEN and actual in CUERPO_IMRAD:
                 clase = None  # "Summary of findings" dentro del cuerpo no es el resumen
@@ -284,6 +344,14 @@ def seccionar(bloques: Sequence[Bloque]) -> DocumentoSeccionado:
             continue
         if bloque.tipo not in TIPOS_DE_TEXTO:
             continue
+        # Entradas de bibliografía fuera de una sección "Referencias" reconocida (el título
+        # faltó o el orden de lectura lo dejó atrás): se excluyen por su forma.
+        if es_referencia_bibliografica(bloque.texto) or (
+            tras_referencia and parece_resto_de_referencia(bloque.texto)
+        ):
+            tras_referencia = True
+            continue
+        tras_referencia = False
         if not grupos:
             grupos.append(_Grupo(None, None, False))
         grupos[-1].parrafos.append(Parrafo(bloque.texto, bloque.pagina_inicio, bloque.pagina_fin))

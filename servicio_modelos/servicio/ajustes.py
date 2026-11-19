@@ -27,8 +27,10 @@ class AjustesServicio(BaseModel):
     max_textos: int = Field(128, ge=1, le=1024, validation_alias="MAX_TEXTOS")
     # Un texto (o un par consulta y texto) más largo se rechaza: nunca se trunca en silencio.
     max_tokens: int = Field(1024, ge=16, le=8192, validation_alias="MAX_TOKENS")
-    # Hilos de inferencia de PyTorch; 0 deja el valor por defecto de la biblioteca.
+    # Hilos de inferencia de PyTorch; 0 usa todos los procesadores del contenedor (T10-02).
     hilos: int = Field(0, ge=0, le=64, validation_alias="HILOS_INFERENCIA")
+    # El reordenador se carga al primer /reordenar: la ingesta solo embebe (T10-02).
+    reordenador_perezoso: bool = Field(True, validation_alias="REORDENADOR_PEREZOSO")
 
     @property
     def max_caracteres(self) -> int:

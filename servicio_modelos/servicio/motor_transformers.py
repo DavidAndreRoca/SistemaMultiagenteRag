@@ -11,6 +11,7 @@ la fijada en ``catalogo.py``.
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from typing import Any
 
@@ -26,12 +27,15 @@ from servicio.catalogo import (
     ModeloFijado,
 )
 from servicio.lotes import lotes_sin_relleno
+from servicio.motores import MotorReordenador, ReordenadorPerezoso
 
 
 def configurar_torch(hilos: int) -> None:
     torch.use_deterministic_algorithms(True)
-    if hilos:
-        torch.set_num_threads(hilos)
+    # 0: todos los procesadores del contenedor. PyTorch, por su cuenta, toma solo los
+    # núcleos físicos (3 de 6 en el portátil de desarrollo); con 6 se embebe un 31 % más
+    # rápido y los vectores son idénticos bit a bit (decisión T10-02).
+    torch.set_num_threads(hilos or os.cpu_count() or 1)
     torch.set_grad_enabled(False)
     registro_transformers.disable_progress_bar()  # el registro queda en JSON
 
@@ -116,6 +120,11 @@ class ReordenadorBgeV2M3(_Base):
         return resultado
 
 
-def cargar_motores(ajustes: AjustesServicio) -> tuple[EmbeddingsBgeM3, ReordenadorBgeV2M3]:
+def cargar_motores(ajustes: AjustesServicio) -> tuple[EmbeddingsBgeM3, MotorReordenador]:
     configurar_torch(ajustes.hilos)
-    return EmbeddingsBgeM3(ajustes), ReordenadorBgeV2M3(ajustes)
+    reordenador: MotorReordenador = (
+        ReordenadorPerezoso(lambda: ReordenadorBgeV2M3(ajustes), BGE_RERANKER_V2_M3)
+        if ajustes.reordenador_perezoso
+        else ReordenadorBgeV2M3(ajustes)
+    )
+    return EmbeddingsBgeM3(ajustes), reordenador

@@ -11,11 +11,12 @@ Configuración (decisión T09-01, apartado 2):
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from app.corpus.bloques import Bloque, DocumentoExtraido, TipoBloque
-from app.corpus.recursos import exigir
+from app.corpus.recursos import DISENO_DE_PAGINA, exigir
 
 # Etiquetas de Docling (DocItemLabel) a tipos de bloque.
 TIPOS_POR_ETIQUETA = {
@@ -38,15 +39,50 @@ class ErrorExtraccion(RuntimeError):
     """Docling no pudo convertir el PDF."""
 
 
+@dataclass(frozen=True)
+class OpcionesDocling:
+    """Rendimiento y memoria de Docling (decisión T10-02). No cambian qué se extrae.
+
+    * ``motor``: lector del PDF (``docling_parse`` o ``pypdfium2``).
+    * ``hilos``: hilos de PyTorch para el modelo de diseño de página.
+    * ``lote_paginas``: páginas por pasada del modelo de diseño de página.
+    * ``cola_paginas``: páginas en espera entre etapas de Docling (acota la memoria).
+    """
+
+    # Medido con 3 PDF reales (89 páginas): mismo texto extraído que con los valores de
+    # Docling (lote 4, cola 100), 5 % menos de tiempo y pico de 2,6 GB en lugar de 3,6 GB.
+    # pypdfium2 se descartó: duplicaba texto (14 298 palabras de un PDF que tiene 9 712).
+    motor: str = "docling_parse"
+    hilos: int = 4
+    lote_paginas: int = 1
+    cola_paginas: int = 4
+
+    def firma(self) -> str:
+        return f"motor={self.motor}"
+
+
+MOTORES = ("docling_parse", "pypdfium2")
+
+
 class ExtractorDocling:
-    def __init__(self, recursos: Path, *, hilos: int = 4) -> None:
+    def __init__(self, recursos: Path, opciones: OpcionesDocling | None = None) -> None:
         exigir(recursos)
+        self.opciones = opciones = opciones or OpcionesDocling()
+        if opciones.motor not in MOTORES:
+            raise ValueError(f"motor de Docling desconocido: {opciones.motor}")
         from docling.datamodel.accelerator_options import AcceleratorDevice, AcceleratorOptions
         from docling.datamodel.base_models import InputFormat
         from docling.datamodel.pipeline_options import PdfPipelineOptions
         from docling.document_converter import DocumentConverter, PdfFormatOption
 
-        opciones = PdfPipelineOptions(
+        if opciones.motor == "pypdfium2":
+            from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend as Motor
+        else:
+            from docling.backend.docling_parse_v4_backend import (
+                DoclingParseV4DocumentBackend as Motor,
+            )
+        hilos = opciones.hilos
+        tuberia = PdfPipelineOptions(
             artifacts_path=recursos,
             do_ocr=False,
             do_table_structure=False,
@@ -59,10 +95,25 @@ class ExtractorDocling:
             enable_remote_services=False,
             allow_external_plugins=False,
             accelerator_options=AcceleratorOptions(num_threads=hilos, device=AcceleratorDevice.CPU),
+            layout_batch_size=opciones.lote_paginas,
+            queue_max_size=opciones.cola_paginas,
         )
         self._convertidor = DocumentConverter(
             allowed_formats=[InputFormat.PDF],
-            format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=opciones)},
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=tuberia, backend=Motor)
+            },
+        )
+
+    @property
+    def firma(self) -> str:
+        """Lo que determina el resultado de la extracción (para la caché): versión de
+        Docling, revisión del modelo de diseño de página y motor de lectura del PDF."""
+        from importlib.metadata import version
+
+        return (
+            f"docling={version('docling-slim')};layout={DISENO_DE_PAGINA.revision};"
+            f"{self.opciones.firma()};bloques=1"
         )
 
     def extraer(self, ruta: Path) -> DocumentoExtraido:
