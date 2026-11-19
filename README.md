@@ -179,6 +179,12 @@ python scripts/respaldo_corpus.py restaurar datos/respaldos/corpus-AAAAMMDD --co
 
 Decisiones: `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md` y `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
 
+## Borradores del caso (T11)
+
+El caso (A1) carga su borrador .docx por hito. Cada carga se valida y crea una versión nueva, vigente en su hito, sin borrar las anteriores. La validación rechaza, con su motivo, los archivos con macros, cifrados, dañados, de otro formato o con contenido comprimido anómalo. El archivo se guarda con nombre aleatorio en el volumen `archivos` y nunca se sirve. Sus párrafos quedan en la base con los identificadores `p1`, `p2`, etc.
+
+Rutas del caso: `POST /caso/versiones` (formulario con `hito` y `archivo`), `GET /caso/versiones` (con `?hito=` opcional) y `GET /caso/versiones/{id}`. Los .docx de prueba de `backend/pruebas/datos/docx/` son ficticios y se regeneran con `python -m pruebas.datos.generar_docx_muestra`. Decisiones: `docs/decisiones/T11-borradores.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
-from sqlalchemy import select
+import uuid
+from collections.abc import Sequence
+
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import undefer
 
 from app.bd.enumeraciones import TipoColeccion
 from app.bd.modelos import (
@@ -23,6 +27,60 @@ from app.repositorios.contexto import ContextoAcceso
 
 class RepositorioVersiones(RepositorioDeCaso[VersionBorrador]):
     modelo = VersionBorrador
+
+    async def vigente_del_hito(self, contexto: ContextoAcceso, hito: str) -> VersionBorrador | None:
+        resultado = await self._sesion.execute(
+            self._consulta(contexto).where(VersionBorrador.hito == hito, VersionBorrador.vigente)
+        )
+        vigente: VersionBorrador | None = resultado.scalar_one_or_none()
+        return vigente
+
+    async def con_parrafos(
+        self, contexto: ContextoAcceso, version_id: uuid.UUID
+    ) -> VersionBorrador | None:
+        """Versión del caso con sus párrafos (columna de carga diferida)."""
+        resultado = await self._sesion.execute(
+            self._consulta(contexto)
+            .where(VersionBorrador.id == version_id)
+            .options(undefer(VersionBorrador.parrafos))
+        )
+        version: VersionBorrador | None = resultado.scalar_one_or_none()
+        return version
+
+    async def recientes(
+        self, contexto: ContextoAcceso, hito: str | None = None
+    ) -> Sequence[VersionBorrador]:
+        """Versiones del caso, de la más reciente a la más antigua (sin cargar el texto)."""
+        consulta = self._consulta(contexto).order_by(
+            VersionBorrador.cargada_en.desc(), VersionBorrador.id.desc()
+        )
+        if hito is not None:
+            consulta = consulta.where(VersionBorrador.hito == hito)
+        resultado = await self._sesion.execute(consulta)
+        versiones: Sequence[VersionBorrador] = resultado.scalars().all()
+        return versiones
+
+    async def registrar_vigente(
+        self, contexto: ContextoAcceso, nueva: VersionBorrador
+    ) -> VersionBorrador | None:
+        """Guarda la nueva versión como vigente de su hito y devuelve la que lo era.
+
+        Bloquea la fila del caso: dos cargas simultáneas del mismo caso se ordenan en lugar
+        de chocar con el índice único de la versión vigente (decisión T11-01, apartado 4).
+        """
+        caso_id = contexto.caso_exigido()
+        await self._sesion.execute(select(Caso.id).where(Caso.id == caso_id).with_for_update())
+        anterior = await self.vigente_del_hito(contexto, nueva.hito)
+        if anterior is not None:
+            await self._sesion.execute(
+                update(VersionBorrador)
+                .where(VersionBorrador.caso_id == caso_id, VersionBorrador.id == anterior.id)
+                .values(vigente=False)
+                .execution_options(synchronize_session="fetch")
+            )
+        nueva.vigente = True
+        await self.agregar(contexto, nueva)
+        return anterior
 
 
 class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):

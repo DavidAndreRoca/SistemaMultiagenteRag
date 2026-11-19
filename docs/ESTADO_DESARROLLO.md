@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 19 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional, cumplida en la rama `t10-corpus-provisional` (apartado 13.8), junto con la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02).
+**Última actualización:** 19 de noviembre de 2026. T11 implementada y verificada en local en la rama `t11-borradores` (apartado 14). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -18,8 +18,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
 | **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
 | **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
-| **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida** en la rama `t10-corpus-provisional`: corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
-| T11 en adelante | | No iniciadas |
+| **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida e integrada** (solicitud de cambio #6, apartado 13.10): corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
+| **T11 (F3)** | Borradores: carga, validación y versiones | **Implementada y verificada en local** con la base real; CP-01 y CP-02 superados y criterios cumplidos (apartado 14). Rama `t11-borradores`, sin integrar |
+| T12 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -678,7 +679,7 @@ Decisiones del equipo del 12 de noviembre de 2026:
 | 4. Comando de ingesta en lote, idempotente, con informe | Hecha | `python -m app.corpus.ingesta`. Una línea por archivo y un resumen, sin texto de los documentos |
 | 5. Rutas del investigador (listar, subir, confirmar incompleto, retirar) | Hecha | `app/api/corpus.py`: cinco rutas nuevas en la matriz de autorización. `GET /investigador/colecciones` muestra ahora el `id` |
 | 6. Registrar por tema las referencias excluidas por no tener acceso abierto | Hecha la estructura | Tabla `exclusion_corpus` con el motivo `sin_acceso_abierto`, contadores y `GET /investigador/colecciones/{id}/exclusiones`. Quien detecta la falta de acceso abierto es el importador de T15 (Unpaywall, T14) |
-| 7. Ingerir el corpus provisional del carril de insumos | **Pendiente** | El corpus provisional aún no existe (R-08). Se ingerirá con el comando de la actividad 4 cuando el equipo lo entregue |
+| 7. Ingerir el corpus provisional del carril de insumos | **Hecha** (19 de noviembre de 2026) | Apartado 13.8: 99 documentos indexados en 2 temas, sin fragmentos ajenos al tema |
 | Tarea: reindexación completa si cambia el modelo de embeddings | Hecha | `python -m app.corpus.reindexar [--forzar]`. Cada documento guarda modelo y revisión de sus vectores |
 | Tarea: el documento guarda la URL de acceso abierto y la licencia; fragmentos breves con enlace | Parcial | Las columnas existen desde T04 y ninguna ruta sirve el PDF. Los valores los obtiene T15 con Unpaywall; los fragmentos breves se muestran desde T16 y T19 |
 
@@ -883,3 +884,85 @@ La primera ingesta completa del corpus provisional tardó más de 2 horas en el 
 **Archivos:**
 - Creados: `backend/app/corpus/` (`medicion.py`, `cache_extraccion.py`, `resegmentar.py`), `backend/pruebas/unitarias/test_corpus_cache_y_avance.py`, `servicio_modelos/pruebas/test_perezoso.py`, `compartido/grobid/grobid.yaml`, `scripts/` (`respaldo_corpus.py`, `crear_subconjunto_desarrollo.py`, `ingesta-programada.ps1`) y `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
 - Modificados: `backend/app/corpus/` (`extraccion.py`, `extractor_docling.py`, `fabrica.py`, `indexacion.py`, `ingesta.py`, `validacion.py`), `backend/app/repositorios/corpus.py`, `backend/app/configuracion/ajustes.py` (`HILOS_DOCLING`), `servicio_modelos/servicio/` (`ajustes.py`, `aplicacion.py`, `esquemas.py`, `motores.py`, `motor_transformers.py`), `compartido/docker-compose.yml`, `.env.example`, `compartido/.env.example`, pruebas de integración del corpus, `README.md` y `CLAUDE.md`.
+
+### 13.10. Integración de la actividad 7 y de la optimización
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmación | `t10-corpus-provisional`, confirmación `320f478` (`T10: ingerir el corpus provisional y optimizar el flujo de desarrollo`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#6 |
+| CI de la solicitud | **Verde**, ejecución 44602405220: 7 de 7 trabajos, incluidos el canal de PDF con Docling real y el servicio de modelos |
+| Integración en `main` | Commit de integración `a03e359` |
+| CI de `main` tras integrar | Ejecución 44609405880: **verde** |
+
+**Demostración para el asesor** (DavidAndreRoca/SistemaMultiagenteRag#3, rama `demo-asesor`): integrada en `main` el 19 de noviembre de 2026, con el commit de integración `cf9afa3`. Agrega `docs/demo/guia-demostracion.md` y `scripts/demo.ps1`, `demo-funciones.ps1` y `demo-detener.ps1`, sin código de la aplicación. Su CI (ejecución 42528177792, 6 de 6 trabajos) es anterior a T09 y T10. Como solo agrega una guía y guiones de PowerShell que la CI no ejecuta, antes de integrarla se comprobó a mano que:
+- todo lo que usan sigue existiendo en `main`: los servicios `bd`, `migrar` y `api`, el perfil `descarga` y los módulos `app.bd.semillas` y `app.seguridad.crear_investigador`;
+- los tres guiones no tienen errores de sintaxis.
+
+La demostración no se volvió a ejecutar de punta a punta.
+
+---
+
+## 14. Fase 3 (F3): T11. Borradores: carga, validación y versiones
+
+Rama `t11-borradores`, desde `main` con T10 y la demostración (`cf9afa3`). Decisión: `docs/decisiones/T11-borradores.md` (T11-01).
+
+**CP-01 y CP-02** se definen en la tesis (6.2.7.1), que no está en el repositorio. Se tomaron como los describe la especificación (RF-01 y la tabla de excepciones de F-04):
+- **CP-01:** una carga válida crea una versión vigente con fecha, hora e hito.
+- **CP-02:** un .docx dañado, con macros, cifrado o inválido se rechaza sin crear versión y deja un evento de validación.
+
+Si la tesis los define de otro modo, hay que contrastarlos.
+
+### 14.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Validación: extensión, tipo MIME, firma del contenedor, tamaño (15 MB), tamaño descomprimido; rechazo de `.docm`, cifrados y dañados | Hecha | `app/borradores/validacion.py`, en 9 pasos y con 5 motivos (T11-01, apartado 2). También rechaza controles ActiveX y DTD (bombas XML). El tipo MIME real se lee de `[Content_Types].xml` |
+| 2. Almacenamiento con nombre aleatorio fuera de la carpeta pública y huella SHA-256 | Hecha | `DIRECTORIO_ARCHIVOS/borradores/<uuid>.docx`, con el almacén generalizado en `app/comun/almacen.py`. El nombre original no se guarda ni se registra: suele llevar el nombre del estudiante |
+| 3. Versión por hito: la nueva queda vigente sin borrar las anteriores | Hecha | `RepositorioVersiones.registrar_vigente`, con la fila del caso bloqueada. El índice único parcial de T04 garantiza una vigente por caso y hito |
+| 4. Texto y párrafos con identificador estable | Hecha | `app/borradores/extraccion.py`: `p1`, `p2`, etc., con texto, estilo y origen (cuerpo o tabla). Incluye las citas de los gestores bibliográficos como se ven y el control de cambios aceptado. Se guardan en `version_borrador.parrafos` (migración 0010) |
+| 5. Rutas del caso: cargar, listar y ver metadatos | Hecha | `POST /caso/versiones`, `GET /caso/versiones` (con `?hito=`) y `GET /caso/versiones/{id}`, en la matriz de autorización |
+| Tarea: el texto se guarda para servir alcances; el archivo no va al proveedor | Hecha | Ninguna ruta devuelve el archivo ni el texto; el texto queda en la base para T12 y T13 |
+| Tarea: primera versión de un hito, respuesta informativa | Hecha | `primera_del_hito` y un mensaje en la respuesta |
+
+### 14.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| CP-01 superado | **Cumplido** | `test_borradores.py` (integración, base real). La carga válida responde 201 con la versión vigente, el hito, la fecha y hora del reloj, la huella y el tamaño. El archivo queda guardado con nombre aleatorio y los párrafos en la base |
+| CP-02 superado | **Cumplido** | Con 14 archivos de muestra (`pruebas/datos/docx/`), cada motivo de rechazo tiene su prueba unitaria. En integración, 7 de ellos y uno de más de 15 MB: el error lleva el formato único y el motivo, no queda versión ni archivo, y se registra un evento `validacion_borrador` sin el nombre del archivo |
+| Un caso no ve ni descarga versiones de otro | **Cumplido** | La versión del caso A responde 404 al caso B, y su lista no la incluye. La matriz de autorización lo comprueba en las tres rutas con una versión real. No hay ruta de descarga |
+| Cada carga crea una versión nueva con fecha, hora e hito | **Cumplido** | Tres cargas (dos del mismo hito, con el mismo archivo) dejan tres versiones y una sola vigente por hito. Tres cargas simultáneas dejan una sola vigente |
+
+### 14.3. Pruebas
+
+- **Backend en contenedor:** 455 pruebas superadas y 5 omitidas; cobertura del 94,59 %. Ruff y mypy sin observaciones.
+- **Migración 0010:** aplicada a la base de desarrollo (0009 a 0010); `alembic check` no encuentra diferencias. El ascenso y descenso completos se prueban en `test_migraciones.py`.
+- **Nuevas:**
+  - `unitarias/test_borradores.py` (19): validación con cada archivo malicioso, extensión, tipo declarado, proporción y número de partes, y extracción (campos, control de cambios, controles de contenido, tablas).
+  - `integracion/test_borradores.py` (14): CP-01, CP-02, versiones, concurrencia, límite de tamaño, hito desconocido, aislamiento y servidor sin configurar.
+  - La matriz de autorización ahora envía formularios con archivo y usa una versión real del caso A.
+
+### 14.4. Problemas encontrados y soluciones
+
+- **Celdas combinadas repetidas:** python-docx devuelve la misma celda combinada varias veces. Deduplicarlas por `id()` fallaba porque lxml recicla esos identificadores. Se deduplican guardando los elementos en un conjunto.
+- **Dependencia en la imagen:** la imagen instala el árbol fijado de `restricciones-corpus.txt`, así que python-docx 1.2.0 (MIT) se agregó allí además de en `pyproject.toml`. Sus dependencias ya estaban en el árbol.
+
+### 14.5. Pendientes y riesgos
+
+- **CP-01 y CP-02:** contrastar con su definición en la tesis.
+- **Notas al pie y cuadros de texto:** python-docx no los lee, así que no se extraen (T11-01, apartado 7).
+- **Borradores reales de prueba:** siguen pendientes del carril de insumos (apartado 13.8). La extracción se probó solo con documentos ficticios generados.
+
+### 14.6. Archivos
+
+- **Creados:**
+  - `backend/app/borradores/` (`validacion.py`, `extraccion.py`, `servicio.py`), `backend/app/api/borradores.py` y `backend/app/comun/almacen.py`;
+  - `backend/migraciones/versiones/0010_parrafos_del_borrador.py`;
+  - `backend/pruebas/datos/generar_docx_muestra.py` y `backend/pruebas/datos/docx/` (14 archivos ficticios), `backend/pruebas/unitarias/test_borradores.py` y `backend/pruebas/integracion/test_borradores.py`;
+  - `docs/decisiones/T11-borradores.md`.
+- **Modificados:**
+  - `backend/app/bd/modelos/borradores.py`, `backend/app/repositorios/caso.py`, `backend/app/corpus/almacen.py` y `backend/app/main.py`;
+  - `backend/pyproject.toml` y `backend/restricciones-corpus.txt`;
+  - `backend/pruebas/matriz_autorizacion.py`, `integracion/test_matriz_autorizacion.py` e `integracion/conftest.py` (`DIRECTORIO_ARCHIVOS` en las pruebas);
+  - `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.

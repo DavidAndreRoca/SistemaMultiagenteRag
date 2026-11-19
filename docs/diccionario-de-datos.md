@@ -438,12 +438,15 @@ Tabla con datos de caso: toda consulta filtra por `caso_id` (4.5).
 | `huella_sha256` | varchar(64) | no |  |  | Huella SHA-256 del archivo. |  |
 | `tamano_bytes` | bigint | no |  |  | Tamaño del archivo. |  |
 | `vigente` | boolean | no |  |  | Versión vigente de su hito. |  |
+| `parrafos` | jsonb | no |  |  | Párrafos extraídos con identificador estable (p1, p2...), texto, estilo y origen (cuerpo o tabla). |  |
+| `palabras` | integer | no |  |  | Palabras del texto extraído. |  |
 | `secciones` | jsonb | sí |  |  | Secciones detectadas con identificadores estables (T12). |  |
 | `metodo_deteccion` | texto (enumeración) | sí | `estilos`, `manual` |  | estilos o manual. |  |
 
 Restricciones e índices parciales:
 
 - huella_sha256 ~ '^[0-9a-f]{64}$'
+- palabras >= 0
 - única (id, caso_id)
 - uq_version_borrador_vigente_por_hito: único en (caso_id, hito) donde vigente
 

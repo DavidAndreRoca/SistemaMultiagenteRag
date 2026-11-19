@@ -1,4 +1,4 @@
-"""Versión del borrador. La carga y validación llegan en T11; las secciones en T12."""
+"""Versión del borrador: carga, validación y párrafos en T11; secciones en T12."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from sqlalchemy import (
     CheckConstraint,
     ForeignKey,
     Index,
+    Integer,
     String,
     Text,
     UniqueConstraint,
@@ -31,6 +32,7 @@ class VersionBorrador(Base):
     __table_args__ = (
         UniqueConstraint("id", "caso_id"),  # destino de claves compuestas (aislamiento)
         CheckConstraint("huella_sha256 ~ '^[0-9a-f]{64}$'", name="huella_hex"),
+        CheckConstraint("palabras >= 0", name="palabras_no_negativas"),
         Index(
             "uq_version_borrador_vigente_por_hito",
             "caso_id",
@@ -63,6 +65,18 @@ class VersionBorrador(Base):
     tamano_bytes: Mapped[int] = col(BigInteger, comentario="Tamaño del archivo.")
     vigente: Mapped[bool] = col(
         Boolean, default=True, server_default="true", comentario="Versión vigente de su hito."
+    )
+    # Carga diferida: listar versiones no trae el texto (decisión T11-01, apartado 5).
+    parrafos: Mapped[list[dict[str, Any]]] = col(
+        JSONB,
+        default=list,
+        server_default=text("'[]'::jsonb"),
+        deferred=True,
+        comentario="Párrafos extraídos con identificador estable (p1, p2...), texto, estilo"
+        " y origen (cuerpo o tabla).",
+    )
+    palabras: Mapped[int] = col(
+        Integer, default=0, server_default="0", comentario="Palabras del texto extraído."
     )
     secciones: Mapped[dict[str, Any] | None] = col(
         JSONB, nullable=True, comentario="Secciones detectadas con identificadores estables (T12)."

@@ -73,6 +73,8 @@ docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --bui
 
 Flujo de desarrollo del corpus (T10-02): la ingesta es reanudable (Ctrl+C y repetir el comando); la extracción de Docling queda en caché en `/archivos/extraccion/` (`app/corpus/cache_extraccion.py`) y `python -m app.corpus.resegmentar --tema T --investigador I [--aplicar]` vuelve a segmentar sin releer los PDF. Para el día a día, el subconjunto de `scripts/crear_subconjunto_desarrollo.py`; el corpus completo, con `scripts/ingesta-programada.ps1`. Respaldo: `python scripts/respaldo_corpus.py respaldar|restaurar`. Presupuesto de memoria de 8 GB en `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
 
+Borradores (T11): `app/borradores/` (`validacion.py` sin acceso a la base, `extraccion.py` con python-docx, `servicio.py`), rutas en `app/api/borradores.py`, versiones en `app/repositorios/caso.py` (`RepositorioVersiones`). Los .docx de muestra (válidos e inválidos, ficticios) se regeneran con `python -m pruebas.datos.generar_docx_muestra`. El nombre original del archivo no se guarda ni se registra.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.
