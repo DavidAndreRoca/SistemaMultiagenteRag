@@ -2,7 +2,7 @@
 
 **Fase:** T12 (Fase 3). **Fecha:** 19 de noviembre de 2026. **Estado:** vigente.
 
-**Origen:** hoja de ruta, T12. Especificación de la Fase 1: RF-02 (F-05 y F-06), base de RF-09, herramientas de D1 y D2 (`estructura_borrador()`) e insumos de T04 (tabla 3, tipos y alcances). CP-09 se toma de la especificación ("un párrafo de más de unas 250 palabras se rechaza para D3 con mensaje") hasta contrastarlo con la Tabla 20 de la tesis, cuya copia aún no lo incluye.
+**Origen:** hoja de ruta, T12. Especificación de la Fase 1: RF-02 (F-05 y F-06), base de RF-09, herramientas de D1 y D2 (`estructura_borrador()`) e insumos de T04 (tabla 3, tipos y alcances). CP-09, según la tesis (`docs/especificacion-fase1/casos-de-prueba-tesis.md`): un fragmento de más de un párrafo o de más de unas 250 palabras hace que el sistema pida seleccionar un fragmento más corto y no procese la solicitud. La primera versión de esta fase solo validaba el límite de palabras; el rechazo de las selecciones de varios párrafos se agregó al contrastarla (apartado 6).
 
 ## 1. Alcance
 
@@ -70,8 +70,9 @@ Cada ubicación da la sección y el párrafo, y si se halló por el título o po
 | --- | --- |
 | El alcance debe ser uno de los admitidos por el tipo (insumos de T04, tabla 3; la base lo impone con un CHECK) | `alcance_no_admitido` |
 | `seccion`: la versión tiene secciones y el id existe. El texto es la sección con sus subsecciones | `sin_secciones`, `seccion_inexistente` |
+| `fragmento`: un solo párrafo (RF-02). Una selección de varios, como lista (`p3,p4`) o rango (`p3-p5`), se rechaza aunque sean cortos, y el mensaje dice cuántos abarca y pide uno más corto (CP-09). `p3-p3` es un solo párrafo | `fragmento_de_varios_parrafos` |
 | `fragmento`: el id de párrafo existe | `parrafo_inexistente` |
-| `fragmento` en `propuesta_redaccion` (D3): hasta `limite_palabras_d3` palabras (250, configuración versionada; CP-09). El mensaje dice cuántas tiene y pide uno menor | `alcance_demasiado_largo` |
+| `fragmento` en `propuesta_redaccion` (D3): hasta `limite_palabras_d3` palabras (250, configuración versionada; CP-09). El mensaje dice cuántas tiene y pide seleccionar un fragmento más corto | `alcance_demasiado_largo` |
 | `consulta`: texto no vacío, de hasta 2 000 caracteres | `consulta_vacia`, `consulta_demasiado_larga` |
 | `hito` y `version`: sin referencia (toman la versión completa) | `alcance_ref_no_admitido` |
 

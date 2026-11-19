@@ -218,7 +218,7 @@ def test_el_alcance_de_seccion_incluye_sus_subsecciones() -> None:
     assert resuelto.texto.startswith("2. Método\n\n2.1. Participantes")
 
 
-def test_cp09_un_parrafo_de_mas_de_250_palabras_se_rechaza_para_d3() -> None:
+def test_cp09_un_fragmento_de_mas_de_250_palabras_se_rechaza_para_d3() -> None:
     parrafos = [PARRAFO_LARGO, PARRAFO_LIMITE]
     with pytest.raises(AlcanceInvalido) as error:
         validar_alcance(
@@ -231,6 +231,7 @@ def test_cp09_un_parrafo_de_mas_de_250_palabras_se_rechaza_para_d3() -> None:
         )
     assert error.value.motivo == "alcance_demasiado_largo" and error.value.estado_http == 422
     assert "251 palabras" in error.value.mensaje and "250" in error.value.mensaje
+    assert "Seleccione un fragmento más corto" in error.value.mensaje  # lo que pide CP-09
     assert error.value.detalle == {
         "motivo": "alcance_demasiado_largo",
         "palabras": 251,
@@ -243,6 +244,67 @@ def test_cp09_un_parrafo_de_mas_de_250_palabras_se_rechaza_para_d3() -> None:
     validar_alcance(
         TipoSolicitud.BUSQUEDA_EVIDENCIA, TipoAlcance.FRAGMENTO, "p1", parrafos, None, PARAMETROS
     )
+
+
+@pytest.mark.parametrize(
+    ("seleccion", "cuantos"),
+    [
+        ("p6,p7", 2),
+        ("p6 p7", 2),
+        ("p6; p7", 2),
+        ("p6-p9", 4),
+        ("p9-p6", 4),
+        ("p6..p7", 2),
+        ("p6" + chr(0x2013) + "p7", 2),  # con semirraya
+        ("p6,p7-p9", 4),
+    ],
+)
+def test_cp09_un_fragmento_de_mas_de_un_parrafo_se_rechaza(seleccion: str, cuantos: int) -> None:
+    """Tesis, CP-09: "fragmento de más de un párrafo" se rechaza pidiendo uno más corto,
+    aunque los párrafos sean cortos."""
+    parrafos, secciones = _estructura()
+    for tipo in (TipoSolicitud.PROPUESTA_REDACCION, TipoSolicitud.BUSQUEDA_EVIDENCIA):
+        with pytest.raises(AlcanceInvalido) as error:
+            validar_alcance(tipo, TipoAlcance.FRAGMENTO, seleccion, parrafos, secciones, PARAMETROS)
+        assert error.value.motivo == "fragmento_de_varios_parrafos"
+        assert f"{cuantos} párrafos" in error.value.mensaje
+        assert "Seleccione un fragmento más corto" in error.value.mensaje
+        assert error.value.detalle == {
+            "motivo": "fragmento_de_varios_parrafos",
+            "parrafos": cuantos,
+        }
+
+
+@pytest.mark.parametrize("seleccion", ["p7", " p7 ", "p7-p7", "p7,p7"])
+def test_un_solo_parrafo_se_admite_con_cualquier_forma(seleccion: str) -> None:
+    parrafos, secciones = _estructura()
+    resuelto = validar_alcance(
+        TipoSolicitud.PROPUESTA_REDACCION,
+        TipoAlcance.FRAGMENTO,
+        seleccion,
+        parrafos,
+        secciones,
+        PARAMETROS,
+    )
+    assert (resuelto.alcance_ref, resuelto.parrafos) == ("p7", ["p7"])
+
+
+def test_un_parrafo_con_saltos_de_linea_sigue_siendo_uno() -> None:
+    con_saltos = ParrafoBorrador(
+        id="p1",
+        texto="Primera línea." + chr(10) + "Segunda línea.",
+        estilo="Normal",
+        origen="cuerpo",
+    )
+    resuelto = validar_alcance(
+        TipoSolicitud.PROPUESTA_REDACCION,
+        TipoAlcance.FRAGMENTO,
+        "p1",
+        [con_saltos],
+        None,
+        PARAMETROS,
+    )
+    assert resuelto.parrafos == ["p1"]
 
 
 def test_el_limite_de_d3_sale_de_la_configuracion() -> None:
