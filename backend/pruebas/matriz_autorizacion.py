@@ -49,6 +49,22 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
     ("GET", "/caso/versiones/{version_id}"): Entrada(
         Politica.CASO, ejemplo="/caso/versiones/{VERSION_A}", datos_de_caso=True
     ),
+    # Secciones del borrador (T12).
+    ("GET", "/caso/versiones/{version_id}/secciones"): Entrada(
+        Politica.CASO, ejemplo="/caso/versiones/{VERSION_A}/secciones", datos_de_caso=True
+    ),
+    ("PUT", "/caso/versiones/{version_id}/secciones"): Entrada(
+        Politica.CASO,
+        ejemplo="/caso/versiones/{VERSION_A}/secciones",
+        cuerpo={"titulos": [{"parrafo": "p2", "nivel": 1}]},
+        datos_de_caso=True,
+    ),
+    ("PUT", "/caso/versiones/{version_id}/referencias"): Entrada(
+        Politica.CASO,
+        ejemplo="/caso/versiones/{VERSION_A}/referencias",
+        cuerpo={"desde": "p13"},
+        datos_de_caso=True,
+    ),
     ("GET", "/investigador/colecciones"): Entrada(Politica.INVESTIGADOR),
     ("POST", "/investigador/colecciones/cientificas"): Entrada(
         Politica.INVESTIGADOR, cuerpo={"tema": "TEMA-MATRIZ"}

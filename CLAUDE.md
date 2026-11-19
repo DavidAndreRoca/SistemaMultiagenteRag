@@ -75,6 +75,8 @@ Flujo de desarrollo del corpus (T10-02): la ingesta es reanudable (Ctrl+C y repe
 
 Borradores (T11): `app/borradores/` (`validacion.py` sin acceso a la base, `extraccion.py` con python-docx, `servicio.py`), rutas en `app/api/borradores.py`, versiones en `app/repositorios/caso.py` (`RepositorioVersiones`). Los .docx de muestra (válidos e inválidos, ficticios) se regeneran con `python -m pruebas.datos.generar_docx_muestra`. El nombre original del archivo no se guarda ni se registra.
 
+Secciones y alcance (T12): `app/borradores/secciones.py` (detección por estilos, marcado manual, referencias, `estructura_borrador`) y `app/borradores/alcance.py` (`validar_alcance`, CP-09), sobre los párrafos guardados, sin volver a leer el .docx. Casos de prueba oficiales de la tesis en `docs/especificacion-fase1/casos-de-prueba-tesis.md`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

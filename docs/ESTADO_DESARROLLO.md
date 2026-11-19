@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 19 de noviembre de 2026. T11 implementada y verificada en local en la rama `t11-borradores` (apartado 14). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 19 de noviembre de 2026. T11 integrada en `main` (solicitud de cambio #7, apartado 14.7). T12 implementada y verificada en local en la rama `t12-secciones-alcance` (apartado 15). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -19,8 +19,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
 | **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). La lectura de RN-16 sobre PDF que solo restringen permisos quedó confirmada el 19 de noviembre de 2026 (apartado 12.7) |
 | **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida e integrada** (solicitud de cambio #6, apartado 13.10): corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
-| **T11 (F3)** | Borradores: carga, validación y versiones | **Implementada y verificada en local** con la base real; CP-01 y CP-02 superados y criterios cumplidos (apartado 14). Rama `t11-borradores`, sin integrar |
-| T12 en adelante | | No iniciadas |
+| **T11 (F3)** | Borradores: carga, validación y versiones | **Integrada en `main`** (solicitud de cambio #7, apartado 14.7). CP-01 y CP-02 superados y contrastados con la Tabla 20 de la tesis (apartado 14) |
+| **T12 (F3)** | Secciones del borrador y alcance | **Implementada y verificada en local** con la base real; criterios cumplidos, CP-09 por contrastar con la tesis (apartado 15). Rama `t12-secciones-alcance`, sin integrar |
+| T13 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -969,3 +970,64 @@ La primera versión de las pruebas se basó en la especificación y difería en 
   - `backend/pyproject.toml` y `backend/restricciones-corpus.txt`;
   - `backend/pruebas/matriz_autorizacion.py`, `integracion/test_matriz_autorizacion.py` e `integracion/conftest.py` (`DIRECTORIO_ARCHIVOS` en las pruebas);
   - `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.
+
+### 14.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t11-borradores`: `6ba6b18` (`T11: cargar, validar y versionar el borrador .docx`) y `09e40dc` (contraste de CP-01 y CP-02 con la Tabla 20 y cierre de T09-01), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#7 |
+| CI de la solicitud | **Verde** en las dos confirmaciones: ejecuciones 44621189670 y 44627359546 (la de `09e40dc`), 7 de 7 trabajos cada una |
+| Integración en `main` | Commit de integración `be91006` |
+| CI de `main` tras integrar | Pendiente de comprobar |
+
+---
+
+## 15. Fase 3 (F3): T12. Secciones del borrador y alcance
+
+Rama `t12-secciones-alcance`, desde el último commit de T11 (`09e40dc`, ya integrado en `be91006`). Decisión: `docs/decisiones/T12-secciones-y-alcance.md` (T12-01).
+
+**CP-09:** su texto oficial (Tabla 20) aún no está en la copia del repositorio. Se tomó de la hoja de ruta: un párrafo de más de unas 250 palabras se rechaza para D3 con mensaje. Hay que contrastarlo cuando llegue la tabla completa.
+
+### 15.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Detectar secciones por estilos de título | Hecha | `app/borradores/secciones.py`. El nivel sale del esquema del párrafo, del nombre del estilo ("Heading N", "Título N", "Encabezado N") o del esquema de sus estilos base. Árbol `s1`, `s2`… con nivel, padre, clase (clasificador del corpus) y párrafos. Se ejecuta en cada carga |
+| 2. Selección manual de respaldo sin estilos | Hecha | Sin títulos, la carga lo informa y pide marcarlos. `PUT /caso/versiones/{id}/secciones` guarda los títulos marcados con el método `manual` |
+| 3. Sección de referencias y sus entradas; indicarla a mano | Hecha | Automática por la clase del título. `PUT /caso/versiones/{id}/referencias` marca a mano un rango de párrafos. Una entrada por línea no vacía, sin interpretar nada (RN-17) |
+| 4. `estructura_borrador(version)` | Hecha | Árbol de títulos, método, sección de referencias y ubicaciones del problema, los objetivos y las hipótesis, por el título o por el texto, en español e inglés. Excluye las referencias y las tablas |
+| 5. Validación de alcance por tipo; límite de 250 palabras para D3 (CP-09) | Hecha | `app/borradores/alcance.py`: alcances admitidos por tipo, existencia de la sección o del párrafo, límite de D3 desde la configuración (`limite_palabras_d3`) y límites de la consulta. Devuelve el texto del alcance |
+| Tarea: identificadores estables de sección y párrafo por versión | Hecha | `p1`… (T11) y `s1`…. Mientras una solicitud use la versión, sus secciones no se pueden cambiar (409 `version_en_uso`) |
+| Tarea: tolerancia a campos de gestores bibliográficos | Hecha | La extracción recorre los controles de contenido de bloque, donde Mendeley y Word ponen la bibliografía, y conserva los saltos de línea. Las citas de Mendeley (campo y control de contenido) y de Zotero quedan como se ven, sin su código |
+
+### 15.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Un .docx con estilos produce sus secciones; uno sin estilos pide selección manual y la guarda | **Cumplido** | `integracion/test_secciones_borrador.py`, con la base real. `estructura.docx` da 11 secciones con estilos integrados, propios y por nivel de esquema, y 3 referencias. `sin_estilos.docx` responde con el pedido de marcar las secciones; tras marcarlas, quedan guardadas con el método `manual` y el detalle de la versión lo refleja |
+| Un párrafo de más de unas 250 palabras se rechaza para D3 con mensaje (CP-09) | **Cumplido** | `unitarias/test_secciones_borrador.py`: 251 palabras se rechazan con `alcance_demasiado_largo` y el mensaje dice cuántas tiene y el límite. 250 se admiten; el mismo párrafo sirve para buscar evidencia, y el límite sale de la configuración. También se comprueba sobre una versión guardada en la base |
+
+### 15.3. Pruebas
+
+- **Backend en contenedor:** 527 pruebas superadas y 5 omitidas; cobertura del 94,98 %. Ruff y mypy sin observaciones.
+- **Nuevas:**
+  - `unitarias/test_secciones_borrador.py` (54): secciones con .docx variados (con y sin estilos, Mendeley, Zotero, tablas), referencias automáticas y manuales, selección manual y sus validaciones, `estructura_borrador`, y validación de alcance para los seis tipos con los cinco alcances (30 combinaciones), más CP-09.
+  - `integracion/test_secciones_borrador.py` (11): las rutas nuevas, la versión en uso y el aislamiento.
+  - La matriz de autorización incluye las tres rutas nuevas.
+- **Archivos de muestra nuevos:** `estructura.docx`, `sin_estilos.docx`, `mendeley.docx` y `zotero.docx` (ficticios).
+
+### 15.4. Problemas encontrados y soluciones
+
+- **La bibliografía de Mendeley se perdía:** python-docx no recorre los controles de contenido de bloque. Se corrigió la extracción de T11 (T12-01, apartado 2).
+- **Las referencias en un solo párrafo no se podían separar:** los saltos de línea se convertían en espacios. Ahora se conservan.
+
+### 15.5. Pendientes
+
+- **CP-09:** contrastar con la Tabla 20 cuando el equipo la entregue completa.
+- **Pistas de problema, objetivos e hipótesis:** se calibrarán con los borradores reales de prueba, que siguen pendientes del carril de insumos.
+
+### 15.6. Archivos
+
+- **Creados:** `backend/app/borradores/secciones.py` y `alcance.py`, `backend/pruebas/unitarias/test_secciones_borrador.py`, `backend/pruebas/integracion/test_secciones_borrador.py`, cuatro .docx de muestra y `docs/decisiones/T12-secciones-y-alcance.md`.
+- **Modificados:** `backend/app/borradores/extraccion.py` y `servicio.py`, `backend/app/api/borradores.py`, `backend/app/repositorios/caso.py` (`hay_de_version`), `backend/pruebas/datos/generar_docx_muestra.py`, `backend/pruebas/matriz_autorizacion.py`, `docs/decisiones/T11-borradores.md`, `README.md`, `CLAUDE.md` y este archivo.

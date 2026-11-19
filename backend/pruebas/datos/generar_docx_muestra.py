@@ -1,10 +1,12 @@
-"""Genera los .docx de muestra de T11 (válidos e inválidos) en ``pruebas/datos/docx/``.
+"""Genera los .docx de muestra de T11 y T12 en ``pruebas/datos/docx/``.
 
 ``python -m pruebas.datos.generar_docx_muestra`` (desde ``backend/``, con python-docx).
 
 Todo el contenido es ficticio. Los archivos inválidos reproducen cada motivo de rechazo de
 la decisión T11-01, apartado 2. El cifrado es sintético: un contenedor OLE con el nombre
 del flujo ``EncryptionInfo``, que es lo que la validación examina (no se descifra nada).
+Los documentos de T12 (decisión T12-01) cubren títulos con estilos integrados y propios,
+un documento sin estilos y los campos y controles de contenido de Mendeley y Zotero.
 """
 
 from __future__ import annotations
@@ -12,8 +14,10 @@ from __future__ import annotations
 import io
 import zipfile
 from pathlib import Path
+from typing import Any
 
 from docx import Document
+from docx.enum.style import WD_STYLE_TYPE
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
@@ -135,6 +139,143 @@ def _crc_alterado(valido: bytes) -> bytes:
     return bytes(datos)
 
 
+def _campo(parrafo: Any, instruccion: str, resultado: str) -> None:
+    """Campo complejo (como los de Zotero o el Mendeley clásico) dentro de un párrafo."""
+    for xml in (
+        f'<w:r {nsdecls("w")}><w:fldChar w:fldCharType="begin"/></w:r>',
+        f'<w:r {nsdecls("w")}><w:instrText xml:space="preserve"> {instruccion} </w:instrText>'
+        "</w:r>",
+        f'<w:r {nsdecls("w")}><w:fldChar w:fldCharType="separate"/></w:r>',
+        f'<w:r {nsdecls("w")}><w:t xml:space="preserve">{resultado}</w:t></w:r>',
+        f'<w:r {nsdecls("w")}><w:fldChar w:fldCharType="end"/></w:r>',
+    ):
+        parrafo._p.append(parse_xml(xml))
+
+
+def _estructura() -> bytes:
+    """Artículo ficticio con estilos integrados y propios, subsecciones, problema, objetivos,
+    hipótesis, una tabla y la lista de referencias con una entrada partida por saltos."""
+    documento = Document()
+    propio = documento.styles.add_style("Título 2", WD_STYLE_TYPE.PARAGRAPH)  # por su nombre
+    esquema = documento.styles.add_style("Apartado del programa", WD_STYLE_TYPE.PARAGRAPH)
+    esquema.element.get_or_add_pPr().append(
+        parse_xml(f'<w:outlineLvl {nsdecls("w")} w:val="2"/>')  # nivel 3 por su esquema
+    )
+    documento.add_heading("Tutoría entre pares y ansiedad ante la estadística", level=0)
+    documento.add_paragraph("Autora Ficticia Uno y Autor Ficticio Dos")
+    documento.add_heading("Resumen", level=1)
+    documento.add_paragraph("Estudio cuasiexperimental ficticio con 84 estudiantes.")
+    documento.add_heading("1. Introducción", level=1)
+    documento.add_paragraph(
+        "La ansiedad ante la estadística reduce el rendimiento. ¿La tutoría entre pares"
+        " reduce esa ansiedad en estudiantes de primer año?"
+    )
+    documento.add_paragraph("El objetivo de este estudio fue medir el efecto de la tutoría.")
+    documento.add_paragraph("1.1. Planteamiento del problema", style=propio)
+    documento.add_paragraph("Los cursos de estadística tienen la mayor tasa de desaprobación.")
+    documento.add_paragraph("1.2. Hipótesis", style=propio)
+    documento.add_paragraph("H1: la tutoría reduce la ansiedad respecto del grupo control.")
+    documento.add_heading("2. Método", level=1)
+    documento.add_heading("2.1. Participantes", level=2)
+    documento.add_paragraph("Participaron 84 estudiantes de una universidad ficticia.")
+    documento.add_paragraph("2.1.1. Criterios de inclusión", style=esquema)
+    documento.add_paragraph("Estar matriculado por primera vez en Estadística I.")
+    documento.add_heading("2.2. Instrumentos", level=2)
+    tabla = documento.add_table(rows=1, cols=2)
+    tabla.cell(0, 0).text = "Escala"
+    tabla.cell(0, 1).text = "Hipótesis de la escala"  # en una tabla: no es una ubicación
+    documento.add_heading("3. Resultados", level=1)
+    documento.add_paragraph("El grupo con tutoría redujo su puntaje de ansiedad.")
+    documento.add_heading("4. Discusión", level=1)
+    documento.add_paragraph("Los resultados coinciden con estudios previos.")
+    documento.add_heading("Referencias", level=1)
+    documento.add_paragraph(
+        "Quispe, R. (2020). Ansiedad ficticia. Revista Imaginaria, 3(2), 10-20."
+    )
+    partida = documento.add_paragraph("Torres, A. (2021). Tutoría ficticia. Editorial Inventada.")
+    partida.add_run().add_break()
+    partida.add_run("Arias, M. (2019). Pares ficticios. Revista Supuesta, 1(1), 1-9.")
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
+def _sin_estilos() -> bytes:
+    """Títulos escritos a mano (negrita en estilo Normal): no hay estilos de título."""
+    documento = Document()
+    for titulo, texto in (
+        ("Introducción", "La ansiedad ante la estadística es frecuente en primer año."),
+        ("Método", "Participaron 84 estudiantes de una universidad ficticia."),
+        ("Resultados", "El grupo con tutoría redujo su ansiedad."),
+        ("Referencias", "Quispe, R. (2020). Ansiedad ficticia. Revista Imaginaria, 3(2), 10-20."),
+    ):
+        documento.add_paragraph().add_run(titulo).bold = True
+        documento.add_paragraph(texto)
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
+def _mendeley() -> bytes:
+    """Citas del Mendeley clásico (campo) y de Mendeley Cite (control de contenido), y la
+    bibliografía en un control de contenido de bloque, como la generan."""
+    documento = Document()
+    documento.add_heading("Introducción", level=1)
+    cita = documento.add_paragraph("La ansiedad es frecuente ")
+    _campo(cita, 'ADDIN CSL_CITATION {"citationItems":[{"id":"ficticio"}]}', "(Quispe, 2020)")
+    cita.add_run(" y persiste ")
+    cita._p.append(
+        parse_xml(
+            f'<w:sdt {nsdecls("w")}><w:sdtPr><w:tag w:val="MENDELEY_CITATION_v3_ficticio"/>'
+            "</w:sdtPr><w:sdtContent><w:r><w:t>(Torres, 2021)</w:t></w:r></w:sdtContent>"
+            "</w:sdt>"
+        )
+    )
+    cita.add_run(".")
+    documento.add_heading("Referencias", level=1)
+    entradas = (
+        "Quispe, R. (2020). Ansiedad ficticia. Revista Imaginaria, 3(2), 10-20.",
+        "Torres, A. (2021). Tutoría ficticia. Editorial Inventada.",
+    )
+    parrafos = "".join(
+        f'<w:p><w:pPr><w:pStyle w:val="Bibliography"/></w:pPr><w:r><w:t>{e}</w:t></w:r></w:p>'
+        for e in entradas
+    )
+    bibliografia = parse_xml(
+        f'<w:sdt {nsdecls("w")}><w:sdtPr><w:tag w:val="MENDELEY_BIBLIOGRAPHY"/></w:sdtPr>'
+        f"<w:sdtContent>{parrafos}</w:sdtContent></w:sdt>"
+    )
+    cuerpo = documento.element.body
+    cuerpo.insert(cuerpo.index(cuerpo.sectPr), bibliografia)  # antes de sectPr
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
+def _zotero() -> bytes:
+    """Bibliografía de Zotero en un solo párrafo con saltos de línea y bajo un título sin
+    estilo: la lista se indica a mano."""
+    documento = Document()
+    documento.add_heading("Introducción", level=1)
+    cita = documento.add_paragraph("Hay evidencia previa ")
+    _campo(cita, "ADDIN ZOTERO_ITEM CSL_CITATION {codigo-ficticio}", "[1]")
+    cita.add_run(".")
+    documento.add_heading("Conclusiones", level=1)
+    documento.add_paragraph("La tutoría entre pares es prometedora.")
+    documento.add_paragraph().add_run("Bibliografía").bold = True
+    lista = documento.add_paragraph()
+    _campo(
+        lista,
+        "ADDIN ZOTERO_BIBL {codigo-ficticio} CSL_BIBLIOGRAPHY",
+        '[1] R. Quispe, "Ansiedad ficticia," Rev. Imag., vol. 3, 2020.',
+    )
+    lista.add_run().add_break()
+    lista.add_run("[2] A. Torres, Tutoría ficticia. Editorial Inventada, 2021.")
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
 def generar() -> dict[str, bytes]:
     valido = _valido()
     with zipfile.ZipFile(io.BytesIO(valido)) as zip_:
@@ -166,6 +307,11 @@ def generar() -> dict[str, bytes]:
         ),
         "sin_documento.docx": _reescribir(valido, {"word/document.xml": None}),
         "pdf_renombrado.docx": b"%PDF-1.4\n% documento ficticio\n%%EOF\n",
+        # T12
+        "estructura.docx": _estructura(),
+        "sin_estilos.docx": _sin_estilos(),
+        "mendeley.docx": _mendeley(),
+        "zotero.docx": _zotero(),
     }
 
 

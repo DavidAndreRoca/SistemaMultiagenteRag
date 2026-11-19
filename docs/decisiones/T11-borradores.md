@@ -58,6 +58,7 @@ Todos los rechazos responden con el formato único de error (4.4) y no crean ver
 - **Identificador:** `p1`, `p2`… dentro de la versión. Una versión no cambia, así que el identificador es estable. T12 los usa para secciones y alcances.
 - **Estilo:** se guarda el nombre del estilo de cada párrafo, que T12 necesita para detectar títulos.
 - **Texto:** todos los `w:t` del párrafo, incluidos los de hipervínculos, controles de contenido (`w:sdt`), inserciones con control de cambios y el resultado visible de los campos. Así quedan las citas de Zotero y Mendeley tal como se ven. No entran el texto eliminado con control de cambios (`w:delText`) ni el código de los campos (`w:instrText`).
+- **Corregido en T12** (T12-01, apartado 2): la extracción recorre también los controles de contenido de bloque, donde Mendeley y Word ponen la bibliografía; conserva los saltos de línea y guarda el nivel de título de cada párrafo.
 - **No se extraen:** encabezados y pies de página, notas al pie, comentarios ni cuadros de texto. No son parte del cuerpo del artículo. Las notas al pie se revisarán si T12 las necesita.
 - **Almacenamiento:** en `version_borrador.parrafos` (JSONB, de carga diferida para que listar versiones no traiga el texto) y el total en `palabras` (migración 0010).
 
@@ -70,7 +71,7 @@ Todos los rechazos responden con el formato único de error (4.4) y no crean ver
 | `GET /caso/versiones/{id}` | Metadatos de una versión: hito, fecha y hora, tamaño, huella, vigencia, palabras y párrafos. Sin texto |
 
 - **Aislamiento:** una versión de otro caso responde 404, igual que una inexistente. El repositorio filtra siempre por el caso de la sesión.
-- **Sin descarga:** ninguna ruta devuelve el archivo ni el texto. El texto se servirá como alcance de una solicitud (T12 y T13).
+- **Sin descarga:** ninguna ruta devuelve el archivo ni el texto. *(Acotado por T12-01, apartado 8: el propio caso puede leer los párrafos de su versión para elegir el alcance.)* El texto se servirá como alcance de una solicitud (T12 y T13).
 
 ## 7. Riesgos y límites
 
