@@ -2,9 +2,11 @@
 
 **Fase:** T11 (Fase 3). **Fecha:** 19 de noviembre de 2026. **Estado:** vigente.
 
-**Origen:** hoja de ruta, T11. Especificación de la Fase 1: RF-01, F-04, RN-09, RN-16, RNF-01 y RNF-10; apartado 6 (validación de archivos). CP-01 y CP-02 se definen en la tesis (6.2.7.1). Aquí se toman como los describe la especificación:
-- **CP-01:** una carga válida crea una versión nueva, vigente en su hito, con fecha, hora e hito.
-- **CP-02:** un .docx dañado, con macros, cifrado o inválido se rechaza sin crear versión y deja un evento de validación.
+**Origen:** hoja de ruta, T11. Especificación de la Fase 1: RF-01, F-04, RN-09, RN-16, RNF-01 y RNF-10; apartado 6 (validación de archivos). CP-01 y CP-02, según la tesis (Tabla 20, en `docs/especificacion-fase1/casos-de-prueba-tesis.md`):
+- **CP-01:** un .docx de un caso registrado registra una versión nueva con fecha y hora, y las versiones anteriores se conservan.
+- **CP-02:** un archivo de formato distinto de .docx o dañado se rechaza, se informa el motivo y no se registra ninguna versión.
+
+Las macros, el cifrado y el contenido anómalo no son parte de CP-02: los rechaza RN-16, con las mismas garantías.
 
 ## 1. Alcance
 

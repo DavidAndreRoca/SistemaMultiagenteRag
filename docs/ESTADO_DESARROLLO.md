@@ -17,7 +17,7 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T06 (F2)** | Autenticación, roles y sesiones | **Completa y verificada** |
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
 | **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
-| **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
+| **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). La lectura de RN-16 sobre PDF que solo restringen permisos quedó confirmada el 19 de noviembre de 2026 (apartado 12.7) |
 | **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida e integrada** (solicitud de cambio #6, apartado 13.10): corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
 | **T11 (F3)** | Borradores: carga, validación y versiones | **Implementada y verificada en local** con la base real; CP-01 y CP-02 superados y criterios cumplidos (apartado 14). Rama `t11-borradores`, sin integrar |
 | T12 en adelante | | No iniciadas |
@@ -646,7 +646,7 @@ Sin preliminares (título, autores, afiliación), encabezados, pies, agradecimie
 
 ### 12.7. Pendiente
 
-- **Confirmar la lectura de RN-16** (decisión T09-01, apartado 3.2): se rechaza el PDF con contraseña de apertura y se admite el que solo restringe permisos.
+- **Lectura de RN-16: confirmada** por el equipo el 19 de noviembre de 2026 (decisión T09-01, apartado 3.2, ya cerrada). Se rechaza el PDF con contraseña de apertura y se admite el que solo restringe permisos.
 - La base de desarrollo recibe la migración 0008 al levantar el proyecto (`migrar`); no se aplicó a mano.
 
 ### 12.8. Integración
@@ -907,11 +907,13 @@ La demostración no se volvió a ejecutar de punta a punta.
 
 Rama `t11-borradores`, desde `main` con T10 y la demostración (`cf9afa3`). Decisión: `docs/decisiones/T11-borradores.md` (T11-01).
 
-**CP-01 y CP-02** se definen en la tesis (6.2.7.1), que no está en el repositorio. Se tomaron como los describe la especificación (RF-01 y la tabla de excepciones de F-04):
-- **CP-01:** una carga válida crea una versión vigente con fecha, hora e hito.
-- **CP-02:** un .docx dañado, con macros, cifrado o inválido se rechaza sin crear versión y deja un evento de validación.
+**CP-01 y CP-02, contrastados con el texto oficial de la tesis** (Tabla 20, copiada en `docs/especificacion-fase1/casos-de-prueba-tesis.md`):
+- **CP-01 (CU-01):** un .docx de un caso registrado registra una versión nueva con fecha y hora, y las versiones anteriores se conservan.
+- **CP-02 (CU-01, E1):** un archivo de formato distinto de .docx o dañado se rechaza, se informa el motivo y no se registra ninguna versión.
 
-Si la tesis los define de otro modo, hay que contrastarlos.
+La primera versión de las pruebas se basó en la especificación y difería en dos puntos, ya corregidos:
+- **CP-01** comprobaba una sola carga; la conservación de las anteriores estaba en otra prueba. Ahora la misma prueba hace dos cargas y comprueba que la primera se conserva entera (registro, párrafos y archivo).
+- **CP-02** incluía macros, cifrado y contenido anómalo, que vienen de RN-16. Le faltaban archivos con otra extensión. Ahora CP-02 prueba 10 casos de formato distinto (.pdf, .doc, .odt, .txt, sin extensión, renombrados) o dañados. Los de RN-16 quedan en una prueba aparte, con las mismas garantías.
 
 ### 14.1. Actividades
 
@@ -929,18 +931,18 @@ Si la tesis los define de otro modo, hay que contrastarlos.
 
 | Criterio | Estado | Cómo se comprobó |
 | --- | --- | --- |
-| CP-01 superado | **Cumplido** | `test_borradores.py` (integración, base real). La carga válida responde 201 con la versión vigente, el hito, la fecha y hora del reloj, la huella y el tamaño. El archivo queda guardado con nombre aleatorio y los párrafos en la base |
-| CP-02 superado | **Cumplido** | Con 14 archivos de muestra (`pruebas/datos/docx/`), cada motivo de rechazo tiene su prueba unitaria. En integración, 7 de ellos y uno de más de 15 MB: el error lleva el formato único y el motivo, no queda versión ni archivo, y se registra un evento `validacion_borrador` sin el nombre del archivo |
+| CP-01 superado | **Cumplido** | `test_cp01_carga_valida_registra_la_version_y_conserva_las_anteriores` (integración, base real). La carga válida responde 201 con la versión, el hito, la fecha y hora del reloj, la huella y el tamaño. Una segunda carga crea otra versión con su propia fecha y hora, y la primera se conserva entera (registro, párrafos y archivo) |
+| CP-02 superado | **Cumplido** | `test_cp02_formato_distinto_o_danado_se_rechaza_sin_registrar_version` (integración), con 10 archivos de formato distinto de .docx o dañados. En cada uno, la carga se rechaza con el formato único de error y el motivo, no queda versión ni archivo, y se registra un evento `validacion_borrador` sin el nombre del archivo. Aparte, RN-16: macros, cifrado, contenido anómalo y más de 15 MB. Cada motivo tiene además su prueba unitaria |
 | Un caso no ve ni descarga versiones de otro | **Cumplido** | La versión del caso A responde 404 al caso B, y su lista no la incluye. La matriz de autorización lo comprueba en las tres rutas con una versión real. No hay ruta de descarga |
 | Cada carga crea una versión nueva con fecha, hora e hito | **Cumplido** | Tres cargas (dos del mismo hito, con el mismo archivo) dejan tres versiones y una sola vigente por hito. Tres cargas simultáneas dejan una sola vigente |
 
 ### 14.3. Pruebas
 
-- **Backend en contenedor:** 455 pruebas superadas y 5 omitidas; cobertura del 94,59 %. Ruff y mypy sin observaciones.
+- **Backend en contenedor:** 462 pruebas superadas y 5 omitidas; cobertura del 94,59 %. Ruff y mypy sin observaciones.
 - **Migración 0010:** aplicada a la base de desarrollo (0009 a 0010); `alembic check` no encuentra diferencias. El ascenso y descenso completos se prueban en `test_migraciones.py`.
 - **Nuevas:**
   - `unitarias/test_borradores.py` (19): validación con cada archivo malicioso, extensión, tipo declarado, proporción y número de partes, y extracción (campos, control de cambios, controles de contenido, tablas).
-  - `integracion/test_borradores.py` (14): CP-01, CP-02, versiones, concurrencia, límite de tamaño, hito desconocido, aislamiento y servidor sin configurar.
+  - `integracion/test_borradores.py` (21): CP-01, CP-02 (10 casos), RN-16 (4 casos), versiones, concurrencia, límite de tamaño, hito desconocido, aislamiento y servidor sin configurar.
   - La matriz de autorización ahora envía formularios con archivo y usa una versión real del caso A.
 
 ### 14.4. Problemas encontrados y soluciones
@@ -950,7 +952,8 @@ Si la tesis los define de otro modo, hay que contrastarlos.
 
 ### 14.5. Pendientes y riesgos
 
-- **CP-01 y CP-02:** contrastar con su definición en la tesis.
+- **CP-01 y CP-02:** contrastados con la Tabla 20 y ajustados (inicio de este apartado).
+- **Tabla 20:** la copia del repositorio solo tiene CP-01 y CP-02; falta que el equipo entregue el resto.
 - **Notas al pie y cuadros de texto:** python-docx no los lee, así que no se extraen (T11-01, apartado 7).
 - **Borradores reales de prueba:** siguen pendientes del carril de insumos (apartado 13.8). La extracción se probó solo con documentos ficticios generados.
 
@@ -960,7 +963,7 @@ Si la tesis los define de otro modo, hay que contrastarlos.
   - `backend/app/borradores/` (`validacion.py`, `extraccion.py`, `servicio.py`), `backend/app/api/borradores.py` y `backend/app/comun/almacen.py`;
   - `backend/migraciones/versiones/0010_parrafos_del_borrador.py`;
   - `backend/pruebas/datos/generar_docx_muestra.py` y `backend/pruebas/datos/docx/` (14 archivos ficticios), `backend/pruebas/unitarias/test_borradores.py` y `backend/pruebas/integracion/test_borradores.py`;
-  - `docs/decisiones/T11-borradores.md`.
+  - `docs/decisiones/T11-borradores.md` y `docs/especificacion-fase1/casos-de-prueba-tesis.md` (Tabla 20, por ahora con CP-01 y CP-02).
 - **Modificados:**
   - `backend/app/bd/modelos/borradores.py`, `backend/app/repositorios/caso.py`, `backend/app/corpus/almacen.py` y `backend/app/main.py`;
   - `backend/pyproject.toml` y `backend/restricciones-corpus.txt`;

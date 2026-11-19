@@ -1,6 +1,6 @@
 # T09-01. Canal de extracción y segmentación de PDF
 
-**Fase:** T09 (Fase 3). **Fecha:** 8 de noviembre de 2026. **Estado:** vigente, salvo el apartado 3.2, que queda propuesto hasta que el equipo lo confirme.
+**Fase:** T09 (Fase 3). **Fecha:** 8 de noviembre de 2026. **Estado:** vigente y cerrada. El apartado 3.2 lo confirmó el equipo el 19 de noviembre de 2026.
 
 **Origen:** hoja de ruta, T09; especificación de la Fase 1, 18.2 a 18.4; RN-16 y RN-23; línea base D-01 (Docling y GROBID).
 
@@ -65,11 +65,13 @@ La ingesta es fuera de línea (18.5), pero la memoria se suma a la de los servic
 
 Los límites salen de la configuración versionada (`tamano_max_pdf_mb`, `paginas_max_pdf`).
 
-### 3.2. PDF cifrados (propuesta para confirmar)
+### 3.2. PDF cifrados (confirmado el 19 de noviembre de 2026)
 
 RN-16 dice que se rechazan los archivos cifrados. Muchos PDF de editoriales están "cifrados" solo para restringir permisos (imprimir, copiar) y se abren sin contraseña.
 
 **Propuesta:** se rechaza (`pdf_cifrado`) el PDF que exige contraseña de apertura y se admite el que solo restringe permisos, que pypdf abre con contraseña vacía. Rechazar también estos excluiría artículos de acceso abierto legítimos. Los dos casos tienen un PDF de muestra (`cifrado.pdf` y `solo_permisos.pdf`). Si el equipo prefiere la lectura estricta, el cambio es una línea en `validacion.py` y su prueba.
+
+**Decisión del equipo (19 de noviembre de 2026):** se adopta la propuesta. Se admiten los PDF que solo restringen permisos y se rechazan únicamente los que exigen contraseña para abrirse. En el corpus provisional ninguno de los 107 PDF está cifrado, así que la decisión no cambió ningún resultado de la ingesta.
 
 ## 4. Limpieza y secciones
 

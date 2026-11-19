@@ -1,4 +1,4 @@
-"""T11: validación del .docx y extracción de párrafos (CP-02; decisión T11-01).
+"""T11: validación del .docx y extracción de párrafos (RN-16, CP-02; decisión T11-01).
 
 Los archivos de ``pruebas/datos/docx/`` son ficticios y se regeneran con
 ``python -m pruebas.datos.generar_docx_muestra``.
@@ -54,9 +54,7 @@ def test_un_docx_valido_pasa_la_validacion() -> None:
         ("con_dtd.docx", M.CONTENIDO_ANOMALO),
     ],
 )
-def test_cp02_rechaza_cada_archivo_malicioso_o_invalido(
-    archivo: str, motivo: MotivoRechazo
-) -> None:
+def test_rechaza_cada_archivo_invalido_o_malicioso(archivo: str, motivo: MotivoRechazo) -> None:
     assert _rechazo(DOCX / archivo) is motivo
 
 

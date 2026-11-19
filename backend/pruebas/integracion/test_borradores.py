@@ -1,4 +1,15 @@
-"""T11: carga y versiones del borrador con la base real (RF-01, CU-01, CP-01, CP-02, RN-09)."""
+"""T11: carga y versiones del borrador con la base real (RF-01, CU-01, CP-01, CP-02, RN-09).
+
+Casos de prueba de la tesis (Tabla 20, ``docs/especificacion-fase1/casos-de-prueba-tesis.md``):
+
+* CP-01 (CU-01): un .docx de un caso registrado registra una versión nueva con fecha y hora,
+  y las versiones anteriores se conservan.
+* CP-02 (CU-01, E1): un archivo de formato distinto de .docx o dañado se rechaza, se informa
+  el motivo y no se registra ninguna versión.
+
+Las macros, el cifrado y el contenido anómalo no son parte de CP-02: los rechaza RN-16 y se
+prueban aparte, con las mismas garantías.
+"""
 
 from __future__ import annotations
 
@@ -69,7 +80,7 @@ async def caso_a(
     await cliente.aclose()
 
 
-async def test_cp01_una_carga_valida_crea_la_version_vigente(
+async def test_cp01_carga_valida_registra_la_version_y_conserva_las_anteriores(
     entorno: Entorno, caso_a: httpx.AsyncClient, caplog: pytest.LogCaptureFixture
 ) -> None:
     with caplog.at_level(logging.INFO):
@@ -102,6 +113,19 @@ async def test_cp01_una_carga_valida_crea_la_version_vigente(
     registro = json.dumps([r.__dict__ for r in caplog.records], default=str)
     assert TEXTO_DEL_BORRADOR not in registro and "Ana Prueba" not in registro
     assert "version de borrador registrada" in registro
+
+    # Una segunda carga del mismo caso: versión nueva con su fecha y hora, y la anterior se
+    # conserva entera (registro, párrafos y archivo).
+    entorno.reloj.avanzar(minutes=5)
+    segunda = (await _cargar(caso_a)).json()["version"]
+    assert segunda["id"] != version["id"]
+    assert segunda["cargada_en"].startswith("2026-11-06T12:05:00")
+    anterior = (await caso_a.get(f"/caso/versiones/{version['id']}")).json()
+    assert {k: v for k, v in anterior.items() if k != "vigente"} == {
+        k: v for k, v in version.items() if k != "vigente"
+    }
+    assert consultar(entorno.url_bd, "SELECT count(*) FROM version_borrador") == [(2,)]
+    assert guardado.exists() and len(_archivos(entorno)) == 2
 
 
 async def test_cada_carga_crea_una_version_y_solo_una_vigente_por_hito(
@@ -139,36 +163,83 @@ async def test_dos_cargas_simultaneas_dejan_una_sola_vigente(
     ) == [(1, 3)]
 
 
+async def _rechazo_sin_version(
+    entorno: Entorno,
+    caso: httpx.AsyncClient,
+    caplog: pytest.LogCaptureFixture,
+    datos: bytes,
+    nombre: str,
+    motivo: str,
+) -> None:
+    """La carga se rechaza, se informa el motivo y no queda versión ni archivo."""
+    with caplog.at_level(logging.INFO):
+        respuesta = await _cargar(caso, datos, nombre=nombre)
+    assert respuesta.status_code == 422, respuesta.text
+    error = respuesta.json()
+    assert (error["codigo"], error["detalle"]) == (motivo, {"motivo": motivo})
+    assert error["mensaje"] and error["incidencia_id"]  # el motivo se informa al caso
+    assert consultar(entorno.url_bd, "SELECT count(*) FROM version_borrador") == [(0,)]
+    assert _archivos(entorno) == []
+    eventos = [r for r in caplog.records if getattr(r, "tipo_evento", "") == "validacion_borrador"]
+    assert [getattr(r, "motivo", None) for r in eventos] == [motivo]
+    assert nombre not in json.dumps([r.__dict__ for r in eventos], default=str)
+
+
+PDF = b"%PDF-1.4\n% documento ficticio\n%%EOF\n"
+ODT = b"PK\x03\x04" + b"mimetypeapplication/vnd.oasis.opendocument.text" + bytes(64)
+
+
+@pytest.mark.parametrize(
+    ("nombre", "datos", "motivo"),
+    [
+        # Formato distinto de .docx, con su propia extensión
+        ("borrador.pdf", PDF, "formato_no_admitido"),
+        ("borrador.doc", (DOCX / "doc_antiguo.docx").read_bytes(), "formato_no_admitido"),
+        ("borrador.odt", ODT, "formato_no_admitido"),
+        ("borrador.txt", b"Texto plano ficticio.", "formato_no_admitido"),
+        ("Articulo de Ana Ficticia", VALIDO, "formato_no_admitido"),  # sin extensión
+        # Formato distinto de .docx con la extensión cambiada
+        ("pdf_renombrado.docx", PDF, "formato_no_admitido"),
+        (
+            "hoja_renombrada.docx",
+            (DOCX / "hoja_renombrada.docx").read_bytes(),
+            "formato_no_admitido",
+        ),
+        # Dañado
+        ("truncado.docx", (DOCX / "truncado.docx").read_bytes(), "docx_danado"),
+        ("crc_alterado.docx", (DOCX / "crc_alterado.docx").read_bytes(), "docx_danado"),
+        ("sin_documento.docx", (DOCX / "sin_documento.docx").read_bytes(), "formato_no_admitido"),
+    ],
+)
+async def test_cp02_formato_distinto_o_danado_se_rechaza_sin_registrar_version(
+    entorno: Entorno,
+    caso_a: httpx.AsyncClient,
+    caplog: pytest.LogCaptureFixture,
+    nombre: str,
+    datos: bytes,
+    motivo: str,
+) -> None:
+    await _rechazo_sin_version(entorno, caso_a, caplog, datos, nombre, motivo)
+
+
 @pytest.mark.parametrize(
     ("archivo", "motivo"),
     [
         ("con_macros.docm", "docx_con_macros"),
         ("macros_renombrado.docx", "docx_con_macros"),
         ("cifrado.docx", "docx_cifrado"),
-        ("truncado.docx", "docx_danado"),
-        ("crc_alterado.docx", "docx_danado"),
         ("bomba.docx", "contenido_anomalo"),
-        ("pdf_renombrado.docx", "formato_no_admitido"),
     ],
 )
-async def test_cp02_un_archivo_invalido_se_rechaza_sin_crear_version(
+async def test_rn16_macros_cifrado_o_contenido_anomalo_se_rechazan_sin_version(
     entorno: Entorno,
     caso_a: httpx.AsyncClient,
     caplog: pytest.LogCaptureFixture,
     archivo: str,
     motivo: str,
 ) -> None:
-    with caplog.at_level(logging.INFO):
-        respuesta = await _cargar(caso_a, (DOCX / archivo).read_bytes(), nombre=archivo)
-    assert respuesta.status_code == 422, respuesta.text
-    error = respuesta.json()
-    assert (error["codigo"], error["detalle"]) == (motivo, {"motivo": motivo})
-    assert error["mensaje"] and error["incidencia_id"]
-    assert consultar(entorno.url_bd, "SELECT count(*) FROM version_borrador") == [(0,)]
-    assert _archivos(entorno) == []
-    eventos = [r for r in caplog.records if getattr(r, "tipo_evento", "") == "validacion_borrador"]
-    assert [getattr(r, "motivo", None) for r in eventos] == [motivo]
-    assert archivo not in json.dumps([r.__dict__ for r in eventos], default=str)
+    datos = (DOCX / archivo).read_bytes()
+    await _rechazo_sin_version(entorno, caso_a, caplog, datos, archivo, motivo)
 
 
 async def test_un_borrador_mas_grande_que_el_limite_se_rechaza(
