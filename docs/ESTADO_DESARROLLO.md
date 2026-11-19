@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 8 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 en la rama `t10-indexacion-corpus` (apartado 13).
+**Última actualización:** 19 de noviembre de 2026. Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional, cumplida en la rama `t10-corpus-provisional` (apartado 13.8), junto con la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02).
 
 ## Resumen
 
@@ -18,7 +18,7 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T07 (F2)** | Casos, temas, colecciones y cuentas | **Completa y verificada** (CP-22 superado) |
 | **T08 (F3)** | Servicios de procesamiento compartidos | **Implementada, verificada en local e integrada en `main`** (solicitud de cambio #2, apartado 11.7). Criterio "responden en ARM": GROBID sí en emulación; el servicio de modelos queda pendiente de la instancia real por una limitación del emulador (apartado 11) |
 | **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). Queda por confirmar la lectura de RN-16 sobre PDF que solo restringen permisos (apartado 12.7) |
-| **T10 (F3)** | Indexación y gestión del corpus | **Implementada y verificada en local** con la base y los servicios reales; CP-21 superado y criterios cumplidos. **Pendiente la actividad 7**: el corpus provisional lo entrega el equipo (apartado 13) |
+| **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida** en la rama `t10-corpus-provisional`: corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
 | T11 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
@@ -752,7 +752,134 @@ Decisiones del equipo del 12 de noviembre de 2026:
 - `backend/pruebas/matriz_autorizacion.py`, `unitarias/test_arquitectura.py` e `integracion/test_casos.py`.
 - `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.
 
-### 13.7. Pendiente
+### 13.7. Integración
 
-- **Actividad 7:** ingerir el corpus provisional cuando el equipo lo entregue, con `python -m app.corpus.ingesta` (README).
-- **Integración:** solicitud de cambio y CI.
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmación | `t10-indexacion-corpus`, confirmación `8b9db98` (`T10: indexar y gestionar el corpus científico`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#5 |
+| CI de la solicitud | **Verde**, ejecución 43351749127: 7 de 7 trabajos. El trabajo `corpus` pasó 9 pruebas con Docling real (incluida la de CP-21 con la base real) y no encontró vulnerabilidades |
+| Integración en `main` | Commit de integración `f11a403` |
+| CI de `main` tras integrar | Ejecución 43352375288: **verde** |
+
+### 13.8. Corpus provisional (actividad 7) e insumos de prueba
+
+Rama `t10-corpus-provisional`. Insumos entregados por el equipo el 12 de noviembre de 2026 en `datos/` (excluida de Git: no se versiona ningún PDF):
+
+- **Artículos base** (`datos/articulos-base/<tema>/`): 5 por tema, empíricos, en español y de acceso abierto. De ellos saldrán los borradores de prueba. **No se ingieren al corpus**: contaminarían la recuperación, igual que RN-19 lo prohíbe con el artículo O1.
+- **Corpus provisional** (`datos/corpus-provisional/<tema>/`): las referencias de acceso abierto de los artículos base.
+- **Temas:** `tema-1-ia-educacion` y `tema-2-transformacion-digital-mypes`, con colecciones científicas `TEMA-1-IA-EDUCACION` y `TEMA-2-TRANSFORMACION-DIGITAL-MYPES` en la base de desarrollo.
+
+**Pendiente del carril de insumos antes de T19:** los borradores de prueba elaborados desde los artículos base, con su hoja de errores introducidos a propósito (especificación de la Fase 1, 7: estructura, método, redacción y referencias).
+
+#### Armado del corpus
+
+Como el importador de T15 todavía no existe, el corpus se armó con un script de apoyo fuera de la aplicación, `scripts/armar_corpus_provisional.py`. Por cada referencia de cada artículo base:
+
+1. Extrae la lista de referencias con GROBID (`processReferences`, sin consolidar).
+2. Resuelve el DOI con Crossref. Si GROBID trae un DOI, lo comprueba. Si no, busca por metadatos y acepta el resultado solo si coinciden el título (similitud de 0,88 o más), el año (con un año de tolerancia) y al menos un apellido (18.9).
+3. Consulta el acceso abierto con Unpaywall.
+4. Descarga los PDF con enlace directo. Solo acepta PDF válidos de hasta 25 MB y no repite un DOI dentro del tema.
+
+El script hace una solicitud cada 0,5 s por servicio, reintenta con espera ante los errores 429 y 5xx, y usa el correo de `CORREO_POLITE` en Crossref y Unpaywall. El informe por referencia queda en `datos/corpus-provisional/informe.csv`.
+
+Estados del informe: los tres pedidos (incluida, cerrada y no localizada) más dos necesarios:
+- `pendiente_pdf`: tiene acceso abierto, pero no hay enlace directo o la descarga falló. Es lo que la especificación llama "pendiente de PDF", que sube el investigador.
+- `articulo_base`: la referencia es otro artículo base y no entra al corpus.
+
+| Tema | Referencias | Incluidas | Pendientes de PDF | Cerradas | No localizadas | Artículo base | PDF únicos |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| tema-1-ia-educacion | 194 | 79 | 28 | 16 | 70 | 1 | **72** |
+| tema-2-transformacion-digital-mypes | 279 | 38 | 64 | 72 | 105 | 0 | **35** |
+
+"Incluidas" cuenta las referencias; varias apuntan al mismo PDF desde distintos artículos base, por eso los PDF únicos son menos. Ningún tema quedó por debajo de 20 PDF.
+
+**Desglose por artículo base** (referencias, incluidas, pendientes, cerradas y no localizadas):
+
+| Tema | Artículo base | Ref. | Incl. | Pend. | Cerr. | No loc. |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | ChatGPT como fuente de información en la Educación | 53 | 17 | 7 | 6 | 23 |
+| 1 | El impacto del ChatGPT en el aprendizaje activo | 41 | 18 | 5 | 1 | 17 |
+| 1 | Inteligencia artificial generativa en ingresantes | 40 | 20 | 7 | 8 | 5 |
+| 1 | Perspectivas del uso de IA generativa ChatGPT (1 referencia es otro artículo base) | 30 | 15 | 6 | 1 | 7 |
+| 1 | Validación del cuestionario para docentes | 30 | 9 | 3 | 0 | 18 |
+| 2 | Adopción de e-marketing en mipymes mexicanas | 70 | 9 | 24 | 26 | 11 |
+| 2 | Factores críticos para la adopción de las TIC | 26 | 1 | 8 | 7 | 10 |
+| 2 | Factores tecnológicos y comercio electrónico en León | 68 | 5 | 5 | 6 | 52 |
+| 2 | Adopción del e-commerce con el modelo TOE en Paraguay | 58 | 6 | 4 | 24 | 24 |
+| 2 | Transformación digital y rentabilidad en MYPES peruanas | 57 | 17 | 23 | 9 | 8 |
+
+**Observaciones:**
+- **Pendientes de PDF (92):** 42 no tienen enlace directo al PDF. Las demás fallaron por respuestas HTTP del sitio, documentos que no eran PDF, tiempos de espera o certificados. Pueden subirse a mano.
+- **No localizadas:** son más en el tema 2, sobre todo en el artículo de León (52 de 68), con muchas referencias a libros, informes y fuentes sin DOI.
+- **Licencias** de los PDF descargados según Unpaywall: CC BY (43), CC BY-NC-SA (16), CC BY-NC (15), CC BY-NC-ND (15), CC BY-SA (3), CC BY-ND (1) y 14 sin licencia declarada. El sistema muestra fragmentos breves con enlace y no redistribuye los PDF (18.10).
+
+#### Ingesta (actividad 7)
+
+Se ingirió cada carpeta con `python -m app.corpus.ingesta` en la base de desarrollo, con la cuenta `INV-DEV` (registro en `datos/corpus-provisional/ingesta-20261113.log`):
+
+| Colección | PDF | Indexados | Incompletos | Excluidos | Ya registrados | Fragmentos |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| TEMA-1-IA-EDUCACION | 72 | 66 | 3 | 3 | 0 | 1 889 |
+| TEMA-2-TRANSFORMACION-DIGITAL-MYPES | 35 | 33 | 0 | 1 | 1 | 896 |
+
+- **Excluidos (4), con su motivo en `exclusion_corpus`:** 3 superan el límite de páginas (`excede_paginas`) y 1 no tiene capa de texto (`sin_capa_de_texto`).
+- **Incompletos (3):** uno sin secciones IMRaD, uno con texto insuficiente y uno con ambos motivos. Sus 26 fragmentos no tienen vector ni se recuperan hasta que el investigador los confirme (RN-14).
+- **Ya registrado (1):** el preprint de OSF es el mismo archivo que otro de la carpeta; no se duplicó.
+
+**Referencias en los fragmentos.** La primera ingesta dejó 44 fragmentos con forma de lista de referencias en 8 documentos. Se corrigió la segmentación (decisión T09-01, apartado 10) y se volvió a segmentar el corpus el 19 de noviembre de 2026 con `python -m app.corpus.resegmentar --aplicar` (registros `resegmentacion-20261119*.log`):
+
+| Pasada | Documentos actualizados | Tiempo |
+| --- | --- | --- |
+| Primera, con Docling (llena la caché) | 33 del tema 1 y 5 del tema 2 | 1 639 s y 908 s la simulación; 240 s y 77 s al aplicar, desde la caché |
+| Tras auditar la regla (apartado 10: 19 párrafos de prosa recuperados) | 6 y 4 | 19 s y 13 s la simulación; 45 s y 67 s al aplicar |
+
+En cada documento actualizado se conservó el vector de los fragmentos que no cambiaron y solo se embebieron los nuevos. Resultado: los fragmentos con 3 DOI o más pasaron de 44 a **1** de 2 785, y ningún fragmento indexado quedó sin vector.
+
+**Consulta de prueba por tema** (densa con bge-m3 real y léxica, en cada colección con su propia pregunta y con la del otro tema): **0 fragmentos ajenos** al tema en las 6 consultas. Por ejemplo, "uso de ChatGPT e inteligencia artificial generativa por estudiantes universitarios" en el tema 1 devuelve fragmentos sobre ChatGPT en la educación superior (similitud de 0,80 a 0,82). La misma pregunta en el tema 2 devuelve, con similitud de 0,50 a 0,52, solo documentos del tema 2 (adopción de IA en pymes).
+
+**Respaldo:** `datos/respaldos/corpus-provisional-20261119` (base, 15,5 MB, y archivos con la caché, 78,8 MB). Se restaura en minutos con `python scripts/respaldo_corpus.py restaurar datos/respaldos/corpus-provisional-20261119 --confirmar`.
+
+**Actividad 7: cumplida.**
+
+### 13.9. Optimización del flujo de desarrollo (antes de cerrar la actividad 7)
+
+La primera ingesta completa del corpus provisional tardó más de 2 horas en el portátil de desarrollo y se detuvo a mano. Antes de cerrar la actividad 7 se optimizó el flujo **sin cambiar los modelos** (bge-m3, bge-reranker-v2-m3 y el modelo de diseño de página de Docling). Decisión: `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md` (T10-02).
+
+**Medición antes y después** con los mismos 3 PDF reales (89 páginas, 192 fragmentos), en un proyecto aislado con la base vacía:
+
+| Etapa | Antes | Después |
+| --- | ---: | ---: |
+| Validación | 21 s | 7 s |
+| Extracción con Docling | 143 s | 137 s |
+| Segmentación | 2 s | 2 s |
+| Cabecera (GROBID) | 19 s | 42 s (37 s de carga del modelo en el primer PDF) |
+| Embeddings | 385 s | 321 s |
+| Escritura en la base | 1 s | 1 s |
+| **Total** | **589 s** | **524 s (11 % menos)** |
+| Pico de GROBID | 3,48 GB | 3,42 GB (0,32 GB en reposo, antes 3,1 GB) |
+| Pico del servicio de modelos | 1,99 GB | 1,52 GB |
+| Pico del proceso de ingesta | 3,37 GB | 2,29 GB |
+| **Suma de picos** (máquina virtual de 7,76 GB) | **8,9 GB** | **7,4 GB** |
+
+**Dónde se iba el tiempo:** en los embeddings (65 %) y en Docling (24 %). Los dos dependen de modelos que no cambian, así que el cómputo baja poco. Lo que explicaba las más de 2 horas era la memoria: la suma de picos superaba la de la máquina virtual y el sistema paginaba. Ahora queda debajo de 8 GB.
+
+**Cambios (todos verificados):**
+
+| Punto del pedido | Qué se hizo | Verificación |
+| --- | --- | --- |
+| 1. Medición por etapa | `app/corpus/medicion.py`: tiempo y pico de memoria por etapa en cada línea de la ingesta y en el resumen | Tabla anterior |
+| 2. Caché de Docling | `app/corpus/cache_extraccion.py`, por huella del PDF y firma del extractor, en `/archivos/extraccion/`. Comando `python -m app.corpus.resegmentar`, que reutiliza los vectores del texto que no cambia | Re-segmentar los 3 PDF: 12 s, 3 aciertos y ninguna extracción. Pruebas unitarias y de integración |
+| 3. Docling liviano | Ya sin OCR ni tablas (T09-01). Se agregaron lote 1 y cola 4: mismo texto, 0,9 GB menos. Se descartó el lector pypdfium2 porque duplicaba texto (+16,8 % de palabras). Validación de capa de texto con una muestra de 12 páginas | Comparación fragmento por fragmento con la configuración anterior |
+| 4. Ingesta reanudable | Por documento, con avance (posición, porcentaje, transcurrido, restante) y mensaje de reanudación ante Ctrl+C | Prueba de integración: detenida tras el primer documento, la segunda pasada procesa solo el que faltaba |
+| 5. Subconjunto de desarrollo | `scripts/crear_subconjunto_desarrollo.py`: 3 PDF de 10 páginas por tema en `datos/corpus-desarrollo/`. Corpus completo solo con `scripts/ingesta-programada.ps1` (no se registró ninguna tarea programada) | Subconjunto creado: 6 PDF |
+| 6. Respaldo y restauración | `scripts/respaldo_corpus.py respaldar` y `restaurar --confirmar`: base, volumen de archivos con la caché y manifiesto con huellas | En el proyecto aislado: tras borrar los fragmentos y la caché, la restauración devolvió 3 documentos, 192 fragmentos con vector y 3 entradas de caché |
+| 7. Memoria en 8 GB | Reordenador cargado al primer uso; PyTorch con los 6 procesadores (antes 3, vectores idénticos); GROBID con `modelPreload: false` y 2 solicitudes simultáneas (`compartido/grobid/grobid.yaml`); 1 PDF a la vez, lote de 16 textos y 1 inferencia simultánea | Suma de picos de 7,4 GB |
+
+**Pruebas:** backend con 422 pruebas superadas y 5 omitidas (incluidas las de la regla de referencias ajustada), cobertura del 94,46 %; servicio de modelos con 28 superadas. Ruff y mypy sin observaciones.
+
+**Proyección del corpus completo** (unas 2 500 páginas y 2 850 fragmentos): unas 2,5 horas sin paginación, según las velocidades medidas. Es una estimación.
+
+**Archivos:**
+- Creados: `backend/app/corpus/` (`medicion.py`, `cache_extraccion.py`, `resegmentar.py`), `backend/pruebas/unitarias/test_corpus_cache_y_avance.py`, `servicio_modelos/pruebas/test_perezoso.py`, `compartido/grobid/grobid.yaml`, `scripts/` (`respaldo_corpus.py`, `crear_subconjunto_desarrollo.py`, `ingesta-programada.ps1`) y `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
+- Modificados: `backend/app/corpus/` (`extraccion.py`, `extractor_docling.py`, `fabrica.py`, `indexacion.py`, `ingesta.py`, `validacion.py`), `backend/app/repositorios/corpus.py`, `backend/app/configuracion/ajustes.py` (`HILOS_DOCLING`), `servicio_modelos/servicio/` (`ajustes.py`, `aplicacion.py`, `esquemas.py`, `motores.py`, `motor_transformers.py`), `compartido/docker-compose.yml`, `.env.example`, `compartido/.env.example`, pruebas de integración del corpus, `README.md` y `CLAUDE.md`.

@@ -14,8 +14,11 @@ from app.comun.errores import ErrorAplicacion
 from app.configuracion import Ajustes
 from app.corpus.almacen import AlmacenArchivos
 from app.corpus.extraccion import ParametrosCanal, crear_canal
+from app.corpus.extractor_docling import OpcionesDocling
 from app.corpus.indexacion import Indexador
 from app.inferencia.servicio_modelos import cliente_desde_ajustes
+
+CARPETA_CACHE = "extraccion"  # caché de Docling, junto a los PDF (decisión T10-02)
 
 
 class CorpusNoConfigurado(ErrorAplicacion):
@@ -51,14 +54,15 @@ def crear_indexador(ajustes: Ajustes) -> Indexador:
     )
     assert ajustes.directorio_recursos_corpus and ajustes.url_grobid
     assert ajustes.directorio_archivos
+    archivos = Path(ajustes.directorio_archivos)
     canal = crear_canal(
         Path(ajustes.directorio_recursos_corpus),
         ajustes.url_grobid,
         ParametrosCanal.desde(parametros_iniciales()),
+        opciones=OpcionesDocling(hilos=ajustes.hilos_docling),
+        cache=archivos / CARPETA_CACHE,
     )
-    return Indexador(
-        canal, cliente_desde_ajustes(ajustes), AlmacenArchivos(Path(ajustes.directorio_archivos))
-    )
+    return Indexador(canal, cliente_desde_ajustes(ajustes), AlmacenArchivos(archivos))
 
 
 def crear_reindexador(ajustes: Ajustes) -> Indexador:

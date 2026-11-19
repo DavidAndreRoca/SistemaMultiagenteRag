@@ -37,6 +37,7 @@ class RespuestaReordenar(IdentidadModelo):
 class ModeloCargado(IdentidadModelo):
     tipo: str
     licencia: str
+    en_memoria: bool = True  # False: se carga al primer uso (reordenador perezoso, T10-02)
 
 
 class Memoria(BaseModel):

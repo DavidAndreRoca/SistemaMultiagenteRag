@@ -14,6 +14,11 @@ name: sma_compartido
 services:
   grobid:
     image: grobid/grobid:0.9.1-crf  # única variante con arm64 (decisión T01-01)
+    # Configuración propia (decisión T10-02): carga cada modelo al primer uso en lugar de
+    # todos al arrancar (0,3 GB en reposo en lugar de 3,1 GB) y atiende 2 solicitudes a la
+    # vez en lugar de 10. Al usarse la cabecera sube a unos 3,4 GB.
+    volumes:
+      - ./grobid/grobid.yaml:/opt/grobid/grobid-home/config/grobid.yaml:ro
     ports:
       - "127.0.0.1:${PUERTO_GROBID:-8070}:8070"
     networks: [compartido]

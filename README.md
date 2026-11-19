@@ -159,7 +159,25 @@ docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-
 docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-deps api python -m app.corpus.reindexar --investigador INV-01
 ```
 
-Decisiones: `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md`.
+La ingesta es reanudable por documento: muestra el avance y el tiempo por etapa, se puede detener con Ctrl+C (el documento en curso se revierte) y se continúa con el mismo comando. La extracción de Docling queda en caché por huella del PDF (`/archivos/extraccion/`), así que volver a segmentar no relee los PDF:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-deps api python -m app.corpus.resegmentar --tema TEMA-01 --investigador INV-01            # simulación
+docker compose -f docker-compose.yml -f docker-compose.corpus.yml run --rm --no-deps api python -m app.corpus.resegmentar --tema TEMA-01 --investigador INV-01 --aplicar
+```
+
+Flujo de desarrollo en un portátil (decisión T10-02):
+
+- **Pruebas diarias:** el subconjunto de 3 PDF por tema, `python scripts/crear_subconjunto_desarrollo.py` (lo copia a `datos/corpus-desarrollo/<tema>/`).
+- **Corpus completo:** solo en ejecuciones programadas, con `scripts/ingesta-programada.ps1` (registra la ingesta en `datos/corpus-provisional/` y respalda la base al terminar sin errores). El script explica cómo programarlo; no se registra solo.
+- **Respaldo y restauración** de la base con el corpus ingerido y del volumen de archivos (con la caché):
+
+```bash
+python scripts/respaldo_corpus.py respaldar
+python scripts/respaldo_corpus.py restaurar datos/respaldos/corpus-AAAAMMDD --confirmar
+```
+
+Decisiones: `docs/decisiones/T10-indexacion-y-gestion-del-corpus.md` y `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
 
 ## Diagnóstico de claves externas
 

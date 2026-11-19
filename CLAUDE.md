@@ -71,6 +71,8 @@ docker compose -f compartido/docker-compose.yml up -d --wait   # modelos en :800
 docker compose -f compartido/docker-compose.yml --profile pruebas run --rm --build pruebas_modelos  # pesos reales
 ```
 
+Flujo de desarrollo del corpus (T10-02): la ingesta es reanudable (Ctrl+C y repetir el comando); la extracción de Docling queda en caché en `/archivos/extraccion/` (`app/corpus/cache_extraccion.py`) y `python -m app.corpus.resegmentar --tema T --investigador I [--aplicar]` vuelve a segmentar sin releer los PDF. Para el día a día, el subconjunto de `scripts/crear_subconjunto_desarrollo.py`; el corpus completo, con `scripts/ingesta-programada.ps1`. Respaldo: `python scripts/respaldo_corpus.py respaldar|restaurar`. Presupuesto de memoria de 8 GB en `docs/decisiones/T10-02-optimizacion-flujo-desarrollo.md`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

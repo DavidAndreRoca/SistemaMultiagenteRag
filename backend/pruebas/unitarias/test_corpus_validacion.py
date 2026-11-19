@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from app.corpus.esquemas import MotivoExclusion
-from app.corpus.validacion import LimitesPdf, huella, validar_pdf
+from app.corpus.validacion import LimitesPdf, huella, paginas_de_muestra, validar_pdf
 
 PDF = Path(__file__).resolve().parents[1] / "datos" / "pdf"
 LIMITES = LimitesPdf(tamano_max_mb=25, paginas_max=60)
@@ -56,6 +56,23 @@ def test_tamano_maximo(tmp_path: Path) -> None:
     informe = validar_pdf(grande, LimitesPdf(tamano_max_mb=1, paginas_max=60))
     assert informe.motivo is MotivoExclusion.EXCEDE_TAMANO
     assert informe.huella_archivo == huella(grande.read_bytes())
+
+
+@pytest.mark.parametrize(
+    ("paginas", "esperado"),
+    [
+        (1, [0]),
+        (12, list(range(12))),
+        (13, [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12]),
+        (60, [0, 5, 11, 16, 21, 27, 32, 38, 43, 48, 54, 59]),
+    ],
+)
+def test_la_capa_de_texto_se_revisa_en_una_muestra_repartida(
+    paginas: int, esperado: list[int]
+) -> None:
+    muestra = paginas_de_muestra(paginas)
+    assert muestra == esperado
+    assert muestra[0] == 0 and muestra[-1] == paginas - 1 and len(muestra) <= 12
 
 
 def test_paginas_maximas() -> None:
