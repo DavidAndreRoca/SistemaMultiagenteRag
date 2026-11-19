@@ -86,6 +86,13 @@ class RepositorioVersiones(RepositorioDeCaso[VersionBorrador]):
 class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):
     modelo = Solicitud
 
+    async def hay_de_version(self, contexto: ContextoAcceso, version_id: uuid.UUID) -> bool:
+        """Alguna solicitud del caso usa la versión (sus ids de sección y párrafo)."""
+        resultado = await self._sesion.execute(
+            self._consulta(contexto).where(Solicitud.version_id == version_id).limit(1)
+        )
+        return resultado.first() is not None
+
 
 class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):
     modelo = FragmentoRecuperado

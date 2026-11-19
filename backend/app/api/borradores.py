@@ -1,8 +1,9 @@
-"""Rutas del borrador del caso (A1): cargar una versión, listarlas y ver sus metadatos.
+"""Rutas del borrador del caso (A1): versiones (T11) y sus secciones (T12).
 
-RF-01 y CU-01 (decisión T11-01, apartado 6). Toda lectura filtra por el caso de la
-sesión: la versión de otro caso responde 404, igual que una inexistente. Ninguna ruta
-devuelve el archivo ni su texto.
+RF-01, CU-01 y F-05 (decisiones T11-01, apartado 6, y T12-01, apartado 8). Toda lectura
+filtra por el caso de la sesión: la versión de otro caso responde 404, igual que una
+inexistente. Ninguna ruta devuelve el archivo; el texto de los párrafos solo lo ve su
+propio caso, para elegir el alcance.
 """
 
 from __future__ import annotations
@@ -13,14 +14,18 @@ from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, Request, UploadFile, status
+from pydantic import BaseModel, Field
 
+from app.borradores.secciones import TituloMarcado
 from app.borradores.servicio import (
     SUBCARPETA,
     BorradorDemasiadoGrande,
     ResultadoCarga,
     ServicioBorradores,
     VersionDetalle,
+    VersionInexistente,
     VersionResumen,
+    VistaSecciones,
     evento_de_validacion,
 )
 from app.comun.almacen import AlmacenPrivado
@@ -42,11 +47,6 @@ class BorradoresNoConfigurado(ErrorAplicacion):
             estado_http=503,
             detalle={"variables": ["DIRECTORIO_ARCHIVOS"]},
         )
-
-
-class VersionInexistente(ErrorAplicacion):
-    def __init__(self) -> None:
-        super().__init__("no_existe", "La versión solicitada no existe.", estado_http=404)
 
 
 def obtener_servicio(peticion: Request) -> ServicioBorradores:
@@ -135,3 +135,67 @@ async def ver_version(
         raise VersionInexistente()
     _, parametros = await unidad.configuracion.vigente()
     return VersionDetalle.con_detalle(version, parametros.hitos)
+
+
+class MarcadoSecciones(BaseModel):
+    titulos: list[TituloMarcado] = Field(min_length=1, max_length=500)
+
+
+class MarcadoReferencias(BaseModel):
+    desde: str = Field(min_length=1, max_length=20)
+    hasta: str | None = Field(default=None, min_length=1, max_length=20)
+
+
+@router.get(
+    "/versiones/{version_id}/secciones",
+    response_model=VistaSecciones,
+    summary="Secciones y párrafos de una versión",
+    description="Árbol de secciones, párrafos con su texto y sección, y la lista de"
+    " referencias. Sin estilos de título, pide marcar las secciones (F-05).",
+)
+async def ver_secciones(
+    version_id: uuid.UUID, contexto: ContextoCaso, unidad: Unidad
+) -> VistaSecciones:
+    version = await unidad.versiones.con_parrafos(contexto, version_id)
+    if version is None:
+        raise VersionInexistente()
+    return VistaSecciones.desde(version)
+
+
+@router.put(
+    "/versiones/{version_id}/secciones",
+    response_model=VistaSecciones,
+    responses={409: {}},
+    summary="Marcar a mano las secciones de una versión",
+    description="Indica qué párrafos son títulos y su nivel. Reemplaza la detección por"
+    " estilos y vuelve a detectar la lista de referencias. 409 si la versión ya tiene"
+    " solicitudes.",
+)
+async def marcar_secciones(
+    version_id: uuid.UUID,
+    cuerpo: MarcadoSecciones,
+    contexto: ContextoCaso,
+    unidad: Unidad,
+    servicio: ServicioDep,
+) -> VistaSecciones:
+    return await servicio.marcar_secciones(unidad, contexto, version_id, cuerpo.titulos)
+
+
+@router.put(
+    "/versiones/{version_id}/referencias",
+    response_model=VistaSecciones,
+    responses={409: {}},
+    summary="Indicar a mano la lista de referencias",
+    description="Del párrafo `desde` al párrafo `hasta` (por defecto, el último). Cada línea"
+    " no vacía es una entrada. 409 si la versión ya tiene solicitudes.",
+)
+async def marcar_referencias(
+    version_id: uuid.UUID,
+    cuerpo: MarcadoReferencias,
+    contexto: ContextoCaso,
+    unidad: Unidad,
+    servicio: ServicioDep,
+) -> VistaSecciones:
+    return await servicio.marcar_referencias(
+        unidad, contexto, version_id, cuerpo.desde, cuerpo.hasta
+    )

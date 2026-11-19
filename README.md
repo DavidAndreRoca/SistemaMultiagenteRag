@@ -185,6 +185,8 @@ El caso (A1) carga su borrador .docx por hito. Cada carga se valida y crea una v
 
 Rutas del caso: `POST /caso/versiones` (formulario con `hito` y `archivo`), `GET /caso/versiones` (con `?hito=` opcional) y `GET /caso/versiones/{id}`. Los .docx de prueba de `backend/pruebas/datos/docx/` son ficticios y se regeneran con `python -m pruebas.datos.generar_docx_muestra`. Decisiones: `docs/decisiones/T11-borradores.md`.
 
+Cada carga detecta las secciones por los estilos de título y separa la lista de referencias (T12). Sin estilos, la respuesta pide marcar los títulos a mano. Rutas: `GET /caso/versiones/{id}/secciones` (árbol, párrafos y referencias), `PUT /caso/versiones/{id}/secciones` (títulos marcados a mano) y `PUT /caso/versiones/{id}/referencias` (lista indicada a mano). La validación del alcance de una solicitud por tipo está en `app/borradores/alcance.py`. Decisiones: `docs/decisiones/T12-secciones-y-alcance.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:
