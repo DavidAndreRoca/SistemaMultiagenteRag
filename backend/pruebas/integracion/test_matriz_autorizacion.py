@@ -3,9 +3,14 @@
 * Sin sesión: 401 en toda ruta que no sea pública.
 * A1 en rutas de A2 y A2 en rutas de A1: 403.
 * Sesión del caso B en rutas de datos de caso: nunca ve datos del caso A.
+
+Las rutas con archivo (T11) se piden como formulario con un .docx de muestra, y
+``{VERSION_A}`` es una versión real del caso A, que el caso B no debe ver.
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 import httpx
 import pytest
@@ -21,14 +26,25 @@ from pruebas.matriz_autorizacion import MATRIZ, Entrada, Politica
 
 pytestmark = pytest.mark.integracion
 
+DOCX = Path(__file__).parents[1] / "datos" / "docx"
+VALORES: dict[str, str] = {"{CASO_A}": "CASO-A"}
+
 
 def _ruta(ruta: str, entrada: Entrada) -> str:
-    return (entrada.ejemplo or ruta).replace("{CASO_A}", "CASO-A")
+    concreta = entrada.ejemplo or ruta
+    for marca, valor in VALORES.items():
+        concreta = concreta.replace(marca, valor)
+    return concreta
 
 
 async def _pedir(
     cliente: httpx.AsyncClient, metodo: str, ruta: str, entrada: Entrada
 ) -> httpx.Response:
+    if entrada.archivo is not None:
+        archivos = {"archivo": (entrada.archivo, (DOCX / entrada.archivo).read_bytes())}
+        return await cliente.request(
+            metodo, _ruta(ruta, entrada), data=entrada.formulario, files=archivos
+        )
     cuerpo = entrada.cuerpo if metodo in {"POST", "PUT", "PATCH"} else None
     return await cliente.request(metodo, _ruta(ruta, entrada), json=cuerpo)
 
@@ -46,6 +62,13 @@ async def test_matriz_de_autorizacion(entorno: Entorno, investigador: httpx.Asyn
     ):
         await entrar_y_cambiar(estudiante_a, *primera_credencial(caso_a))
         await entrar_y_cambiar(estudiante_b, *primera_credencial(caso_b))
+        version_a = await estudiante_a.post(
+            "/caso/versiones",
+            data={"hito": "avance_1"},
+            files={"archivo": ("a.docx", (DOCX / "valido.docx").read_bytes())},
+        )
+        assert version_a.status_code == 201, version_a.text
+        VALORES["{VERSION_A}"] = version_a.json()["version"]["id"]
 
         fallos: list[str] = []
         for (metodo, ruta), entrada in MATRIZ.items():
@@ -71,6 +94,7 @@ async def test_matriz_de_autorizacion(entorno: Entorno, investigador: httpx.Asyn
                     fallos.append(f"{metodo} {ruta} con su caso -> {propio.status_code}")
             if entrada.datos_de_caso:
                 ajeno = await _pedir(estudiante_b, metodo, ruta, entrada)
-                if "CASO-A" in ajeno.text or "TEMA-A" in ajeno.text:
+                datos_de_a = ("CASO-A", "TEMA-A", VALORES["{VERSION_A}"])
+                if any(dato in ajeno.text for dato in datos_de_a):
                     fallos.append(f"{metodo} {ruta}: el caso B ve datos del caso A")
         assert fallos == []

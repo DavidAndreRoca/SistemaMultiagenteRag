@@ -25,6 +25,9 @@ class Entrada:
     ejemplo: str | None = None  # ruta concreta si tiene parámetros; {CASO_A} = código del caso A
     cuerpo: dict[str, Any] = field(default_factory=dict)
     datos_de_caso: bool = False  # devuelve datos de un caso: otro caso no debe verlos
+    # Formulario con archivo (multipart): campos y nombre de un .docx de pruebas/datos/docx/.
+    formulario: dict[str, str] = field(default_factory=dict)
+    archivo: str | None = None
 
 
 ID_FICTICIO = "00000000-0000-4000-8000-000000000000"  # basta para comprobar 401 y 403
@@ -38,6 +41,14 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         Politica.SESION, cuerpo={"contrasena_actual": "x", "contrasena_nueva": "y"}
     ),
     ("GET", "/caso"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Borrador (T11). {VERSION_A} = una versión del caso A creada por la prueba.
+    ("POST", "/caso/versiones"): Entrada(
+        Politica.CASO, datos_de_caso=True, formulario={"hito": "avance_1"}, archivo="valido.docx"
+    ),
+    ("GET", "/caso/versiones"): Entrada(Politica.CASO, datos_de_caso=True),
+    ("GET", "/caso/versiones/{version_id}"): Entrada(
+        Politica.CASO, ejemplo="/caso/versiones/{VERSION_A}", datos_de_caso=True
+    ),
     ("GET", "/investigador/colecciones"): Entrada(Politica.INVESTIGADOR),
     ("POST", "/investigador/colecciones/cientificas"): Entrada(
         Politica.INVESTIGADOR, cuerpo={"tema": "TEMA-MATRIZ"}

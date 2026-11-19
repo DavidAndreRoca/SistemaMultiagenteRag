@@ -128,8 +128,10 @@ class Entorno:
 
 
 @pytest.fixture
-async def entorno(bd_limpia: str) -> AsyncIterator[Entorno]:
-    aplicacion = crear_aplicacion(cargar_ajustes(variables_base(URL_BD=bd_limpia)))
+async def entorno(bd_limpia: str, tmp_path: Path) -> AsyncIterator[Entorno]:
+    # DIRECTORIO_ARCHIVOS: la carga de borradores (T11) guarda allí cada versión.
+    variables = variables_base(URL_BD=bd_limpia, DIRECTORIO_ARCHIVOS=str(tmp_path / "archivos"))
+    aplicacion = crear_aplicacion(cargar_ajustes(variables))
     reloj = RelojFicticio()
     aplicacion.state.reloj = reloj
     async with aplicacion.router.lifespan_context(aplicacion):

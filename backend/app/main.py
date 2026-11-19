@@ -1,4 +1,4 @@
-"""Creación de la aplicación FastAPI."""
+"""CreaciÃ³n de la aplicaciÃ³n FastAPI."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app import __version__
-from app.api import caso, corpus, investigador, salud, sesion
+from app.api import borradores, caso, corpus, investigador, salud, sesion
 from app.bd.sesion import crear_fabrica_sesiones, crear_motor
 from app.comun.errores import RespuestaError, registrar_manejadores
 from app.comun.middleware import MiddlewareIncidencia
@@ -18,10 +18,10 @@ from app.configuracion import Ajustes, cargar_ajustes
 
 
 def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
-    """Fábrica de la aplicación.
+    """FÃ¡brica de la aplicaciÃ³n.
 
     Si no se pasan ``ajustes`` se leen y validan del entorno; ante una variable
-    obligatoria ausente lanza ``ErrorConfiguracion`` y la aplicación no arranca.
+    obligatoria ausente lanza ``ErrorConfiguracion`` y la aplicaciÃ³n no arranca.
     """
     ajustes = ajustes or cargar_ajustes()
     configurar_registro()
@@ -61,8 +61,9 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     aplicacion.state.indexador = None
     aplicacion.state.embebedor = None
     aplicacion.state.candado_corpus = asyncio.Lock()
+    aplicacion.state.servicio_borradores = None  # se crea al primer uso (DIRECTORIO_ARCHIVOS)
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
-    for modulo in (salud, sesion, caso, investigador, corpus):
+    for modulo in (salud, sesion, caso, borradores, investigador, corpus):
         aplicacion.include_router(modulo.router)
     return aplicacion

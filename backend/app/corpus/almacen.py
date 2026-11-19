@@ -8,30 +8,13 @@
 
 from __future__ import annotations
 
-import shutil
-import uuid
 from pathlib import Path
+
+from app.comun.almacen import AlmacenPrivado
 
 SUBCARPETA = "corpus"
 
 
-class AlmacenArchivos:
+class AlmacenArchivos(AlmacenPrivado):
     def __init__(self, base: Path) -> None:
-        self._base = base
-
-    def guardar(self, origen: Path) -> str:
-        """Copia el archivo con un nombre aleatorio y devuelve su ruta relativa."""
-        relativa = f"{SUBCARPETA}/{uuid.uuid4().hex}.pdf"
-        destino = self._base / relativa
-        destino.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(origen, destino)
-        return relativa
-
-    def borrar(self, relativa: str) -> None:
-        self.ruta(relativa).unlink(missing_ok=True)
-
-    def ruta(self, relativa: str) -> Path:
-        ruta = (self._base / relativa).resolve()
-        if not ruta.is_relative_to(self._base.resolve()):
-            raise ValueError("ruta fuera del almacén")
-        return ruta
+        super().__init__(base, SUBCARPETA, ".pdf")

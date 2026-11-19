@@ -19,6 +19,7 @@ dependencies = [
     "pgvector>=0.3,<1",
     "pypdf>=7.0,<8",
     "python-multipart>=0.0.20,<1",  # subida de PDF a la API (T10)
+    "python-docx>=1.2,<2",  # borradores .docx (T11); MIT
 ]
 
 [project.optional-dependencies]
