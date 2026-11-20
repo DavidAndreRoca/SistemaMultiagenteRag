@@ -56,6 +56,25 @@ services:
       retries: 20
       start_period: 5s
 
+  # Interfaz en desarrollo (T13): docker compose --profile interfaz up -d interfaz
+  # Abra http://127.0.0.1:5173. Vite reenvía /api a la API, así ambas quedan bajo el mismo
+  # origen y la cookie de sesión funciona sin CORS. Node fijado como en la CI.
+  interfaz:
+    profiles: ["interfaz"]
+    image: node:24.22.2-bookworm-slim
+    working_dir: /repo/frontend
+    command: ["sh", "-c", "npm install --no-audit --no-fund && npx vite --host 0.0.0.0"]
+    environment:
+      URL_API: http://api:8000
+    volumes:
+      - ./frontend:/repo/frontend
+      - ./docs:/repo/docs:ro
+    ports:
+      - "127.0.0.1:${PUERTO_INTERFAZ:-5173}:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+
   # docker compose run --rm --build pruebas   (usa un entorno propio, no necesita claves externas)
   pruebas:
     profiles: ["pruebas"]

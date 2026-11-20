@@ -1,0 +1,55 @@
+{
+  "name": "sistema-multiagente-rag-interfaz",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Interfaz del sistema multiagente con RAG (T13): React, TypeScript, Vite y React Aria Components.",
+  "engines": {
+    "node": ">=24.22.2"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "tipos": "tsc -b --noEmit",
+    "lint": "eslint .",
+    "formato": "prettier --write .",
+    "formato:revisar": "prettier --check .",
+    "pruebas": "vitest run",
+    "generar:api": "openapi-typescript ../docs/api/openapi.json -o src/api/esquema.d.ts",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0",
+    "react": "19.3.1",
+    "react-aria-components": "1.22.1",
+    "react-dom": "19.3.1",
+    "react-router": "8.5.1"
+  },
+  "overrides": {
+    "playwright-core": "1.65.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.65.0",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "eslint": "9.39.5",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "jsdom": "31.0.0",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

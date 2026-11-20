@@ -1,0 +1,238 @@
+/* Estilos de la interfaz (RNF-18, WCAG 2.2 AA): contrastes de al menos 4,5:1 para el texto
+   y 3:1 para los bordes de los controles, foco siempre visible y objetivos de 24 px o más. */
+:root {
+  --texto: #1b1f24;
+  --texto-suave: #4a5260;
+  --fondo: #ffffff;
+  --fondo-suave: #f3f5f8;
+  --borde: #6b7380;
+  --primario: #1f4e99;
+  --primario-oscuro: #163a73;
+  --sobre-primario: #ffffff;
+  --foco: #b3460b;
+  --error: #a3161e;
+  --error-fondo: #fdeced;
+  --info-fondo: #e8f0fb;
+  --importante-fondo: #fff4e0;
+  --radio: 6px;
+  font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 100%;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+}
+
+:focus-visible,
+[data-focus-visible] {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.saltar {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  padding: 0.5rem 1rem;
+  background: var(--primario);
+  color: var(--sobre-primario);
+  z-index: 10;
+}
+.saltar:focus {
+  top: 1rem;
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--fondo-suave);
+  border-bottom: 1px solid var(--borde);
+}
+.cabecera__nombre {
+  margin: 0;
+  font-weight: 600;
+}
+.cabecera__cuenta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.contenido {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+.contenido h1:focus {
+  outline: none;
+}
+section {
+  margin-block: 2rem;
+}
+
+.formulario {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+}
+
+.campo {
+  display: grid;
+  gap: 0.25rem;
+}
+.campo label {
+  font-weight: 600;
+}
+.campo input,
+.selector__boton {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: var(--texto);
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+.campo [slot="description"],
+.campo__descripcion {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.9375rem;
+}
+.campo__error,
+.campo input[data-invalid] {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.selector__boton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: start;
+  cursor: pointer;
+}
+.selector__lista {
+  min-width: var(--trigger-width);
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+.selector__opcion {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+.selector__opcion[data-focused],
+.selector__opcion[data-hovered] {
+  background: var(--info-fondo);
+}
+.selector__opcion[data-selected] {
+  font-weight: 600;
+}
+
+.boton {
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  border-radius: var(--radio);
+  border: 2px solid var(--primario);
+  cursor: pointer;
+  justify-self: start;
+}
+.boton--principal {
+  background: var(--primario);
+  color: var(--sobre-primario);
+}
+.boton--principal[data-hovered] {
+  background: var(--primario-oscuro);
+}
+.boton--secundario {
+  background: var(--fondo);
+  color: var(--primario);
+}
+.boton[data-disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.aviso {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radio);
+  border-left: 4px solid;
+}
+.aviso p {
+  margin: 0.25rem 0;
+}
+.aviso--error {
+  background: var(--error-fondo);
+  border-color: var(--error);
+}
+.aviso--informativo {
+  background: var(--info-fondo);
+  border-color: var(--primario);
+}
+.aviso--importante {
+  background: var(--importante-fondo);
+  border-color: var(--foco);
+}
+.aviso__incidencia {
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+}
+.datos dt {
+  font-weight: 600;
+}
+.datos dd {
+  margin: 0;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabla th,
+.tabla td {
+  padding: 0.5rem;
+  text-align: start;
+  border-bottom: 1px solid var(--borde);
+  vertical-align: top;
+}
+.tabla thead th {
+  background: var(--fondo-suave);
+}
+
+.oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
