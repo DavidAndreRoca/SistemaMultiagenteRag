@@ -1,1 +1,1 @@
-"""Pruebas de contrato con respuestas grabadas de servicios externos: GROBID (T09) y servicios bibliográficos (T14)."""
+"""Pruebas de contrato con respuestas grabadas: GROBID (T09) y servicios bibliográficos (T14)."""
