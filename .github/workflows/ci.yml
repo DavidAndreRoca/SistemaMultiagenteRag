@@ -253,7 +253,6 @@ jobs:
       ENTORNO: pruebas
       URL_BD: postgresql+psycopg://sma:sma_ci@localhost:5432/sma
       SECRETO_SESION: secreto-solo-para-pruebas-automaticas-0123456789
-      DIRECTORIO_ARCHIVOS: ${{ runner.temp }}/archivos
       URL_API: http://127.0.0.1:8000
       E2E_CREAR_INVESTIGADOR: python -m app.seguridad.crear_investigador
       E2E_DIRECTORIO_BACKEND: ${{ github.workspace }}/backend
@@ -278,6 +277,9 @@ jobs:
           alembic upgrade head
       - name: Levantar la API
         working-directory: backend
+        # El contexto "runner" solo existe dentro de un paso, no en el env del trabajo.
+        env:
+          DIRECTORIO_ARCHIVOS: ${{ runner.temp }}/archivos
         run: |
           nohup python -m app > "${{ runner.temp }}/api.log" 2>&1 &
           for _ in $(seq 1 60); do curl -fs http://127.0.0.1:8000/salud >/dev/null && exit 0; sleep 1; done
