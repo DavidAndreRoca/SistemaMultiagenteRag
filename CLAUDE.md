@@ -79,6 +79,8 @@ Secciones y alcance (T12): `app/borradores/secciones.py` (detección por estilos
 
 Interfaz (T13): `frontend/` (React 19, TypeScript estricto, Vite, React Aria Components, React Router). Herramientas en el contenedor `node:24.22.2-bookworm-slim` (Node del equipo demasiado antiguo); `node_modules` queda instalado para Linux. El cliente se genera del contrato: `python -m app.contrato` y luego `npm run generar:api`; una prueba del backend y la CI fallan si quedan desfasados. La interfaz llama a `/api/...` y Vite lo reenvía a la API (mismo origen). Extremo a extremo: `scripts/e2e.ps1` (proyecto `sma_e2e` aislado). En desarrollo: `docker compose --profile interfaz up -d interfaz`.
 
+Servicios bibliográficos (T14): `app/bibliografia/` (Crossref, doi.org, Unpaywall y OpenAlex detrás de `interfaces.py`, con limitador, reintentos, caché en `cache_metadatos` y comparador). Toda falla da `no_comprobable`, nunca `no_encontrado` (RN-18). Las pruebas usan respuestas grabadas en `pruebas/contrato/respuestas/` (`python -m pruebas.contrato.grabar`, con `CORREO_POLITE` y `CLAVE_OPENALEX`), nunca la red.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

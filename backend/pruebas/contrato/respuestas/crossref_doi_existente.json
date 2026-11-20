@@ -1,0 +1,257 @@
+{
+  "cuerpo": {
+    "message": {
+      "DOI": "10.3390/educsci13090856",
+      "ISSN": [
+        "2227-7102"
+      ],
+      "URL": "https://doi.org/10.3390/educsci13090856",
+      "abstract": "<jats:p>ChatGPT is revolutionizing the field of higher education by leveraging deep learning models to generate human-like content. However, its integration into academic settings raises concerns regarding academic integrity, plagiarism detection, and the potential impact on critical thinking skills. This article presents a study that adopts a thing ethnography approach to understand ChatGPT’s perspective on the challenges and opportunities it represents for higher education. The research explores the potential benefits and limitations of ChatGPT, as well as mitigation strategies for addressing the identified challenges. Findings emphasize the urgent need for clear policies, guidelines, and frameworks to responsibly integrate ChatGPT in higher education. It also highlights the need for empirical research to understand user experiences and perceptions. The findings provide insights that can guide future research efforts in understanding the implications of ChatGPT and similar Artificial Intelligence (AI) systems in higher education. The study concludes by highlighting the importance of thing ethnography as an innovative approach for engaging with intelligent AI systems and calls for further research to explore best practices and strategies in utilizing Generative AI for educational purposes.</jats:p>",
+      "alternative-id": [
+        "educsci13090856"
+      ],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-1158-924X",
+          "affiliation": [
+            {
+              "name": "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+            }
+          ],
+          "authenticated-orcid": false,
+          "family": "Michel-Villarreal",
+          "given": "Rosario",
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ],
+          "sequence": "first"
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-4551-8327",
+          "affiliation": [
+            {
+              "name": "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+            }
+          ],
+          "authenticated-orcid": false,
+          "family": "Vilalta-Perdomo",
+          "given": "Eliseo",
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ],
+          "sequence": "additional"
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-7919-4885",
+          "affiliation": [
+            {
+              "name": "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+            }
+          ],
+          "authenticated-orcid": false,
+          "family": "Salinas-Navarro",
+          "given": "David Ernesto",
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ],
+          "sequence": "additional"
+        },
+        {
+          "affiliation": [
+            {
+              "name": "School of Engineering and Sciences, Tecnológico de Monterrey, Monterrey 64849, Mexico"
+            }
+          ],
+          "family": "Thierry-Aguilera",
+          "given": "Ricardo",
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ],
+          "sequence": "additional"
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-3431-713X",
+          "affiliation": [
+            {
+              "name": "Cornwall Business School, Falmouth University, Penryn TR10 9FE, UK"
+            }
+          ],
+          "authenticated-orcid": false,
+          "family": "Gerardou",
+          "given": "Flor Silvestre",
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ],
+          "sequence": "additional"
+        }
+      ],
+      "container-title": [
+        "Education Sciences"
+      ],
+      "content-domain": {
+        "crossmark-restriction": false,
+        "domain": []
+      },
+      "created": {
+        "date-parts": [
+          [
+            2023,
+            8,
+            23
+          ]
+        ],
+        "date-time": "2023-08-23T08:20:30Z",
+        "timestamp": 1692778830000
+      },
+      "deposited": {
+        "date-parts": [
+          [
+            2025,
+            10,
+            10
+          ]
+        ],
+        "date-time": "2025-10-10T20:40:21Z",
+        "timestamp": 1760128821000
+      },
+      "funder": [
+        {
+          "name": "Writing Lab, Institute for the Future of Education, Tecnologico de Monterrey, Mexico"
+        }
+      ],
+      "indexed": {
+        "date-parts": [
+          [
+            2026,
+            11,
+            20
+          ]
+        ],
+        "date-time": "2026-11-20T06:41:52Z",
+        "timestamp": 1795156912837,
+        "version": "4.10.3"
+      },
+      "is-referenced-by-count": 815,
+      "issn-type": [
+        {
+          "type": "electronic",
+          "value": "2227-7102"
+        }
+      ],
+      "issue": "9",
+      "issued": {
+        "date-parts": [
+          [
+            2023,
+            8,
+            23
+          ]
+        ]
+      },
+      "journal-issue": {
+        "issue": "9",
+        "published-online": {
+          "date-parts": [
+            [
+              2023,
+              9
+            ]
+          ]
+        }
+      },
+      "language": "en",
+      "license": [
+        {
+          "URL": "https://creativecommons.org/licenses/by/4.0/",
+          "content-version": "vor",
+          "delay-in-days": 0,
+          "start": {
+            "date-parts": [
+              [
+                2023,
+                8,
+                23
+              ]
+            ],
+            "date-time": "2023-08-23T00:00:00Z",
+            "timestamp": 1692748800000
+          }
+        }
+      ],
+      "link": [
+        {
+          "URL": "https://www.mdpi.com/2227-7102/13/9/856/pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ],
+      "member": "1968",
+      "original-title": [],
+      "page": "856",
+      "prefix": "10.3390",
+      "published": {
+        "date-parts": [
+          [
+            2023,
+            8,
+            23
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2023,
+            8,
+            23
+          ]
+        ]
+      },
+      "publisher": "MDPI AG",
+      "reference-count": 50,
+      "references-count": 50,
+      "relation": {},
+      "resource": {
+        "primary": {
+          "URL": "https://www.mdpi.com/2227-7102/13/9/856"
+        }
+      },
+      "score": 1,
+      "short-container-title": [
+        "Education Sciences"
+      ],
+      "short-title": [],
+      "source": "Crossref",
+      "subject": [],
+      "subtitle": [],
+      "title": [
+        "Challenges and Opportunities of Generative AI for Higher Education as Explained by ChatGPT"
+      ],
+      "type": "journal-article",
+      "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+      "volume": "13"
+    },
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "status": "ok"
+  },
+  "estado": 200,
+  "servicio": "crossref",
+  "tipo": "application/json"
+}

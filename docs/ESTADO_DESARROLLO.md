@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 19 de noviembre de 2026. T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 implementada y verificada en local en la rama `t13-interfaz-base` (apartado 16). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 19 de noviembre de 2026. T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 implementada y verificada en local en la rama `t14-clientes-bibliograficos` (apartado 17). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -21,8 +21,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida e integrada** (solicitud de cambio #6, apartado 13.10): corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
 | **T11 (F3)** | Borradores: carga, validación y versiones | **Integrada en `main`** (solicitud de cambio #7, apartado 14.7). CP-01 y CP-02 superados y contrastados con la Tabla 20 de la tesis (apartado 14) |
 | **T12 (F3)** | Secciones del borrador y alcance | **Integrada en `main`** (solicitud de cambio #8, apartado 15.7); criterios cumplidos y CP-09 contrastado con la tesis (apartado 15) |
-| **T13 (F3)** | Interfaz base | **Implementada y verificada en local**: criterios cumplidos con Playwright frente a la API real (apartado 16). Falta la prueba manual con lector de pantalla. Rama `t13-interfaz-base`, sin integrar |
-| T14 en adelante | | No iniciadas |
+| **T13 (F3)** | Interfaz base | **Integrada en `main`** (solicitud de cambio #9, apartado 16.7): criterios cumplidos con Playwright frente a la API real, también en la CI (apartado 16). Prueba manual con teclado y NVDA superada según el equipo (apartado 16.5) |
+| **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Implementada y verificada en local**; criterios cumplidos (apartado 17). Falta grabar OpenAlex, que necesita `CLAVE_OPENALEX`. Rama `t14-clientes-bibliograficos`, sin integrar |
+| T15 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1087,7 +1088,7 @@ Rama `t13-interfaz-base`, desde `main` con T12 (`f534de0`). Decisión: `docs/dec
 
 ### 16.5. Pendientes
 
-- **Prueba manual con teclado y lector de pantalla** (NVDA) en estas pantallas: la pide la hoja de ruta y le corresponde al equipo.
+- **Prueba manual con teclado y lector de pantalla (NVDA): superada según el equipo** (20 de noviembre de 2026). La hizo el equipo en la interfaz de desarrollo (`http://127.0.0.1:5173`), con dos cuentas ficticias de la base de desarrollo (`INV-PRUEBA-NVDA` y `CASO-PRUEBA-NVDA-1`, tema `TEMA-PRUEBA-NVDA`), creadas con la contraseña inicial ya cambiada. El archivo con sus credenciales, fuera del repositorio, se borró al terminar. Las cuentas quedan en la base de desarrollo.
 - **RNF-17 (usabilidad, menos de 3 minutos para cargar y pedir una revisión):** se mide en la prueba piloto, cuando exista la formulación de solicitudes (T29).
 
 ### 16.6. Archivos
@@ -1100,4 +1101,73 @@ Rama `t13-interfaz-base`, desde `main` con T12 (`f534de0`). Decisión: `docs/dec
 - **Modificados:**
   - `backend/app/api/caso.py` (hitos en `GET /caso`), `backend/pruebas/unitarias/test_arquitectura.py` (contrato al día) y `backend/pruebas/integracion/test_casos.py`;
   - `.github/workflows/ci.yml` y `docker-compose.yml` (servicio `interfaz`);
+  - `README.md`, `CLAUDE.md` y este archivo.
+
+### 16.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t13-interfaz-base`: `27f7196` (`T13: crear la interfaz base con React, TypeScript y React Aria Components`) y `295c206` (corrección del flujo de CI), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#9 |
+| CI de la solicitud | La primera ejecución (44649813265) no arrancó por el error del flujo (apartado 16.4). Tras corregirlo: **verde**, ejecución 44671874090, 9 de 9 trabajos. Incluye `interfaz` y `interfaz_e2e`: las pruebas de extremo a extremo y la revisión de accesibilidad pasan también en la CI |
+| Integración en `main` | Commit de integración `78c1cd5` |
+| CI de `main` tras integrar | Ejecución 44673300029: **verde** |
+
+---
+
+## 17. Fase 3 (F3): T14. Clientes bibliográficos con limitador y caché
+
+Rama `t14-clientes-bibliograficos`, desde `main` con T13 (`78c1cd5`). Decisión: `docs/decisiones/T14-clientes-bibliograficos.md` (T14-01).
+
+### 17.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Interfaz `ServicioBibliografico` y resultado común | Hecha | `app/bibliografia/interfaces.py` (`ServicioBibliografico`, `BuscadorBibliografico` y `FormateadorDeCitas`) y `modelos.py` (`ResultadoBibliografico`: estado `encontrado`, `no_encontrado` o `no_comprobable`, metadatos normalizados, acceso abierto, cita, candidatos y motivo) |
+| 2. Limitador de tasa por servicio (cubeta de fichas), configurable | Hecha | `limitador.py`. Valores de la documentación de cada servicio: Crossref 10 y 3 por segundo, doi.org 5, Unpaywall 1,15 (100 000 por día) y OpenAlex 10. Variables `TASA_*` |
+| 3. Caché en `cache_metadatos` con vigencia configurable | Hecha | `cache.py` y `RepositorioCacheMetadatos`. Lo encontrado dura 30 días y lo no encontrado, 24 horas. Un `no_comprobable` nunca se guarda. Si la base falla, la caché se omite y la consulta sigue |
+| 4. Crossref por DOI y por metadatos, con el correo del proyecto | Hecha | `crossref.py`: `mailto` y `User-Agent`, con limitadores separados para registro y búsqueda |
+| 5. doi.org por negociación de contenido: CSL-JSON y cita formateada | Hecha | `doi.py`. Estilos de las normas de la configuración (`apa`, `ieee` y `vancouver`). Una respuesta HTML no se acepta como cita |
+| 6. Unpaywall: estado y mejor ubicación de acceso abierto | Hecha | `unpaywall.py` |
+| 7. OpenAlex con clave, como respaldo de metadatos | Hecha, con su grabación pendiente | `openalex.py`. Sin `CLAVE_OPENALEX` da `no_comprobable` (`no_configurado`). Probado con su formato documentado; la grabación real queda pendiente (apartado 17.5) |
+| 8. Comparación de metadatos con tolerancias documentadas | Hecha | `comparador.py`: título con similitud de 0,88 o más (normalizado y también sin subtítulo), al menos un apellido (también en apellidos compuestos) y año con un año de tolerancia. Sin uno de los tres datos, no se confirma |
+| Tarea: tiempos de espera y reintentos con espera exponencial | Hecha | `http.py`: 3 intentos ante red, tiempo agotado, 429 y 5xx; esperas de 0,5 s y 1 s; respeta `Retry-After` |
+| Tarea: toda excepción de red o límite da `no_comprobable` | Hecha | `FallaDeServicio` se convierte en `no_comprobable` en la base común de los clientes (`base.py`) |
+| Tarea: respuestas reales grabadas en `pruebas/contrato/` | Hecha para Crossref, doi.org y Unpaywall | 8 respuestas con `python -m pruebas.contrato.grabar`, sin el correo ni la clave (el script lo comprueba). OpenAlex pendiente de la clave |
+
+### 17.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Con el servicio simulado caído, el resultado es `no_comprobable` y nunca `no_encontrado` (base de CP-13) | **Cumplido** | Las 7 consultas de los cuatro clientes (por DOI, búsqueda y cita) con 6 fallas simuladas: sin conexión, tiempo agotado, 503, 429, respuesta ilegible y 403. Siempre `no_comprobable`, con su motivo, y los reintentos que corresponden a cada falla |
+| Una segunda consulta del mismo DOI se resuelve desde la caché | **Cumplido** | Con la base real: la segunda consulta (con el DOI escrito de otra forma) sale de `cache_metadatos` sin pedir nada al servicio. Vencida la vigencia, se vuelve a consultar y la entrada se reemplaza. Lo no encontrado vence a las 24 horas |
+| El limitador impide superar la tasa configurada en una ráfaga de prueba | **Cumplido** | Ráfaga de 30 consultas a 3 por segundo con reloj simulado: en ninguna ventana se superan la ráfaga inicial más 3 por segundo, y la última sale a los 9 s. También con 25 consultas concurrentes |
+
+### 17.3. Pruebas
+
+- **Backend en contenedor:** 586 pruebas superadas y 6 omitidas, cobertura del 94,74 %. Ruff y mypy sin observaciones.
+- **Nuevas:**
+  - `unitarias/test_bibliografia.py` (42 y una omitida): limitador, comparador, contrato con las respuestas grabadas, fallas simuladas, reintentos, `Retry-After`, servicio sin configurar, DOI inválido, caché en memoria, fábrica e interfaces, y un registro sin el correo ni la clave. Omitida: el contrato real de OpenAlex, hasta grabarlo.
+  - `integracion/test_bibliografia_cache.py` (3): caché sobre la base real.
+- **Sin red en la CI:** ninguna prueba consulta los servicios reales.
+
+### 17.4. Problemas encontrados y soluciones
+
+- **Una página HTML pasaba como cita:** las pruebas de fallas mostraron que doi.org aceptaba como cita cualquier respuesta 200. Ahora solo se acepta `text/x-bibliography` o `text/plain`, que es lo que devuelve doi.org (comprobado en la grabación).
+- **La normalización de DOI estaba en el cliente de GROBID.** Pasó a `app/bibliografia/normalizacion.py`, y GROBID la reutiliza.
+
+### 17.5. Pendientes
+
+- **Grabar OpenAlex:** `CLAVE_OPENALEX` está vacía en el `.env` de desarrollo. Hay que ponerla y ejecutar `python -m pruebas.contrato.grabar` (con `CORREO_POLITE` y `CLAVE_OPENALEX` cargadas). La prueba de contrato de OpenAlex se activa sola cuando existe la grabación.
+
+### 17.6. Archivos
+
+- **Creados:**
+  - `backend/app/bibliografia/` (`modelos.py`, `interfaces.py`, `normalizacion.py`, `limitador.py`, `comparador.py`, `http.py`, `cache.py`, `base.py`, `crossref.py`, `doi.py`, `unpaywall.py`, `openalex.py` y `fabrica.py`);
+  - `backend/pruebas/contrato/` (`grabar.py` y `respuestas/`, con 8 respuestas reales), `backend/pruebas/dobles_bibliografia.py`, `unitarias/test_bibliografia.py` e `integracion/test_bibliografia_cache.py`;
+  - `docs/decisiones/T14-clientes-bibliograficos.md`.
+- **Modificados:**
+  - `backend/app/repositorios/sistema.py` (`RepositorioCacheMetadatos`) y `unidad.py`;
+  - `backend/app/configuracion/ajustes.py` (tasas, tiempo, reintentos y vigencias) y `.env.example`;
+  - `backend/app/corpus/grobid.py` (normalización de DOI compartida);
   - `README.md`, `CLAUDE.md` y este archivo.

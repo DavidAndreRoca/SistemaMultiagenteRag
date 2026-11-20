@@ -29,7 +29,11 @@ from app.repositorios.investigador import (
     RepositorioColeccionesInvestigador,
     RepositorioCuentasInvestigador,
 )
-from app.repositorios.sistema import RepositorioConfiguracion, RepositorioSalud
+from app.repositorios.sistema import (
+    RepositorioCacheMetadatos,
+    RepositorioConfiguracion,
+    RepositorioSalud,
+)
 
 
 class UnidadDeTrabajo:
@@ -39,6 +43,7 @@ class UnidadDeTrabajo:
         self.autenticacion = RepositorioAutenticacion(sesion)
         self.configuracion = RepositorioConfiguracion(sesion)
         self.salud = RepositorioSalud(sesion)
+        self.cache_metadatos = RepositorioCacheMetadatos(sesion)
         # Datos de caso (A1)
         self.caso_propio = RepositorioCasoPropio(sesion)
         self.versiones = RepositorioVersiones(sesion)
