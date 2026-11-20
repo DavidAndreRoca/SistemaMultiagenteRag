@@ -1,0 +1,374 @@
+{
+  "cuerpo": {
+    "alternate_titles": [],
+    "apc_list": {
+      "currency": "CHF",
+      "value": 1400,
+      "value_usd": 1557
+    },
+    "apc_paid": {
+      "currency": "CHF",
+      "value": 1400,
+      "value_usd": 1557
+    },
+    "authorships": [
+      {
+        "author": {
+          "display_name": "Rosario Michel‐Villarreal",
+          "id": "https://openalex.org/A5077933411",
+          "observed_orcids": [
+            "https://orcid.org/0000-0002-1158-924X"
+          ],
+          "orcid": "https://orcid.org/0000-0002-1158-924X"
+        },
+        "author_position": "first",
+        "contributor_roles": [
+          {
+            "display_name": "Conceptualization",
+            "id": "https://openalex.org/contributor-roles/conceptualization"
+          },
+          {
+            "display_name": "Formal analysis",
+            "id": "https://openalex.org/contributor-roles/formal-analysis"
+          },
+          {
+            "display_name": "Methodology",
+            "id": "https://openalex.org/contributor-roles/methodology"
+          },
+          {
+            "display_name": "Writing – original draft",
+            "id": "https://openalex.org/contributor-roles/writing-original-draft"
+          },
+          {
+            "display_name": "Writing – review & editing",
+            "id": "https://openalex.org/contributor-roles/writing-review-editing"
+          }
+        ],
+        "countries": [
+          "GB"
+        ],
+        "is_corresponding": true,
+        "raw_affiliation_strings": [
+          "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+        ],
+        "raw_author_name": "Rosario Michel-Villarreal",
+        "raw_orcid": "https://orcid.org/0000-0002-1158-924X"
+      },
+      {
+        "author": {
+          "display_name": "Eliseo Luis Vilalta-perdomo",
+          "id": "https://openalex.org/A5022657282",
+          "observed_orcids": [
+            "https://orcid.org/0000-0002-4551-8327"
+          ],
+          "orcid": "https://orcid.org/0000-0002-4551-8327"
+        },
+        "author_position": "middle",
+        "contributor_roles": [
+          {
+            "display_name": "Formal analysis",
+            "id": "https://openalex.org/contributor-roles/formal-analysis"
+          },
+          {
+            "display_name": "Validation",
+            "id": "https://openalex.org/contributor-roles/validation"
+          },
+          {
+            "display_name": "Writing – review & editing",
+            "id": "https://openalex.org/contributor-roles/writing-review-editing"
+          }
+        ],
+        "countries": [
+          "GB"
+        ],
+        "is_corresponding": false,
+        "raw_affiliation_strings": [
+          "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+        ],
+        "raw_author_name": "Eliseo Vilalta-Perdomo",
+        "raw_orcid": "https://orcid.org/0000-0002-4551-8327"
+      },
+      {
+        "author": {
+          "display_name": "David Ernesto Salinas-Navarro",
+          "id": "https://openalex.org/A5063068737",
+          "observed_orcids": [
+            "https://orcid.org/0000-0002-7919-4885"
+          ],
+          "orcid": "https://orcid.org/0000-0002-7919-4885"
+        },
+        "author_position": "middle",
+        "contributor_roles": [
+          {
+            "display_name": "Formal analysis",
+            "id": "https://openalex.org/contributor-roles/formal-analysis"
+          },
+          {
+            "display_name": "Validation",
+            "id": "https://openalex.org/contributor-roles/validation"
+          },
+          {
+            "display_name": "Writing – review & editing",
+            "id": "https://openalex.org/contributor-roles/writing-review-editing"
+          }
+        ],
+        "countries": [
+          "GB"
+        ],
+        "is_corresponding": false,
+        "raw_affiliation_strings": [
+          "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+        ],
+        "raw_author_name": "David Ernesto Salinas-Navarro",
+        "raw_orcid": "https://orcid.org/0000-0002-7919-4885"
+      },
+      {
+        "author": {
+          "display_name": "Ricardo Thierry-Aguilera",
+          "id": "https://openalex.org/A5068726068",
+          "observed_orcids": [],
+          "orcid": null
+        },
+        "author_position": "middle",
+        "contributor_roles": [
+          {
+            "display_name": "Formal analysis",
+            "id": "https://openalex.org/contributor-roles/formal-analysis"
+          },
+          {
+            "display_name": "Validation",
+            "id": "https://openalex.org/contributor-roles/validation"
+          },
+          {
+            "display_name": "Writing – review & editing",
+            "id": "https://openalex.org/contributor-roles/writing-review-editing"
+          }
+        ],
+        "countries": [
+          "MX"
+        ],
+        "is_corresponding": false,
+        "raw_affiliation_strings": [
+          "School of Engineering and Sciences, Tecnológico de Monterrey, Monterrey 64849, Mexico"
+        ],
+        "raw_author_name": "Ricardo Thierry-Aguilera",
+        "raw_orcid": null
+      },
+      {
+        "author": {
+          "display_name": "Flor Silvestre Gerardou",
+          "id": "https://openalex.org/A5009987074",
+          "observed_orcids": [
+            "https://orcid.org/0000-0003-3431-713X"
+          ],
+          "orcid": "https://orcid.org/0000-0003-3431-713X"
+        },
+        "author_position": "last",
+        "contributor_roles": [
+          {
+            "display_name": "Formal analysis",
+            "id": "https://openalex.org/contributor-roles/formal-analysis"
+          },
+          {
+            "display_name": "Validation",
+            "id": "https://openalex.org/contributor-roles/validation"
+          },
+          {
+            "display_name": "Writing – review & editing",
+            "id": "https://openalex.org/contributor-roles/writing-review-editing"
+          }
+        ],
+        "countries": [
+          "GB"
+        ],
+        "is_corresponding": false,
+        "raw_affiliation_strings": [
+          "Cornwall Business School, Falmouth University, Penryn TR10 9FE, UK"
+        ],
+        "raw_author_name": "Flor Silvestre Gerardou",
+        "raw_orcid": "https://orcid.org/0000-0003-3431-713X"
+      }
+    ],
+    "awards": [],
+    "best_oa_location": {
+      "doi": "https://doi.org/10.3390/educsci13090856",
+      "id": "doi:10.3390/educsci13090856",
+      "is_accepted": true,
+      "is_oa": true,
+      "is_published": true,
+      "landing_page_url": "https://doi.org/10.3390/educsci13090856",
+      "license": "cc-by",
+      "license_id": "https://openalex.org/licenses/cc-by",
+      "pdf_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591",
+      "raw_source_name": "Education Sciences",
+      "raw_type": "journal-article",
+      "source": {
+        "display_name": "Education Sciences",
+        "host_organization": "https://openalex.org/P4310310987",
+        "host_organization_lineage": [
+          "https://openalex.org/P4310310987"
+        ],
+        "host_organization_lineage_names": [
+          "Multidisciplinary Digital Publishing Institute"
+        ],
+        "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+        "id": "https://openalex.org/S2738008561",
+        "is_core": true,
+        "is_in_doaj": true,
+        "is_oa": true,
+        "issn": [
+          "2227-7102"
+        ],
+        "issn_l": "2227-7102",
+        "listed_in": [
+          "anvur-class-a",
+          "anvur-scientific",
+          "cwts-core",
+          "doaj",
+          "erih-plus",
+          "norway-1",
+          "poland-70",
+          "russia-white-list-1",
+          "vabb-shw"
+        ],
+        "type": "journal"
+      },
+      "version": "publishedVersion"
+    },
+    "biblio": {
+      "first_page": "856",
+      "issue": "9",
+      "last_page": "856",
+      "volume": "13"
+    },
+    "child_works_count": 0,
+    "citation_normalized_percentile": {
+      "is_in_top_10_percent": true,
+      "is_in_top_1_percent": true,
+      "value": 0.99992599
+    },
+    "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4386098991",
+    "cited_by_count": 1383,
+    "cited_by_percentile_year": {
+      "max": 100,
+      "min": 86
+    },
+    "content_urls": {
+      "grobid_xml": "https://content.openalex.org/works/W4386098991.grobid-xml",
+      "pdf": "https://content.openalex.org/works/W4386098991.pdf"
+    },
+    "countries_distinct_count": 2,
+    "created_date": "2023-08-24T00:00:00",
+    "display_name": "Challenges and Opportunities of Generative AI for Higher Education as Explained by ChatGPT",
+    "doi": "https://doi.org/10.3390/educsci13090856",
+    "funders": [
+      {
+        "display_name": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+        "id": "https://openalex.org/F4320323037",
+        "ror": "https://ror.org/03ayjn504"
+      }
+    ],
+    "fwci": 286.8655,
+    "has_content": {
+      "grobid_xml": true,
+      "pdf": true
+    },
+    "has_fulltext": true,
+    "id": "https://openalex.org/W4386098991",
+    "ids": {
+      "doi": "https://doi.org/10.3390/educsci13090856",
+      "openalex": "https://openalex.org/W4386098991"
+    },
+    "institutions": [],
+    "institutions_distinct_count": 4,
+    "is_paratext": false,
+    "is_pulled": false,
+    "is_retracted": false,
+    "is_traditional": true,
+    "is_xpac": false,
+    "language": "en",
+    "lineage": [
+      "https://openalex.org/W4386098991"
+    ],
+    "locations_count": 5,
+    "open_access": {
+      "any_repository_has_fulltext": true,
+      "is_oa": true,
+      "oa_status": "gold",
+      "oa_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591"
+    },
+    "parent_works": [],
+    "primary_location": {
+      "doi": "https://doi.org/10.3390/educsci13090856",
+      "id": "doi:10.3390/educsci13090856",
+      "is_accepted": true,
+      "is_oa": true,
+      "is_published": true,
+      "landing_page_url": "https://doi.org/10.3390/educsci13090856",
+      "license": "cc-by",
+      "license_id": "https://openalex.org/licenses/cc-by",
+      "pdf_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591",
+      "raw_source_name": "Education Sciences",
+      "raw_type": "journal-article",
+      "source": {
+        "display_name": "Education Sciences",
+        "host_organization": "https://openalex.org/P4310310987",
+        "host_organization_lineage": [
+          "https://openalex.org/P4310310987"
+        ],
+        "host_organization_lineage_names": [
+          "Multidisciplinary Digital Publishing Institute"
+        ],
+        "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+        "id": "https://openalex.org/S2738008561",
+        "is_core": true,
+        "is_in_doaj": true,
+        "is_oa": true,
+        "issn": [
+          "2227-7102"
+        ],
+        "issn_l": "2227-7102",
+        "listed_in": [
+          "anvur-class-a",
+          "anvur-scientific",
+          "cwts-core",
+          "doaj",
+          "erih-plus",
+          "norway-1",
+          "poland-70",
+          "russia-white-list-1",
+          "vabb-shw"
+        ],
+        "type": "journal"
+      },
+      "version": "publishedVersion"
+    },
+    "primary_topic": {
+      "display_name": "Artificial Intelligence in Education",
+      "domain": {
+        "display_name": "Social Sciences",
+        "id": "https://openalex.org/domains/2"
+      },
+      "field": {
+        "display_name": "Social Sciences",
+        "id": "https://openalex.org/fields/33"
+      },
+      "id": "https://openalex.org/T14414",
+      "score": 0.9976000189781189,
+      "subfield": {
+        "display_name": "Education",
+        "id": "https://openalex.org/subfields/3304"
+      }
+    },
+    "publication_date": "2023-08-23",
+    "publication_year": 2023,
+    "referenced_works_count": 42,
+    "study_designs": [],
+    "title": "Challenges and Opportunities of Generative AI for Higher Education as Explained by ChatGPT",
+    "type": "article",
+    "updated_date": "2026-11-20T13:11:24.684918"
+  },
+  "estado": 200,
+  "servicio": "openalex",
+  "tipo": "application/json"
+}

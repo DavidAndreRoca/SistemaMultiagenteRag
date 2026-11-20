@@ -1,0 +1,9 @@
+{
+  "cuerpo": {
+    "error": "Not Found",
+    "message": "Work doi:10.9999/sma-no-existe-2026 not found"
+  },
+  "estado": 404,
+  "servicio": "openalex",
+  "tipo": "application/json"
+}

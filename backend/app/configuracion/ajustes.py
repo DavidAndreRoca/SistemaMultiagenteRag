@@ -98,6 +98,29 @@ class Ajustes(BaseModel):
         default=4, ge=1, le=32, validation_alias=AliasChoices("HILOS_DOCLING")
     )
 
+    # Servicios bibliográficos (T14). Ajustes de operación, no parámetros funcionales: no
+    # cambian qué se verifica, solo el ritmo y la espera (decisión T14-01, apartados 3 a 5).
+    # Tasas en consultas por segundo, según la documentación de cada servicio.
+    tasa_crossref: float = Field(default=10, gt=0, le=50, validation_alias="TASA_CROSSREF")
+    tasa_crossref_busqueda: float = Field(
+        default=3, gt=0, le=50, validation_alias="TASA_CROSSREF_BUSQUEDA"
+    )
+    tasa_doi: float = Field(default=5, gt=0, le=50, validation_alias="TASA_DOI")
+    tasa_unpaywall: float = Field(default=1.15, gt=0, le=50, validation_alias="TASA_UNPAYWALL")
+    tasa_openalex: float = Field(default=10, gt=0, le=50, validation_alias="TASA_OPENALEX")
+    tiempo_maximo_bibliografia_s: float = Field(
+        default=15, gt=0, le=120, validation_alias="TIEMPO_MAXIMO_BIBLIOGRAFIA_S"
+    )
+    reintentos_bibliografia: int = Field(
+        default=3, ge=1, le=6, validation_alias="REINTENTOS_BIBLIOGRAFIA"
+    )
+    vigencia_cache_bibliografia_dias: int = Field(
+        default=30, ge=1, le=365, validation_alias="VIGENCIA_CACHE_BIBLIOGRAFIA_DIAS"
+    )
+    vigencia_no_encontrado_horas: int = Field(
+        default=24, ge=1, le=720, validation_alias="VIGENCIA_NO_ENCONTRADO_HORAS"
+    )
+
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:
         for nombre, url in (

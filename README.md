@@ -208,6 +208,15 @@ docker run --rm -v "$PWD:/repo" -w /repo/frontend node:24.22.2-bookworm-slim sh 
 
 Decisiones: `docs/decisiones/T13-interfaz-base.md`.
 
+## Servicios bibliográficos (T14)
+
+`backend/app/bibliografia/` consulta Crossref, doi.org, Unpaywall y OpenAlex, con un limitador de tasa por servicio, reintentos con espera exponencial y caché en `cache_metadatos`.
+- **Resultado:** cada consulta da `encontrado`, `no_encontrado` o `no_comprobable`. Una caída nunca se confunde con una inexistencia (RN-18).
+- **Configuración:** el correo del proyecto (`CORREO_POLITE`) y la clave de OpenAlex (`CLAVE_OPENALEX`) van en `.env`. Las tasas, los tiempos y la vigencia de la caché tienen valores por defecto, que se pueden cambiar (ver `.env.example`).
+- **Pruebas:** usan respuestas reales grabadas en `backend/pruebas/contrato/respuestas/`, sin el correo ni la clave. Se regraban con `python -m pruebas.contrato.grabar`.
+
+Decisiones: `docs/decisiones/T14-clientes-bibliograficos.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

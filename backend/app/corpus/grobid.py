@@ -17,6 +17,7 @@ from pathlib import Path
 
 import httpx
 
+from app.bibliografia.normalizacion import normalizar_doi
 from app.comun.errores import ErrorAplicacion
 from app.comun.registro import obtener_registrador
 from app.corpus.esquemas import Autor, MetadatosCabecera
@@ -24,8 +25,6 @@ from app.corpus.esquemas import Autor, MetadatosCabecera
 TEI = "{http://www.tei-c.org/ns/1.0}"
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 TIEMPO_MAXIMO_S = 180.0  # la primera solicitud carga los modelos de GROBID
-PATRON_DOI = re.compile(r"^10\.\d{4,9}/\S+$")
-PREFIJOS_DOI = ("https://doi.org/", "http://doi.org/", "https://dx.doi.org/", "http://dx.doi.org/")
 
 _registro = obtener_registrador("corpus")
 
@@ -40,16 +39,6 @@ class ErrorGrobid(ErrorAplicacion):
             estado_http=503,
         )
         self.motivo = motivo
-
-
-def normalizar_doi(valor: str | None) -> str | None:
-    if not valor:
-        return None
-    doi = valor.strip().lower()
-    for prefijo in PREFIJOS_DOI:
-        doi = doi.removeprefix(prefijo)
-    doi = doi.removeprefix("doi:").strip().rstrip(".")
-    return doi if PATRON_DOI.fullmatch(doi) else None
 
 
 def _texto(elemento: ET.Element | None) -> str | None:
