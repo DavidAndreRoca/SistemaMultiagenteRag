@@ -183,7 +183,7 @@ async def principal() -> None:
             "openalex",
             await pedir(
                 "https://api.openalex.org/works",
-                params={**parametros, "search": consulta, "per-page": "5"},
+                params={**parametros, "search": titulo, "per-page": "5"},  # como el cliente
             ),
             secretos,
         )

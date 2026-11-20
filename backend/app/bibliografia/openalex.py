@@ -124,7 +124,10 @@ class ClienteOpenAlex(ClienteBase):
                 f"{URL_BASE}/works",
                 params={
                     **self._params,
-                    "search": consulta.texto()[:500],
+                    # Solo el título: con apellidos y año agregados, la búsqueda de OpenAlex
+                    # dejó fuera la obra buscada (comprobado con la grabación real, T14-01).
+                    # El comparador exige después título, autor y año.
+                    "search": consulta.titulo[:500],
                     "per-page": str(CANDIDATOS),
                 },
             )

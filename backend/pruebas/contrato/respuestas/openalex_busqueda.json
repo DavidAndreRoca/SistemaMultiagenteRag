@@ -1,0 +1,1501 @@
+{
+  "cuerpo": {
+    "group_by": [],
+    "results": [
+      {
+        "alternate_titles": [],
+        "apc_list": {
+          "currency": "CHF",
+          "value": 1400,
+          "value_usd": 1557
+        },
+        "apc_paid": {
+          "currency": "CHF",
+          "value": 1400,
+          "value_usd": 1557
+        },
+        "authorships": [
+          {
+            "author": {
+              "display_name": "Rosario Michel‐Villarreal",
+              "id": "https://openalex.org/A5077933411",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-1158-924X"
+              ],
+              "orcid": "https://orcid.org/0000-0002-1158-924X"
+            },
+            "author_position": "first",
+            "contributor_roles": [
+              {
+                "display_name": "Conceptualization",
+                "id": "https://openalex.org/contributor-roles/conceptualization"
+              },
+              {
+                "display_name": "Formal analysis",
+                "id": "https://openalex.org/contributor-roles/formal-analysis"
+              },
+              {
+                "display_name": "Methodology",
+                "id": "https://openalex.org/contributor-roles/methodology"
+              },
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": true,
+            "raw_affiliation_strings": [
+              "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+            ],
+            "raw_author_name": "Rosario Michel-Villarreal",
+            "raw_orcid": "https://orcid.org/0000-0002-1158-924X"
+          },
+          {
+            "author": {
+              "display_name": "Eliseo Luis Vilalta-perdomo",
+              "id": "https://openalex.org/A5022657282",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-4551-8327"
+              ],
+              "orcid": "https://orcid.org/0000-0002-4551-8327"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Formal analysis",
+                "id": "https://openalex.org/contributor-roles/formal-analysis"
+              },
+              {
+                "display_name": "Validation",
+                "id": "https://openalex.org/contributor-roles/validation"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+            ],
+            "raw_author_name": "Eliseo Vilalta-Perdomo",
+            "raw_orcid": "https://orcid.org/0000-0002-4551-8327"
+          },
+          {
+            "author": {
+              "display_name": "David Ernesto Salinas-Navarro",
+              "id": "https://openalex.org/A5063068737",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-7919-4885"
+              ],
+              "orcid": "https://orcid.org/0000-0002-7919-4885"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Formal analysis",
+                "id": "https://openalex.org/contributor-roles/formal-analysis"
+              },
+              {
+                "display_name": "Validation",
+                "id": "https://openalex.org/contributor-roles/validation"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Community Resilience and Sustainability Lab (CoRSEL), Aston Business School, Aston University, Birmingham B4 7ET, UK"
+            ],
+            "raw_author_name": "David Ernesto Salinas-Navarro",
+            "raw_orcid": "https://orcid.org/0000-0002-7919-4885"
+          },
+          {
+            "author": {
+              "display_name": "Ricardo Thierry-Aguilera",
+              "id": "https://openalex.org/A5068726068",
+              "observed_orcids": [],
+              "orcid": null
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Formal analysis",
+                "id": "https://openalex.org/contributor-roles/formal-analysis"
+              },
+              {
+                "display_name": "Validation",
+                "id": "https://openalex.org/contributor-roles/validation"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "MX"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "School of Engineering and Sciences, Tecnológico de Monterrey, Monterrey 64849, Mexico"
+            ],
+            "raw_author_name": "Ricardo Thierry-Aguilera",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Flor Silvestre Gerardou",
+              "id": "https://openalex.org/A5009987074",
+              "observed_orcids": [
+                "https://orcid.org/0000-0003-3431-713X"
+              ],
+              "orcid": "https://orcid.org/0000-0003-3431-713X"
+            },
+            "author_position": "last",
+            "contributor_roles": [
+              {
+                "display_name": "Formal analysis",
+                "id": "https://openalex.org/contributor-roles/formal-analysis"
+              },
+              {
+                "display_name": "Validation",
+                "id": "https://openalex.org/contributor-roles/validation"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Cornwall Business School, Falmouth University, Penryn TR10 9FE, UK"
+            ],
+            "raw_author_name": "Flor Silvestre Gerardou",
+            "raw_orcid": "https://orcid.org/0000-0003-3431-713X"
+          }
+        ],
+        "awards": [],
+        "best_oa_location": {
+          "doi": "https://doi.org/10.3390/educsci13090856",
+          "id": "doi:10.3390/educsci13090856",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.3390/educsci13090856",
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "pdf_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591",
+          "raw_source_name": "Education Sciences",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Education Sciences",
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "id": "https://openalex.org/S2738008561",
+            "is_core": true,
+            "is_in_doaj": true,
+            "is_oa": true,
+            "issn": [
+              "2227-7102"
+            ],
+            "issn_l": "2227-7102",
+            "listed_in": [
+              "anvur-class-a",
+              "anvur-scientific",
+              "cwts-core",
+              "doaj",
+              "erih-plus",
+              "norway-1",
+              "poland-70",
+              "russia-white-list-1",
+              "vabb-shw"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "biblio": {
+          "first_page": "856",
+          "issue": "9",
+          "last_page": "856",
+          "volume": "13"
+        },
+        "child_works_count": 0,
+        "citation_normalized_percentile": {
+          "is_in_top_10_percent": true,
+          "is_in_top_1_percent": true,
+          "value": 0.99992319
+        },
+        "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4386098991",
+        "cited_by_count": 1383,
+        "cited_by_percentile_year": {
+          "max": 100,
+          "min": 86
+        },
+        "content_urls": {
+          "grobid_xml": "https://content.openalex.org/works/W4386098991.grobid-xml",
+          "pdf": "https://content.openalex.org/works/W4386098991.pdf"
+        },
+        "countries_distinct_count": 2,
+        "created_date": "2023-08-24T00:00:00",
+        "display_name": "Challenges and Opportunities of Generative AI for Higher Education as Explained by ChatGPT",
+        "doi": "https://doi.org/10.3390/educsci13090856",
+        "funders": [
+          {
+            "display_name": "Instituto Tecnológico y de Estudios Superiores de Monterrey",
+            "id": "https://openalex.org/F4320323037",
+            "ror": "https://ror.org/03ayjn504"
+          }
+        ],
+        "fwci": 286.0729,
+        "has_content": {
+          "grobid_xml": true,
+          "pdf": true
+        },
+        "has_fulltext": true,
+        "id": "https://openalex.org/W4386098991",
+        "ids": {
+          "doi": "https://doi.org/10.3390/educsci13090856",
+          "openalex": "https://openalex.org/W4386098991"
+        },
+        "institutions": [],
+        "institutions_distinct_count": 4,
+        "is_authors_truncated": false,
+        "is_paratext": false,
+        "is_pulled": false,
+        "is_retracted": false,
+        "is_traditional": true,
+        "is_xpac": false,
+        "language": "en",
+        "lineage": [
+          "https://openalex.org/W4386098991"
+        ],
+        "locations_count": 5,
+        "open_access": {
+          "any_repository_has_fulltext": true,
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591"
+        },
+        "parent_works": [],
+        "primary_location": {
+          "doi": "https://doi.org/10.3390/educsci13090856",
+          "id": "doi:10.3390/educsci13090856",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.3390/educsci13090856",
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "pdf_url": "https://www.mdpi.com/2227-7102/13/9/856/pdf?version=1692771591",
+          "raw_source_name": "Education Sciences",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Education Sciences",
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "id": "https://openalex.org/S2738008561",
+            "is_core": true,
+            "is_in_doaj": true,
+            "is_oa": true,
+            "issn": [
+              "2227-7102"
+            ],
+            "issn_l": "2227-7102",
+            "listed_in": [
+              "anvur-class-a",
+              "anvur-scientific",
+              "cwts-core",
+              "doaj",
+              "erih-plus",
+              "norway-1",
+              "poland-70",
+              "russia-white-list-1",
+              "vabb-shw"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "primary_topic": {
+          "display_name": "Artificial Intelligence in Education",
+          "domain": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/domains/2"
+          },
+          "field": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/fields/33"
+          },
+          "id": "https://openalex.org/T14414",
+          "score": 0.9976000189781189,
+          "subfield": {
+            "display_name": "Education",
+            "id": "https://openalex.org/subfields/3304"
+          }
+        },
+        "publication_date": "2023-08-23",
+        "publication_year": 2023,
+        "referenced_works_count": 42,
+        "relevance_score": 516.4896,
+        "study_designs": [],
+        "title": "Challenges and Opportunities of Generative AI for Higher Education as Explained by ChatGPT",
+        "type": "article",
+        "updated_date": "2026-11-20T13:11:24.684918"
+      },
+      {
+        "alternate_titles": [],
+        "apc_list": null,
+        "apc_paid": null,
+        "authorships": [
+          {
+            "author": {
+              "display_name": "Muhammad Mujtaba Asad",
+              "id": "https://openalex.org/A5064543467",
+              "observed_orcids": [
+                "https://orcid.org/0000-0001-9532-7054"
+              ],
+              "orcid": "https://orcid.org/0000-0001-9532-7054"
+            },
+            "author_position": "first",
+            "contributor_roles": [],
+            "countries": [
+              "OM",
+              "PK"
+            ],
+            "is_corresponding": true,
+            "raw_affiliation_strings": [
+              "Sohar University, Sohar, Oman",
+              "Sukkur IBA University, Sukkur, Pakistan"
+            ],
+            "raw_author_name": "Muhammad Mujtaba Asad",
+            "raw_orcid": "https://orcid.org/0000-0001-9532-7054"
+          },
+          {
+            "author": {
+              "display_name": "Aqsa Ajaz",
+              "id": "https://openalex.org/A5114394777",
+              "observed_orcids": [],
+              "orcid": null
+            },
+            "author_position": "last",
+            "contributor_roles": [],
+            "countries": [
+              "PK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Sukkur IBA University, Sukkur, Pakistan"
+            ],
+            "raw_author_name": "Aqsa Ajaz",
+            "raw_orcid": null
+          }
+        ],
+        "awards": [],
+        "best_oa_location": null,
+        "biblio": {
+          "first_page": "507",
+          "issue": "5",
+          "last_page": "523",
+          "volume": "41"
+        },
+        "child_works_count": 0,
+        "citation_normalized_percentile": {
+          "is_in_top_10_percent": true,
+          "is_in_top_1_percent": true,
+          "value": 0.99671128
+        },
+        "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4403731931",
+        "cited_by_count": 85,
+        "cited_by_percentile_year": {
+          "max": 100,
+          "min": 86
+        },
+        "content_urls": null,
+        "countries_distinct_count": 2,
+        "created_date": "2024-10-25T00:00:00",
+        "display_name": "Impact of ChatGPT and generative AI on lifelong learning and upskilling learners in higher education: unveiling the challenges and opportunities globally",
+        "doi": "https://doi.org/10.1108/ijilt-06-2024-0103",
+        "funders": [],
+        "fwci": 24.416,
+        "has_content": {
+          "grobid_xml": false,
+          "pdf": false
+        },
+        "has_fulltext": false,
+        "id": "https://openalex.org/W4403731931",
+        "ids": {
+          "doi": "https://doi.org/10.1108/ijilt-06-2024-0103",
+          "openalex": "https://openalex.org/W4403731931"
+        },
+        "institutions": [],
+        "institutions_distinct_count": 2,
+        "is_authors_truncated": false,
+        "is_paratext": false,
+        "is_pulled": false,
+        "is_retracted": false,
+        "is_traditional": true,
+        "is_xpac": false,
+        "language": "en",
+        "lineage": [
+          "https://openalex.org/W4403731931"
+        ],
+        "locations_count": 1,
+        "open_access": {
+          "any_repository_has_fulltext": false,
+          "is_oa": false,
+          "oa_status": "closed",
+          "oa_url": null
+        },
+        "parent_works": [],
+        "primary_location": {
+          "doi": "https://doi.org/10.1108/ijilt-06-2024-0103",
+          "id": "doi:10.1108/ijilt-06-2024-0103",
+          "is_accepted": true,
+          "is_oa": false,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.1108/ijilt-06-2024-0103",
+          "license": null,
+          "license_id": null,
+          "pdf_url": null,
+          "raw_source_name": "The International Journal of Information and Learning Technology",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "International Journal of Information and Learning Technology",
+            "host_organization": "https://openalex.org/P4310319811",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319811"
+            ],
+            "host_organization_lineage_names": [
+              "Emerald Publishing Limited"
+            ],
+            "host_organization_name": "Emerald Publishing Limited",
+            "id": "https://openalex.org/S180054134",
+            "is_core": true,
+            "is_in_doaj": false,
+            "is_oa": false,
+            "issn": [
+              "2056-4880",
+              "2056-4899"
+            ],
+            "issn_l": "2056-4880",
+            "listed_in": [
+              "abdc-c",
+              "cwts-core",
+              "dongbi-d",
+              "erih-plus",
+              "jufo-1",
+              "norway-1",
+              "poland-40",
+              "russia-white-list-2"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "primary_topic": {
+          "display_name": "Artificial Intelligence in Education",
+          "domain": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/domains/2"
+          },
+          "field": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/fields/33"
+          },
+          "id": "https://openalex.org/T14414",
+          "score": 0.9976000189781189,
+          "subfield": {
+            "display_name": "Education",
+            "id": "https://openalex.org/subfields/3304"
+          }
+        },
+        "publication_date": "2024-10-25",
+        "publication_year": 2024,
+        "referenced_works_count": 83,
+        "relevance_score": 99.87575,
+        "study_designs": [],
+        "title": "Impact of ChatGPT and generative AI on lifelong learning and upskilling learners in higher education: unveiling the challenges and opportunities globally",
+        "type": "article",
+        "updated_date": "2026-11-20T13:11:24.684918"
+      },
+      {
+        "alternate_titles": [],
+        "apc_list": null,
+        "apc_paid": null,
+        "authorships": [
+          {
+            "author": {
+              "display_name": "Cecilia Ka Yuk Chan",
+              "id": "https://openalex.org/A5079685686",
+              "observed_orcids": [
+                "https://orcid.org/0000-0001-6984-6360"
+              ],
+              "orcid": "https://orcid.org/0000-0001-6984-6360"
+            },
+            "author_position": "first",
+            "contributor_roles": [],
+            "countries": [
+              "AU",
+              "HK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "4 Park Square, Milton Park, Abingdon, Oxon OX14 4RN",
+              "605 Third Avenue, New York, NY 10158",
+              "Director of the Center for Educational Innovation, Hong Kong University Science and Technology",
+              "Educational Innovation, University of Sydney",
+              "Learning Innovation Centre at the University of Hong Kong",
+              "Learning Innovation Centre at the University of Hong Kong (HKU)",
+              "Professor in Education, University of Hong Kong",
+              "Professor of Learning Technologies and Innovation,"
+            ],
+            "raw_author_name": "Cecilia Ka Yuk Chan",
+            "raw_orcid": "https://orcid.org/0000-0001-6984-6360"
+          },
+          {
+            "author": {
+              "display_name": "Tom Colloton",
+              "id": "https://openalex.org/A5060773803",
+              "observed_orcids": [
+                "https://orcid.org/0009-0008-9032-2885"
+              ],
+              "orcid": "https://orcid.org/0009-0008-9032-2885"
+            },
+            "author_position": "last",
+            "contributor_roles": [],
+            "countries": [
+              "HK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "The University of Hong Kong, Hong Kong,Eireann Technologies, Hong Kong"
+            ],
+            "raw_author_name": "Tom Colloton",
+            "raw_orcid": "https://orcid.org/0009-0008-9032-2885"
+          }
+        ],
+        "awards": [],
+        "best_oa_location": {
+          "doi": "https://doi.org/10.4324/9781003459026",
+          "id": "doi:10.4324/9781003459026",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.4324/9781003459026",
+          "license": "cc-by-nc-nd",
+          "license_id": "https://openalex.org/licenses/cc-by-nc-nd",
+          "pdf_url": "https://api.taylorfrancis.com/content/books/oa-mono/download?identifierName=doi&identifierValue=10.4324/9781003459026&type=webpdf",
+          "raw_source_name": null,
+          "raw_type": "monograph",
+          "source": {
+            "display_name": "Routledge eBooks",
+            "host_organization": "https://openalex.org/P4310319847",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319847",
+              "https://openalex.org/P4310320547",
+              "https://openalex.org/P4310320449"
+            ],
+            "host_organization_lineage_names": [
+              "Routledge",
+              "Taylor & Francis",
+              "Informa"
+            ],
+            "host_organization_name": "Routledge",
+            "id": "https://openalex.org/S4306463855",
+            "is_core": false,
+            "is_in_doaj": false,
+            "is_oa": false,
+            "issn": null,
+            "issn_l": null,
+            "listed_in": [],
+            "type": "ebook platform"
+          },
+          "version": "publishedVersion"
+        },
+        "biblio": {
+          "first_page": null,
+          "issue": null,
+          "last_page": null,
+          "volume": null
+        },
+        "child_works_count": 7,
+        "citation_normalized_percentile": {
+          "is_in_top_10_percent": true,
+          "is_in_top_1_percent": true,
+          "value": 0.99978399
+        },
+        "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4392658848",
+        "cited_by_count": 370,
+        "cited_by_percentile_year": {
+          "max": 100,
+          "min": 99
+        },
+        "content_urls": {
+          "grobid_xml": "https://content.openalex.org/works/W4392658848.grobid-xml",
+          "pdf": "https://content.openalex.org/works/W4392658848.pdf"
+        },
+        "countries_distinct_count": 2,
+        "created_date": "2024-03-12T00:00:00",
+        "display_name": "Generative AI in Higher Education: The ChatGPT Effect",
+        "doi": "https://doi.org/10.4324/9781003459026",
+        "funders": [],
+        "fwci": 163.3533,
+        "has_content": {
+          "grobid_xml": true,
+          "pdf": true
+        },
+        "has_fulltext": true,
+        "id": "https://openalex.org/W4392658848",
+        "ids": {
+          "doi": "https://doi.org/10.4324/9781003459026",
+          "openalex": "https://openalex.org/W4392658848"
+        },
+        "institutions": [],
+        "institutions_distinct_count": 3,
+        "is_authors_truncated": false,
+        "is_paratext": false,
+        "is_pulled": false,
+        "is_retracted": false,
+        "is_traditional": true,
+        "is_xpac": false,
+        "language": "en",
+        "lineage": [
+          "https://openalex.org/W4392658848"
+        ],
+        "locations_count": 6,
+        "open_access": {
+          "any_repository_has_fulltext": true,
+          "is_oa": true,
+          "oa_status": "hybrid",
+          "oa_url": "https://api.taylorfrancis.com/content/books/oa-mono/download?identifierName=doi&identifierValue=10.4324/9781003459026&type=webpdf"
+        },
+        "parent_works": [],
+        "primary_location": {
+          "doi": "https://doi.org/10.4324/9781003459026",
+          "id": "doi:10.4324/9781003459026",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.4324/9781003459026",
+          "license": "cc-by-nc-nd",
+          "license_id": "https://openalex.org/licenses/cc-by-nc-nd",
+          "pdf_url": "https://api.taylorfrancis.com/content/books/oa-mono/download?identifierName=doi&identifierValue=10.4324/9781003459026&type=webpdf",
+          "raw_source_name": null,
+          "raw_type": "monograph",
+          "source": {
+            "display_name": "Routledge eBooks",
+            "host_organization": "https://openalex.org/P4310319847",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319847",
+              "https://openalex.org/P4310320547",
+              "https://openalex.org/P4310320449"
+            ],
+            "host_organization_lineage_names": [
+              "Routledge",
+              "Taylor & Francis",
+              "Informa"
+            ],
+            "host_organization_name": "Routledge",
+            "id": "https://openalex.org/S4306463855",
+            "is_core": false,
+            "is_in_doaj": false,
+            "is_oa": false,
+            "issn": null,
+            "issn_l": null,
+            "listed_in": [],
+            "type": "ebook platform"
+          },
+          "version": "publishedVersion"
+        },
+        "primary_topic": {
+          "display_name": "Artificial Intelligence in Education",
+          "domain": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/domains/2"
+          },
+          "field": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/fields/33"
+          },
+          "id": "https://openalex.org/T14414",
+          "score": 0.9990000128746033,
+          "subfield": {
+            "display_name": "Education",
+            "id": "https://openalex.org/subfields/3304"
+          }
+        },
+        "publication_date": "2024-03-11",
+        "publication_year": 2024,
+        "referenced_works_count": 211,
+        "relevance_score": 99.79526,
+        "study_designs": [],
+        "title": "Generative AI in Higher Education: The ChatGPT Effect",
+        "type": "book",
+        "updated_date": "2026-11-20T13:11:24.684918"
+      },
+      {
+        "alternate_titles": [],
+        "apc_list": null,
+        "apc_paid": null,
+        "authorships": [
+          {
+            "author": {
+              "display_name": "Fiona Fui‐Hoon Nah",
+              "id": "https://openalex.org/A5061450492",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-5505-7843"
+              ],
+              "orcid": "https://orcid.org/0000-0002-5505-7843"
+            },
+            "author_position": "first",
+            "contributor_roles": [],
+            "countries": [
+              "HK"
+            ],
+            "is_corresponding": true,
+            "raw_affiliation_strings": [
+              "City University of Hong Kong, Kowloon, Hong Kong SAR"
+            ],
+            "raw_author_name": "Fiona Fui-Hoon Nah",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Ruilin Zheng",
+              "id": "https://openalex.org/A5103156292",
+              "observed_orcids": [
+                "https://orcid.org/0000-0003-1765-6340"
+              ],
+              "orcid": "https://orcid.org/0000-0003-1765-6340"
+            },
+            "author_position": "middle",
+            "contributor_roles": [],
+            "countries": [
+              "HK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "City University of Hong Kong, Kowloon, Hong Kong SAR"
+            ],
+            "raw_author_name": "Ruilin Zheng",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Jingyuan Cai",
+              "id": "https://openalex.org/A5101816829",
+              "observed_orcids": [
+                "https://orcid.org/0009-0004-6875-5108"
+              ],
+              "orcid": "https://orcid.org/0009-0004-6875-5108"
+            },
+            "author_position": "middle",
+            "contributor_roles": [],
+            "countries": [
+              "HK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "City University of Hong Kong, Kowloon, Hong Kong SAR"
+            ],
+            "raw_author_name": "Jingyuan Cai",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Keng Leng Siau",
+              "id": "https://openalex.org/A5013335372",
+              "observed_orcids": [
+                "https://orcid.org/0000-0001-8139-4467"
+              ],
+              "orcid": "https://orcid.org/0000-0001-8139-4467"
+            },
+            "author_position": "middle",
+            "contributor_roles": [],
+            "countries": [
+              "HK"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "City University of Hong Kong, Kowloon, Hong Kong SAR"
+            ],
+            "raw_author_name": "Keng Siau",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Langtao Chen",
+              "id": "https://openalex.org/A5049585534",
+              "observed_orcids": [
+                "https://orcid.org/0000-0003-4509-5755"
+              ],
+              "orcid": "https://orcid.org/0000-0003-4509-5755"
+            },
+            "author_position": "last",
+            "contributor_roles": [],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Missouri University of Science and Technology, Rolla, Missouri, USA"
+            ],
+            "raw_author_name": "Langtao Chen",
+            "raw_orcid": null
+          }
+        ],
+        "awards": [],
+        "best_oa_location": {
+          "doi": "https://doi.org/10.1080/15228053.2023.2233814",
+          "id": "doi:10.1080/15228053.2023.2233814",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.1080/15228053.2023.2233814",
+          "license": null,
+          "license_id": null,
+          "pdf_url": "https://www.tandfonline.com/doi/pdf/10.1080/15228053.2023.2233814?needAccess=true",
+          "raw_source_name": "Journal of Information Technology Case and Application Research",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Journal of Information Technology Case and Application Research",
+            "host_organization": "https://openalex.org/P4310320547",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320547",
+              "https://openalex.org/P4310320449"
+            ],
+            "host_organization_lineage_names": [
+              "Taylor & Francis",
+              "Informa"
+            ],
+            "host_organization_name": "Taylor & Francis",
+            "id": "https://openalex.org/S2764688611",
+            "is_core": true,
+            "is_in_doaj": false,
+            "is_oa": false,
+            "issn": [
+              "1522-8053",
+              "2333-6897"
+            ],
+            "issn_l": "1522-8053",
+            "listed_in": [
+              "abdc-c",
+              "anvur-scientific",
+              "cwts-core",
+              "jufo-1",
+              "norway-1",
+              "poland-20",
+              "russia-white-list-2"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "biblio": {
+          "first_page": "277",
+          "issue": "3",
+          "last_page": "304",
+          "volume": "25"
+        },
+        "child_works_count": 0,
+        "citation_normalized_percentile": {
+          "is_in_top_10_percent": true,
+          "is_in_top_1_percent": true,
+          "value": 0.99978833
+        },
+        "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4385071300",
+        "cited_by_count": 2151,
+        "cited_by_percentile_year": {
+          "max": 100,
+          "min": 86
+        },
+        "content_urls": {
+          "grobid_xml": "https://content.openalex.org/works/W4385071300.grobid-xml",
+          "pdf": "https://content.openalex.org/works/W4385071300.pdf"
+        },
+        "countries_distinct_count": 2,
+        "created_date": "2023-07-23T00:00:00",
+        "display_name": "Generative AI and ChatGPT: Applications, challenges, and AI-human collaboration",
+        "doi": "https://doi.org/10.1080/15228053.2023.2233814",
+        "funders": [
+          {
+            "display_name": "University of Missouri",
+            "id": "https://openalex.org/F4320309568",
+            "ror": "https://ror.org/02ymw8z06"
+          },
+          {
+            "display_name": "City University of Hong Kong",
+            "id": "https://openalex.org/F4320309893",
+            "ror": "https://ror.org/03q8dnn23"
+          },
+          {
+            "display_name": "Georgia State University",
+            "id": "https://openalex.org/F4320310607",
+            "ror": "https://ror.org/03qt6ba18"
+          },
+          {
+            "display_name": "Missouri University of Science and Technology",
+            "id": "https://openalex.org/F4320312855",
+            "ror": "https://ror.org/00scwqd12"
+          },
+          {
+            "display_name": "University of Hong Kong",
+            "id": "https://openalex.org/F4320322170",
+            "ror": "https://ror.org/02zhqgq86"
+          },
+          {
+            "display_name": "Jinan University",
+            "id": "https://openalex.org/F4320322292",
+            "ror": "https://ror.org/02xe5ns62"
+          },
+          {
+            "display_name": "Renmin University of China",
+            "id": "https://openalex.org/F4320322499",
+            "ror": "https://ror.org/041pakw92"
+          }
+        ],
+        "fwci": 119.3834,
+        "has_content": {
+          "grobid_xml": true,
+          "pdf": true
+        },
+        "has_fulltext": true,
+        "id": "https://openalex.org/W4385071300",
+        "ids": {
+          "doi": "https://doi.org/10.1080/15228053.2023.2233814",
+          "openalex": "https://openalex.org/W4385071300"
+        },
+        "institutions": [],
+        "institutions_distinct_count": 2,
+        "is_authors_truncated": false,
+        "is_paratext": false,
+        "is_pulled": false,
+        "is_retracted": false,
+        "is_traditional": true,
+        "is_xpac": false,
+        "language": "en",
+        "lineage": [
+          "https://openalex.org/W4385071300"
+        ],
+        "locations_count": 2,
+        "open_access": {
+          "any_repository_has_fulltext": true,
+          "is_oa": true,
+          "oa_status": "bronze",
+          "oa_url": "https://www.tandfonline.com/doi/pdf/10.1080/15228053.2023.2233814?needAccess=true"
+        },
+        "parent_works": [],
+        "primary_location": {
+          "doi": "https://doi.org/10.1080/15228053.2023.2233814",
+          "id": "doi:10.1080/15228053.2023.2233814",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.1080/15228053.2023.2233814",
+          "license": null,
+          "license_id": null,
+          "pdf_url": "https://www.tandfonline.com/doi/pdf/10.1080/15228053.2023.2233814?needAccess=true",
+          "raw_source_name": "Journal of Information Technology Case and Application Research",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Journal of Information Technology Case and Application Research",
+            "host_organization": "https://openalex.org/P4310320547",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320547",
+              "https://openalex.org/P4310320449"
+            ],
+            "host_organization_lineage_names": [
+              "Taylor & Francis",
+              "Informa"
+            ],
+            "host_organization_name": "Taylor & Francis",
+            "id": "https://openalex.org/S2764688611",
+            "is_core": true,
+            "is_in_doaj": false,
+            "is_oa": false,
+            "issn": [
+              "1522-8053",
+              "2333-6897"
+            ],
+            "issn_l": "1522-8053",
+            "listed_in": [
+              "abdc-c",
+              "anvur-scientific",
+              "cwts-core",
+              "jufo-1",
+              "norway-1",
+              "poland-20",
+              "russia-white-list-2"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "primary_topic": {
+          "display_name": "Artificial Intelligence Applications",
+          "domain": {
+            "display_name": "Physical Sciences",
+            "id": "https://openalex.org/domains/3"
+          },
+          "field": {
+            "display_name": "Computer Science",
+            "id": "https://openalex.org/fields/17"
+          },
+          "id": "https://openalex.org/T13904",
+          "score": 0.9541000127792358,
+          "subfield": {
+            "display_name": "Artificial Intelligence",
+            "id": "https://openalex.org/subfields/1702"
+          }
+        },
+        "publication_date": "2023-07-03",
+        "publication_year": 2023,
+        "referenced_works_count": 88,
+        "relevance_score": 87.95635,
+        "study_designs": [],
+        "title": "Generative AI and ChatGPT: Applications, challenges, and AI-human collaboration",
+        "type": "article",
+        "updated_date": "2026-11-20T13:11:24.684918"
+      },
+      {
+        "alternate_titles": [],
+        "apc_list": {
+          "currency": "CHF",
+          "value": 1800,
+          "value_usd": 2046
+        },
+        "apc_paid": {
+          "currency": "CHF",
+          "value": 1800,
+          "value_usd": 2046
+        },
+        "authorships": [
+          {
+            "author": {
+              "display_name": "Gila Kurtz",
+              "id": "https://openalex.org/A5015073654",
+              "observed_orcids": [
+                "https://orcid.org/0000-0001-7775-1409"
+              ],
+              "orcid": "https://orcid.org/0000-0001-7775-1409"
+            },
+            "author_position": "first",
+            "contributor_roles": [
+              {
+                "display_name": "Conceptualization",
+                "id": "https://openalex.org/contributor-roles/conceptualization"
+              },
+              {
+                "display_name": "Methodology",
+                "id": "https://openalex.org/contributor-roles/methodology"
+              },
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              },
+              {
+                "display_name": "Writing – review & editing",
+                "id": "https://openalex.org/contributor-roles/writing-review-editing"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": true,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Gila Kurtz",
+            "raw_orcid": "https://orcid.org/0000-0001-7775-1409"
+          },
+          {
+            "author": {
+              "display_name": "Meital Amzalag",
+              "id": "https://openalex.org/A5055001897",
+              "observed_orcids": [
+                "https://orcid.org/0000-0001-5197-5172"
+              ],
+              "orcid": "https://orcid.org/0000-0001-5197-5172"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Meital Amzalag",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Nava Shaked",
+              "id": "https://openalex.org/A5069118034",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-2362-4663"
+              ],
+              "orcid": "https://orcid.org/0000-0002-2362-4663"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Nava Shaked",
+            "raw_orcid": "https://orcid.org/0000-0002-2362-4663"
+          },
+          {
+            "author": {
+              "display_name": "Yanay Zaguri",
+              "id": "https://openalex.org/A5039827541",
+              "observed_orcids": [],
+              "orcid": null
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Yanay Zaguri",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Dan Kohen-Vacs",
+              "id": "https://openalex.org/A5092117372",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-6225-6365"
+              ],
+              "orcid": "https://orcid.org/0000-0002-6225-6365"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Dan Kohen-Vacs",
+            "raw_orcid": "https://orcid.org/0000-0002-6225-6365"
+          },
+          {
+            "author": {
+              "display_name": "Eran Gal",
+              "id": "https://openalex.org/A5080866419",
+              "observed_orcids": [
+                "https://orcid.org/0000-0002-0486-4960"
+              ],
+              "orcid": "https://orcid.org/0000-0002-0486-4960"
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Eran Gal",
+            "raw_orcid": "https://orcid.org/0000-0002-0486-4960"
+          },
+          {
+            "author": {
+              "display_name": "Gideon Zailer",
+              "id": "https://openalex.org/A5096773160",
+              "observed_orcids": [],
+              "orcid": null
+            },
+            "author_position": "middle",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Gideon Zailer",
+            "raw_orcid": null
+          },
+          {
+            "author": {
+              "display_name": "Eran Barak-Medina",
+              "id": "https://openalex.org/A5093351001",
+              "observed_orcids": [
+                "https://orcid.org/0009-0002-8542-0305"
+              ],
+              "orcid": "https://orcid.org/0009-0002-8542-0305"
+            },
+            "author_position": "last",
+            "contributor_roles": [
+              {
+                "display_name": "Writing – original draft",
+                "id": "https://openalex.org/contributor-roles/writing-original-draft"
+              }
+            ],
+            "countries": [
+              "IL"
+            ],
+            "is_corresponding": false,
+            "raw_affiliation_strings": [
+              "Faculty of Instructional Design, Holon Institute of Technology (HIT), Holon 5810201, Israel"
+            ],
+            "raw_author_name": "Eran Barak-Medina",
+            "raw_orcid": null
+          }
+        ],
+        "awards": [],
+        "best_oa_location": {
+          "doi": "https://doi.org/10.3390/educsci14050503",
+          "id": "doi:10.3390/educsci14050503",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.3390/educsci14050503",
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "pdf_url": "https://www.mdpi.com/2227-7102/14/5/503/pdf?version=1715092275",
+          "raw_source_name": "Education Sciences",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Education Sciences",
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "id": "https://openalex.org/S2738008561",
+            "is_core": true,
+            "is_in_doaj": true,
+            "is_oa": true,
+            "issn": [
+              "2227-7102"
+            ],
+            "issn_l": "2227-7102",
+            "listed_in": [
+              "anvur-class-a",
+              "anvur-scientific",
+              "cwts-core",
+              "doaj",
+              "erih-plus",
+              "norway-1",
+              "poland-70",
+              "russia-white-list-1",
+              "vabb-shw"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "biblio": {
+          "first_page": "503",
+          "issue": "5",
+          "last_page": "503",
+          "volume": "14"
+        },
+        "child_works_count": 0,
+        "citation_normalized_percentile": {
+          "is_in_top_10_percent": true,
+          "is_in_top_1_percent": true,
+          "value": 0.99963166
+        },
+        "cited_by_api_url": "https://api.openalex.org/works?filter=cites:W4396707866",
+        "cited_by_count": 308,
+        "cited_by_percentile_year": {
+          "max": 100,
+          "min": 99
+        },
+        "content_urls": {
+          "grobid_xml": "https://content.openalex.org/works/W4396707866.grobid-xml",
+          "pdf": "https://content.openalex.org/works/W4396707866.pdf"
+        },
+        "countries_distinct_count": 1,
+        "created_date": "2024-05-08T00:00:00",
+        "display_name": "Strategies for Integrating Generative AI into Higher Education: Navigating Challenges and Leveraging Opportunities",
+        "doi": "https://doi.org/10.3390/educsci14050503",
+        "funders": [],
+        "fwci": 88.4722,
+        "has_content": {
+          "grobid_xml": true,
+          "pdf": true
+        },
+        "has_fulltext": true,
+        "id": "https://openalex.org/W4396707866",
+        "ids": {
+          "doi": "https://doi.org/10.3390/educsci14050503",
+          "openalex": "https://openalex.org/W4396707866"
+        },
+        "institutions": [],
+        "institutions_distinct_count": 1,
+        "is_authors_truncated": false,
+        "is_paratext": false,
+        "is_pulled": false,
+        "is_retracted": false,
+        "is_traditional": true,
+        "is_xpac": false,
+        "language": "en",
+        "lineage": [
+          "https://openalex.org/W4396707866"
+        ],
+        "locations_count": 2,
+        "open_access": {
+          "any_repository_has_fulltext": true,
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://www.mdpi.com/2227-7102/14/5/503/pdf?version=1715092275"
+        },
+        "parent_works": [],
+        "primary_location": {
+          "doi": "https://doi.org/10.3390/educsci14050503",
+          "id": "doi:10.3390/educsci14050503",
+          "is_accepted": true,
+          "is_oa": true,
+          "is_published": true,
+          "landing_page_url": "https://doi.org/10.3390/educsci14050503",
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "pdf_url": "https://www.mdpi.com/2227-7102/14/5/503/pdf?version=1715092275",
+          "raw_source_name": "Education Sciences",
+          "raw_type": "journal-article",
+          "source": {
+            "display_name": "Education Sciences",
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "id": "https://openalex.org/S2738008561",
+            "is_core": true,
+            "is_in_doaj": true,
+            "is_oa": true,
+            "issn": [
+              "2227-7102"
+            ],
+            "issn_l": "2227-7102",
+            "listed_in": [
+              "anvur-class-a",
+              "anvur-scientific",
+              "cwts-core",
+              "doaj",
+              "erih-plus",
+              "norway-1",
+              "poland-70",
+              "russia-white-list-1",
+              "vabb-shw"
+            ],
+            "type": "journal"
+          },
+          "version": "publishedVersion"
+        },
+        "primary_topic": {
+          "display_name": "Artificial Intelligence in Education",
+          "domain": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/domains/2"
+          },
+          "field": {
+            "display_name": "Social Sciences",
+            "id": "https://openalex.org/fields/33"
+          },
+          "id": "https://openalex.org/T14414",
+          "score": 0.9984999895095825,
+          "subfield": {
+            "display_name": "Education",
+            "id": "https://openalex.org/subfields/3304"
+          }
+        },
+        "publication_date": "2024-05-07",
+        "publication_year": 2024,
+        "referenced_works_count": 52,
+        "relevance_score": 85.147934,
+        "study_designs": [],
+        "title": "Strategies for Integrating Generative AI into Higher Education: Navigating Challenges and Leveraging Opportunities",
+        "type": "article",
+        "updated_date": "2026-11-20T13:11:24.684918"
+      }
+    ]
+  },
+  "estado": 200,
+  "servicio": "openalex",
+  "tipo": "application/json"
+}

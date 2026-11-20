@@ -282,6 +282,10 @@ def test_openalex_con_respuesta_real() -> None:
         )
     )
     assert busqueda.estado is Estado.ENCONTRADO and busqueda.candidatos
+    # OpenAlex no separa el apellido: el comparador igual confirma la obra correcta.
+    mejor = mejor_coincidencia(CANDIDATO.titulo, ["Michel-Villarreal"], 2023, busqueda.candidatos)
+    assert mejor is not None and mejor[0].doi == DOI
+    assert transporte.peticiones[-1].url.params["search"] == CANDIDATO.titulo  # solo el título
 
 
 def test_openalex_mapea_su_formato() -> None:

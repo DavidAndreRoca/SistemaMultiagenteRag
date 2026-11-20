@@ -63,7 +63,9 @@ Se configuran con `TASA_CROSSREF`, `TASA_CROSSREF_BUSQUEDA`, `TASA_DOI`, `TASA_U
 | Crossref (`crossref.py`) | `GET /works/{doi}`; búsqueda `GET /works?query.bibliographic=...&rows=5` | Fuente principal (decisión de la especificación). Autores con apellidos y nombres por separado |
 | doi.org (`doi.py`) | Negociación de contenido: `application/vnd.citationstyles.csl+json` (metadatos) y `text/x-bibliography; style=...; locale=...` (cita) | Cita determinista, sin modelo de lenguaje (RN-17). Estilos de las normas de la configuración: `apa` (apa7), `ieee` y `vancouver` |
 | Unpaywall (`unpaywall.py`) | `GET /v2/{doi}?email=...` | Estado OA, si es abierto, y la mejor ubicación: URL, PDF, licencia y versión |
-| OpenAlex (`openalex.py`) | `GET /works/doi:{doi}`; búsqueda `GET /works?search=...` | Respaldo de metadatos y de estado OA. Sin `CLAVE_OPENALEX` da `no_comprobable` (`no_configurado`). Da el nombre completo de cada autor; el apellido se toma como la última palabra |
+| OpenAlex (`openalex.py`) | `GET /works/doi:{doi}`; búsqueda `GET /works?search=<título>` (solo el título, ver abajo) | Respaldo de metadatos y de estado OA. Sin `CLAVE_OPENALEX` da `no_comprobable` (`no_configurado`). Da el nombre completo de cada autor; el apellido se toma como la última palabra |
+
+**Búsqueda de OpenAlex solo por título (comprobado el 20 de noviembre de 2026).** Con la consulta completa (título, apellido y año), el artículo de prueba no apareció entre los 5 primeros resultados. Solo con el título, salió primero. Crossref, en cambio, recibe la referencia completa en `query.bibliographic`, que está hecho para eso, y la encontró primero. En los dos casos, el comparador exige después título, autor y año sobre los candidatos.
 
 ## 7. Comparador (`comparador.py`)
 
@@ -79,7 +81,7 @@ Si a la referencia le falta el título, los autores o el año, no se confirma (`
 
 ## 8. Pruebas
 
-- **Contrato:** `pruebas/contrato/` guarda respuestas reales de los cuatro servicios (un artículo existente y un DOI inexistente), grabadas con `python -m pruebas.contrato.grabar`. Antes de guardarlas se quitan el correo, la clave y la lista de referencias del artículo, que es larga y no se usa.
+- **Contrato:** `pruebas/contrato/respuestas/` guarda 11 respuestas reales de los cuatro servicios (un artículo existente, un DOI inexistente y las búsquedas), grabadas con `python -m pruebas.contrato.grabar`. Antes de guardarlas se quitan el correo, la clave y la lista de referencias del artículo, que es larga y no se usa.
 - **Simulación:** caídas (error de conexión), tiempo agotado, 429 con `Retry-After`, 500 y respuestas lentas, con `httpx.MockTransport` y esperas simuladas.
 - **Unitarias:** limitador con reloj simulado y comparador.
 - **Integración:** caché con la base real.

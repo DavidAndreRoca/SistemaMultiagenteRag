@@ -22,7 +22,7 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T11 (F3)** | Borradores: carga, validación y versiones | **Integrada en `main`** (solicitud de cambio #7, apartado 14.7). CP-01 y CP-02 superados y contrastados con la Tabla 20 de la tesis (apartado 14) |
 | **T12 (F3)** | Secciones del borrador y alcance | **Integrada en `main`** (solicitud de cambio #8, apartado 15.7); criterios cumplidos y CP-09 contrastado con la tesis (apartado 15) |
 | **T13 (F3)** | Interfaz base | **Integrada en `main`** (solicitud de cambio #9, apartado 16.7): criterios cumplidos con Playwright frente a la API real, también en la CI (apartado 16). Prueba manual con teclado y NVDA superada según el equipo (apartado 16.5) |
-| **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Implementada y verificada en local**; criterios cumplidos (apartado 17). Falta grabar OpenAlex, que necesita `CLAVE_OPENALEX`. Rama `t14-clientes-bibliograficos`, sin integrar |
+| **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Implementada y verificada en local**, con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17). Rama `t14-clientes-bibliograficos`, sin integrar |
 | T15 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
@@ -1129,11 +1129,11 @@ Rama `t14-clientes-bibliograficos`, desde `main` con T13 (`78c1cd5`). Decisión:
 | 4. Crossref por DOI y por metadatos, con el correo del proyecto | Hecha | `crossref.py`: `mailto` y `User-Agent`, con limitadores separados para registro y búsqueda |
 | 5. doi.org por negociación de contenido: CSL-JSON y cita formateada | Hecha | `doi.py`. Estilos de las normas de la configuración (`apa`, `ieee` y `vancouver`). Una respuesta HTML no se acepta como cita |
 | 6. Unpaywall: estado y mejor ubicación de acceso abierto | Hecha | `unpaywall.py` |
-| 7. OpenAlex con clave, como respaldo de metadatos | Hecha, con su grabación pendiente | `openalex.py`. Sin `CLAVE_OPENALEX` da `no_comprobable` (`no_configurado`). Probado con su formato documentado; la grabación real queda pendiente (apartado 17.5) |
+| 7. OpenAlex con clave, como respaldo de metadatos | Hecha | `openalex.py`, probado con sus respuestas reales. Sin `CLAVE_OPENALEX` da `no_comprobable` (`no_configurado`). Busca solo por el título (apartado 17.4) |
 | 8. Comparación de metadatos con tolerancias documentadas | Hecha | `comparador.py`: título con similitud de 0,88 o más (normalizado y también sin subtítulo), al menos un apellido (también en apellidos compuestos) y año con un año de tolerancia. Sin uno de los tres datos, no se confirma |
 | Tarea: tiempos de espera y reintentos con espera exponencial | Hecha | `http.py`: 3 intentos ante red, tiempo agotado, 429 y 5xx; esperas de 0,5 s y 1 s; respeta `Retry-After` |
 | Tarea: toda excepción de red o límite da `no_comprobable` | Hecha | `FallaDeServicio` se convierte en `no_comprobable` en la base común de los clientes (`base.py`) |
-| Tarea: respuestas reales grabadas en `pruebas/contrato/` | Hecha para Crossref, doi.org y Unpaywall | 8 respuestas con `python -m pruebas.contrato.grabar`, sin el correo ni la clave (el script lo comprueba). OpenAlex pendiente de la clave |
+| Tarea: respuestas reales grabadas en `pruebas/contrato/` | Hecha | 11 respuestas de los cuatro servicios con `python -m pruebas.contrato.grabar`, sin el correo ni la clave (el script lo comprueba, y se volvió a comprobar en los 11 archivos) |
 
 ### 17.2. Criterios de aceptación
 
@@ -1145,26 +1145,27 @@ Rama `t14-clientes-bibliograficos`, desde `main` con T13 (`78c1cd5`). Decisión:
 
 ### 17.3. Pruebas
 
-- **Backend en contenedor:** 586 pruebas superadas y 6 omitidas, cobertura del 94,74 %. Ruff y mypy sin observaciones.
+- **Backend en contenedor:** 587 pruebas superadas y 5 omitidas (las que necesitan GROBID o el servicio de modelos), cobertura del 94,87 %. Ruff y mypy sin observaciones.
 - **Nuevas:**
-  - `unitarias/test_bibliografia.py` (42 y una omitida): limitador, comparador, contrato con las respuestas grabadas, fallas simuladas, reintentos, `Retry-After`, servicio sin configurar, DOI inválido, caché en memoria, fábrica e interfaces, y un registro sin el correo ni la clave. Omitida: el contrato real de OpenAlex, hasta grabarlo.
+  - `unitarias/test_bibliografia.py` (43): limitador, comparador, contrato con las respuestas grabadas de los cuatro servicios, fallas simuladas, reintentos, `Retry-After`, servicio sin configurar, DOI inválido, caché en memoria, fábrica e interfaces, y un registro sin el correo ni la clave.
   - `integracion/test_bibliografia_cache.py` (3): caché sobre la base real.
 - **Sin red en la CI:** ninguna prueba consulta los servicios reales.
 
 ### 17.4. Problemas encontrados y soluciones
 
 - **Una página HTML pasaba como cita:** las pruebas de fallas mostraron que doi.org aceptaba como cita cualquier respuesta 200. Ahora solo se acepta `text/x-bibliography` o `text/plain`, que es lo que devuelve doi.org (comprobado en la grabación).
+- **La búsqueda de OpenAlex con la referencia completa no encontraba la obra.** Al grabar OpenAlex, la prueba del comparador falló: con título, apellido y año, el artículo no estaba entre los 5 primeros resultados (el comparador hizo bien en no aceptar ninguno). Comprobado con dos consultas reales: solo con el título, el artículo sale primero. OpenAlex busca ahora solo por el título; el comparador sigue exigiendo título, autor y año.
 - **La normalización de DOI estaba en el cliente de GROBID.** Pasó a `app/bibliografia/normalizacion.py`, y GROBID la reutiliza.
 
 ### 17.5. Pendientes
 
-- **Grabar OpenAlex:** `CLAVE_OPENALEX` está vacía en el `.env` de desarrollo. Hay que ponerla y ejecutar `python -m pruebas.contrato.grabar` (con `CORREO_POLITE` y `CLAVE_OPENALEX` cargadas). La prueba de contrato de OpenAlex se activa sola cuando existe la grabación.
+- Ninguno de esta fase. La grabación de OpenAlex se hizo el 20 de noviembre de 2026, cuando el equipo puso `CLAVE_OPENALEX` en `.env`.
 
 ### 17.6. Archivos
 
 - **Creados:**
   - `backend/app/bibliografia/` (`modelos.py`, `interfaces.py`, `normalizacion.py`, `limitador.py`, `comparador.py`, `http.py`, `cache.py`, `base.py`, `crossref.py`, `doi.py`, `unpaywall.py`, `openalex.py` y `fabrica.py`);
-  - `backend/pruebas/contrato/` (`grabar.py` y `respuestas/`, con 8 respuestas reales), `backend/pruebas/dobles_bibliografia.py`, `unitarias/test_bibliografia.py` e `integracion/test_bibliografia_cache.py`;
+  - `backend/pruebas/contrato/` (`grabar.py` y `respuestas/`, con 11 respuestas reales), `backend/pruebas/dobles_bibliografia.py`, `unitarias/test_bibliografia.py` e `integracion/test_bibliografia_cache.py`;
   - `docs/decisiones/T14-clientes-bibliograficos.md`.
 - **Modificados:**
   - `backend/app/repositorios/sistema.py` (`RepositorioCacheMetadatos`) y `unidad.py`;
