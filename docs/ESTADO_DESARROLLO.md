@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 19 de noviembre de 2026. T11 integrada en `main` (solicitud de cambio #7, apartado 14.7). T12 implementada y verificada en local en la rama `t12-secciones-alcance` (apartado 15). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 19 de noviembre de 2026. T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 implementada y verificada en local en la rama `t13-interfaz-base` (apartado 16). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -20,8 +20,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T09 (F3)** | Extracción y segmentación de documentos | **Implementada, verificada e integrada en `main`** (solicitud de cambio #4, apartado 12.8), con Docling y GROBID reales; criterios de aceptación cumplidos (apartado 12). La lectura de RN-16 sobre PDF que solo restringen permisos quedó confirmada el 19 de noviembre de 2026 (apartado 12.7) |
 | **T10 (F3)** | Indexación y gestión del corpus | **Integrada en `main`** (apartado 13.7). **Actividad 7 cumplida e integrada** (solicitud de cambio #6, apartado 13.10): corpus provisional de 2 temas ingerido (99 documentos indexados), sin referencias en los fragmentos y sin fragmentos ajenos al tema en las consultas de prueba (apartado 13.8). Flujo de desarrollo optimizado (apartado 13.9) |
 | **T11 (F3)** | Borradores: carga, validación y versiones | **Integrada en `main`** (solicitud de cambio #7, apartado 14.7). CP-01 y CP-02 superados y contrastados con la Tabla 20 de la tesis (apartado 14) |
-| **T12 (F3)** | Secciones del borrador y alcance | **Implementada y verificada en local** con la base real; criterios cumplidos y CP-09 contrastado con la tesis (apartado 15). Rama `t12-secciones-alcance`, sin integrar |
-| T13 en adelante | | No iniciadas |
+| **T12 (F3)** | Secciones del borrador y alcance | **Integrada en `main`** (solicitud de cambio #8, apartado 15.7); criterios cumplidos y CP-09 contrastado con la tesis (apartado 15) |
+| **T13 (F3)** | Interfaz base | **Implementada y verificada en local**: criterios cumplidos con Playwright frente a la API real (apartado 16). Falta la prueba manual con lector de pantalla. Rama `t13-interfaz-base`, sin integrar |
+| T14 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -979,7 +980,7 @@ La primera versión de las pruebas se basó en la especificación y difería en 
 | Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#7 |
 | CI de la solicitud | **Verde** en las dos confirmaciones: ejecuciones 44621189670 y 44627359546 (la de `09e40dc`), 7 de 7 trabajos cada una |
 | Integración en `main` | Commit de integración `be91006` |
-| CI de `main` tras integrar | Pendiente de comprobar |
+| CI de `main` tras integrar | Ejecución 44630084125: **verde** |
 
 ---
 
@@ -1030,3 +1031,72 @@ Rama `t12-secciones-alcance`, desde el último commit de T11 (`09e40dc`, ya inte
 
 - **Creados:** `backend/app/borradores/secciones.py` y `alcance.py`, `backend/pruebas/unitarias/test_secciones_borrador.py`, `backend/pruebas/integracion/test_secciones_borrador.py`, cuatro .docx de muestra y `docs/decisiones/T12-secciones-y-alcance.md`.
 - **Modificados:** `backend/app/borradores/extraccion.py` y `servicio.py`, `backend/app/api/borradores.py`, `backend/app/repositorios/caso.py` (`hay_de_version`), `backend/pruebas/datos/generar_docx_muestra.py`, `backend/pruebas/matriz_autorizacion.py`, `docs/decisiones/T11-borradores.md`, `README.md`, `CLAUDE.md` y este archivo.
+
+### 15.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t12-secciones-alcance`: `fe9f35c` (`T12: detectar secciones del borrador, separar referencias y validar el alcance`) y `e3d848f` (rechazo de fragmentos de más de un párrafo, CP-09), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#8 |
+| CI de la solicitud | **Verde** en las dos confirmaciones: ejecuciones 44630350926 y 44637373011 (la de `e3d848f`), 7 de 7 trabajos |
+| Integración en `main` | Commit de integración `f534de0` |
+| CI de `main` tras integrar | Ejecución 44639715850: **verde** |
+
+---
+
+## 16. Fase 3 (F3): T13. Interfaz base
+
+Rama `t13-interfaz-base`, desde `main` con T12 (`f534de0`). Decisión: `docs/decisiones/T13-interfaz-base.md` (T13-01). El equipo eligió React Aria Components como biblioteca de componentes el 19 de noviembre de 2026.
+
+### 16.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Aplicación React con TypeScript y Vite en `frontend/` | Hecha | React 19.3.1, TypeScript 5.9.3 estricto, Vite 8.3.6 y React Router 8.5.1, todo con versión exacta y árbol fijado. Herramientas en Node 24.22.2 (contenedor), porque el Node del equipo es demasiado antiguo |
+| 2. Biblioteca de componentes accesible, con su criterio | Hecha | React Aria Components 1.22.1, elegida por el equipo. Criterio y opciones en T13-01, apartado 2 |
+| 3. Cliente tipado generado del contrato OpenAPI | Hecha | `python -m app.contrato` escribe `docs/api/openapi.json` y `npm run generar:api` genera los tipos. Una prueba del backend y la CI fallan si quedan desfasados |
+| 4. Pantallas: inicio de sesión, cambio de contraseña inicial, panel del caso, carga y lista de versiones, y casos y colecciones del investigador | Hecha | `src/paginas/`. El panel muestra la versión vigente por hito y la invitación a cargar la primera. La pantalla del investigador permite crear temas y registrar casos, con las credenciales iniciales mostradas una sola vez |
+| 5. Playwright y revisión automática de accesibilidad | Hecha | `e2e/flujo.spec.ts` con axe-core (WCAG 2.2 A y AA); `scripts/e2e.ps1` en local y el trabajo `interfaz_e2e` en la CI |
+| 6. La aplicación detrás del mismo dominio que la API en desarrollo | Hecha | La interfaz llama a `/api/...` y Vite lo reenvía a la API. Servicio `interfaz` de Compose (perfil `interfaz`) |
+| Tarea: manejo uniforme de errores del formato común | Hecha | `ErrorApi` en `src/api/cliente.ts` y `AvisoError`, con el mensaje y el identificador de incidencia |
+| Tarea: rutas protegidas por rol | Hecha | `Protegida` en `src/App.tsx`. Con contraseña inicial pendiente, solo se puede cambiarla |
+| Tarea: CI ampliada | Hecha | Trabajos `interfaz` (cliente al día, tipos, ESLint, formato, pruebas, compilación y `npm audit`) e `interfaz_e2e` |
+
+### 16.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Playwright recorre inicio de sesión, carga y versión visible | **Cumplido** | El caso A ingresa, cambia su contraseña, elige el hito con el selector, elige `valido.docx` con el diálogo de archivo, la carga y ve "Es la primera versión del hito Avance 1." Su versión aparece "Vigente" en la lista y en la tabla por hito. Además, un archivo que no es .docx se rechaza con su motivo, sin crear versión |
+| La revisión automática no encuentra errores de accesibilidad graves en estas pantallas | **Cumplido** | axe-core sin infracciones graves ni críticas en: inicio de sesión, casos y colecciones, panel sin versiones y panel con una versión. El recorrido con el tabulador del inicio de sesión sigue el orden visual, y el enlace para saltar al contenido aparece al recibir el foco |
+| Un caso no ve datos de otro desde la interfaz | **Cumplido** | El caso B, registrado en el mismo tema, ve su panel sin versiones y nada del caso A. Al abrir `/investigador`, vuelve a su panel |
+
+### 16.3. Pruebas
+
+- **Extremo a extremo en local** (`scripts/e2e.ps1`, proyecto aislado `sma_e2e`): **4 de 4 superadas**.
+- **Frontend:** 9 pruebas unitarias superadas (cliente y rutas protegidas). Tipos, ESLint (con jsx-a11y estricto) y Prettier sin observaciones. La compilación ocupa 146 KB comprimidos.
+- **Backend en contenedor:** 541 pruebas superadas y 5 omitidas, cobertura del 94,97 %, con la prueba nueva del contrato al día y la de `GET /caso` con los hitos. Ruff y mypy sin observaciones.
+
+### 16.4. Problemas encontrados y soluciones
+
+- **npm 10 falla al resolver Vitest** con un error interno. Se resolvió con npm 11, que trae Node 24.
+- **Node del equipo (22.13.1) más antiguo** del que piden jsdom y React Router. Las herramientas corren en un contenedor de Node 24.22.2.
+- **Dos copias de `playwright-core`** con tipos incompatibles. Se resolvió con un `overrides` a 1.65.0.
+- **El contrato cambiaba según la versión de Python:** Python 3.13 nombra distinto los estados 413 y 422. El generador fija los nombres de la RFC 9110, y la prueba pasa con 3.12 (contenedor) y con 3.13.
+- **En las pruebas unitarias,** openapi-fetch guardaba la referencia a `fetch` al importar, y el `fetch` de Node no acepta URL relativas. El cliente usa ahora una URL absoluta del mismo origen y resuelve `fetch` en cada petición.
+
+### 16.5. Pendientes
+
+- **Prueba manual con teclado y lector de pantalla** (NVDA) en estas pantallas: la pide la hoja de ruta y le corresponde al equipo.
+- **RNF-17 (usabilidad, menos de 3 minutos para cargar y pedir una revisión):** se mide en la prueba piloto, cuando exista la formulación de solicitudes (T29).
+
+### 16.6. Archivos
+
+- **Creados:**
+  - `frontend/` (configuración, `src/`, `e2e/`, `package.json` y `package-lock.json`);
+  - `backend/app/contrato.py` y `docs/api/openapi.json`;
+  - `scripts/e2e.ps1`;
+  - `docs/decisiones/T13-interfaz-base.md`.
+- **Modificados:**
+  - `backend/app/api/caso.py` (hitos en `GET /caso`), `backend/pruebas/unitarias/test_arquitectura.py` (contrato al día) y `backend/pruebas/integracion/test_casos.py`;
+  - `.github/workflows/ci.yml` y `docker-compose.yml` (servicio `interfaz`);
+  - `README.md`, `CLAUDE.md` y este archivo.

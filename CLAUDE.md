@@ -77,6 +77,8 @@ Borradores (T11): `app/borradores/` (`validacion.py` sin acceso a la base, `extr
 
 Secciones y alcance (T12): `app/borradores/secciones.py` (detección por estilos, marcado manual, referencias, `estructura_borrador`) y `app/borradores/alcance.py` (`validar_alcance`, CP-09), sobre los párrafos guardados, sin volver a leer el .docx. Casos de prueba oficiales de la tesis en `docs/especificacion-fase1/casos-de-prueba-tesis.md`.
 
+Interfaz (T13): `frontend/` (React 19, TypeScript estricto, Vite, React Aria Components, React Router). Herramientas en el contenedor `node:24.22.2-bookworm-slim` (Node del equipo demasiado antiguo); `node_modules` queda instalado para Linux. El cliente se genera del contrato: `python -m app.contrato` y luego `npm run generar:api`; una prueba del backend y la CI fallan si quedan desfasados. La interfaz llama a `/api/...` y Vite lo reenvía a la API (mismo origen). Extremo a extremo: `scripts/e2e.ps1` (proyecto `sma_e2e` aislado). En desarrollo: `docker compose --profile interfaz up -d interfaz`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

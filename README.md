@@ -187,6 +187,27 @@ Rutas del caso: `POST /caso/versiones` (formulario con `hito` y `archivo`), `GET
 
 Cada carga detecta las secciones por los estilos de título y separa la lista de referencias (T12). Sin estilos, la respuesta pide marcar los títulos a mano. Rutas: `GET /caso/versiones/{id}/secciones` (árbol, párrafos y referencias), `PUT /caso/versiones/{id}/secciones` (títulos marcados a mano) y `PUT /caso/versiones/{id}/referencias` (lista indicada a mano). La validación del alcance de una solicitud por tipo está en `app/borradores/alcance.py`. Decisiones: `docs/decisiones/T12-secciones-y-alcance.md`.
 
+## Interfaz (T13)
+
+Aplicación React con TypeScript y Vite en `frontend/`, con React Aria Components para los controles accesibles (WCAG 2.2 AA). Las herramientas corren en el contenedor de Node 24.22.2, igual que en la CI, porque piden un Node más nuevo que el del equipo de desarrollo.
+
+```bash
+docker compose up -d --wait bd api
+docker compose --profile interfaz up -d interfaz      # http://127.0.0.1:5173, con /api reenviado a la API
+```
+
+Comandos del frontend (desde la raíz del repositorio, en el contenedor):
+
+```bash
+docker run --rm -v "$PWD:/repo" -w /repo/frontend node:24.22.2-bookworm-slim npm ci
+docker run --rm -v "$PWD:/repo" -w /repo/frontend node:24.22.2-bookworm-slim sh -c "npm run tipos && npm run lint && npm run pruebas && npm run build"
+```
+
+- **Cliente de la API:** se genera del contrato y nunca se escribe a mano. Tras cambiar una ruta, ejecute `python -m app.contrato` (escribe `docs/api/openapi.json`) y luego `npm run generar:api` en `frontend/`.
+- **Pruebas de extremo a extremo con Playwright y revisión de accesibilidad:** `scripts/e2e.ps1` las ejecuta en un proyecto de Compose aislado que se borra al terminar.
+
+Decisiones: `docs/decisiones/T13-interfaz-base.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

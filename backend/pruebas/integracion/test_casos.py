@@ -52,11 +52,21 @@ async def test_alta_completa_de_un_caso(entorno: Entorno, investigador: httpx.As
         await entrar_y_cambiar(estudiante, cuenta, inicial)
         propio = await estudiante.get("/caso")
     assert propio.status_code == 200
-    assert propio.json() == {
+    datos = propio.json()
+    hitos = datos.pop("hitos")
+    assert datos == {
         "codigo": "CASO-01",
         "tipo_autoria": "individual",
         "tema": "TEMA-01",
         "norma_citacion": "ieee",
+    }
+    # El catálogo de hitos de la configuración vigente, para el formulario de carga (T13).
+    assert [h["codigo"] for h in hitos][:2] == ["avance_1", "avance_2"] and len(hitos) == 8
+    assert hitos[0] == {
+        "orden": 1,
+        "codigo": "avance_1",
+        "nombre": "Avance 1",
+        "contenido": "Planteamiento",
     }
 
 

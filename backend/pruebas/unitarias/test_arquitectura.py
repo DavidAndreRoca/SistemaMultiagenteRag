@@ -14,6 +14,8 @@ import app.bd.modelos as modelos
 from app.bd.base import Base
 from app.bd.diccionario import RUTA_DICCIONARIO, alimenta, generar, indice_de_metricas
 from app.bd.metricas import CODIGOS
+from app.contrato import RUTA_CONTRATO
+from app.contrato import generar as generar_contrato
 from app.repositorios import caso as repos_caso
 from app.repositorios import corpus as repos_corpus
 from app.repositorios import investigador as repos_investigador
@@ -151,6 +153,13 @@ def test_toda_columna_tiene_descripcion() -> None:
         if not c.comment
     ]
     assert sin_comentario == []
+
+
+def test_contrato_openapi_al_dia() -> None:
+    """La interfaz genera su cliente de ``docs/api/openapi.json`` (T13)."""
+    assert RUTA_CONTRATO.read_text(encoding="utf-8") == generar_contrato(), (
+        "Regenere con: python -m app.contrato (y en frontend/: npm run generar:api)"
+    )
 
 
 def test_diccionario_de_datos_al_dia() -> None:

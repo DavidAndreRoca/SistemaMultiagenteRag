@@ -1,0 +1,3389 @@
+{
+  "components": {
+    "schemas": {
+      "Body_cargar_version_caso_versiones_post": {
+        "properties": {
+          "archivo": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Archivo",
+            "type": "string"
+          },
+          "hito": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Hito",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hito",
+          "archivo"
+        ],
+        "title": "Body_cargar_version_caso_versiones_post",
+        "type": "object"
+      },
+      "Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post": {
+        "properties": {
+          "archivo": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Archivo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "archivo"
+        ],
+        "title": "Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post",
+        "type": "object"
+      },
+      "CambioNormaVista": {
+        "properties": {
+          "cambiado_en": {
+            "format": "date-time",
+            "title": "Cambiado En",
+            "type": "string"
+          },
+          "norma_anterior": {
+            "title": "Norma Anterior",
+            "type": "string"
+          },
+          "norma_nueva": {
+            "title": "Norma Nueva",
+            "type": "string"
+          }
+        },
+        "required": [
+          "norma_anterior",
+          "norma_nueva",
+          "cambiado_en"
+        ],
+        "title": "CambioNormaVista",
+        "type": "object"
+      },
+      "CasoCreadoVista": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "credenciales": {
+            "items": {
+              "$ref": "#/components/schemas/CredencialVista"
+            },
+            "title": "Credenciales",
+            "type": "array"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCaso"
+          },
+          "norma_citacion": {
+            "title": "Norma Citacion",
+            "type": "string"
+          },
+          "tema": {
+            "title": "Tema",
+            "type": "string"
+          },
+          "tipo_autoria": {
+            "$ref": "#/components/schemas/TipoAutoria"
+          }
+        },
+        "required": [
+          "codigo",
+          "tipo_autoria",
+          "tema",
+          "norma_citacion",
+          "estado",
+          "credenciales"
+        ],
+        "title": "CasoCreadoVista",
+        "type": "object"
+      },
+      "CasoDetalleVista": {
+        "properties": {
+          "cambios_norma": {
+            "items": {
+              "$ref": "#/components/schemas/CambioNormaVista"
+            },
+            "title": "Cambios Norma",
+            "type": "array"
+          },
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "cuentas": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Cuentas",
+            "type": "array"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCaso"
+          },
+          "norma_citacion": {
+            "title": "Norma Citacion",
+            "type": "string"
+          },
+          "tema": {
+            "title": "Tema",
+            "type": "string"
+          },
+          "tipo_autoria": {
+            "$ref": "#/components/schemas/TipoAutoria"
+          }
+        },
+        "required": [
+          "codigo",
+          "tipo_autoria",
+          "tema",
+          "norma_citacion",
+          "estado",
+          "cuentas",
+          "cambios_norma"
+        ],
+        "title": "CasoDetalleVista",
+        "type": "object"
+      },
+      "CasoPropio": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "hitos": {
+            "items": {
+              "$ref": "#/components/schemas/HitoVista"
+            },
+            "title": "Hitos",
+            "type": "array"
+          },
+          "norma_citacion": {
+            "title": "Norma Citacion",
+            "type": "string"
+          },
+          "tema": {
+            "title": "Tema",
+            "type": "string"
+          },
+          "tipo_autoria": {
+            "$ref": "#/components/schemas/TipoAutoria"
+          }
+        },
+        "required": [
+          "codigo",
+          "tipo_autoria",
+          "tema",
+          "norma_citacion",
+          "hitos"
+        ],
+        "title": "CasoPropio",
+        "type": "object"
+      },
+      "CasoVista": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCaso"
+          },
+          "norma_citacion": {
+            "title": "Norma Citacion",
+            "type": "string"
+          },
+          "tema": {
+            "title": "Tema",
+            "type": "string"
+          },
+          "tipo_autoria": {
+            "$ref": "#/components/schemas/TipoAutoria"
+          }
+        },
+        "required": [
+          "codigo",
+          "tipo_autoria",
+          "tema",
+          "norma_citacion",
+          "estado"
+        ],
+        "title": "CasoVista",
+        "type": "object"
+      },
+      "ColeccionVista": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "n_excluidas": {
+            "title": "N Excluidas",
+            "type": "integer"
+          },
+          "n_incluidas": {
+            "title": "N Incluidas",
+            "type": "integer"
+          },
+          "n_pendientes": {
+            "title": "N Pendientes",
+            "type": "integer"
+          },
+          "tema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tema"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoColeccion"
+          }
+        },
+        "required": [
+          "id",
+          "tipo",
+          "tema",
+          "n_incluidas",
+          "n_excluidas",
+          "n_pendientes"
+        ],
+        "title": "ColeccionVista",
+        "type": "object"
+      },
+      "CredencialVista": {
+        "properties": {
+          "contrasena_inicial": {
+            "description": "Se muestra una sola vez; no se almacena en claro.",
+            "title": "Contrasena Inicial",
+            "type": "string"
+          },
+          "cuenta": {
+            "title": "Cuenta",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cuenta",
+          "contrasena_inicial"
+        ],
+        "title": "CredencialVista",
+        "type": "object"
+      },
+      "DocumentoVista": {
+        "properties": {
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "archivo_original": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archivo Original"
+          },
+          "autores": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Autores",
+            "type": "array"
+          },
+          "confirmado": {
+            "title": "Confirmado",
+            "type": "boolean"
+          },
+          "creado_en": {
+            "format": "date-time",
+            "title": "Creado En",
+            "type": "string"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumento"
+          },
+          "fragmentos": {
+            "title": "Fragmentos",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "motivo_estado": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo Estado"
+          },
+          "num_paginas": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Num Paginas"
+          },
+          "retirado_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retirado En"
+          },
+          "titulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Titulo"
+          }
+        },
+        "required": [
+          "id",
+          "titulo",
+          "autores",
+          "anio",
+          "doi",
+          "estado",
+          "motivo_estado",
+          "confirmado",
+          "archivo_original",
+          "num_paginas",
+          "fragmentos",
+          "creado_en",
+          "retirado_en"
+        ],
+        "title": "DocumentoVista",
+        "type": "object"
+      },
+      "EstadoCaso": {
+        "enum": [
+          "habilitado",
+          "desactivado"
+        ],
+        "title": "EstadoCaso",
+        "type": "string"
+      },
+      "EstadoDocumento": {
+        "enum": [
+          "activo",
+          "retirado",
+          "incompleto"
+        ],
+        "title": "EstadoDocumento",
+        "type": "string"
+      },
+      "EstadoSalud": {
+        "properties": {
+          "base_de_datos": {
+            "title": "Base De Datos",
+            "type": "boolean"
+          },
+          "estado": {
+            "enum": [
+              "ok",
+              "degradado"
+            ],
+            "title": "Estado",
+            "type": "string"
+          },
+          "extension_vector": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extension Vector"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "estado",
+          "version",
+          "base_de_datos",
+          "extension_vector"
+        ],
+        "title": "EstadoSalud",
+        "type": "object"
+      },
+      "EstadoSesion": {
+        "properties": {
+          "csrf": {
+            "description": "Valor que debe enviarse en la cabecera X-CSRF-Token.",
+            "title": "Csrf",
+            "type": "string"
+          },
+          "cuenta": {
+            "title": "Cuenta",
+            "type": "string"
+          },
+          "debe_cambiar_contrasena": {
+            "title": "Debe Cambiar Contrasena",
+            "type": "boolean"
+          },
+          "expira_en": {
+            "format": "date-time",
+            "title": "Expira En",
+            "type": "string"
+          },
+          "rol": {
+            "$ref": "#/components/schemas/Rol"
+          }
+        },
+        "required": [
+          "cuenta",
+          "rol",
+          "debe_cambiar_contrasena",
+          "expira_en",
+          "csrf"
+        ],
+        "title": "EstadoSesion",
+        "type": "object"
+      },
+      "ExclusionVista": {
+        "properties": {
+          "duplicado_de_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duplicado De Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "identificador": {
+            "title": "Identificador",
+            "type": "string"
+          },
+          "mensaje": {
+            "title": "Mensaje",
+            "type": "string"
+          },
+          "motivo": {
+            "$ref": "#/components/schemas/MotivoExclusionCorpus"
+          },
+          "objeto": {
+            "$ref": "#/components/schemas/ObjetoExclusion"
+          },
+          "registrada_en": {
+            "format": "date-time",
+            "title": "Registrada En",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "objeto",
+          "identificador",
+          "motivo",
+          "mensaje",
+          "duplicado_de_id",
+          "registrada_en"
+        ],
+        "title": "ExclusionVista",
+        "type": "object"
+      },
+      "HitoVista": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "contenido": {
+            "title": "Contenido",
+            "type": "string"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "orden": {
+            "title": "Orden",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "orden",
+          "codigo",
+          "nombre",
+          "contenido"
+        ],
+        "title": "HitoVista",
+        "type": "object"
+      },
+      "ListaReferencias": {
+        "properties": {
+          "desde": {
+            "title": "Desde",
+            "type": "string"
+          },
+          "entradas": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Entradas",
+            "type": "array"
+          },
+          "hasta": {
+            "title": "Hasta",
+            "type": "string"
+          },
+          "metodo": {
+            "enum": [
+              "automatica",
+              "manual"
+            ],
+            "title": "Metodo",
+            "type": "string"
+          },
+          "seccion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion"
+          }
+        },
+        "required": [
+          "metodo",
+          "seccion",
+          "desde",
+          "hasta",
+          "entradas"
+        ],
+        "title": "ListaReferencias",
+        "type": "object"
+      },
+      "MarcadoReferencias": {
+        "properties": {
+          "desde": {
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Desde",
+            "type": "string"
+          },
+          "hasta": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hasta"
+          }
+        },
+        "required": [
+          "desde"
+        ],
+        "title": "MarcadoReferencias",
+        "type": "object"
+      },
+      "MarcadoSecciones": {
+        "properties": {
+          "titulos": {
+            "items": {
+              "$ref": "#/components/schemas/TituloMarcado"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "title": "Titulos",
+            "type": "array"
+          }
+        },
+        "required": [
+          "titulos"
+        ],
+        "title": "MarcadoSecciones",
+        "type": "object"
+      },
+      "MetodoDeteccionSecciones": {
+        "enum": [
+          "estilos",
+          "manual"
+        ],
+        "title": "MetodoDeteccionSecciones",
+        "type": "string"
+      },
+      "MotivoExclusionCorpus": {
+        "description": "Motivo de exclusión del corpus (RF-15, CP-21; Fase 1, 18.3 y 18.9).",
+        "enum": [
+          "no_es_pdf",
+          "pdf_ilegible",
+          "pdf_cifrado",
+          "excede_tamano",
+          "excede_paginas",
+          "sin_capa_de_texto",
+          "duplicado",
+          "sin_acceso_abierto"
+        ],
+        "title": "MotivoExclusionCorpus",
+        "type": "string"
+      },
+      "ObjetoExclusion": {
+        "description": "Qué se excluyó del corpus: un archivo subido o una referencia (importador, T15).",
+        "enum": [
+          "archivo",
+          "referencia"
+        ],
+        "title": "ObjetoExclusion",
+        "type": "string"
+      },
+      "ParrafoVista": {
+        "properties": {
+          "es_titulo": {
+            "title": "Es Titulo",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "origen": {
+            "enum": [
+              "cuerpo",
+              "tabla"
+            ],
+            "title": "Origen",
+            "type": "string"
+          },
+          "seccion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "texto",
+          "origen",
+          "seccion",
+          "es_titulo"
+        ],
+        "title": "ParrafoVista",
+        "type": "object"
+      },
+      "RespuestaError": {
+        "description": "Esquema OpenAPI del error común.",
+        "properties": {
+          "codigo": {
+            "examples": [
+              "entrada_invalida"
+            ],
+            "title": "Codigo",
+            "type": "string"
+          },
+          "detalle": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detalle"
+          },
+          "incidencia_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incidencia Id"
+          },
+          "mensaje": {
+            "title": "Mensaje",
+            "type": "string"
+          }
+        },
+        "required": [
+          "codigo",
+          "mensaje"
+        ],
+        "title": "RespuestaError",
+        "type": "object"
+      },
+      "Resultado": {
+        "enum": [
+          "indexado",
+          "incompleto",
+          "excluido",
+          "duplicado",
+          "ya_registrado"
+        ],
+        "title": "Resultado",
+        "type": "string"
+      },
+      "ResultadoCarga": {
+        "properties": {
+          "mensajes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Mensajes",
+            "type": "array"
+          },
+          "primera_del_hito": {
+            "title": "Primera Del Hito",
+            "type": "boolean"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionDetalle"
+          }
+        },
+        "required": [
+          "version",
+          "primera_del_hito",
+          "mensajes"
+        ],
+        "title": "ResultadoCarga",
+        "type": "object"
+      },
+      "ResultadoIngesta": {
+        "properties": {
+          "archivo": {
+            "title": "Archivo",
+            "type": "string"
+          },
+          "documento_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Documento Id"
+          },
+          "fragmentos": {
+            "default": 0,
+            "title": "Fragmentos",
+            "type": "integer"
+          },
+          "memoria_mb": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Memoria Mb",
+            "type": "object"
+          },
+          "mensajes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Mensajes",
+            "type": "array"
+          },
+          "motivos": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Motivos",
+            "type": "array"
+          },
+          "resultado": {
+            "$ref": "#/components/schemas/Resultado"
+          },
+          "tiempos_s": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Tiempos S",
+            "type": "object"
+          }
+        },
+        "required": [
+          "archivo",
+          "resultado"
+        ],
+        "title": "ResultadoIngesta",
+        "type": "object"
+      },
+      "Rol": {
+        "description": "A1: caso (estudiante o pareja); A2: investigador.",
+        "enum": [
+          "A1",
+          "A2"
+        ],
+        "title": "Rol",
+        "type": "string"
+      },
+      "Seccion": {
+        "properties": {
+          "clase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clase"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "nivel": {
+            "title": "Nivel",
+            "type": "integer"
+          },
+          "padre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Padre"
+          },
+          "parrafo_titulo": {
+            "title": "Parrafo Titulo",
+            "type": "string"
+          },
+          "parrafos": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Parrafos",
+            "type": "array"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "titulo",
+          "nivel",
+          "clase",
+          "padre",
+          "parrafo_titulo",
+          "parrafos"
+        ],
+        "title": "Seccion",
+        "type": "object"
+      },
+      "SolicitudCambioContrasena": {
+        "properties": {
+          "contrasena_actual": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Contrasena Actual",
+            "type": "string"
+          },
+          "contrasena_nueva": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Contrasena Nueva",
+            "type": "string"
+          }
+        },
+        "required": [
+          "contrasena_actual",
+          "contrasena_nueva"
+        ],
+        "title": "SolicitudCambioContrasena",
+        "type": "object"
+      },
+      "SolicitudCaso": {
+        "properties": {
+          "codigo": {
+            "examples": [
+              "CASO-01"
+            ],
+            "maxLength": 30,
+            "minLength": 2,
+            "title": "Codigo",
+            "type": "string"
+          },
+          "tema": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Tema",
+            "type": "string"
+          },
+          "tipo_autoria": {
+            "$ref": "#/components/schemas/TipoAutoria"
+          }
+        },
+        "required": [
+          "codigo",
+          "tipo_autoria",
+          "tema"
+        ],
+        "title": "SolicitudCaso",
+        "type": "object"
+      },
+      "SolicitudColeccion": {
+        "properties": {
+          "tema": {
+            "examples": [
+              "TEMA-01"
+            ],
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Tema",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tema"
+        ],
+        "title": "SolicitudColeccion",
+        "type": "object"
+      },
+      "SolicitudInicio": {
+        "properties": {
+          "codigo": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Codigo",
+            "type": "string"
+          },
+          "contrasena": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Contrasena",
+            "type": "string"
+          }
+        },
+        "required": [
+          "codigo",
+          "contrasena"
+        ],
+        "title": "SolicitudInicio",
+        "type": "object"
+      },
+      "SolicitudNorma": {
+        "properties": {
+          "norma": {
+            "examples": [
+              "apa7"
+            ],
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Norma",
+            "type": "string"
+          }
+        },
+        "required": [
+          "norma"
+        ],
+        "title": "SolicitudNorma",
+        "type": "object"
+      },
+      "TipoAutoria": {
+        "enum": [
+          "individual",
+          "pareja"
+        ],
+        "title": "TipoAutoria",
+        "type": "string"
+      },
+      "TipoColeccion": {
+        "enum": [
+          "guias",
+          "cientifica",
+          "personal"
+        ],
+        "title": "TipoColeccion",
+        "type": "string"
+      },
+      "TituloMarcado": {
+        "properties": {
+          "nivel": {
+            "default": 1,
+            "title": "Nivel",
+            "type": "integer"
+          },
+          "parrafo": {
+            "title": "Parrafo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parrafo"
+        ],
+        "title": "TituloMarcado",
+        "type": "object"
+      },
+      "VersionDetalle": {
+        "properties": {
+          "cargada_en": {
+            "format": "date-time",
+            "title": "Cargada En",
+            "type": "string"
+          },
+          "hito": {
+            "title": "Hito",
+            "type": "string"
+          },
+          "huella_sha256": {
+            "title": "Huella Sha256",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "metodo_deteccion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetodoDeteccionSecciones"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nombre_hito": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre Hito"
+          },
+          "palabras": {
+            "title": "Palabras",
+            "type": "integer"
+          },
+          "parrafos": {
+            "title": "Parrafos",
+            "type": "integer"
+          },
+          "referencias": {
+            "title": "Referencias",
+            "type": "integer"
+          },
+          "secciones": {
+            "title": "Secciones",
+            "type": "integer"
+          },
+          "tamano_bytes": {
+            "title": "Tamano Bytes",
+            "type": "integer"
+          },
+          "vigente": {
+            "title": "Vigente",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "hito",
+          "nombre_hito",
+          "cargada_en",
+          "vigente",
+          "tamano_bytes",
+          "palabras",
+          "huella_sha256",
+          "parrafos",
+          "metodo_deteccion",
+          "secciones",
+          "referencias"
+        ],
+        "title": "VersionDetalle",
+        "type": "object"
+      },
+      "VersionResumen": {
+        "properties": {
+          "cargada_en": {
+            "format": "date-time",
+            "title": "Cargada En",
+            "type": "string"
+          },
+          "hito": {
+            "title": "Hito",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "nombre_hito": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre Hito"
+          },
+          "palabras": {
+            "title": "Palabras",
+            "type": "integer"
+          },
+          "tamano_bytes": {
+            "title": "Tamano Bytes",
+            "type": "integer"
+          },
+          "vigente": {
+            "title": "Vigente",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "hito",
+          "nombre_hito",
+          "cargada_en",
+          "vigente",
+          "tamano_bytes",
+          "palabras"
+        ],
+        "title": "VersionResumen",
+        "type": "object"
+      },
+      "VistaSecciones": {
+        "description": "Secciones y párrafos de una versión, para que el caso elija el alcance (F-05).",
+        "properties": {
+          "mensajes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Mensajes",
+            "type": "array"
+          },
+          "metodo_deteccion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetodoDeteccionSecciones"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parrafos": {
+            "items": {
+              "$ref": "#/components/schemas/ParrafoVista"
+            },
+            "title": "Parrafos",
+            "type": "array"
+          },
+          "referencias": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ListaReferencias"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "secciones": {
+            "items": {
+              "$ref": "#/components/schemas/Seccion"
+            },
+            "title": "Secciones",
+            "type": "array"
+          },
+          "titulo_documento": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Titulo Documento"
+          },
+          "version_id": {
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version_id",
+          "metodo_deteccion",
+          "titulo_documento",
+          "secciones",
+          "parrafos",
+          "referencias",
+          "mensajes"
+        ],
+        "title": "VistaSecciones",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Sistema multiagente con RAG",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/caso": {
+      "get": {
+        "operationId": "caso_propio_caso_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoPropio"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Datos del propio caso",
+        "tags": [
+          "caso"
+        ]
+      }
+    },
+    "/caso/versiones": {
+      "get": {
+        "description": "De la más reciente a la más antigua; con `hito`, solo las de ese hito.",
+        "operationId": "listar_versiones_caso_versiones_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "hito",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hito"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VersionResumen"
+                  },
+                  "title": "Response Listar Versiones Caso Versiones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Versiones del borrador",
+        "tags": [
+          "borradores"
+        ]
+      },
+      "post": {
+        "description": "Valida el .docx (RN-16) y crea una versión nueva, vigente en su hito, sin borrar las anteriores (RN-09). Un archivo inválido, con macros, cifrado o dañado se rechaza con su motivo y no crea versión (CP-02).",
+        "operationId": "cargar_version_caso_versiones_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_cargar_version_caso_versiones_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoCarga"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "413": {
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Cargar una versión del borrador",
+        "tags": [
+          "borradores"
+        ]
+      }
+    },
+    "/caso/versiones/{version_id}": {
+      "get": {
+        "operationId": "ver_version_caso_versiones__version_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionDetalle"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Metadatos de una versión del borrador",
+        "tags": [
+          "borradores"
+        ]
+      }
+    },
+    "/caso/versiones/{version_id}/referencias": {
+      "put": {
+        "description": "Del párrafo `desde` al párrafo `hasta` (por defecto, el último). Cada línea no vacía es una entrada. 409 si la versión ya tiene solicitudes.",
+        "operationId": "marcar_referencias_caso_versiones__version_id__referencias_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarcadoReferencias"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaSecciones"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Indicar a mano la lista de referencias",
+        "tags": [
+          "borradores"
+        ]
+      }
+    },
+    "/caso/versiones/{version_id}/secciones": {
+      "get": {
+        "description": "Árbol de secciones, párrafos con su texto y sección, y la lista de referencias. Sin estilos de título, pide marcar las secciones (F-05).",
+        "operationId": "ver_secciones_caso_versiones__version_id__secciones_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaSecciones"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Secciones y párrafos de una versión",
+        "tags": [
+          "borradores"
+        ]
+      },
+      "put": {
+        "description": "Indica qué párrafos son títulos y su nivel. Reemplaza la detección por estilos y vuelve a detectar la lista de referencias. 409 si la versión ya tiene solicitudes.",
+        "operationId": "marcar_secciones_caso_versiones__version_id__secciones_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarcadoSecciones"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaSecciones"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Marcar a mano las secciones de una versión",
+        "tags": [
+          "borradores"
+        ]
+      }
+    },
+    "/investigador/casos": {
+      "get": {
+        "operationId": "listar_casos_investigador_casos_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CasoVista"
+                  },
+                  "title": "Response Listar Casos Investigador Casos Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Listar casos",
+        "tags": [
+          "investigador"
+        ]
+      },
+      "post": {
+        "operationId": "crear_caso_investigador_casos_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCaso"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoCreadoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Dar de alta un caso con su colección personal y sus cuentas",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/casos/{codigo}": {
+      "get": {
+        "operationId": "detalle_caso_investigador_casos__codigo__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "codigo",
+            "required": true,
+            "schema": {
+              "title": "Codigo",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoDetalleVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Detalle de un caso",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/casos/{codigo}/desactivar": {
+      "post": {
+        "operationId": "desactivar_investigador_casos__codigo__desactivar_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "codigo",
+            "required": true,
+            "schema": {
+              "title": "Codigo",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Desactivar un caso",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/casos/{codigo}/norma": {
+      "put": {
+        "operationId": "cambiar_norma_investigador_casos__codigo__norma_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "codigo",
+            "required": true,
+            "schema": {
+              "title": "Codigo",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudNorma"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Elegir la norma de citación",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/casos/{codigo}/reactivar": {
+      "post": {
+        "operationId": "reactivar_investigador_casos__codigo__reactivar_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "codigo",
+            "required": true,
+            "schema": {
+              "title": "Codigo",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CasoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Reactivar un caso",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/colecciones": {
+      "get": {
+        "operationId": "listar_colecciones_investigador_colecciones_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ColeccionVista"
+                  },
+                  "title": "Response Listar Colecciones Investigador Colecciones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Colecciones compartidas",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/colecciones/cientificas": {
+      "post": {
+        "operationId": "crear_coleccion_investigador_colecciones_cientificas_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudColeccion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColeccionVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Crear la colección científica de un tema",
+        "tags": [
+          "investigador"
+        ]
+      }
+    },
+    "/investigador/colecciones/{coleccion_id}/documentos": {
+      "get": {
+        "operationId": "listar_documentos_investigador_colecciones__coleccion_id__documentos_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentoVista"
+                  },
+                  "title": "Response Listar Documentos Investigador Colecciones  Coleccion Id  Documentos Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Documentos de una colección científica",
+        "tags": [
+          "corpus"
+        ]
+      },
+      "post": {
+        "description": "201 si se guardó (indexado o incompleto); 200 si se excluyó, era un duplicado o ya se había procesado. El motivo va en la respuesta.",
+        "operationId": "subir_documento_investigador_colecciones__coleccion_id__documentos_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoIngesta"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoIngesta"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "413": {
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Subir un PDF a una colección científica",
+        "tags": [
+          "corpus"
+        ]
+      }
+    },
+    "/investigador/colecciones/{coleccion_id}/exclusiones": {
+      "get": {
+        "operationId": "listar_exclusiones_investigador_colecciones__coleccion_id__exclusiones_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExclusionVista"
+                  },
+                  "title": "Response Listar Exclusiones Investigador Colecciones  Coleccion Id  Exclusiones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Archivos y referencias excluidos de una colección, con su motivo",
+        "tags": [
+          "corpus"
+        ]
+      }
+    },
+    "/investigador/documentos/{documento_id}/confirmar": {
+      "post": {
+        "operationId": "confirmar_documento_investigador_documentos__documento_id__confirmar_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "documento_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Documento Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Confirmar la indexación de un documento incompleto",
+        "tags": [
+          "corpus"
+        ]
+      }
+    },
+    "/investigador/documentos/{documento_id}/retirar": {
+      "post": {
+        "operationId": "retirar_documento_investigador_documentos__documento_id__retirar_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "documento_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Documento Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentoVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Retirar un documento: deja de recuperarse y se conserva su registro",
+        "tags": [
+          "corpus"
+        ]
+      }
+    },
+    "/salud": {
+      "get": {
+        "operationId": "salud_salud_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoSalud"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoSalud"
+                }
+              }
+            },
+            "description": "Base o extensión no disponible"
+          }
+        },
+        "summary": "Estado de la aplicación y de sus dependencias básicas",
+        "tags": [
+          "salud"
+        ]
+      }
+    },
+    "/sesion": {
+      "delete": {
+        "operationId": "cerrar_sesion_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Cerrar sesión",
+        "tags": [
+          "sesion"
+        ]
+      },
+      "get": {
+        "operationId": "consultar_sesion_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoSesion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Sesión actual",
+        "tags": [
+          "sesion"
+        ]
+      },
+      "post": {
+        "operationId": "iniciar_sesion_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudInicio"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoSesion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Iniciar sesión",
+        "tags": [
+          "sesion"
+        ]
+      }
+    },
+    "/sesion/contrasena": {
+      "post": {
+        "operationId": "cambiar_sesion_contrasena_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCambioContrasena"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Cambiar contraseña",
+        "tags": [
+          "sesion"
+        ]
+      }
+    }
+  }
+}
