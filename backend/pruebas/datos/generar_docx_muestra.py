@@ -21,7 +21,10 @@ from docx.enum.style import WD_STYLE_TYPE
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
+from pruebas.datos import articulo_o1 as o1
+
 CARPETA = Path(__file__).parent / "docx"
+O1 = Path(__file__).parent / "o1"
 TIPO_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
 TIPO_MACROS = "application/vnd.ms-word.document.macroEnabled.main+xml"
 TIPO_HOJA = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"
@@ -276,6 +279,23 @@ def _zotero() -> bytes:
     return salida.getvalue()
 
 
+def _articulo_o1() -> bytes:
+    """Artículo O1 ficticio con 24 referencias para el importador (T15)."""
+    documento = Document()
+    for tipo, texto in o1.CUERPO:
+        if tipo == "titulo":
+            documento.add_heading(texto, level=0)
+        elif tipo == "seccion":
+            documento.add_heading(texto, level=1)
+        else:
+            documento.add_paragraph(texto)
+    for referencia in o1.REFERENCIAS:
+        documento.add_paragraph(referencia.entrada())
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
 def generar() -> dict[str, bytes]:
     valido = _valido()
     with zipfile.ZipFile(io.BytesIO(valido)) as zip_:
@@ -320,6 +340,11 @@ def main() -> None:
     for nombre, datos in generar().items():
         (CARPETA / nombre).write_bytes(datos)
         print(f"{nombre}: {len(datos)} bytes")
+    # T15: el artículo O1 va aparte, para que ninguna prueba lo trate como borrador o corpus.
+    O1.mkdir(exist_ok=True)
+    datos = _articulo_o1()
+    (O1 / "articulo_o1.docx").write_bytes(datos)
+    print(f"o1/articulo_o1.docx: {len(datos)} bytes")
 
 
 if __name__ == "__main__":

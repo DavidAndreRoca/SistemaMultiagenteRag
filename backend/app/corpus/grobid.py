@@ -14,8 +14,10 @@ import re
 import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from typing import Any
 
 import httpx
+from pydantic import BaseModel, ConfigDict
 
 from app.bibliografia.normalizacion import normalizar_doi
 from app.comun.errores import ErrorAplicacion
@@ -24,6 +26,7 @@ from app.corpus.esquemas import Autor, MetadatosCabecera
 
 TEI = "{http://www.tei-c.org/ns/1.0}"
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
+PATRON_DOI_EN_TEXTO = re.compile(r"10\.\d{4,9}/[^\s\"<>]+")
 TIEMPO_MAXIMO_S = 180.0  # la primera solicitud carga los modelos de GROBID
 
 _registro = obtener_registrador("corpus")
@@ -99,6 +102,61 @@ def metadatos_desde_tei(tei: str) -> MetadatosCabecera:
     )
 
 
+class ReferenciaGrobid(BaseModel):
+    """Una entrada de la lista de referencias, analizada por GROBID (T15)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    texto: str  # la entrada tal como aparece en el artículo
+    titulo: str | None = None
+    apellidos: list[str] = []
+    anio: int | None = None
+    doi: str | None = None
+
+
+def referencias_desde_tei(tei: str) -> list[ReferenciaGrobid]:
+    """Cada ``biblStruct`` del TEI de ``processReferences`` o ``processCitationList``."""
+    raiz = ET.fromstring(tei)
+    referencias = []
+    for biblio in raiz.iter(f"{TEI}biblStruct"):
+        crudo = next(
+            (_texto(n) for n in biblio.iter(f"{TEI}note") if n.get("type") == "raw_reference"),
+            None,
+        )
+        titulo = _texto(biblio.find(f"{TEI}analytic/{TEI}title")) or _texto(
+            biblio.find(f"{TEI}monogr/{TEI}title")
+        )
+        apellidos = [s for s in (_texto(x) for x in biblio.iter(f"{TEI}surname")) if s]
+        doi = next(
+            (
+                normalizar_doi(_texto(i))
+                for i in biblio.iter(f"{TEI}idno")
+                if (i.get("type") or "").upper() == "DOI" and normalizar_doi(_texto(i))
+            ),
+            None,
+        ) or _doi_en_texto(crudo)
+        texto = crudo or titulo
+        if not texto:
+            continue  # sin texto ni título no hay referencia que resolver
+        referencias.append(
+            ReferenciaGrobid(
+                texto=texto,
+                titulo=titulo,
+                apellidos=apellidos,
+                anio=_anio(biblio),
+                doi=doi,
+            )
+        )
+    return referencias
+
+
+def _doi_en_texto(texto: str | None) -> str | None:
+    if not texto:
+        return None
+    hallado = PATRON_DOI_EN_TEXTO.search(texto)
+    return normalizar_doi(hallado.group(0)) if hallado else None
+
+
 class ClienteGrobid:
     def __init__(
         self,
@@ -140,5 +198,57 @@ class ClienteGrobid:
             raise ErrorGrobid(f"estado HTTP {respuesta.status_code}")
         try:
             return metadatos_desde_tei(respuesta.text)
+        except (ET.ParseError, ValueError) as error:
+            raise ErrorGrobid("respuesta no válida") from error
+
+    def referencias(self, ruta: Path) -> list[ReferenciaGrobid]:
+        """Lista de referencias de un PDF (``processReferences``, sin consolidar)."""
+        with ruta.open("rb") as archivo:
+            respuesta = self._post(
+                "/api/processReferences",
+                files={"input": ("articulo.pdf", archivo, "application/pdf")},
+                data={"consolidateCitations": "0", "includeRawCitations": "1"},
+            )
+        return self._referencias(respuesta)
+
+    def referencias_de_texto(self, entradas: list[str]) -> list[ReferenciaGrobid]:
+        """Análisis de entradas ya separadas, por ejemplo las de un .docx
+        (``processCitationList``)."""
+        if not entradas:
+            return []
+        respuesta = self._post(
+            "/api/processCitationList",
+            data={
+                "citations": entradas,
+                "consolidateCitations": "0",
+                "includeRawCitations": "1",
+            },
+        )
+        return self._referencias(respuesta)
+
+    def _post(self, ruta: str, **kwargs: Any) -> httpx.Response:
+        inicio = time.perf_counter()
+        try:
+            respuesta = self._cliente.post(ruta, headers={"Accept": "application/xml"}, **kwargs)
+        except httpx.HTTPError as error:
+            raise ErrorGrobid(f"sin respuesta ({type(error).__name__})") from error
+        _registro.info(
+            "grobid referencias",
+            extra={
+                "tipo_evento": "importacion",
+                "estado_http": respuesta.status_code,
+                "duracion_ms": round((time.perf_counter() - inicio) * 1000),
+            },
+        )
+        return respuesta
+
+    @staticmethod
+    def _referencias(respuesta: httpx.Response) -> list[ReferenciaGrobid]:
+        if respuesta.status_code == 204:  # GROBID no encontró referencias
+            return []
+        if respuesta.status_code != 200:
+            raise ErrorGrobid(f"estado HTTP {respuesta.status_code}")
+        try:
+            return referencias_desde_tei(respuesta.text)
         except (ET.ParseError, ValueError) as error:
             raise ErrorGrobid("respuesta no válida") from error

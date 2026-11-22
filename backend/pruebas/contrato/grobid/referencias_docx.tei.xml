@@ -1,0 +1,434 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:mml="http://www.w3.org/1998/Math/MathML">
+	<teiHeader/>
+	<text>
+		<front/>
+		<body/>
+		<back>
+			<div>
+				<listBibl>
+<biblStruct status="extracted" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Ansiedad estadística en estudiantes de primer año</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Quispe</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.01</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.01" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Quispe, A. (2021). Ansiedad estadística en estudiantes de primer año. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.01</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Tutoría entre pares en cursos de métodos cuantitativos</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Huamán</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.02</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.02" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Huamán, A. (2022). Tutoría entre pares en cursos de métodos cuantitativos. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.02</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Autoeficacia y rendimiento en estadística universitaria</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Mendoza</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.03</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.03" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Mendoza, A. (2023). Autoeficacia y rendimiento en estadística universitaria. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.03</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Aprendizaje cooperativo en la enseñanza de la probabilidad</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Ccahuana</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.04</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.04" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2024">2024</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ccahuana, A. (2024). Aprendizaje cooperativo en la enseñanza de la probabilidad. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.04</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Actitudes hacia la estadística en ciencias sociales</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Salazar</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.05</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.05" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Salazar, A. (2020). Actitudes hacia la estadística en ciencias sociales. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.05</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Evaluación formativa en asignaturas de investigación</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Paredes</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.06</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.06" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Paredes, A. (2021). Evaluación formativa en asignaturas de investigación. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.06</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Mentoría académica y permanencia estudiantil</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Vilca</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.07</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.07" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Vilca, A. (2022). Mentoría académica y permanencia estudiantil. Revista Ficticia de Pedagogía. https://doi.org/10.5555/sma.o1.07</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Programas de nivelación matemática en la universidad</title>
+		<author>
+			<persName><forename type="first">B</forename><surname>Arroyo</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.08</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.08" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Docencia</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Arroyo, B. (2021). Programas de nivelación matemática en la universidad. Revista Ficticia de Docencia. https://doi.org/10.5555/sma.o1.08</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Motivación y estrategias de estudio en estadística</title>
+		<author>
+			<persName><forename type="first">C</forename><surname>Benavides</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.09</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.09" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Docencia</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Benavides, C. (2022). Motivación y estrategias de estudio en estadística. Revista Ficticia de Docencia. https://doi.org/10.5555/sma.o1.09</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Ansiedad matemática y elección de carrera</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Cárdenas</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.10</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.10" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Educación</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Cárdenas, D. (2019). Ansiedad matemática y elección de carrera. Revista Ficticia de Educación. https://doi.org/10.5555/sma.o1.10</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Clima de aula en cursos de estadística aplicada</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Delgado</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.11</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.11" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Educación</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Delgado, D. (2019). Clima de aula en cursos de estadística aplicada. Revista Ficticia de Educación. https://doi.org/10.5555/sma.o1.11</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Retroalimentación entre pares en educación superior</title>
+		<author>
+			<persName><forename type="first">D</forename><surname>Espinoza</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.12</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.12" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Educación</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Espinoza, D. (2019). Retroalimentación entre pares en educación superior. Revista Ficticia de Educación. https://doi.org/10.5555/sma.o1.12</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Medición de la ansiedad ante los exámenes</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Flores</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.13</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.13" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia Cerrada</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Flores, E. (2018). Medición de la ansiedad ante los exámenes. Revista Ficticia Cerrada. https://doi.org/10.5555/sma.o1.13</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Rendimiento académico y apoyo social percibido</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Gutiérrez</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.14</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.14" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia Cerrada</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Gutiérrez, E. (2018). Rendimiento académico y apoyo social percibido. Revista Ficticia Cerrada. https://doi.org/10.5555/sma.o1.14</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Diseños cuasiexperimentales en educación</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Herrera</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.15</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.15" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia Cerrada</title>
+		<imprint>
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Herrera, E. (2018). Diseños cuasiexperimentales en educación. Revista Ficticia Cerrada. https://doi.org/10.5555/sma.o1.15</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Hábitos de estudio en estudiantes de ingeniería</title>
+		<author>
+			<persName><forename type="first">F</forename><surname>Ibáñez</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.16</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.16" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia Regional</title>
+		<imprint>
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ibáñez, F. (2017). Hábitos de estudio en estudiantes de ingeniería. Revista Ficticia Regional. https://doi.org/10.5555/sma.o1.16</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Escalas de ansiedad estadística validadas en el Perú</title>
+		<author>
+			<persName><forename type="first">G</forename><surname>Jiménez</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Psicometría</title>
+		<imprint>
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Jiménez, G. (2020). Escalas de ansiedad estadística validadas en el Perú. Revista Ficticia de Psicometría.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Efectos de la tutoría virtual en estudiantes de primer ciclo</title>
+		<author>
+			<persName><forename type="first">H</forename><surname>Lazo</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Psicometría</title>
+		<imprint>
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Lazo, H. (2021). Efectos de la tutoría virtual en estudiantes de primer ciclo. Revista Ficticia de Psicometría.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Informe interno sobre deserción en cursos de estadística</title>
+		<author>
+			<persName><forename type="first">I</forename><surname>Montes</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+		<respStmt>
+			<orgName>Universidad Ficticia</orgName>
+		</respStmt>
+	</monogr>
+	<note type="raw_reference">Montes, I. (2015). Informe interno sobre deserción en cursos de estadística. Universidad Ficticia.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Apuntes de clase de estadística descriptiva</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Núñez</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note>Material docente ficticio</note>
+	<note type="raw_reference">Núñez, J. (2016). Apuntes de clase de estadística descriptiva. Material docente ficticio.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Manual ficticio de estadística para ciencias sociales</title>
+		<author>
+			<persName><forename type="first">K</forename><surname>Ortiz</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Editorial Ficticia</title>
+		<imprint>
+			<date type="published" when="2014">2014</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ortiz, K. (2014). Manual ficticio de estadística para ciencias sociales. Editorial Ficticia.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Ansiedad y procrastinación académica</title>
+		<author>
+			<persName><forename type="first">L</forename><surname>Pacheco</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.22</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.22" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Psicología</title>
+		<imprint>
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Pacheco, L. (2022). Ansiedad y procrastinación académica. Revista Ficticia de Psicología. https://doi.org/10.5555/sma.o1.22</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Bienestar estudiantil y carga académica</title>
+		<author>
+			<persName><forename type="first">M</forename><surname>Ramos</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.23</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.23" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Psicología</title>
+		<imprint>
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Ramos, M. (2023). Bienestar estudiantil y carga académica. Revista Ficticia de Psicología. https://doi.org/10.5555/sma.o1.23</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Estudio pionero de ansiedad estadística digitalizado</title>
+		<author>
+			<persName><forename type="first">N</forename><surname>Soto</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/sma.o1.24</idno>
+		<ptr target="https://doi.org/10.5555/sma.o1.24" />
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia Histórica</title>
+		<imprint>
+			<date type="published" when="2012">2012</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">Soto, N. (2012). Estudio pionero de ansiedad estadística digitalizado. Revista Ficticia Histórica. https://doi.org/10.5555/sma.o1.24</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

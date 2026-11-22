@@ -17,8 +17,15 @@ from dataclasses import dataclass
 from sqlalchemy import ColumnElement, and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bd.enumeraciones import EstadoDocumento
-from app.bd.modelos import Coleccion, Documento, ExclusionCorpus, Fragmento, FragmentoRecuperado
+from app.bd.enumeraciones import EstadoDocumento, EstadoReferencia
+from app.bd.modelos import (
+    Coleccion,
+    Documento,
+    ExclusionCorpus,
+    Fragmento,
+    FragmentoRecuperado,
+    ReferenciaImportada,
+)
 from app.repositorios.contexto import ContextoAcceso
 
 
@@ -182,7 +189,8 @@ class RepositorioCorpus:
         return resultado.all()
 
     async def recontar(self, contexto: ContextoAcceso, coleccion: Coleccion) -> None:
-        """Contadores del informe por tema: incluidos (recuperables) y exclusiones."""
+        """Contadores del informe por tema: incluidos (recuperables), exclusiones y
+        referencias del artículo O1 pendientes de PDF (T15)."""
         contexto.exigir_investigador()
         incluidas = await self._sesion.scalar(
             select(func.count(Documento.id)).where(
@@ -194,10 +202,20 @@ class RepositorioCorpus:
                 ExclusionCorpus.coleccion_id == coleccion.id
             )
         )
+        pendientes = await self._sesion.scalar(
+            select(func.count(ReferenciaImportada.id)).where(
+                ReferenciaImportada.coleccion_id == coleccion.id,
+                ReferenciaImportada.estado == EstadoReferencia.PENDIENTE_PDF,
+            )
+        )
         await self._sesion.execute(
             update(Coleccion)
             .where(Coleccion.id == coleccion.id)
-            .values(n_incluidas=incluidas or 0, n_excluidas=excluidas or 0)
+            .values(
+                n_incluidas=incluidas or 0,
+                n_excluidas=excluidas or 0,
+                n_pendientes=pendientes or 0,
+            )
         )
         await self._sesion.refresh(coleccion)
 

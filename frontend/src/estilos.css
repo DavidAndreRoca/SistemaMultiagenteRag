@@ -96,6 +96,7 @@ section {
   font-weight: 600;
 }
 .campo input,
+.campo textarea,
 .selector__boton {
   min-height: 2.5rem;
   padding: 0.5rem 0.75rem;
@@ -111,8 +112,13 @@ section {
   color: var(--texto-suave);
   font-size: 0.9375rem;
 }
+.campo textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
 .campo__error,
-.campo input[data-invalid] {
+.campo input[data-invalid],
+.campo textarea[data-invalid] {
   color: var(--error);
   border-color: var(--error);
 }
@@ -235,4 +241,32 @@ section {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Importación de referencias (T15) */
+.avance {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 32rem;
+}
+.avance progress {
+  width: 100%;
+  height: 1rem;
+}
+.pendientes {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+.pendiente {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+.pendiente__texto {
+  margin: 0;
+  overflow-wrap: anywhere;
 }

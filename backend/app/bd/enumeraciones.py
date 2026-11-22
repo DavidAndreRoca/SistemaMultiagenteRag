@@ -51,6 +51,35 @@ class MotivoExclusionCorpus(StrEnum):
     SIN_CAPA_DE_TEXTO = "sin_capa_de_texto"
     DUPLICADO = "duplicado"
     SIN_ACCESO_ABIERTO = "sin_acceso_abierto"
+    # Referencias del artículo O1 (T15)
+    NO_LOCALIZADA = "no_localizada"  # los servicios respondieron y no hay coincidencia
+    SIN_DOI = "sin_doi"  # localizada sin DOI: no se puede comprobar el acceso abierto
+    DOI_INVALIDO = "doi_invalido"  # lista de DOI: la línea no tiene forma de DOI
+
+
+class OrigenImportacion(StrEnum):
+    """Formato del artículo O1 o lista de DOI (T15-01, apartado 2)."""
+
+    PDF = "pdf"
+    DOCX = "docx"
+    DOI = "doi"
+
+
+class EstadoImportacion(StrEnum):
+    EN_COLA = "en_cola"
+    EN_PROCESO = "en_proceso"
+    TERMINADA = "terminada"
+    INTERRUMPIDA = "interrumpida"  # la API se reinició durante la importación
+    FALLIDA = "fallida"  # no se pudieron extraer las referencias
+
+
+class EstadoReferencia(StrEnum):
+    """Estado de una referencia del artículo O1 en la colección del tema (T15)."""
+
+    INCLUIDA = "incluida"  # su PDF está en la colección
+    PENDIENTE_PDF = "pendiente_pdf"  # de acceso abierto, el investigador sube el PDF
+    EXCLUIDA = "excluida"  # con motivo (no localizada, sin acceso abierto...)
+    NO_COMPROBABLE = "no_comprobable"  # un servicio no respondió (RN-18): se reintenta
 
 
 class EstadoAccesoAbierto(StrEnum):

@@ -69,6 +69,9 @@ export function Investigador() {
           <section aria-labelledby="titulo-temas">
             <h2 id="titulo-temas">Temas y colecciones científicas</h2>
             <TablaTemas temas={temas} />
+            <p>
+              <a href="/investigador/importacion">Importar las referencias del artículo O1</a>
+            </p>
             <NuevoTema alCrear={actualizar} />
           </section>
         </>

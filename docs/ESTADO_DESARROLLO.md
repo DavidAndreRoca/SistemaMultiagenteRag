@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 19 de noviembre de 2026. T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 implementada y verificada en local en la rama `t14-clientes-bibliograficos` (apartado 17). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 22 de noviembre de 2026. T15 implementada y verificada en su rama (apartado 18). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -22,8 +22,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T11 (F3)** | Borradores: carga, validación y versiones | **Integrada en `main`** (solicitud de cambio #7, apartado 14.7). CP-01 y CP-02 superados y contrastados con la Tabla 20 de la tesis (apartado 14) |
 | **T12 (F3)** | Secciones del borrador y alcance | **Integrada en `main`** (solicitud de cambio #8, apartado 15.7); criterios cumplidos y CP-09 contrastado con la tesis (apartado 15) |
 | **T13 (F3)** | Interfaz base | **Integrada en `main`** (solicitud de cambio #9, apartado 16.7): criterios cumplidos con Playwright frente a la API real, también en la CI (apartado 16). Prueba manual con teclado y NVDA superada según el equipo (apartado 16.5) |
-| **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Implementada y verificada en local**, con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17). Rama `t14-clientes-bibliograficos`, sin integrar |
-| T15 en adelante | | No iniciadas |
+| **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Integrada en `main`** (solicitud de cambio #10, apartado 17.7), con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17) |
+| **T15 (F3)** | Importador de referencias del artículo O1 | **Implementada y verificada** en la rama `t15-importador-referencias`, con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18). Falta integrarla |
+| T16 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1172,3 +1173,110 @@ Rama `t14-clientes-bibliograficos`, desde `main` con T13 (`78c1cd5`). Decisión:
   - `backend/app/configuracion/ajustes.py` (tasas, tiempo, reintentos y vigencias) y `.env.example`;
   - `backend/app/corpus/grobid.py` (normalización de DOI compartida);
   - `README.md`, `CLAUDE.md` y este archivo.
+
+### 17.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t14-clientes-bibliograficos`: `220a95f` (`T14: agregar los clientes bibliográficos con limitador y caché`), `724aca5` (línea larga del paquete de contrato) y `6ca815f` (grabación de OpenAlex y búsqueda por título), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#10 |
+| CI de la solicitud | **Verde**, ejecución 44837538462 (la de `6ca815f`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `f3e343f` |
+| CI de `main` tras integrar | Ejecución 44839306862: **verde** |
+
+---
+
+## 18. Fase 3 (F3): T15. Importador de referencias del artículo O1
+
+Rama `t15-importador-referencias`, desde `main` con T14 (`f3e343f`). Decisión: `docs/decisiones/T15-importador-referencias.md` (T15-01). Formatos y prueba real decididos por el equipo el 20 de noviembre de 2026: PDF, .docx y lista de DOI (amplía RF-20), y un artículo base importado de punta a punta.
+
+### 18.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Carga del artículo O1 (.docx) o de una lista de DOI para un tema | Hecha, también PDF | `POST /investigador/colecciones/{id}/importaciones` responde 202. El .docx se valida con T11 y el PDF con T09. En la lista de DOI, las líneas sin forma de DOI se excluyen con `doi_invalido` |
+| 2. Referencias con GROBID y descarte del artículo (RN-19) | Hecha | `app/importacion/extraccion.py` y `ClienteGrobid.referencias` y `referencias_de_texto` (`processReferences` y `processCitationList`, sin consolidar). El .docx pasa por la detección de referencias de T12. El artículo vive solo en `/archivos/importacion/<id>/` y se borra en cuanto se extraen las referencias, también si la extracción falla. Al arrancar, la API borra cualquier resto |
+| 3. Resolución por DOI o por metadatos con T14 | Hecha | `resolucion.py` (`Localizador`): Crossref por DOI, OpenAlex por DOI si Crossref no lo conoce (DOI de DataCite) y, si nadie lo encuentra, búsqueda en Crossref y luego en OpenAlex con el comparador de T14. Sin respuesta de algún servicio, `no_comprobable` (RN-18) |
+| 4. Acceso abierto en Unpaywall | Hecha | Sin registro en Unpaywall vale el acceso abierto de OpenAlex, si localizó la obra por DOI. Sin ninguno o con `is_oa = false`: excluida con `sin_acceso_abierto` (RN-14). Se guardan el estado, la página, el enlace al PDF y la licencia |
+| 5. Descarga del PDF con enlace directo y proceso con T09 y T10 | Hecha | `descarga.py`: hasta el tamaño máximo de la configuración y con la firma `%PDF-`. Después, `Indexador.ingerir` de T10. El documento recibe los metadatos de Crossref y de Unpaywall y el origen `importacion_o1` |
+| 6. Pendiente de PDF y carga manual | Hecha | `pendiente_pdf` con `sin_enlace_directo` o `descarga_fallida`. `POST /investigador/referencias/{id}/pdf` la indexa con T10: queda incluida, o excluida con el motivo del canal |
+| 7. Exclusión con motivo | Hecha | `no_localizada`, `sin_doi`, `sin_acceso_abierto` y `doi_invalido` (migración 0011) en `exclusion_corpus` con `objeto = referencia`. Un PDF que el canal rechaza deja su propia exclusión de archivo |
+| 8. Informe por tema | Hecha | `GET /investigador/colecciones/{id}/informe`: referencias totales, de acceso abierto, incluidas, pendientes, no comprobables y excluidas por motivo. `recontar` lleva ahora también `n_pendientes` |
+| 9. Pantallas del investigador | Hecha | `/investigador/importacion` (`frontend/src/paginas/Importacion.tsx`): tema, artículo o DOI con el avance, informe y pendientes con enlace a su página de acceso abierto y subida del PDF |
+| Tarea: proceso en segundo plano con estado consultable | Hecha | Tarea `asyncio`, una importación a la vez por proceso. `GET /investigador/importaciones/{id}` da estado y avance. Una importación cortada por un reinicio queda `interrumpida` en la siguiente consulta |
+| Tarea: idempotencia | Hecha | Cada referencia es única por colección (`clave`: DOI o huella del texto). Las incluidas y excluidas no se reprocesan; las no comprobables y las pendientes se reintentan, y un DOI que ya tiene documento no se descarga otra vez |
+| Tarea: prueba explícita de RN-19 | Hecha | Apartado 18.3 |
+
+### 18.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Un .docx de prueba con al menos 20 referencias se importa y el informe lista incluidas, excluidas y pendientes con motivo | **Cumplido** | `test_importar_el_docx_arma_el_informe_con_cada_resultado`: el artículo O1 ficticio (`pruebas/datos/o1/articulo_o1.docx`, 24 referencias, una por escenario) da 9 incluidas, 5 pendientes (3 `sin_enlace_directo` y 2 `descarga_fallida`), 8 excluidas (`sin_acceso_abierto` 4, `no_localizada` 2, `sin_doi` 1 y `sin_capa_de_texto` 1) y 2 no comprobables (Crossref caído). Cada referencia queda con el estado y el motivo de su escenario, y los contadores de la colección son 9, 8 y 5 |
+| Tras la importación no existe copia del artículo O1 | **Cumplido** | Con servicios simulados (`test_rn19_...`, .docx y PDF): al resolver la primera referencia, la carpeta del artículo ya está vacía. Al terminar no queda ningún archivo en `importacion/`, y en el almacén solo están los 9 PDF de las referencias. Ninguna fila de ninguna tabla contiene frases del cuerpo, el título del artículo ni el nombre del archivo, y el registro tampoco. Con el artículo base real, en el proyecto aislado `sma_t15`: apartado 18.3 |
+| Un PDF subido desde "pendientes" queda indexado en la colección del tema | **Cumplido** | Con el canal simulado (`test_subir_el_pdf_de_una_pendiente_la_incluye`): la referencia queda incluida, con documento de origen `importacion_o1` y su DOI, y los pendientes bajan de 5 a 4. Un escaneado queda excluido con `sin_capa_de_texto` y una referencia que ya no está pendiente responde 409. Con el canal real (Docling, GROBID y bge-m3): apartado 18.3 |
+
+### 18.3. Pruebas
+
+- **Backend en contenedor (Python 3.12):** 594 pruebas superadas y 5 omitidas (las que necesitan GROBID o el servicio de modelos), cobertura del 94,13 %. Ruff y mypy sin observaciones.
+- **Integración (`integracion/test_importacion.py`, 7 pruebas):**
+  - el informe del .docx;
+  - RN-19;
+  - la reimportación, que no duplica y solo reintenta las 2 descargas fallidas;
+  - la lista de DOI: normalización, `doi_invalido`, DOI de DataCite con el acceso abierto de OpenAlex y avance completo, y un DOI con documento que no se vuelve a descargar;
+  - el artículo inválido, que falla y también se borra, más los rechazos 422 y 404;
+  - la subida desde pendientes;
+  - la importación cortada, que queda `interrumpida`.
+
+  GROBID responde con sus respuestas reales grabadas (`pruebas/contrato/grobid/`: 23 referencias del PDF y 24 del .docx, con los 19 DOI correctos en ambos casos).
+- **Interfaz:**
+  - `src/pruebas/importacion.test.tsx` (4): lista de DOI con avance hasta terminar, archivo y DOI a la vez rechazados, informe con motivos, enlace de acceso abierto y subida de un pendiente, y textos de los motivos. En total, 13 pruebas unitarias superadas, con tipos, lint, formato y compilación sin observaciones.
+  - **Extremo a extremo** (`scripts/e2e.ps1`): 5 de 5 superadas. La nueva abre la importación de un tema y revisa su accesibilidad sin infracciones graves.
+- **Prueba real con un artículo base** (decisión del equipo), en el proyecto aislado `sma_t15` (puertos 5438 y 8040), sin tocar el corpus provisional de `sma_rag`:
+  - **Artículo:** `ChatGPT_como_fuente_de_informacion_en_la_Educacion.pdf` (22 páginas), con GROBID, Crossref, Unpaywall, OpenAlex, descargas, Docling y bge-m3 reales.
+  - **Tiempo y extracción:** 1 059 s en total; GROBID extrajo 53 referencias en unos 40 s.
+  - **Informe:**
+    - 14 referencias incluidas, con 13 documentos (12 activos y uno incompleto sin confirmar);
+    - 9 pendientes de PDF (7 por descarga fallida y 2 sin enlace directo);
+    - 30 excluidas: `no_localizada` 21, `sin_acceso_abierto` 7 y `sin_doi` 2;
+    - ninguna no comprobable.
+
+    Las no localizadas son noticias, páginas web, libros y entradas sin título ni año, que ningún servicio registra. La excepción son dos DOI de DataCite (apartado 18.4).
+  - **RN-19 en disco:** `importacion/` vacía, ningún archivo con la huella SHA-256 del artículo y ninguna caché de Docling para él. Hay un PDF en el almacén por cada documento.
+  - **RN-19 en la base:** las 21 tablas se revisaron con cinco frases del cuerpo, la huella y el nombre del archivo. No hay texto del artículo ni su huella. Las únicas coincidencias están en 4 filas de `cache_metadatos`: son resultados de búsqueda de OpenAlex (para otras referencias) que traen entre sus candidatos el registro bibliográfico público del propio artículo (título y DOI). El comparador los descartó y ningún documento tiene ese DOI.
+  - **RN-19 en el registro de la API:** ninguna de las frases.
+  - **Subida desde pendientes con el canal real:** se subió un PDF ficticio de muestra (`pruebas/datos/pdf/articulo_es.pdf`; no otro artículo base, para no indexar artículos O1). La referencia quedó incluida en 23 s, con 9 fragmentos, y los pendientes bajaron de 9 a 8.
+  - **DataCite, tras la corrección:** en un tema nuevo, `10.48550/arxiv.1612.08220` quedó incluido (acceso abierto `green`, descargado e indexado). `10.5281/zenodo.10360697` quedó pendiente de PDF con su página de acceso abierto; OpenAlex lo devuelve con el DOI del registro general (`10.5281/zenodo.10360696`).
+  - **RN-19 después de estas pruebas:** se repitió con el mismo resultado; hay 15 PDF en el almacén para 15 documentos.
+
+### 18.4. Problemas encontrados y soluciones
+
+- **CP-21 contaba el artículo O1 ficticio:** la prueba del canal real ingiere toda la carpeta `pruebas/datos/pdf/`, y el O1 estaba ahí. El O1 pasó a `pruebas/datos/o1/`, aparte del corpus, que es donde corresponde, porque nunca debe ingerirse.
+- **Los DOI de DataCite quedaban "no localizados":** Crossref no conoce los DOI de arXiv ni de Zenodo, y Unpaywall tampoco. Ahora se consultan en OpenAlex por DOI y se usa su acceso abierto (apartado 18.3).
+- **La lista de DOI repetía exclusiones:** al reimportar, una línea sin forma de DOI volvía a registrarse en `exclusion_corpus`, y esas líneas no sumaban al avance. Corregido y probado.
+- **La descarga usaba `.stream(`,** que la regla de arquitectura toma por una consulta a la base fuera de `repositorios/`. Ahora usa `send(..., stream=True)`.
+- **En jsdom, `fetch` no acepta un `File` dentro de un `FormData`:** en la prueba de la subida se sustituye el envío y se comprueba el formulario.
+- **La cookie de sesión es `Secure`:** el guion de la prueba real, que llamaba a la API por `http://127.0.0.1`, la envía en la cabecera. La aplicación no cambió.
+- **Un `Error` simple no muestra su texto en `AvisoError`** (solo los `ErrorApi`). La pantalla nueva usa `ErrorApi` para sus validaciones. Las de T11 y T13 tienen el mismo defecto (apartado 18.5).
+- **Antes de la migración 0011:**
+  - una importación cortada se marca `interrumpida` en la siguiente consulta, no al arrancar, porque al arrancar la base puede no estar disponible;
+  - se agregó el motivo `doi_invalido`;
+  - se descartó la variante `-Completo` de `scripts/e2e.ps1` (decisión, apartado 9).
+
+### 18.5. Pendientes y riesgos
+
+- **Mensajes de validación de T11 y T13:** `PanelCaso.tsx` e `Investigador.tsx` crean `new Error(...)` y la pantalla muestra "Ocurrió un error inesperado." en lugar del texto. Corrección de una línea por pantalla, fuera del alcance de T15.
+- **Descargas fallidas en la prueba real (7 de 23 abiertas):** muchos sitios rechazan las descargas automáticas. El investigador las sube a mano desde la pantalla de pendientes, como prevé la Fase 1 (n.° 14).
+- **Tiempo:** cada PDF descargado pasa por Docling (unos 30 a 60 s en CPU). Un artículo con 50 referencias tarda unos 18 minutos. La cola persistente es de T28.
+
+### 18.6. Archivos
+
+- **Creados:**
+  - `backend/app/importacion/` (`extraccion.py`, `resolucion.py`, `descarga.py`, `servicio.py` y `fabrica.py`), `backend/app/repositorios/importacion.py`, `backend/app/api/importacion.py`, `backend/app/bd/modelos/importacion.py` y `backend/migraciones/versiones/0011_importacion_de_referencias.py`;
+  - `backend/pruebas/datos/articulo_o1.py` y `pruebas/datos/o1/` (PDF y .docx ficticios), `pruebas/contrato/grabar_grobid_referencias.py` y `pruebas/contrato/grobid/` (2 respuestas reales), `pruebas/dobles_importacion.py` e `integracion/test_importacion.py`;
+  - `frontend/src/paginas/Importacion.tsx` y `frontend/src/pruebas/importacion.test.tsx`;
+  - `docs/decisiones/T15-importador-referencias.md`.
+- **Modificados:**
+  - `backend/app/bd/enumeraciones.py`, `bd/modelos/__init__.py`, `corpus/grobid.py` (referencias con GROBID), `corpus/indexacion.py` (mensajes de los motivos nuevos), `repositorios/corpus.py` (`n_pendientes`) y `unidad.py`, y `main.py` (rutas y limpieza al arrancar; también se corrigieron sus tildes mal codificadas);
+  - `backend/pruebas/datos/generar_pdf_muestra.py` y `generar_docx_muestra.py`, `pruebas/dobles_corpus.py` (marca `VARIANTE=`) y `pruebas/matriz_autorizacion.py` (5 rutas);
+  - `frontend/src/App.tsx`, `componentes/controles.tsx` (`CampoTextoLargo`), `estilos.css`, `paginas/Investigador.tsx` (enlace), `api/esquema.d.ts` y `e2e/flujo.spec.ts`;
+  - `docs/api/openapi.json`, `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.

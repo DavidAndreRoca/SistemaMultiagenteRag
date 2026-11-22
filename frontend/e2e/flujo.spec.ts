@@ -2,11 +2,14 @@
 // * Playwright recorre inicio de sesión, carga y versión visible.
 // * La revisión automática no encuentra errores de accesibilidad graves en estas pantallas.
 // * Un caso no ve datos de otro desde la interfaz.
+// T15: la pantalla de importación de referencias es accesible. La importación y la subida de
+// pendientes se prueban con pruebas unitarias y de integración, porque la CI no tiene GROBID.
 import { expect, test, type Page } from "@playwright/test";
 
 import {
   BORRADOR_VALIDO,
   cambiarContrasena,
+  CONTRASENA_NUEVA,
   entrar,
   revisarAccesibilidad,
   salir,
@@ -67,6 +70,24 @@ test("el investigador ingresa, crea un tema y registra dos casos", async ({ page
   credenciales.set(CASO_B, await registrarCaso(page, CASO_B));
   await expect(page.getByRole("rowheader", { name: CASO_A })).toBeVisible();
   await revisarAccesibilidad(page, "casos y colecciones", info);
+  await salir(page);
+});
+
+test("el investigador abre la importación de referencias de un tema (T15)", async ({
+  page,
+}, info) => {
+  const { cuenta } = investigador();
+  await entrar(page, cuenta, CONTRASENA_NUEVA);
+  await expect(page.getByRole("heading", { name: "Casos y colecciones" })).toBeVisible();
+  await page.getByRole("link", { name: "Importar las referencias del artículo O1" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Importar referencias del artículo O1" }),
+  ).toBeVisible();
+  await elegir(page, "Tema", TEMA);
+  await expect(page.getByText("Este tema todavía no tiene referencias importadas.")).toBeVisible();
+  await expect(page.getByText("No hay referencias pendientes de PDF.")).toBeVisible();
+  await expect(page.getByLabel("O pegue la lista de DOI")).toBeVisible();
+  await revisarAccesibilidad(page, "importación de referencias", info);
   await salir(page);
 });
 

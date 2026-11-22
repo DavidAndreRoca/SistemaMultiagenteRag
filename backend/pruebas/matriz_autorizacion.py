@@ -104,6 +104,22 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
     ("POST", "/investigador/documentos/{documento_id}/retirar"): Entrada(
         Politica.INVESTIGADOR, ejemplo=f"/investigador/documentos/{ID_FICTICIO}/retirar"
     ),
+    # Importador de referencias del artículo O1 (T15)
+    ("POST", "/investigador/colecciones/{coleccion_id}/importaciones"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/importaciones"
+    ),
+    ("GET", "/investigador/importaciones/{importacion_id}"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/importaciones/{ID_FICTICIO}"
+    ),
+    ("GET", "/investigador/colecciones/{coleccion_id}/informe"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/informe"
+    ),
+    ("GET", "/investigador/colecciones/{coleccion_id}/referencias"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/colecciones/{ID_FICTICIO}/referencias"
+    ),
+    ("POST", "/investigador/referencias/{referencia_id}/pdf"): Entrada(
+        Politica.INVESTIGADOR, ejemplo=f"/investigador/referencias/{ID_FICTICIO}/pdf"
+    ),
 }
 
 RUTAS_EXCLUIDAS = {"/docs", "/docs/oauth2-redirect", "/openapi.json"}
