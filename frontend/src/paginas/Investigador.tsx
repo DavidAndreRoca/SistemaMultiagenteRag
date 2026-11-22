@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Form } from "react-aria-components";
 
-import { api, exigir, type Esquemas } from "../api/cliente";
+import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import {
   AvisoError,
   AvisoInformativo,
@@ -197,7 +197,7 @@ function NuevoCaso({ temas, alCrear }: { temas: Coleccion[]; alCrear: () => void
     setError(null);
     setCreado(null);
     if (tema === null || autoria === null) {
-      setError(new Error("Elija el tema y el tipo de autoría."));
+      setError(errorDeValidacion("Elija el tema y el tipo de autoría."));
       return;
     }
     try {

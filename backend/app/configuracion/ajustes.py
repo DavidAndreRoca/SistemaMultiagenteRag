@@ -27,6 +27,15 @@ from pydantic import (
 )
 
 LONGITUD_MINIMA_SECRETO = 32
+PROVEEDORES_MODELO_CONOCIDOS = ("groq", "deepseek", "gemini", "simulado")
+# D-10: la lista de producción se llena en T25. Mientras esté vacía, en producción no
+# se puede habilitar ningún proveedor gratuito de desarrollo (T17-01, apartado 3).
+PROVEEDORES_DE_PRODUCCION: frozenset[str] = frozenset()
+PROVEEDORES_POR_ENTORNO = {
+    "desarrollo": ("groq", "deepseek", "gemini"),
+    "pruebas": ("simulado",),
+    "produccion": (),
+}
 
 
 class Entorno(StrEnum):
@@ -120,6 +129,24 @@ class Ajustes(BaseModel):
     vigencia_no_encontrado_horas: int = Field(
         default=24, ge=1, le=720, validation_alias="VIGENCIA_NO_ENCONTRADO_HORAS"
     )
+    # Modelos de lenguaje (T17): proveedores habilitados en orden de respaldo. Vacío o
+    # ausente: los del entorno (PROVEEDORES_POR_ENTORNO).
+    proveedores_modelo: str | None = Field(
+        default=None, validation_alias=AliasChoices("PROVEEDORES_MODELO")
+    )
+    tiempo_maximo_modelo_s: float = Field(
+        default=120, gt=0, le=600, validation_alias="TIEMPO_MAXIMO_MODELO_S"
+    )
+    espera_maxima_limitador_s: float = Field(
+        default=30, ge=0, le=300, validation_alias="ESPERA_MAXIMA_LIMITADOR_S"
+    )
+
+    @property
+    def cadena_modelos(self) -> tuple[str, ...]:
+        """Proveedores de modelo habilitados, en orden de respaldo."""
+        if self.proveedores_modelo is None or not self.proveedores_modelo.strip():
+            return PROVEEDORES_POR_ENTORNO[self.entorno.value]
+        return tuple(p.strip().lower() for p in self.proveedores_modelo.split(",") if p.strip())
 
     @model_validator(mode="after")
     def _validar_por_entorno(self) -> Self:
@@ -129,6 +156,7 @@ class Ajustes(BaseModel):
         ):
             if url and not url.startswith(("http://", "https://")):
                 raise ValueError(f"{nombre} debe empezar con http:// o https://")
+        self._validar_modelos()
         faltantes: list[str] = []
         if _vacia(self.url_bd):
             faltantes.append("URL_BD")
@@ -152,6 +180,24 @@ class Ajustes(BaseModel):
                 f"{self.entorno.value}: {', '.join(faltantes)}"
             )
         return self
+
+    def _validar_modelos(self) -> None:
+        """Regla de entorno de T17: falla al arrancar si no se cumple."""
+        cadena = self.cadena_modelos
+        desconocidos = [p for p in cadena if p not in PROVEEDORES_MODELO_CONOCIDOS]
+        if desconocidos:
+            raise ValueError(f"PROVEEDORES_MODELO nombra proveedores desconocidos: {desconocidos}")
+        if len(set(cadena)) != len(cadena):
+            raise ValueError("PROVEEDORES_MODELO repite proveedores")
+        if self.entorno is Entorno.PRODUCCION:
+            prohibidos = [p for p in cadena if p not in PROVEEDORES_DE_PRODUCCION]
+            if prohibidos:
+                raise ValueError(
+                    "en producción solo se admiten los proveedores de la lista de producción"
+                    f" (D-10); PROVEEDORES_MODELO incluye: {', '.join(prohibidos)}"
+                )
+        if "simulado" in cadena and self.entorno is not Entorno.PRUEBAS:
+            raise ValueError("el proveedor simulado solo se admite en el entorno de pruebas")
 
     @property
     def es_produccion(self) -> bool:

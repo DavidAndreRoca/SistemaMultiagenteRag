@@ -83,6 +83,8 @@ Servicios bibliográficos (T14): `app/bibliografia/` (Crossref, doi.org, Unpaywa
 
 Importador O1 (T15): `app/importacion/` (`extraccion.py` sin acceso a la base; `resolucion.py` con `Localizador`; `descarga.py`; `servicio.py` con `Importador` en segundo plano, que borra el artículo de `/archivos/importacion/<id>/` al extraer, RN-19), repositorio `app/repositorios/importacion.py`, rutas en `app/api/importacion.py`, pantalla `frontend/src/paginas/Importacion.tsx`. En pruebas, `pruebas/dobles_importacion.py` simula GROBID (TEI grabados en `pruebas/contrato/grobid/`), los servicios y las descargas a partir de `pruebas/datos/articulo_o1.py`.
 
+Modelos de lenguaje (T17): `app/llm/` (`ModeloLenguaje` en `interfaces.py`, proveedores Groq, DeepSeek, Gemini y simulado en `proveedores.py`, `CadenaModelos` con reintentos, respaldo y registro en `cadena.py`, `limitador.py`, `fabrica.crear_cadena`). Orden en `PROVEEDORES_MODELO` (validado al arrancar; en pruebas, `simulado`); modelos, límites y precios en la configuración (migración 0012). Instrucciones en `backend/instrucciones/<agente>/<version>.md`, cargadas con `app/instrucciones/cargador.py`; una versión publicada no se edita (`registro.json`, `python -m app.instrucciones registrar`). Ninguna prueba automática llama a un proveedor real: el contrato usa `pruebas/contrato/modelos/` (`python -m pruebas.contrato.grabar_modelos`).
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

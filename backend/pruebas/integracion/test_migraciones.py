@@ -532,3 +532,20 @@ def test_la_migracion_0008_agrega_el_umbral_de_documento_incompleto(base_vacia: 
     _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
     with pytest.raises(RuntimeError, match="congelada"):
         command.upgrade(cfg, "0008")
+
+
+def test_la_migracion_0012_agrega_los_modelos_de_lenguaje(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0012")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict)
+    assert [m["proveedor"] for m in parametros["modelos"]] == ["groq", "deepseek", "gemini"]
+    assert parametros["modelos"][0]["modelo"] == "openai/gpt-oss-120b"
+    assert parametros["versiones_instrucciones"] == {}
+    command.downgrade(cfg, "0011")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and "modelos" not in parametros
+    assert "versiones_instrucciones" not in parametros
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    with pytest.raises(RuntimeError, match="congelada"):
+        command.upgrade(cfg, "0012")

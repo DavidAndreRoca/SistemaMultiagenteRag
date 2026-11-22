@@ -1,5 +1,6 @@
-"""Repositorios sin datos de caso: configuración vigente, estado de la base y caché de
-metadatos bibliográficos (públicos y compartidos por todo el sistema, T14-01)."""
+"""Repositorios sin datos de caso: configuración vigente, estado de la base, caché de
+metadatos bibliográficos (públicos y compartidos por todo el sistema, T14-01) y eventos
+técnicos de las llamadas a los modelos (T17), que no llevan contenido."""
 
 from __future__ import annotations
 
@@ -11,7 +12,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.administracion.parametros import ParametrosFuncionales
-from app.bd.modelos import CacheMetadatos, Configuracion
+from app.bd.modelos import CacheMetadatos, Configuracion, EventoTecnico
 
 
 class ErrorSinConfiguracion(RuntimeError):
@@ -82,3 +83,13 @@ class RepositorioCacheMetadatos:
             .values(servicio=servicio, clave=clave, **valores)
             .on_conflict_do_update(index_elements=["servicio", "clave"], set_=valores)
         )
+
+
+class RepositorioEventosTecnicos:
+    def __init__(self, sesion: AsyncSession) -> None:
+        self._sesion = sesion
+
+    async def agregar(self, evento: EventoTecnico) -> EventoTecnico:
+        self._sesion.add(evento)
+        await self._sesion.flush()
+        return evento

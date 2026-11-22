@@ -40,6 +40,7 @@ RF-20 nombra el .docx o una lista de DOI y la extracción "con GROBID". GROBID s
 - **Al arrancar:** la API borra lo que haya quedado en esa carpeta (por ejemplo, tras una caída). Una importación que figura en curso pero que el proceso actual no atiende se marca `interrumpida` en la siguiente consulta o importación. Se hace así porque, al arrancar, la base puede no estar disponible todavía.
 - **Base:** solo se guardan las referencias: el texto de cada entrada, que es un dato bibliográfico público, y sus metadatos. No se guarda el nombre del archivo ni su huella.
 - **Corpus:** el artículo nunca pasa por el indexador.
+- **Registro público del artículo en la caché bibliográfica:** las búsquedas de OpenAlex para otras referencias pueden devolver, entre sus candidatos, el registro bibliográfico del propio artículo O1 (título, autores, año y DOI). Esas respuestas quedan en `cache_metadatos` (T14), como cualquier otra. Ocurrió en la prueba real (ESTADO, apartado 18.3). El equipo decidió el 22 de noviembre de 2026 que esto no infringe RN-19: es un metadato público de un servicio externo, no el artículo ni su texto. Por eso se deja así.
 - **Comprobación:** las pruebas revisan, después de importar, que no quede ningún archivo en la carpeta, que ninguna tabla contenga una frase del cuerpo del artículo y que el artículo no esté entre los documentos. Se hace con archivos ficticios y con un artículo base real, en un proyecto aislado.
 
 ## 4. Modelo de datos (migración 0011)

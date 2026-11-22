@@ -2,8 +2,9 @@
 
 Los nombres y los valores iniciales salen de los insumos de T04 (apartado 4) y de la
 especificación de la Fase 1 (6.3, 6.7, 18.4 y 18.6). La versión 1 es provisional: T34
-recalibra la recuperación y la ventana, y T35 completa el esquema (modelos y precios
-llegan en T17). Ningún valor de aquí se lee del entorno.
+recalibra la recuperación y la ventana, y T35 completa el esquema. Los modelos, sus
+límites y precios y las versiones de las instrucciones llegan en T17 (migración 0012).
+Ningún valor de aquí se lee del entorno.
 """
 
 from __future__ import annotations
@@ -43,6 +44,55 @@ class VentanaTokens(_Estricto):
         if not self.minimo <= self.objetivo <= self.maximo:
             raise ValueError("la ventana debe cumplir mínimo <= objetivo <= máximo")
         return self
+
+
+class LimitesModelo(_Estricto):
+    """Límites del proveedor para el limitador del cliente (R-01). ``None``: sin límite."""
+
+    rpm: int | None = Field(None, ge=1)
+    rpd: int | None = Field(None, ge=1)
+    tpm: int | None = Field(None, ge=1)
+    tpd: int | None = Field(None, ge=1)
+
+
+class ModeloConfigurado(_Estricto):
+    """Un modelo de lenguaje de la cadena (T17-01, apartado 2). ``alias`` marca un
+    identificador que el proveedor puede cambiar: solo se admite en desarrollo (RN-24)."""
+
+    proveedor: str = Field(pattern=r"^(groq|deepseek|gemini)$")
+    modelo: str = Field(min_length=1, max_length=120)
+    alias: bool = False
+    max_tokens_salida: int = Field(2048, ge=1, le=65_536)
+    precio_entrada_usd_millon: float | None = Field(None, ge=0)
+    precio_salida_usd_millon: float | None = Field(None, ge=0)
+    limites: LimitesModelo = Field(default_factory=LimitesModelo)
+
+
+MODELOS_INICIALES: tuple[ModeloConfigurado, ...] = (
+    # D-06. Groq: límites del plan publicados en su página (22 de noviembre de 2026).
+    ModeloConfigurado(
+        proveedor="groq",
+        modelo="openai/gpt-oss-120b",
+        precio_entrada_usd_millon=0.15,
+        precio_salida_usd_millon=0.60,
+        limites=LimitesModelo(rpm=30, rpd=1000, tpm=8000, tpd=200_000),
+    ),
+    # DeepSeek no ofrece identificadores fijos: alias, solo en desarrollo (decisión del
+    # equipo). Precio de hora punta, sin caché. Sin límite de tasa publicado.
+    ModeloConfigurado(
+        proveedor="deepseek",
+        modelo="deepseek-flash",
+        alias=True,
+        precio_entrada_usd_millon=0.30,
+        precio_salida_usd_millon=1.20,
+    ),
+    # Gemini estable (decisión del equipo). Límites gratuitos no publicados: conservadores.
+    ModeloConfigurado(
+        proveedor="gemini",
+        modelo="gemini-3.8-flash",
+        limites=LimitesModelo(rpm=5, rpd=100),
+    ),
+)
 
 
 HITOS_INICIALES: tuple[Hito, ...] = (
@@ -107,6 +157,12 @@ class ParametrosFuncionales(_Estricto):
     # Hitos (tesis 6.2.2) y uso mínimo orientativo (6.2.2.2): se reporta, no bloquea
     uso_minimo_por_hito: int = Field(1, ge=0)
     hitos: list[Hito] = Field(default_factory=lambda: list(HITOS_INICIALES), min_length=1)
+    # Modelos de lenguaje (T17): el orden de respaldo lo da PROVEEDORES_MODELO
+    modelos: list[ModeloConfigurado] = Field(
+        default_factory=lambda: list(MODELOS_INICIALES), min_length=1
+    )
+    # Versión vigente de la instrucción de cada agente (RNF-21): agente -> vN
+    versiones_instrucciones: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _coherencia(self) -> Self:
@@ -121,6 +177,12 @@ class ParametrosFuncionales(_Estricto):
             raise ValueError("n_reranking no puede superar los candidatos recuperados")
         if self.suficiencia_n > self.n_reranking:
             raise ValueError("suficiencia_n no puede superar n_reranking")
+        proveedores = [m.proveedor for m in self.modelos]
+        if len(set(proveedores)) != len(proveedores):
+            raise ValueError("hay más de un modelo para el mismo proveedor")
+        for agente, version in self.versiones_instrucciones.items():
+            if not _es_codigo(agente) or re.fullmatch(r"v[0-9]{1,4}", version) is None:
+                raise ValueError(f"versión de instrucción inválida: {agente}={version}")
         codigos = [h.codigo for h in self.hitos]
         if len(set(codigos)) != len(codigos):
             raise ValueError("hay hitos repetidos")
@@ -130,6 +192,9 @@ class ParametrosFuncionales(_Estricto):
 
     def hito(self, codigo: str) -> Hito | None:
         return next((h for h in self.hitos if h.codigo == codigo), None)
+
+    def modelo(self, proveedor: str) -> ModeloConfigurado | None:
+        return next((m for m in self.modelos if m.proveedor == proveedor), None)
 
 
 def _es_codigo(valor: str) -> bool:

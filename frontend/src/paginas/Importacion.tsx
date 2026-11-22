@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Form, Link } from "react-aria-components";
 
-import { api, ErrorApi, exigir, type Esquemas } from "../api/cliente";
+import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import {
   AvisoError,
   AvisoInformativo,
@@ -173,13 +173,7 @@ function NuevaImportacion({
     setError(null);
     const hayDois = dois.trim() !== "";
     if ((archivo === null) === !hayDois) {
-      setError(
-        new ErrorApi(
-          0,
-          "entrada_no_valida",
-          "Suba el artículo o pegue la lista de DOI, pero no ambos.",
-        ),
-      );
+      setError(errorDeValidacion("Suba el artículo o pegue la lista de DOI, pero no ambos."));
       return;
     }
     const datos = new FormData();
@@ -440,7 +434,7 @@ function Pendiente({
   async function subir() {
     setError(null);
     if (archivo === null) {
-      setError(new ErrorApi(0, "falta_archivo", "Elija el PDF de la referencia."));
+      setError(errorDeValidacion("Elija el PDF de la referencia."));
       return;
     }
     const datos = new FormData();

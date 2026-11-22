@@ -230,6 +230,18 @@ El resto queda pendiente de PDF (el investigador lo sube desde la misma pantalla
 
 Decisiones: `docs/decisiones/T15-importador-referencias.md`.
 
+## Adaptador de modelos de lenguaje (T17)
+
+`backend/app/llm/` llama a los modelos detrás de una sola interfaz (`ModeloLenguaje.generar`), con salida estructurada validada localmente con Pydantic.
+- **Proveedores:** Groq (`openai/gpt-oss-120b`, esquema estricto), DeepSeek (`deepseek-flash`, solo en desarrollo) y Gemini (`gemini-3.8-flash`) como respaldo, más uno simulado para las pruebas.
+- **Respaldo y límites:** pasa al siguiente proveedor solo ante errores de disponibilidad, tras 2 reintentos. Un limitador respeta los límites de cada proveedor (riesgo R-01).
+- **Registro:** cada intento queda en `evento_tecnico`, con tokens, duración y costo estimado.
+- **Configuración:** las claves (`CLAVE_GROQ`, `CLAVE_DEEPSEEK`, `CLAVE_GEMINI`) y el orden (`PROVEEDORES_MODELO`) van en `.env`. Los modelos, límites y precios están en la configuración versionada. En producción solo se admiten los proveedores de producción (T25).
+- **Instrucciones:** archivos versionados en `backend/instrucciones/<agente>/<version>.md` (plantilla en `plantilla.md`). Una versión publicada no se edita: `python -m app.instrucciones registrar <agente>/<version>` fija su huella en `registro.json`.
+- **Pruebas de contrato:** respuestas reales grabadas con `python -m pruebas.contrato.grabar_modelos` (una llamada por proveedor con clave).
+
+Decisiones: `docs/decisiones/T17-adaptador-modelos.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:
