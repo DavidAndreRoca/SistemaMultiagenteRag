@@ -25,6 +25,11 @@ export class ErrorApi extends Error {
   }
 }
 
+/** Error de una validación de la propia interfaz: ``AvisoError`` muestra su mensaje tal cual. */
+export function errorDeValidacion(mensaje: string): ErrorApi {
+  return new ErrorApi(0, "validacion_interfaz", mensaje);
+}
+
 export const MENSAJE_SIN_CONEXION =
   "No se pudo conectar con el servidor. Revise su conexión e intente de nuevo.";
 

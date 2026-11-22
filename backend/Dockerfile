@@ -17,6 +17,8 @@ COPY pyproject.toml ./
 COPY app ./app
 COPY alembic.ini ./
 COPY migraciones ./migraciones
+# Instrucciones versionadas de los agentes (T17): /app/instrucciones/<agente>/<version>.md
+COPY instrucciones ./instrucciones
 
 # --- Ejecución (desarrollo y producción) ---
 FROM base AS ejecucion

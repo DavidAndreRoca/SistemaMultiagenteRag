@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 22 de noviembre de 2026. T15 implementada y verificada en su rama (apartado 18). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 22 de noviembre de 2026. T17 implementada y verificada en su rama (apartado 19). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -23,8 +23,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T12 (F3)** | Secciones del borrador y alcance | **Integrada en `main`** (solicitud de cambio #8, apartado 15.7); criterios cumplidos y CP-09 contrastado con la tesis (apartado 15) |
 | **T13 (F3)** | Interfaz base | **Integrada en `main`** (solicitud de cambio #9, apartado 16.7): criterios cumplidos con Playwright frente a la API real, también en la CI (apartado 16). Prueba manual con teclado y NVDA superada según el equipo (apartado 16.5) |
 | **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Integrada en `main`** (solicitud de cambio #10, apartado 17.7), con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17) |
-| **T15 (F3)** | Importador de referencias del artículo O1 | **Implementada y verificada** en la rama `t15-importador-referencias`, con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18). Falta integrarla |
-| T16 en adelante | | No iniciadas |
+| **T15 (F3)** | Importador de referencias del artículo O1 | **Integrada en `main`** (solicitud de cambio #11, apartado 18.7), verificada con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18) |
+| **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Implementada y verificada** en la rama `t17-adaptador-modelos`, con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
+| T16 en adelante | | No iniciadas (T16 sigue a T17 según el orden de ejecución) |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1264,7 +1265,7 @@ Rama `t15-importador-referencias`, desde `main` con T14 (`f3e343f`). Decisión: 
 
 ### 18.5. Pendientes y riesgos
 
-- **Mensajes de validación de T11 y T13:** `PanelCaso.tsx` e `Investigador.tsx` crean `new Error(...)` y la pantalla muestra "Ocurrió un error inesperado." en lugar del texto. Corrección de una línea por pantalla, fuera del alcance de T15.
+- **Mensajes de validación de T11 y T13:** `PanelCaso.tsx` e `Investigador.tsx` crean `new Error(...)` y la pantalla muestra "Ocurrió un error inesperado." en lugar del texto. **Corregido al inicio de T17** (apartado 19).
 - **Descargas fallidas en la prueba real (7 de 23 abiertas):** muchos sitios rechazan las descargas automáticas. El investigador las sube a mano desde la pantalla de pendientes, como prevé la Fase 1 (n.° 14).
 - **Tiempo:** cada PDF descargado pasa por Docling (unos 30 a 60 s en CPU). Un artículo con 50 referencias tarda unos 18 minutos. La cola persistente es de T28.
 
@@ -1280,3 +1281,108 @@ Rama `t15-importador-referencias`, desde `main` con T14 (`f3e343f`). Decisión: 
   - `backend/pruebas/datos/generar_pdf_muestra.py` y `generar_docx_muestra.py`, `pruebas/dobles_corpus.py` (marca `VARIANTE=`) y `pruebas/matriz_autorizacion.py` (5 rutas);
   - `frontend/src/App.tsx`, `componentes/controles.tsx` (`CampoTextoLargo`), `estilos.css`, `paginas/Investigador.tsx` (enlace), `api/esquema.d.ts` y `e2e/flujo.spec.ts`;
   - `docs/api/openapi.json`, `docs/diccionario-de-datos.md`, `README.md`, `CLAUDE.md` y este archivo.
+
+### 18.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t15-importador-referencias`: `d103b25` (`T15: agregar el importador de referencias del artículo O1`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#11 |
+| CI de la solicitud | **Verde**, ejecución 44992224855 (la de `d103b25`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `56d1229` |
+| CI de `main` tras integrar | Ejecución 44994653518: **verde** |
+
+---
+
+## 19. Fase 3 (F3): T17. Adaptador de modelos de lenguaje e instrucciones versionadas
+
+Rama `t17-adaptador-modelos`, desde `main` con T15 (`56d1229`). Decisión: `docs/decisiones/T17-adaptador-modelos.md` (T17-01). Según el orden de ejecución de la hoja de ruta, T17 va antes que T16.
+
+Decisiones del equipo del 22 de noviembre de 2026:
+- **DeepSeek:** solo ofrece alias, así que se admite solo en desarrollo, registrando la versión que informa.
+- **Gemini:** `gemini-3.8-flash`, su modelo estable.
+- **Llamadas:** con `httpx` directo, sin SDK.
+
+**Corrección previa (pendiente de T11 y T13, apartado 18.5):** las validaciones propias de la interfaz ahora muestran su mensaje tal cual (por ejemplo, "Elija el hito y el archivo .docx de su borrador.") y no "Ocurrió un error inesperado.".
+- `errorDeValidacion` en `frontend/src/api/cliente.ts`, usado en `PanelCaso.tsx`, `Investigador.tsx` e `Importacion.tsx`.
+- Pruebas en `frontend/src/pruebas/validacion.test.tsx`: el panel del caso muestra el mensaje y no llama a la API, y un error imprevisto sigue sin mostrar su texto técnico.
+
+### 19.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Interfaz `ModeloLenguaje.generar(instruccion, entrada, esquema)` | Hecha | `app/llm/interfaces.py` y `modelos.py`. `EntradaModelo` solo admite texto en modo estricto (tarea y bloques etiquetados, con tamaño máximo). `ResultadoEstructurado[T]` devuelve los datos validados, proveedor, modelo, versión informada, instrucción y huella, tokens, duración, costo, intentos y si hubo respaldo |
+| 2. Proveedor GroqCloud con esquema JSON estricto | Hecha | `proveedores.py` (`ProveedorCompatibleOpenAI`): `openai/gpt-oss-120b` con `response_format: json_schema` y `strict: true`. `esquema.py` arma el esquema estricto: todo requerido, `additionalProperties: false` y opcionales como unión con `null` |
+| 3. Proveedores de respaldo DeepSeek y Gemini | Hecha | DeepSeek (`deepseek-flash`): modo JSON con el esquema escrito en la instrucción; un contenido en blanco se trata como falla transitoria. Gemini (`gemini-3.8-flash`): API de interacciones con `response_format` |
+| 4. Cadena de respaldo solo para errores de disponibilidad | Hecha | `cadena.py`. Red, tiempo agotado, 429, 402, 5xx y límite diario pasan al siguiente proveedor tras 2 reintentos con espera exponencial (o `retry-after`). Una solicitud rechazada (400, 401…) o una salida inválida se reportan sin respaldo. Cada intento registra el proveedor usado |
+| 5. Proveedor simulado determinista | Hecha | `ProveedorSimulado`: valores válidos para cualquier esquema, o respuestas fijas por esquema, y una falla simulada a pedido. Es el proveedor por defecto en `ENTORNO=pruebas` |
+| 6. Limitador del lado del cliente | Hecha | `limitador.py`: solicitudes y tokens por minuto y por día, con reserva estimada y ajuste con el uso real. Groq: 30 solicitudes y 8 000 tokens por minuto; 1 000 solicitudes y 200 000 tokens por día (R-01). Si la espera supera `ESPERA_MAXIMA_LIMITADOR_S`, pasa al respaldo |
+| 7. Validación local con Pydantic de toda salida | Hecha | `esquema.validar`: siempre, también con esquema estricto. El error lleva la ubicación y el tipo de cada falla, nunca los valores |
+| 8. Tokens, duración y costo en `evento_tecnico` | Hecha | `fabrica.registrador_en_base` y `RepositorioEventosTecnicos`. El costo se estima con los precios de lista de la configuración; si la base falla, la llamada sigue |
+| 9. Cargador de instrucciones con identificador y huella | Hecha | `app/instrucciones/cargador.py`: archivos `backend/instrucciones/<agente>/<version>.md` con cabecera, huella SHA-256 y `registro.json`, que impide editar una versión publicada. `python -m app.instrucciones listar\|registrar`. La configuración elige la versión (`versiones_instrucciones`) y cada solicitud guarda su `configuracion_id` (RNF-21). Plantilla en `backend/instrucciones/plantilla.md` |
+| 10. Regla de entorno de producción | Hecha | `PROVEEDORES_MODELO`, validada al arrancar: en `produccion` solo se admiten los proveedores de la lista de producción, vacía hasta T25 (D-10), así que no hay respaldo gratuito. La fábrica vuelve a comprobarlo y rechaza un alias fuera de desarrollo (RN-24) |
+| Tarea: contenido delimitado como datos (RN-23) | Hecha | `mensajes.py`: regla fija en el mensaje de sistema y bloques `<datos etiqueta="…">`, con los cierres de etiqueta neutralizados |
+| Tarea: reintento técnico hasta 2 veces (4.4) | Hecha | Esperas de 1 s y 2 s, o el `retry-after` del proveedor (hasta 20 s) |
+| Tarea: identificadores fijos (RN-24) | Hecha | Configuración (migración de datos 0012): `openai/gpt-oss-120b` y `gemini-3.8-flash` fijos; `deepseek-flash` marcado como alias |
+| Tarea: claves solo de la configuración (RNF-16) | Hecha | `CLAVE_GROQ`, `CLAVE_DEEPSEEK` y `CLAVE_GEMINI` de los ajustes. Un proveedor sin clave se omite y queda registrado |
+
+### 19.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Una salida que no cumple el esquema se rechaza localmente y se reporta | **Cumplido** | `test_una_salida_fuera_del_esquema_...` y `test_una_salida_invalida_se_reporta_sin_pasar_al_respaldo`: da `SalidaInvalida` con cada campo y tipo de error, sin los valores; el respaldo no se llama y el evento queda con `SalidaInvalida:salida_invalida` |
+| Con Groq simulado no disponible, la llamada pasa a DeepSeek y queda registrado el proveedor usado | **Cumplido** | `test_con_groq_caido_pasa_a_deepseek_...`: Groq responde 503, se reintenta 2 veces (esperas de 1 s y 2 s) y responde DeepSeek. El resultado dice `deepseek`, `deepseek-flash` y `respaldo = True`; hay 4 eventos (3 de Groq con su error y 1 de DeepSeek). Con la base real, `integracion/test_llm_registro.py` |
+| En `produccion`, intentar usar un proveedor gratuito falla al arrancar | **Cumplido** | `test_en_produccion_un_proveedor_gratuito_falla_al_arrancar`: con `groq`, `deepseek`, `gemini` o `groq,gemini`, `cargar_ajustes` lanza `ErrorConfiguracion`. Sin proveedores, arranca sin respaldo |
+| Cada llamada registra tokens y duración | **Cumplido** | `test_cada_llamada_registra_tokens_duracion_y_costo` (210 y 30 tokens, costo 0,000050 USD con precios de Groq) y, con la base real, `evento_tecnico` con etapa, proveedor, modelo, tokens, duración y error, sin la tarea, los datos ni la salida |
+
+### 19.3. Pruebas
+
+- **Backend en contenedor (Python 3.12):** 625 pruebas superadas, cobertura del 92,70 %. Ruff y mypy sin observaciones.
+  - Esa corrida omitió además las 9 del canal real, porque el volumen de recursos del proyecto aislado se había borrado al cerrar T15. Con los recursos copiados de nuevo pasan las 9, CP-21 incluida.
+  - Las 8 omitidas restantes necesitan GROBID o el servicio de modelos, o son las 3 de contrato que esperan las grabaciones.
+- **Unitarias (`unitarias/test_llm.py`, 36):**
+  - esquema estricto y validación;
+  - RN-23: bloques delimitados y cierres neutralizados;
+  - RNF-10: con un .docx de muestra, la carga enviada lleva solo la sección del alcance, como texto, ni la firma del .docx ni los párrafos de fuera del alcance, y solo los campos esperados;
+  - cuerpo y respuesta de Groq, DeepSeek y Gemini;
+  - clasificación de 10 fallas;
+  - cadena de respaldo;
+  - limitador con reloj simulado;
+  - regla de entorno y alias;
+  - fábrica;
+  - cargador e inmutabilidad de las instrucciones.
+- **Contrato (`unitarias/test_llm_contrato.py`):** reproduce la respuesta real grabada de cada proveedor y valida su esquema; comprueba que ninguna grabación lleve claves. **Pendiente de las claves** (apartado 19.5): sin grabación, las 3 pruebas se omiten y lo dicen.
+- **Integración:** `test_llm_registro.py` (2), con la base real, y la migración 0012 en `test_migraciones.py` (subida, bajada y versión 1 congelada). La semilla sigue coincidiendo con `parametros_iniciales()`.
+- **Interfaz:** 16 pruebas unitarias, con las 3 nuevas de validación.
+
+### 19.4. Problemas encontrados y soluciones
+
+- **Un `bytes` se aceptaba como texto:** Pydantic convierte `bytes` en `str` por defecto, así que un .docx podía entrar en un bloque de datos. `EntradaModelo` y `BloqueDatos` validan ahora en modo estricto (RNF-10).
+- **El esquema estricto perdía propiedades llamadas `title`:** al quitar la palabra clave `title`, también se borraba una propiedad con ese nombre. Ahora los nombres dentro de `properties` y `$defs` se conservan.
+- **La documentación de los proveedores cambió:**
+  - DeepSeek ya no publica `deepseek-chat`; ofrece `deepseek-flash` y `deepseek-v4-pro`, ambos alias.
+  - Gemini 2.5 está obsoleto y su API recomendada es la de interacciones.
+  - Groq no deja claro si los 8 000 tokens por minuto son los del plan gratuito.
+
+  Se consultaron el 22 de noviembre de 2026 y se decidió con el equipo (apartado 19, encabezado).
+
+### 19.5. Pendientes y riesgos
+
+- **Grabaciones de contrato:** `CLAVE_GROQ` está vacía en `.env` (sin cambios desde el 20 de noviembre); `CLAVE_DEEPSEEK` y `CLAVE_GEMINI` también. Con cada clave cargada: `python -m pruebas.contrato.grabar_modelos`, una llamada por proveedor con la tarea ficticia `contrato/v1`.
+- **Límites gratuitos de Gemini:** no están publicados; la configuración usa 5 solicitudes por minuto y 100 por día hasta conocerlos.
+- **Limitador por proceso:** T28 decide si la API y el trabajador necesitan uno compartido.
+- **Reordenador (T08, 18,6 s):** afecta la latencia de T16, no a este adaptador. Se trata en T16.
+
+### 19.6. Archivos
+
+- **Creados:**
+  - `backend/app/llm/` (`modelos.py`, `interfaces.py`, `esquema.py`, `mensajes.py`, `limitador.py`, `proveedores.py`, `cadena.py` y `fabrica.py`) y `backend/app/instrucciones/` (`cargador.py` y `__main__.py`);
+  - `backend/instrucciones/` (`plantilla.md`, `contrato/v1.md` y `registro.json`) y `backend/migraciones/versiones/0012_modelos_de_lenguaje.py`;
+  - `backend/pruebas/contrato/grabar_modelos.py`, `unitarias/test_llm.py`, `unitarias/test_llm_contrato.py` e `integracion/test_llm_registro.py`;
+  - `frontend/src/pruebas/validacion.test.tsx`;
+  - `docs/decisiones/T17-adaptador-modelos.md`.
+- **Modificados:**
+  - `backend/app/configuracion/ajustes.py` (`PROVEEDORES_MODELO`, tiempos y regla de entorno), `administracion/parametros.py` (`modelos` y `versiones_instrucciones`) y `repositorios/sistema.py` y `unidad.py` (`RepositorioEventosTecnicos`);
+  - `backend/Dockerfile` (copia `instrucciones/`), `pruebas/integracion/test_migraciones.py` y `.env.example`;
+  - `frontend/src/api/cliente.ts`, `paginas/PanelCaso.tsx`, `Investigador.tsx` e `Importacion.tsx`;
+  - `docs/decisiones/T15-importador-referencias.md` (registro público del artículo en la caché, aceptado por el equipo), `README.md`, `CLAUDE.md` y este archivo.

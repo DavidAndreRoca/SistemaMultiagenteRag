@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Form } from "react-aria-components";
 
-import { api, exigir, type Esquemas } from "../api/cliente";
+import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import {
   AvisoError,
   AvisoInformativo,
@@ -140,7 +140,7 @@ function CargarVersion({ caso, alCargar }: { caso: Caso; alCargar: () => void })
     setResultado(null);
     setError(null);
     if (hito === null || archivo === null) {
-      setError(new Error("Elija el hito y el archivo .docx de su borrador."));
+      setError(errorDeValidacion("Elija el hito y el archivo .docx de su borrador."));
       return;
     }
     const datos = new FormData();
