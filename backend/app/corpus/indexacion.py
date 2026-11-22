@@ -586,10 +586,20 @@ def _documento(
     )
 
 
+MENSAJES_REFERENCIA = {
+    MotivoExclusionCorpus.NO_LOCALIZADA: "Ningún servicio bibliográfico confirmó la referencia"
+    " (título, autor y año).",
+    MotivoExclusionCorpus.SIN_DOI: "La obra no tiene DOI: no se puede comprobar su acceso abierto.",
+    MotivoExclusionCorpus.DOI_INVALIDO: "La línea no tiene la forma de un DOI.",
+}
+
+
 def mensaje_de_motivo(motivo: MotivoExclusionCorpus) -> str:
     """Mensaje legible de un motivo de exclusión guardado."""
     if motivo is MotivoExclusionCorpus.DUPLICADO:
         return MENSAJE_DUPLICADO
     if motivo is MotivoExclusionCorpus.SIN_ACCESO_ABIERTO:
         return "La referencia no tiene una versión de acceso abierto (RN-14)."
+    if motivo in MENSAJES_REFERENCIA:
+        return MENSAJES_REFERENCIA[motivo]
     return MENSAJES_MOTIVO[MotivoExclusion(motivo.value)]

@@ -264,6 +264,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/investigador/colecciones/{coleccion_id}/importaciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Importar las referencias de un artículo O1 o de una lista de DOI
+         * @description Responde 202 en cuanto recibe el archivo; el avance se consulta en /investigador/importaciones/{id}. El artículo se borra al extraer sus referencias.
+         */
+        post: operations["iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investigador/colecciones/{coleccion_id}/informe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Informe del corpus de un tema: referencias por estado y motivo */
+        get: operations["informe_tema_investigador_colecciones__coleccion_id__informe_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investigador/colecciones/{coleccion_id}/referencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Referencias importadas de un tema; con estado=pendiente_pdf, los pendientes */
+        get: operations["listar_referencias_investigador_colecciones__coleccion_id__referencias_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/investigador/documentos/{documento_id}/confirmar": {
         parameters: {
             query?: never;
@@ -292,6 +346,43 @@ export interface paths {
         put?: never;
         /** Retirar un documento: deja de recuperarse y se conserva su registro */
         post: operations["retirar_documento_investigador_documentos__documento_id__retirar_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investigador/importaciones/{importacion_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Avance de una importación de referencias */
+        get: operations["ver_importacion_investigador_importaciones__importacion_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investigador/referencias/{referencia_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subir el PDF de una referencia pendiente
+         * @description Se indexa con el canal de T09 y T10: la referencia queda incluida, o excluida con el motivo del canal.
+         */
+        post: operations["subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -362,8 +453,20 @@ export interface components {
             /** Hito */
             hito: string;
         };
+        /** Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post */
+        Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post: {
+            /** Archivo */
+            archivo?: string | null;
+            /** Dois */
+            dois?: string | null;
+        };
         /** Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post */
         Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post: {
+            /** Archivo */
+            archivo: string;
+        };
+        /** Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post */
+        Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post: {
             /** Archivo */
             archivo: string;
         };
@@ -503,6 +606,17 @@ export interface components {
          * @enum {string}
          */
         EstadoDocumento: "activo" | "retirado" | "incompleto";
+        /**
+         * EstadoImportacion
+         * @enum {string}
+         */
+        EstadoImportacion: "en_cola" | "en_proceso" | "terminada" | "interrumpida" | "fallida";
+        /**
+         * EstadoReferencia
+         * @description Estado de una referencia del artículo O1 en la colección del tema (T15).
+         * @enum {string}
+         */
+        EstadoReferencia: "incluida" | "pendiente_pdf" | "excluida" | "no_comprobable";
         /** EstadoSalud */
         EstadoSalud: {
             /** Base De Datos */
@@ -567,6 +681,69 @@ export interface components {
             /** Orden */
             orden: number;
         };
+        /** ImportacionVista */
+        ImportacionVista: {
+            /**
+             * Coleccion Id
+             * Format: uuid
+             */
+            coleccion_id: string;
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Error */
+            error: string | null;
+            estado: components["schemas"]["EstadoImportacion"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Iniciada En */
+            iniciada_en: string | null;
+            origen: components["schemas"]["OrigenImportacion"];
+            /** Procesadas */
+            procesadas: number;
+            /** Terminada En */
+            terminada_en: string | null;
+            /** Total */
+            total: number;
+        };
+        /**
+         * InformeTema
+         * @description Informe del corpus de un tema (RF-15, RF-20).
+         */
+        InformeTema: {
+            /**
+             * Coleccion Id
+             * Format: uuid
+             */
+            coleccion_id: string;
+            /** De Acceso Abierto */
+            de_acceso_abierto: number;
+            /** Documentos Recuperables */
+            documentos_recuperables: number;
+            /** Excluidas */
+            excluidas: number;
+            /** Excluidas Por Motivo */
+            excluidas_por_motivo: {
+                [key: string]: number;
+            };
+            /** Exclusiones Del Corpus */
+            exclusiones_del_corpus: number;
+            /** Incluidas */
+            incluidas: number;
+            /** No Comprobables */
+            no_comprobables: number;
+            /** Pendientes Pdf */
+            pendientes_pdf: number;
+            /** Referencias */
+            referencias: number;
+            /** Tema */
+            tema: string | null;
+        };
         /** ListaReferencias */
         ListaReferencias: {
             /** Desde */
@@ -605,13 +782,19 @@ export interface components {
          * @description Motivo de exclusión del corpus (RF-15, CP-21; Fase 1, 18.3 y 18.9).
          * @enum {string}
          */
-        MotivoExclusionCorpus: "no_es_pdf" | "pdf_ilegible" | "pdf_cifrado" | "excede_tamano" | "excede_paginas" | "sin_capa_de_texto" | "duplicado" | "sin_acceso_abierto";
+        MotivoExclusionCorpus: "no_es_pdf" | "pdf_ilegible" | "pdf_cifrado" | "excede_tamano" | "excede_paginas" | "sin_capa_de_texto" | "duplicado" | "sin_acceso_abierto" | "no_localizada" | "sin_doi" | "doi_invalido";
         /**
          * ObjetoExclusion
          * @description Qué se excluyó del corpus: un archivo subido o una referencia (importador, T15).
          * @enum {string}
          */
         ObjetoExclusion: "archivo" | "referencia";
+        /**
+         * OrigenImportacion
+         * @description Formato del artículo O1 o lista de DOI (T15-01, apartado 2).
+         * @enum {string}
+         */
+        OrigenImportacion: "pdf" | "docx" | "doi";
         /** ParrafoVista */
         ParrafoVista: {
             /** Es Titulo */
@@ -627,6 +810,42 @@ export interface components {
             seccion: string | null;
             /** Texto */
             texto: string;
+        };
+        /** ReferenciaVista */
+        ReferenciaVista: {
+            /**
+             * Actualizada En
+             * Format: date-time
+             */
+            actualizada_en: string;
+            /** Anio */
+            anio: number | null;
+            /** Autores */
+            autores: string[];
+            /** Documento Id */
+            documento_id: string | null;
+            /** Doi */
+            doi: string | null;
+            estado: components["schemas"]["EstadoReferencia"];
+            /** Estado Oa */
+            estado_oa: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Licencia */
+            licencia: string | null;
+            /** Motivo */
+            motivo: string | null;
+            /** Texto */
+            texto: string;
+            /** Titulo */
+            titulo: string | null;
+            /** Url Acceso Abierto */
+            url_acceso_abierto: string | null;
+            /** Url Pdf */
+            url_pdf: string | null;
         };
         /**
          * RespuestaError
@@ -2128,6 +2347,227 @@ export interface operations {
             };
         };
     };
+    iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                coleccion_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportacionVista"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Content Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    informe_tema_investigador_colecciones__coleccion_id__informe_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                coleccion_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InformeTema"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    listar_referencias_investigador_colecciones__coleccion_id__referencias_get: {
+        parameters: {
+            query?: {
+                estado?: components["schemas"]["EstadoReferencia"] | null;
+            };
+            header?: never;
+            path: {
+                coleccion_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenciaVista"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
     confirmar_documento_investigador_documentos__documento_id__confirmar_post: {
         parameters: {
             query?: never;
@@ -2259,6 +2699,158 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["RespuestaError"];
                 };
+            };
+        };
+    };
+    ver_importacion_investigador_importaciones__importacion_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                importacion_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportacionVista"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                referencia_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenciaVista"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Content Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

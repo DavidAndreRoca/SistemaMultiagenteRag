@@ -13,6 +13,7 @@ import {
   Select,
   SelectValue,
   Text,
+  TextArea,
   TextField,
   type ButtonProps,
   type Key,
@@ -45,6 +46,21 @@ export function CampoTexto({
     <TextField {...props} className="campo">
       <Label>{etiqueta}</Label>
       <Input />
+      {descripcion ? <Text slot="description">{descripcion}</Text> : null}
+      <FieldError className="campo__error" />
+    </TextField>
+  );
+}
+
+export function CampoTextoLargo({
+  etiqueta,
+  descripcion,
+  ...props
+}: TextFieldProps & { etiqueta: string; descripcion?: string }) {
+  return (
+    <TextField {...props} className="campo">
+      <Label>{etiqueta}</Label>
+      <TextArea />
       {descripcion ? <Text slot="description">{descripcion}</Text> : null}
       <FieldError className="campo__error" />
     </TextField>

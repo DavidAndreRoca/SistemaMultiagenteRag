@@ -6,6 +6,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import { Marco } from "./componentes/Marco";
 import { CambiarContrasena } from "./paginas/CambiarContrasena";
 import { Entrar } from "./paginas/Entrar";
+import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
 import { PanelCaso } from "./paginas/PanelCaso";
 import { inicioDe, ROL_CASO, ROL_INVESTIGADOR, useSesion, type Rol } from "./sesion/sesion";
@@ -84,6 +85,14 @@ export function App() {
         element={
           <Protegida rol={ROL_INVESTIGADOR}>
             <Investigador />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/investigador/importacion"
+        element={
+          <Protegida rol={ROL_INVESTIGADOR}>
+            <ImportacionReferencias />
           </Protegida>
         }
       />

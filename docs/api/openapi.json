@@ -22,6 +22,36 @@
         "title": "Body_cargar_version_caso_versiones_post",
         "type": "object"
       },
+      "Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post": {
+        "properties": {
+          "archivo": {
+            "anyOf": [
+              {
+                "contentMediaType": "application/octet-stream",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archivo"
+          },
+          "dois": {
+            "anyOf": [
+              {
+                "maxLength": 100000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dois"
+          }
+        },
+        "title": "Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post",
+        "type": "object"
+      },
       "Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post": {
         "properties": {
           "archivo": {
@@ -34,6 +64,20 @@
           "archivo"
         ],
         "title": "Body_subir_documento_investigador_colecciones__coleccion_id__documentos_post",
+        "type": "object"
+      },
+      "Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post": {
+        "properties": {
+          "archivo": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Archivo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "archivo"
+        ],
+        "title": "Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post",
         "type": "object"
       },
       "CambioNormaVista": {
@@ -421,6 +465,28 @@
         "title": "EstadoDocumento",
         "type": "string"
       },
+      "EstadoImportacion": {
+        "enum": [
+          "en_cola",
+          "en_proceso",
+          "terminada",
+          "interrumpida",
+          "fallida"
+        ],
+        "title": "EstadoImportacion",
+        "type": "string"
+      },
+      "EstadoReferencia": {
+        "description": "Estado de una referencia del artículo O1 en la colección del tema (T15).",
+        "enum": [
+          "incluida",
+          "pendiente_pdf",
+          "excluida",
+          "no_comprobable"
+        ],
+        "title": "EstadoReferencia",
+        "type": "string"
+      },
       "EstadoSalud": {
         "properties": {
           "base_de_datos": {
@@ -573,6 +639,163 @@
         "title": "HitoVista",
         "type": "object"
       },
+      "ImportacionVista": {
+        "properties": {
+          "coleccion_id": {
+            "format": "uuid",
+            "title": "Coleccion Id",
+            "type": "string"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoImportacion"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "iniciada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iniciada En"
+          },
+          "origen": {
+            "$ref": "#/components/schemas/OrigenImportacion"
+          },
+          "procesadas": {
+            "title": "Procesadas",
+            "type": "integer"
+          },
+          "terminada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terminada En"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "coleccion_id",
+          "origen",
+          "estado",
+          "total",
+          "procesadas",
+          "error",
+          "creada_en",
+          "iniciada_en",
+          "terminada_en"
+        ],
+        "title": "ImportacionVista",
+        "type": "object"
+      },
+      "InformeTema": {
+        "description": "Informe del corpus de un tema (RF-15, RF-20).",
+        "properties": {
+          "coleccion_id": {
+            "format": "uuid",
+            "title": "Coleccion Id",
+            "type": "string"
+          },
+          "de_acceso_abierto": {
+            "title": "De Acceso Abierto",
+            "type": "integer"
+          },
+          "documentos_recuperables": {
+            "title": "Documentos Recuperables",
+            "type": "integer"
+          },
+          "excluidas": {
+            "title": "Excluidas",
+            "type": "integer"
+          },
+          "excluidas_por_motivo": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Excluidas Por Motivo",
+            "type": "object"
+          },
+          "exclusiones_del_corpus": {
+            "title": "Exclusiones Del Corpus",
+            "type": "integer"
+          },
+          "incluidas": {
+            "title": "Incluidas",
+            "type": "integer"
+          },
+          "no_comprobables": {
+            "title": "No Comprobables",
+            "type": "integer"
+          },
+          "pendientes_pdf": {
+            "title": "Pendientes Pdf",
+            "type": "integer"
+          },
+          "referencias": {
+            "title": "Referencias",
+            "type": "integer"
+          },
+          "tema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tema"
+          }
+        },
+        "required": [
+          "coleccion_id",
+          "tema",
+          "referencias",
+          "de_acceso_abierto",
+          "incluidas",
+          "pendientes_pdf",
+          "no_comprobables",
+          "excluidas",
+          "excluidas_por_motivo",
+          "documentos_recuperables",
+          "exclusiones_del_corpus"
+        ],
+        "title": "InformeTema",
+        "type": "object"
+      },
       "ListaReferencias": {
         "properties": {
           "desde": {
@@ -684,7 +907,10 @@
           "excede_paginas",
           "sin_capa_de_texto",
           "duplicado",
-          "sin_acceso_abierto"
+          "sin_acceso_abierto",
+          "no_localizada",
+          "sin_doi",
+          "doi_invalido"
         ],
         "title": "MotivoExclusionCorpus",
         "type": "string"
@@ -696,6 +922,16 @@
           "referencia"
         ],
         "title": "ObjetoExclusion",
+        "type": "string"
+      },
+      "OrigenImportacion": {
+        "description": "Formato del artículo O1 o lista de DOI (T15-01, apartado 2).",
+        "enum": [
+          "pdf",
+          "docx",
+          "doi"
+        ],
+        "title": "OrigenImportacion",
         "type": "string"
       },
       "ParrafoVista": {
@@ -740,6 +976,152 @@
           "es_titulo"
         ],
         "title": "ParrafoVista",
+        "type": "object"
+      },
+      "ReferenciaVista": {
+        "properties": {
+          "actualizada_en": {
+            "format": "date-time",
+            "title": "Actualizada En",
+            "type": "string"
+          },
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "autores": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Autores",
+            "type": "array"
+          },
+          "documento_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Documento Id"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoReferencia"
+          },
+          "estado_oa": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estado Oa"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "licencia": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Licencia"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          },
+          "titulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Titulo"
+          },
+          "url_acceso_abierto": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url Acceso Abierto"
+          },
+          "url_pdf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url Pdf"
+          }
+        },
+        "required": [
+          "id",
+          "texto",
+          "doi",
+          "titulo",
+          "autores",
+          "anio",
+          "estado",
+          "motivo",
+          "estado_oa",
+          "url_acceso_abierto",
+          "url_pdf",
+          "licencia",
+          "documento_id",
+          "actualizada_en"
+        ],
+        "title": "ReferenciaVista",
         "type": "object"
       },
       "RespuestaError": {
@@ -2852,6 +3234,291 @@
         ]
       }
     },
+    "/investigador/colecciones/{coleccion_id}/importaciones": {
+      "post": {
+        "description": "Responde 202 en cuanto recibe el archivo; el avance se consulta en /investigador/importaciones/{id}. El artículo se borra al extraer sus referencias.",
+        "operationId": "iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_iniciar_importacion_investigador_colecciones__coleccion_id__importaciones_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportacionVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "413": {
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Importar las referencias de un artículo O1 o de una lista de DOI",
+        "tags": [
+          "importacion"
+        ]
+      }
+    },
+    "/investigador/colecciones/{coleccion_id}/informe": {
+      "get": {
+        "operationId": "informe_tema_investigador_colecciones__coleccion_id__informe_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InformeTema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Informe del corpus de un tema: referencias por estado y motivo",
+        "tags": [
+          "importacion"
+        ]
+      }
+    },
+    "/investigador/colecciones/{coleccion_id}/referencias": {
+      "get": {
+        "operationId": "listar_referencias_investigador_colecciones__coleccion_id__referencias_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coleccion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coleccion Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "estado",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/EstadoReferencia"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReferenciaVista"
+                  },
+                  "title": "Response Listar Referencias Investigador Colecciones  Coleccion Id  Referencias Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Referencias importadas de un tema; con estado=pendiente_pdf, los pendientes",
+        "tags": [
+          "importacion"
+        ]
+      }
+    },
     "/investigador/documentos/{documento_id}/confirmar": {
       "post": {
         "operationId": "confirmar_documento_investigador_documentos__documento_id__confirmar_post",
@@ -3015,6 +3682,189 @@
         "summary": "Retirar un documento: deja de recuperarse y se conserva su registro",
         "tags": [
           "corpus"
+        ]
+      }
+    },
+    "/investigador/importaciones/{importacion_id}": {
+      "get": {
+        "operationId": "ver_importacion_investigador_importaciones__importacion_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "importacion_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Importacion Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportacionVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance de una importación de referencias",
+        "tags": [
+          "importacion"
+        ]
+      }
+    },
+    "/investigador/referencias/{referencia_id}/pdf": {
+      "post": {
+        "description": "Se indexa con el canal de T09 y T10: la referencia queda incluida, o excluida con el motivo del canal.",
+        "operationId": "subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "referencia_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Referencia Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_subir_pdf_referencia_investigador_referencias__referencia_id__pdf_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenciaVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "413": {
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Subir el PDF de una referencia pendiente",
+        "tags": [
+          "importacion"
         ]
       }
     },

@@ -24,6 +24,7 @@ from app.repositorios.caso import (
 )
 from app.repositorios.colecciones import RepositorioColecciones
 from app.repositorios.corpus import RepositorioCorpus
+from app.repositorios.importacion import RepositorioImportacion
 from app.repositorios.investigador import (
     RepositorioCasosInvestigador,
     RepositorioColeccionesInvestigador,
@@ -59,6 +60,7 @@ class UnidadDeTrabajo:
         self.colecciones_investigador = RepositorioColeccionesInvestigador(sesion)
         self.cuentas_investigador = RepositorioCuentasInvestigador(sesion)
         self.corpus = RepositorioCorpus(sesion)
+        self.importacion = RepositorioImportacion(sesion)
 
     async def confirmar(self) -> None:
         await self._sesion.commit()

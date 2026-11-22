@@ -217,6 +217,19 @@ Decisiones: `docs/decisiones/T13-interfaz-base.md`.
 
 Decisiones: `docs/decisiones/T14-clientes-bibliograficos.md`.
 
+## Importador de referencias del artículo O1 (T15)
+
+En la pantalla `/investigador/importacion`, el investigador elige el tema y sube el artículo O1 (PDF o .docx) o pega una lista de DOI. La importación sigue en segundo plano:
+1. extrae las referencias con GROBID y **borra el artículo** en ese momento (RN-19);
+2. localiza cada referencia en Crossref u OpenAlex y consulta su acceso abierto en Unpaywall;
+3. descarga el PDF si hay un enlace directo y lo indexa con el canal de T09 y T10.
+
+El resto queda pendiente de PDF (el investigador lo sube desde la misma pantalla) o excluido con su motivo. Lo que no se pudo comprobar se reintenta al importar de nuevo, y reimportar no duplica nada.
+- **Requisitos:** los mismos de la ingesta del corpus (GROBID, el servicio de modelos y `docker-compose.corpus.yml`), más `CORREO_POLITE` y `CLAVE_OPENALEX`.
+- **Pruebas:** usan las respuestas reales de GROBID grabadas en `backend/pruebas/contrato/grobid/` (`python -m pruebas.contrato.grabar_grobid_referencias`) y un artículo O1 ficticio con 24 referencias (`backend/pruebas/datos/articulo_o1.py`).
+
+Decisiones: `docs/decisiones/T15-importador-referencias.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

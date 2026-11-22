@@ -24,9 +24,12 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen.canvas import Canvas
 
+from pruebas.datos import articulo_o1 as o1
 from pruebas.datos import textos_muestra as t
 
 DESTINO = Path(__file__).parent / "pdf"
+# T15: el artículo O1 va aparte: la carpeta pdf/ es la muestra del corpus (CP-21).
+O1 = Path(__file__).parent / "o1"
 ANCHO, ALTO = A4
 MARGEN = 56.0
 SEPARACION_COLUMNAS = 18.0
@@ -258,6 +261,11 @@ def generar() -> list[Path]:
     dibujar(DESTINO / "solo_permisos.pdf", corto, "Notas ficticias", "{n}", cifrado=restringido)
     escaneado(DESTINO / "escaneado.pdf")
     creadas += [DESTINO / n for n in ("cifrado.pdf", "solo_permisos.pdf", "escaneado.pdf")]
+    # Artículo O1 ficticio para el importador de referencias (T15).
+    bloques_o1: t.Bloques = [*o1.CUERPO, *(("referencia", r.entrada()) for r in o1.REFERENCIAS)]
+    O1.mkdir(exist_ok=True)
+    dibujar(O1 / "articulo_o1.pdf", maquetar(bloques_o1), "Revista Ficticia", "{n}")
+    creadas.append(O1 / "articulo_o1.pdf")
     return creadas
 
 

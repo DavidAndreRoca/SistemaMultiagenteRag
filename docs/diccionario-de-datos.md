@@ -221,7 +221,7 @@ Archivo o referencia que no entró al corpus, con su motivo (RF-15, CP-21; Fase 
 | `objeto` | texto (enumeración) | no | `archivo`, `referencia` |  | archivo (subido o de la ingesta) o referencia (importador del artículo O1). |  |
 | `identificador` | text | no |  |  | Nombre del archivo, DOI o texto de la referencia. |  |
 | `huella_archivo` | varchar(64) | sí |  |  | Huella SHA-256 del archivo, si lo hubo. |  |
-| `motivo` | texto (enumeración) | no | `no_es_pdf`, `pdf_ilegible`, `pdf_cifrado`, `excede_tamano`, `excede_paginas`, `sin_capa_de_texto`, `duplicado`, `sin_acceso_abierto` |  | Motivo de la exclusión. | Informe del corpus por tema (RF-15) |
+| `motivo` | texto (enumeración) | no | `no_es_pdf`, `pdf_ilegible`, `pdf_cifrado`, `excede_tamano`, `excede_paginas`, `sin_capa_de_texto`, `duplicado`, `sin_acceso_abierto`, `no_localizada`, `sin_doi`, `doi_invalido` |  | Motivo de la exclusión. | Informe del corpus por tema (RF-15) |
 | `duplicado_de_id` | uuid | sí |  | FK documento.id | Documento ya indexado del que es duplicado (por texto o por DOI). |  |
 | `registrado_por_id` | uuid | sí |  | FK cuenta.id | Cuenta del investigador que intentó agregarlo. |  |
 | `registrada_en` | timestamp with time zone | no |  |  | Fecha y hora del registro. |  |
@@ -301,6 +301,58 @@ Tabla con datos de caso: toda consulta filtra por `caso_id` (4.5).
 | `coherencia` | texto (enumeración) | no | `coherente`, `parcial`, `no_coherente`, `no_evaluada` |  | Coherencia con la afirmación (informativa). |  |
 | `documento_id` | uuid | sí |  | FK documento.id | Documento indexado en la colección personal, si existe. |  |
 | `aportada_en` | timestamp with time zone | no |  |  | Fecha y hora del aporte. |  |
+
+## `importacion_referencias`
+
+Importación de las referencias de un artículo O1 o de una lista de DOI (RF-20, T15).
+
+| Columna | Tipo | Nulo | Valores permitidos | Claves | Descripción | Alimenta |
+| --- | --- | --- | --- | --- | --- | --- |
+| `id` | uuid | no |  | PK | Identificador interno (UUID). |  |
+| `coleccion_id` | uuid | no |  | FK coleccion.id | Colección científica del tema. |  |
+| `origen` | texto (enumeración) | no | `pdf`, `docx`, `doi` |  | pdf o docx (artículo O1, que no se guarda) o doi (lista de DOI). |  |
+| `estado` | texto (enumeración) | no | `en_cola`, `en_proceso`, `terminada`, `interrumpida`, `fallida` |  | Avance del proceso en segundo plano. |  |
+| `total` | integer | no |  |  | Referencias extraídas. |  |
+| `procesadas` | integer | no |  |  | Referencias ya resueltas. |  |
+| `error` | varchar(60) | sí |  |  | Código del error si la importación falló. |  |
+| `creada_por_id` | uuid | sí |  | FK cuenta.id | Investigador que la pidió. |  |
+| `creada_en` | timestamp with time zone | no |  |  | Fecha y hora de la solicitud. |  |
+| `iniciada_en` | timestamp with time zone | sí |  |  | Inicio del proceso. |  |
+| `terminada_en` | timestamp with time zone | sí |  |  | Fin del proceso. |  |
+
+Restricciones e índices parciales:
+
+- procesadas >= 0 AND total >= 0 AND procesadas <= total
+
+## `referencia_importada`
+
+Referencia de un artículo O1 en la colección de su tema, con su estado (RF-20). Solo la entrada bibliográfica: nunca texto del artículo (RN-19).
+
+| Columna | Tipo | Nulo | Valores permitidos | Claves | Descripción | Alimenta |
+| --- | --- | --- | --- | --- | --- | --- |
+| `id` | uuid | no |  | PK | Identificador interno (UUID). |  |
+| `coleccion_id` | uuid | no |  | FK coleccion.id | Colección científica del tema. |  |
+| `importacion_id` | uuid | no |  | FK importacion_referencias.id | Última importación que la trató. |  |
+| `clave` | varchar(300) | no |  |  | doi:<DOI normalizado> o texto:<huella SHA-256 del texto normalizado>; única por colección (idempotencia). |  |
+| `texto` | text | no |  |  | Entrada bibliográfica tal como la extrajo GROBID. |  |
+| `doi` | varchar(255) | sí |  |  | DOI normalizado, si se conoce. |  |
+| `titulo` | text | sí |  |  | Título de la obra. |  |
+| `autores` | jsonb | no |  |  | Apellidos de los autores de la obra (metadato bibliográfico). |  |
+| `anio` | integer | sí |  |  | Año de publicación. |  |
+| `estado` | texto (enumeración) | no | `incluida`, `pendiente_pdf`, `excluida`, `no_comprobable` |  | incluida, pendiente_pdf, excluida o no_comprobable. |  |
+| `motivo` | varchar(60) | sí |  |  | Motivo del estado si no está incluida. |  |
+| `estado_oa` | varchar(20) | sí |  |  | Estado de acceso abierto según Unpaywall. |  |
+| `url_acceso_abierto` | text | sí |  |  | Página de acceso abierto (para bajar el PDF a mano). |  |
+| `url_pdf` | text | sí |  |  | Enlace directo al PDF, si lo hay. |  |
+| `licencia` | varchar(80) | sí |  |  | Licencia de uso. |  |
+| `documento_id` | uuid | sí |  | FK documento.id | Documento indexado, si está incluida. |  |
+| `actualizada_en` | timestamp with time zone | no |  |  | Último cambio de estado. |  |
+
+Restricciones e índices parciales:
+
+- (estado = 'incluida') = (documento_id IS NOT NULL)
+- (estado = 'incluida') OR motivo IS NOT NULL
+- única (coleccion_id, clave)
 
 ## `resultado`
 

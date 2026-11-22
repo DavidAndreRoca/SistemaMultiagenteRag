@@ -55,7 +55,8 @@ def contenido(marca: str, variante: str = "") -> bytes:
 
 class CanalFicticio:
     """Marcas: ``TUTORIA`` o ``SUENO`` (procesado), ``INCOMPLETO``, ``ESCANEADO``,
-    ``ILEGIBLE``. ``DOI=...`` fija el DOI de la cabecera."""
+    ``ILEGIBLE``. ``DOI=...`` fija el DOI de la cabecera y ``VARIANTE=...`` cambia el
+    texto (para que varios PDF del mismo tema no sean duplicados)."""
 
     def __init__(self) -> None:
         self.parametros: ParametrosCanal | None = None
@@ -88,6 +89,9 @@ class CanalFicticio:
         tema = "SUENO" if "SUENO" in texto else "TUTORIA"
         incompleto = "INCOMPLETO" in texto
         piezas = TEXTOS[tema][:1] if incompleto else TEXTOS[tema]
+        variante = re.search(r"VARIANTE=(\S+)", texto)
+        if variante:  # otro texto: no es duplicado de los demás documentos del tema
+            piezas = [(s, t, p, f"{c} Variante {variante.group(1)}.") for s, t, p, c in piezas]
         fragmentos = [
             FragmentoProcesado(
                 orden=i,

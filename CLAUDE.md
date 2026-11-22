@@ -81,6 +81,8 @@ Interfaz (T13): `frontend/` (React 19, TypeScript estricto, Vite, React Aria Com
 
 Servicios bibliográficos (T14): `app/bibliografia/` (Crossref, doi.org, Unpaywall y OpenAlex detrás de `interfaces.py`, con limitador, reintentos, caché en `cache_metadatos` y comparador). Toda falla da `no_comprobable`, nunca `no_encontrado` (RN-18). Las pruebas usan respuestas grabadas en `pruebas/contrato/respuestas/` (`python -m pruebas.contrato.grabar`, con `CORREO_POLITE` y `CLAVE_OPENALEX`), nunca la red.
 
+Importador O1 (T15): `app/importacion/` (`extraccion.py` sin acceso a la base; `resolucion.py` con `Localizador`; `descarga.py`; `servicio.py` con `Importador` en segundo plano, que borra el artículo de `/archivos/importacion/<id>/` al extraer, RN-19), repositorio `app/repositorios/importacion.py`, rutas en `app/api/importacion.py`, pantalla `frontend/src/paginas/Importacion.tsx`. En pruebas, `pruebas/dobles_importacion.py` simula GROBID (TEI grabados en `pruebas/contrato/grobid/`), los servicios y las descargas a partir de `pruebas/datos/articulo_o1.py`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.
