@@ -294,7 +294,9 @@ def valores_neutros(esquema: dict[str, Any], defs: dict[str, Any] | None = None)
         minimo = int(esquema.get("minItems", 0))
         return [valores_neutros(esquema.get("items", {}), defs) for _ in range(minimo)]
     if tipo == "string":
-        return "x" * int(esquema.get("minLength", 0))
+        if str(esquema.get("pattern", "")).startswith("^F[1-9]"):
+            return "F1"  # identificador de fragmento citable (T18)
+        return "x" * max(int(esquema.get("minLength", 0)), 1 if "minLength" in esquema else 0)
     if tipo in ("integer", "number"):
         return esquema.get("minimum", 0)
     return {"boolean": False, "null": None}.get(str(tipo))

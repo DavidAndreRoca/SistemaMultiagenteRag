@@ -69,7 +69,13 @@ class Grabadora(httpx.AsyncBaseTransport):
         respuesta = await self.interno.handle_async_request(peticion)
         contenido = await respuesta.aread()
         self.respuestas.append((respuesta.status_code, contenido))
-        return httpx.Response(respuesta.status_code, content=contenido, headers=respuesta.headers)
+        # El cuerpo ya viene descomprimido: sin estas cabeceras httpx no lo descomprime otra vez.
+        cabeceras = {
+            k: v
+            for k, v in respuesta.headers.items()
+            if k.lower() not in ("content-encoding", "content-length", "transfer-encoding")
+        }
+        return httpx.Response(respuesta.status_code, content=contenido, headers=cabeceras)
 
 
 def _proveedor(nombre: str, clave: str, cliente: httpx.AsyncClient) -> ProveedorModelo:

@@ -1,0 +1,42 @@
+{
+  "proveedor": "groq",
+  "modelo": "openai/gpt-oss-120b",
+  "estado": 200,
+  "cuerpo": {
+    "id": "chatcmpl-4b997db9-f899-4f34-99fe-f0ac98f73cbd",
+    "object": "chat.completion",
+    "created": 1795443795,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"seccion\":\"metodos\",\"idioma\":\"es\",\"cita\":\"F1\"}",
+          "reasoning": "We need to classify the fragment. The fragment: \"Participaron 84 estudiantes ficticios de primer año, asignados a un grupo con tutoría entre pares y a un grupo control, en un diseño cuasiexperimental.\"\n\nThis describes participants and design, which is methods section. Language is Spanish, ISO 639-1 code \"es\". Citation identifier is \"F1\". So output JSON with seccion \"metodos\", idioma \"es\", cita \"F1\". Ensure compact JSON, no extra spaces? It's okay. Provide exactly as required."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 5.189453061,
+      "prompt_tokens": 478,
+      "prompt_time": 0.022005624,
+      "completion_tokens": 144,
+      "completion_time": 0.303068077,
+      "total_tokens": 622,
+      "total_time": 0.325073701,
+      "completion_tokens_details": {
+        "reasoning_tokens": 113
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_f640395b96",
+    "x_groq": {
+      "id": "req_01m84cm3zaen899s8s7yqckzhb",
+      "seed": 1243649999
+    },
+    "service_tier": "on_demand"
+  }
+}

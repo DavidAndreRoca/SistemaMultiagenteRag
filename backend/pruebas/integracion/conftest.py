@@ -191,3 +191,7 @@ def primera_credencial(caso: dict[str, object]) -> tuple[str, str]:
     credenciales = caso["credenciales"]
     assert isinstance(credenciales, list)
     return credenciales[0]["cuenta"], credenciales[0]["contrasena_inicial"]
+
+
+# Escenario de recuperación compartido por T16 y T18 (al final: importa Entorno de aquí).
+from pruebas.integracion.escenario_rag import escenario  # noqa: E402, F401
