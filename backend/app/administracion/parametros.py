@@ -127,7 +127,11 @@ class ParametrosFuncionales(_Estricto):
     k_denso: int = Field(30, ge=1)
     k_lexico: int = Field(30, ge=1)
     rrf_constante: int = Field(60, ge=1)
+    # T16-01: candidatos que pasan por el reordenador (18.6 dice 30; 20 por latencia,
+    # decisión del equipo, a calibrar en T34) y tope de tokens del contexto (R-01)
+    candidatos_reranking: int = Field(20, ge=1)
     n_reranking: int = Field(8, ge=1)
+    presupuesto_tokens_contexto: int = Field(2400, ge=1)
     suficiencia_n: int = Field(2, ge=1)
     suficiencia_tau: float = Field(
         0.5,
@@ -162,7 +166,7 @@ class ParametrosFuncionales(_Estricto):
         default_factory=lambda: list(MODELOS_INICIALES), min_length=1
     )
     # Versión vigente de la instrucción de cada agente (RNF-21): agente -> vN
-    versiones_instrucciones: dict[str, str] = Field(default_factory=dict)
+    versiones_instrucciones: dict[str, str] = Field(default_factory=lambda: {"suficiencia": "v1"})
 
     @model_validator(mode="after")
     def _coherencia(self) -> Self:
@@ -175,6 +179,10 @@ class ParametrosFuncionales(_Estricto):
             raise ValueError("la lista de normas tiene duplicados")
         if self.n_reranking > self.k_denso + self.k_lexico:
             raise ValueError("n_reranking no puede superar los candidatos recuperados")
+        if not self.n_reranking <= self.candidatos_reranking <= self.k_denso + self.k_lexico:
+            raise ValueError(
+                "candidatos_reranking debe estar entre n_reranking y los candidatos recuperados"
+            )
         if self.suficiencia_n > self.n_reranking:
             raise ValueError("suficiencia_n no puede superar n_reranking")
         proveedores = [m.proveedor for m in self.modelos]

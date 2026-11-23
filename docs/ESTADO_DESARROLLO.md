@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 22 de noviembre de 2026. T17 implementada y verificada en su rama (apartado 19). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 22 de noviembre de 2026. T16 implementada y verificada en su rama (apartado 20). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -24,8 +24,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T13 (F3)** | Interfaz base | **Integrada en `main`** (solicitud de cambio #9, apartado 16.7): criterios cumplidos con Playwright frente a la API real, también en la CI (apartado 16). Prueba manual con teclado y NVDA superada según el equipo (apartado 16.5) |
 | **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Integrada en `main`** (solicitud de cambio #10, apartado 17.7), con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17) |
 | **T15 (F3)** | Importador de referencias del artículo O1 | **Integrada en `main`** (solicitud de cambio #11, apartado 18.7), verificada con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18) |
-| **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Implementada y verificada** en la rama `t17-adaptador-modelos`, con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
-| T16 en adelante | | No iniciadas (T16 sigue a T17 según el orden de ejecución) |
+| **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Integrada en `main`** (solicitud de cambio #12, apartado 19.7), verificada con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
+| **T16 (F3)** | Recuperación híbrida y suficiencia | **Implementada y verificada** en la rama `t16-recuperacion-suficiencia`; criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
+| T18 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1386,3 +1387,115 @@ Decisiones del equipo del 22 de noviembre de 2026:
   - `backend/Dockerfile` (copia `instrucciones/`), `pruebas/integracion/test_migraciones.py` y `.env.example`;
   - `frontend/src/api/cliente.ts`, `paginas/PanelCaso.tsx`, `Investigador.tsx` e `Importacion.tsx`;
   - `docs/decisiones/T15-importador-referencias.md` (registro público del artículo en la caché, aceptado por el equipo), `README.md`, `CLAUDE.md` y este archivo.
+
+### 19.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t17-adaptador-modelos`: `a0aee34` (`T17: agregar el adaptador de modelos y las instrucciones versionadas`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#12 |
+| CI de la solicitud | **Verde**, ejecución 44998881166 (la de `a0aee34`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `2eeb26f` |
+| CI de `main` tras integrar | Ejecución 45000391996: **verde** |
+
+---
+
+## 20. Fase 3 (F3): T16. Recuperación híbrida y suficiencia
+
+Rama `t16-recuperacion-suficiencia`, desde `main` con T17 (`2eeb26f`). Decisión: `docs/decisiones/T16-recuperacion-suficiencia.md` (T16-01).
+
+Decisiones del equipo del 22 de noviembre de 2026:
+- **Candidatos del reordenador:** 20 (18.6 dice 30), por latencia, a calibrar en T34.
+- **Presupuesto de contexto:** 2 400 tokens (R-01).
+- **Conjunto de consultas:** redactado por el asistente como lo escribiría un estudiante, con el documento de origen marcado. El equipo lo revisará antes de T34 y T38.
+
+### 20.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Búsqueda densa (k = 30) sobre las colecciones permitidas | Hecha | `app/repositorios/recuperacion.py` (`RepositorioRecuperacion.buscar_denso`): coseno con el índice HNSW, solo fragmentos con vector de documentos recuperables. Las colecciones salen siempre de `colecciones_permitidas(tipo, contexto)` |
+| 2. Búsqueda léxica (k = 30) con `tsvector` | Hecha | `buscar_lexico`: `websearch_to_tsquery` simple con OR entre los términos de la consulta, sin palabras vacías |
+| 3. Fusión por rangos recíprocos | Hecha | `app/rag/fusion.py` (`fusionar`): suma de 1 / (60 + posición), determinista ante empates |
+| 4. Reranking y los mejores 8 | Hecha | `app/rag/recuperacion.py`: los primeros 20 de la fusión (`candidatos_reranking`) pasan por el reordenador. Se toman hasta 8 (`n_reranking`) sin superar 2 400 tokens (`presupuesto_tokens_contexto`) y sin cortar ninguno |
+| 5. Suficiencia, paso 1 | Hecha | `app/rag/suficiencia.py`: al menos N = 2 fragmentos con puntaje de 0,5 o más; si no, abstención sin llamar al modelo |
+| 6. Suficiencia, paso 2 | Hecha | El adaptador de T17 con `instrucciones/suficiencia/v1.md` (versión fijada en la configuración) responde `{suficiente, motivo}`, con los fragmentos como datos. Con el modelo caído, la falla es técnica, no una abstención |
+| 7. Identificadores `F1` a `Fn` y `fragmento_recuperado` | Hecha | `app/rag/servicio.py` (`ServicioEvidencia.preparar`): una fila por fragmento numerado, con los puntajes denso, léxico, de la fusión y del reranking, y su posición, también cuando hay abstención. Deja además eventos técnicos de `recuperacion` y `reranking` |
+| 8. Conjunto de consultas de prueba | Hecha, en borrador | `evaluacion/conjuntos/recuperacion-t16.json`: 20 consultas, 10 por tema, con su origen. Línea base con `python -m app.rag.evaluar` (apartado 20.3) |
+| Tarea: recibe `ContextoAcceso` y tipo, no colección | Hecha | Ni `Recuperador.recuperar` ni el repositorio aceptan una colección |
+| Tarea: parámetros de la configuración versionada | Hecha | k, constante, candidatos, número final, presupuesto, N y tau se leen de la configuración vigente. Migración de datos 0013 |
+| Tarea: presupuesto de contexto (R-01) | Hecha | 2 400 tokens. En la línea base, de 5 a 7 fragmentos por consulta |
+
+### 20.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| CP-05 superado: con evidencia insuficiente no se genera nada | **Cumplido** | `test_cp05_sin_evidencia_no_se_genera_y_la_abstencion_queda_registrada`: una consulta de otro asunto no llama a la generación ni al modelo de suficiencia (paso 1). Queda un `resultado` con `abstencion = true`, etiqueta `sin_evidencia_suficiente`, el aviso "Sin evidencia suficiente" y el paso que decidió. También el paso 2 (`test_el_juicio_del_modelo_puede_decidir_abstencion`) |
+| Una consulta del caso A nunca devuelve fragmentos de la colección personal del caso B ni de otro tema | **Cumplido** | `test_el_caso_a_solo_recupera_de_su_tema_y_su_coleccion_personal`. Con fragmentos del mismo asunto en la colección personal de B (mismo tema), en TEMA-B, en las guías y en un documento retirado, A solo recibe de su científica y de su personal. Por tipo, `revision_estructura` solo recibe guías y `verificacion_referencias`, nada. Un documento incompleto sin confirmar no entra, y B no puede preparar evidencia para una solicitud de A |
+| Precisión contextual y exhaustividad calculadas sobre el conjunto de prueba y registradas como línea base | **Cumplido** | Apartado 20.3 |
+
+### 20.3. Pruebas y línea base
+
+- **Backend en contenedor (Python 3.12):** 659 pruebas superadas y 8 omitidas, cobertura del 92,82 %. Ruff y mypy sin observaciones.
+  - Las omitidas necesitan GROBID o el servicio de modelos, o son las 3 de contrato de T17.
+  - La regla de arquitectura detectó consultas directas en el evaluador; pasaron a `RepositorioEvaluacion`.
+- **Unitarias (`unitarias/test_rag.py`, 16):**
+  - fusión y determinismo;
+  - presupuesto de contexto;
+  - parámetros y validación;
+  - paso 1 sin llamar al modelo;
+  - paso 2 en ambos desenlaces;
+  - fragmentos como datos etiquetados;
+  - modelo caído;
+  - esquema del juicio;
+  - métricas y conjunto: el conjunto se lee con su esquema, está en borrador y ninguna consulta copia cuatro palabras seguidas del título.
+- **Integración (`integracion/test_rag.py`, 8):**
+  - aislamiento;
+  - colecciones por tipo;
+  - candidatos y presupuesto;
+  - registro de fragmentos y eventos;
+  - CP-05;
+  - generación solo con evidencia;
+  - abstención por juicio del modelo;
+  - documento incompleto.
+
+  Además, la migración 0013 en `test_migraciones.py`.
+- **Línea base** (`evaluacion/resultados/linea-base-t16.json`): conjunto `borrador-1`, corpus provisional y servicio de modelos reales (bge-m3 y bge-reranker-v2-m3), con los parámetros iniciales. Cada tema se evaluó en una transacción revertida; se comprobó después que la base de desarrollo no cambió (102 documentos, 2 785 fragmentos y ningún caso de evaluación).
+
+  | Medida | Global | Tema 1 (IA en educación) | Tema 2 (MYPES) |
+  | --- | --- | --- | --- |
+  | Precisión contextual | 0,68 | 0,52 | 0,84 |
+  | Exhaustividad | 0,80 | 0,70 | 0,90 |
+  | Consultas con el documento de origen en el contexto | 16 de 20 | 7 de 10 | 9 de 10 |
+  | Tiempo medio por consulta | 24,9 s | | |
+
+  - **Sin umbral todavía:** el de la tesis (precisión de 0,80) se exige en T38.
+  - **Interpretación:** solo el documento de origen cuenta como esperado, así que la medida es conservadora. En el tema 1 hay muchos artículos sobre ChatGPT en educación, y otros fragmentos pertinentes cuentan como fallos. La revisión del conjunto por el equipo puede agregar documentos esperados.
+  - **Tiempo:** casi todo es el reordenador con 20 candidatos.
+
+### 20.4. Problemas encontrados y soluciones
+
+- **Búsqueda léxica con todos los términos:** la consulta de prueba de T10 (`plainto_tsquery`) exige todos los términos, y una consulta escrita como oración rara vez coincidiría. Por diseño, la recuperación usa OR entre los términos, sin palabras vacías.
+- **El registro de instrucciones se escribía con finales de línea de Windows:** `python -m app.instrucciones registrar` escribe ahora siempre con LF.
+- **psycopg asíncrono no funciona con el bucle Proactor de Windows:** el evaluador usa el bucle Selector en Windows.
+- **El contenedor de pruebas no veía `evaluacion/`:** se monta en solo lectura, igual que `docs/`.
+- **El reordenador fue más lento que en T08:** 28,2 s con 30 candidatos, frente a 18,6 s. De ahí la decisión de usar 20 (T16-01, apartado 3).
+
+### 20.5. Pendientes y riesgos
+
+- **Revisión del conjunto por el equipo** antes de las métricas finales de T34 y T38: reescribir o agregar consultas y documentos esperados.
+- **Latencia:** unos 25 s por recuperación en la computadora de desarrollo, casi todo del reordenador. En ARM será mayor. Opciones para T34, sin adelantarlas: menos candidatos, menos tokens por par o cuantización.
+- **Paso 2 con un modelo real:** espera `CLAVE_GROQ` (apartado 19.5). En CI y en las pruebas se usa el proveedor simulado.
+
+### 20.6. Archivos
+
+- **Creados:**
+  - `backend/app/rag/` (`modelos.py`, `fusion.py`, `recuperacion.py`, `suficiencia.py`, `servicio.py` y `evaluar.py`) y `backend/app/repositorios/recuperacion.py` y `evaluacion.py` (el evaluador consulta por repositorio, como exige la regla de arquitectura);
+  - `backend/instrucciones/suficiencia/v1.md` y `backend/migraciones/versiones/0013_recuperacion_y_suficiencia.py`;
+  - `backend/pruebas/dobles_rag.py`, `unitarias/test_rag.py` e `integracion/test_rag.py`;
+  - `evaluacion/conjuntos/recuperacion-t16.json` y `evaluacion/resultados/linea-base-t16.json`;
+  - `docs/decisiones/T16-recuperacion-suficiencia.md`.
+- **Modificados:**
+  - `backend/app/administracion/parametros.py` (`candidatos_reranking`, `presupuesto_tokens_contexto` y versión de `suficiencia`) y `repositorios/unidad.py`;
+  - `backend/app/instrucciones/__main__.py` (LF) e `instrucciones/registro.json`;
+  - `backend/pruebas/integracion/test_migraciones.py` y `docker-compose.yml` (monta `evaluacion/` en el contenedor de pruebas);
+  - `README.md`, `CLAUDE.md` y este archivo.

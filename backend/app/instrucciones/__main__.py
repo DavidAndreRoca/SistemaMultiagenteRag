@@ -41,8 +41,9 @@ def principal(argumentos: list[str]) -> int:
         print(f"{identificador} ya está registrada con otra huella: cree una versión nueva.")
         return 1
     nuevo = {**registradas, identificador: actuales[identificador]}
-    (DIRECTORIO / REGISTRO).write_text(
-        json.dumps(dict(sorted(nuevo.items())), indent=2) + "\n", encoding="utf-8"
+    # Siempre con LF, también en Windows: el archivo se versiona.
+    (DIRECTORIO / REGISTRO).write_bytes(
+        (json.dumps(dict(sorted(nuevo.items())), indent=2) + "\n").encode("utf-8")
     )
     print(f"{identificador} registrada.")
     return 0
