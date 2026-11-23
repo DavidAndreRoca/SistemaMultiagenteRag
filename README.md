@@ -261,6 +261,14 @@ La suficiencia se decide en dos pasos: primero un umbral (2 fragmentos con punta
 
 Decisiones: `docs/decisiones/T16-recuperacion-suficiencia.md`.
 
+## Contrato de agentes y referencias (T18)
+
+- **Agentes:** todo agente (`backend/app/agentes/contrato.py`) recibe el mismo estado de la solicitud, sin historial del caso. Recupera la evidencia (T16), se abstiene si no alcanza y, si alcanza, genera con el adaptador (T17) y el esquema de su tipo (`esquemas.py`).
+- **Comprobaciones:** las de esquema (1) y de citas (3) están en `backend/app/verificacion/comprobaciones.py`. Toda cita debe ser un fragmento recuperado para esa solicitud.
+- **Referencias:** se arman desde los metadatos guardados, nunca desde el texto de un modelo (RN-17). Con DOI, en la norma del caso por doi.org; sin DOI o si doi.org no responde, con `citeproc-py` y los estilos CSL oficiales de IEEE, APA 7 y Vancouver (`backend/app/bibliografia/estilos/`).
+
+Decisiones: `docs/decisiones/T18-contrato-agentes.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

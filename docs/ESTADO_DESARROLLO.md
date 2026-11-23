@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 22 de noviembre de 2026. T16 implementada y verificada en su rama (apartado 20). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 23 de noviembre de 2026. T18 implementada y verificada en su rama (apartado 21). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -25,8 +25,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T14 (F3)** | Clientes bibliográficos con limitador y caché | **Integrada en `main`** (solicitud de cambio #10, apartado 17.7), con respuestas reales grabadas de los cuatro servicios; criterios cumplidos (apartado 17) |
 | **T15 (F3)** | Importador de referencias del artículo O1 | **Integrada en `main`** (solicitud de cambio #11, apartado 18.7), verificada con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18) |
 | **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Integrada en `main`** (solicitud de cambio #12, apartado 19.7), verificada con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
-| **T16 (F3)** | Recuperación híbrida y suficiencia | **Implementada y verificada** en la rama `t16-recuperacion-suficiencia`; criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
-| T18 en adelante | | No iniciadas |
+| **T16 (F3)** | Recuperación híbrida y suficiencia | **Integrada en `main`** (solicitud de cambio #13, apartado 20.7); criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
+| **T18 (F3)** | Contrato común de agentes y comprobaciones deterministas | **Implementada y verificada** en la rama `t18-contrato-agentes`; criterios cumplidos (apartado 21) |
+| T19 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1369,7 +1370,7 @@ Decisiones del equipo del 22 de noviembre de 2026:
 
 ### 19.5. Pendientes y riesgos
 
-- **Grabaciones de contrato:** `CLAVE_GROQ` está vacía en `.env` (sin cambios desde el 20 de noviembre); `CLAVE_DEEPSEEK` y `CLAVE_GEMINI` también. Con cada clave cargada: `python -m pruebas.contrato.grabar_modelos`, una llamada por proveedor con la tarea ficticia `contrato/v1`.
+- **Grabaciones de contrato:** la de Groq se grabó el 23 de noviembre de 2026, al cargarse `CLAVE_GROQ` (apartado 21). `CLAVE_DEEPSEEK` y `CLAVE_GEMINI` siguen vacías. Con cada clave cargada: `python -m pruebas.contrato.grabar_modelos`, una llamada por proveedor con la tarea ficticia `contrato/v1`.
 - **Límites gratuitos de Gemini:** no están publicados; la configuración usa 5 solicitudes por minuto y 100 por día hasta conocerlos.
 - **Limitador por proceso:** T28 decide si la API y el trabajador necesitan uno compartido.
 - **Reordenador (T08, 18,6 s):** afecta la latencia de T16, no a este adaptador. Se trata en T16.
@@ -1499,4 +1500,96 @@ Decisiones del equipo del 22 de noviembre de 2026:
   - `backend/app/administracion/parametros.py` (`candidatos_reranking`, `presupuesto_tokens_contexto` y versión de `suficiencia`) y `repositorios/unidad.py`;
   - `backend/app/instrucciones/__main__.py` (LF) e `instrucciones/registro.json`;
   - `backend/pruebas/integracion/test_migraciones.py` y `docker-compose.yml` (monta `evaluacion/` en el contenedor de pruebas);
+  - `README.md`, `CLAUDE.md` y este archivo.
+
+### 20.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t16-recuperacion-suficiencia`: `9413668` (`T16: agregar la recuperación híbrida y la suficiencia en dos pasos`) y `2847cc8` (formato de la migración 0013), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#13 |
+| CI de la solicitud | La primera ejecución falló en `ruff format --check` (apartado 20.4). **Verde** tras la corrección: ejecución 45185586537 (la de `2847cc8`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `73b506d` |
+| CI de `main` tras integrar | Ejecución 45187955058: **verde** |
+
+---
+
+## 21. Fase 3 (F3): T18. Contrato común de agentes y comprobaciones deterministas
+
+Rama `t18-contrato-agentes`, desde `main` con T16 (`73b506d`). Decisión: `docs/decisiones/T18-contrato-agentes.md` (T18-01). Decisión del equipo del 23 de noviembre de 2026:
+- `citeproc-py` 0.12.3 con los estilos oficiales de `citeproc-py-styles` 0.2.0, en versiones fijas;
+- con DOI, la cita de doi.org; si no hay DOI o doi.org no responde, el formateador local;
+- las tres normas de D-12;
+- migrar la base de desarrollo con respaldo.
+
+**Antes de empezar:**
+- **Base de desarrollo:** estaba en la migración 0010. T18 no necesita migrarla porque no cambia el esquema. A pedido del equipo se migró a 0013 tras un respaldo completo (`datos/respaldos/antes-de-0013-2026-11-23.*`). Se conserva todo: 102 documentos, 2 785 fragmentos (2 759 con vector), 4 exclusiones, 13 cuentas y 7 casos. La configuración v1 ganó los modelos de T17 y los parámetros de T16.
+- **Groq:** con `CLAVE_GROQ` cargada se grabó la respuesta real de contrato (`pruebas/contrato/modelos/groq.json`, una llamada con la tarea ficticia `contrato/v1`: 478 tokens de entrada y 144 de salida). La prueba de contrato de Groq ya no se omite y pasa. La grabadora reconstruía la respuesta con `content-encoding` y httpx intentaba descomprimirla otra vez; se corrigió.
+
+### 21.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Estado de entrada | Hecha | `app/agentes/contrato.py` (`EstadoAgente`): `solicitud_id`, `caso_id`, `tipo`, `alcance`, `hito`, `tema_id`, `version_id`, `intento` y `motivos_falla`. Inmutable y sin campos extra: no admite historial. Los motivos solo llegan en el intento 2 |
+| 2. Esquemas de salida de los seis tipos | Hecha | `app/agentes/esquemas.py` (tablas 12 a 15): estrictos, con longitudes máximas y citas `F<n>` (al menos una por afirmación, hallazgo, tarea o cambio). `VerificacionReferencias` es la salida determinista de T20 |
+| 3. Clase base de agente | Hecha | `Agente.atender`: recupera y decide la suficiencia (T16). Con abstención no llama al modelo. Si no, genera (T17) con la instrucción vigente, el alcance y `F1` a `Fn` como datos, y el esquema del tipo. En el intento 2 agrega los motivos de la falla |
+| 4. Comprobaciones 1 y 3 | Hecha | `app/verificacion/comprobaciones.py`: `comprobar_esquema` (esquema del tipo) y `comprobar_citas`, que reúne los `F<n>` de los campos `citas` y de cualquier texto y exige que estén entre los de `fragmento_recuperado`. Los motivos nombran campos e identificadores, nunca contenido |
+| 5. Constructor de referencias | Hecha | `app/bibliografia/referencias.py` (`ConstructorReferencias`): de los identificadores citados obtiene los documentos de la solicitud, siempre con el caso, y arma una referencia por documento en la norma. Con DOI usa doi.org; si no, CSL local. Indica el método |
+| 6. Formateador CSL (IEEE y APA 7) | Hecha, también Vancouver | `app/bibliografia/csl.py` con `citeproc-py` 0.12.3 y `es-ES`. Usa `apa.csl`, `ieee.csl` y `nlm-citation-sequence.csl` oficiales, copiados en `app/bibliografia/estilos/` con su huella y su licencia (CC BY-SA 3.0). Quita el número de lista de IEEE y Vancouver |
+| Tarea: ningún agente consulta el historial | Hecha | El agente solo recibe `EstadoAgente` y usa la evidencia de su solicitud. Una prueba compara lo enviado al modelo con y sin una solicitud previa del caso |
+| Tarea: sin campos de texto libre para referencias | Hecha | Ningún esquema que produce el modelo tiene campos de referencia, fuente, documento, DOI, URL ni autor (prueba sobre los esquemas). Las fuentes las calcula el sistema |
+| Tarea: las comprobaciones viven en `verificacion/` | Hecha | Reutilizables por T30 sobre la salida guardada |
+
+### 21.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| Una salida simulada que cita `F9` cuando solo hay `F1` a `F8` es rechazada | **Cumplido** | `test_una_salida_que_cita_f9_se_rechaza`, con la base real: el agente de prueba genera una salida que cita `F1` y `F9`; la solicitud tiene `F1` a `F8` en `fragmento_recuperado`. La comprobación 3 da "cita a un fragmento no recuperado: F9". También en las pruebas unitarias, con citas en campos y dentro del texto |
+| Toda referencia mostrada proviene de metadatos almacenados | **Cumplido** | `test_las_referencias_salen_de_los_metadatos_guardados` en las tres normas: el documento con DOI toma la cita de doi.org en el estilo de la norma, sin el número de lista. El que no tiene DOI se arma en local con su título, autores y año guardados. Un `F99` no arma nada y otro caso no obtiene ninguna referencia. Con doi.org caído, todo se arma en local con los metadatos guardados, incluido el DOI |
+
+### 21.3. Pruebas
+
+- **Backend en contenedor (Python 3.12, con `citeproc-py` en la imagen):** 703 pruebas superadas y 7 omitidas, cobertura del 93,12 %. Las omitidas necesitan GROBID o el servicio de modelos, o son las de contrato de DeepSeek y Gemini. Ruff (todo `backend/`) y mypy sin observaciones.
+- **Unitarias (`unitarias/test_agentes.py`, 32):**
+  - un ejemplo válido por tipo;
+  - 9 salidas defectuosas fabricadas: citas vacías o mal formadas, `F0`, enumeraciones inválidas, campos que faltan y campos extra como `referencias` o `fuentes`;
+  - esquemas sin campos de referencias y compatibles con el modo estricto;
+  - comprobación 3 en campos y en texto;
+  - estado del agente;
+  - formateador CSL en las tres normas, con artículo y con libro y con el texto exacto esperado;
+  - DOI y URL;
+  - huella de los estilos;
+  - número de lista.
+- **Integración (`integracion/test_agentes.py`, 11):**
+  - agente de prueba con el modelo simulado: generación con las comprobaciones, `F9` rechazado, abstención sin llamar al modelo, intento 2, sin memoria y tipos o casos ajenos;
+  - constructor de referencias en las tres normas, con doi.org simulado que responde y que no responde, y aislamiento por caso.
+- **Escenario compartido:** el de T16 pasó a `integracion/escenario_rag.py`, registrado en `conftest.py`, para que lo usen T16 y T18.
+- **Contrato de Groq:** `unitarias/test_llm_contrato.py` pasa con la respuesta real grabada.
+
+### 21.4. Problemas encontrados y soluciones
+
+- **APA aplicaba capitalización de títulos en inglés a una revista en español** («De Pedagogía»): se pasa al motor el idioma guardado del documento, y CSL solo aplica esa regla a títulos en inglés.
+- **IEEE y Vancouver numeran la lista:** una referencia suelta no lleva número. Se quita «[n]» o «n.», también en la cita de doi.org.
+- **No hay un estilo llamado `vancouver.csl`:** se usa `nlm-citation-sequence.csl` (*Citing Medicine*, 2.ª edición), el estilo de referencia de Vancouver.
+- **El paquete de estilos pesa 60 MB (10 867 estilos):** se copian solo los tres que se usan, con su huella, y la dependencia es solo `citeproc-py`.
+- **El simulado no armaba citas válidas:** sus valores neutros no respetaban el patrón `F<n>`. Ahora genera `F1` para ese patrón.
+- **Importar el fixture del escenario en otro módulo lo redefinía (Ruff F811):** se movió a un módulo compartido que registra `conftest.py`.
+
+### 21.5. Pendientes y riesgos
+
+- **Grabaciones de DeepSeek y Gemini:** esperan sus claves (apartado 19.5).
+- **Formato de las referencias:** salen en texto plano, sin cursivas (doi.org también entrega texto plano). La presentación en la interfaz es de T19.
+- **Agentes concretos (D1 a D4):** desde T19, cada uno con su instrucción, consulta y presentación del alcance.
+
+### 21.6. Archivos
+
+- **Creados:**
+  - `backend/app/agentes/` (`contrato.py` y `esquemas.py`) y `backend/app/verificacion/comprobaciones.py`;
+  - `backend/app/bibliografia/csl.py`, `referencias.py` y `estilos/` (tres estilos CSL y `LEEME.md`);
+  - `backend/pruebas/unitarias/test_agentes.py`, `integracion/test_agentes.py`, `integracion/escenario_rag.py` y `pruebas/contrato/modelos/groq.json`;
+  - `docs/decisiones/T18-contrato-agentes.md`.
+- **Modificados:**
+  - `backend/app/repositorios/caso.py` (`identificadores` y `documentos_citados`, con el caso) y `app/llm/proveedores.py` (citas del simulado);
+  - `backend/pyproject.toml` y `restricciones-corpus.txt` (`citeproc-py==0.12.3`);
+  - `backend/pruebas/contrato/grabar_modelos.py` (cabeceras de la grabadora), `integracion/conftest.py` y `test_rag.py`;
   - `README.md`, `CLAUDE.md` y este archivo.

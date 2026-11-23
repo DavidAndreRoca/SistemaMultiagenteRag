@@ -87,6 +87,8 @@ Modelos de lenguaje (T17): `app/llm/` (`ModeloLenguaje` en `interfaces.py`, prov
 
 Recuperación (T16): `app/rag/` (`fusion.py` con RRF y presupuesto de contexto, `recuperacion.Recuperador`, `suficiencia.decidir` en dos pasos, `servicio.ServicioEvidencia` con `preparar` y `atender`, que solo genera con evidencia suficiente y registra `fragmento_recuperado`, eventos y la abstención). Consultas por tipo y contexto en `app/repositorios/recuperacion.py`, nunca por colección. Instrucción `instrucciones/suficiencia/v1.md`. Línea base con `python -m app.rag.evaluar` sobre `evaluacion/conjuntos/` (transacción revertida, no escribe en la base). En pruebas, `pruebas/dobles_rag.py` (reordenador por coincidencia de palabras).
 
+Contrato de agentes (T18): `app/agentes/contrato.py` (`EstadoAgente` sin historial; `Agente.atender` recupera, decide suficiencia y genera con el esquema del tipo de `app/agentes/esquemas.py`, que no tiene campos de referencias). Comprobaciones 1 (esquema) y 3 (citas a `fragmento_recuperado`) en `app/verificacion/comprobaciones.py`. Referencias en `app/bibliografia/referencias.py` (doi.org con DOI; si no, `csl.py` con `citeproc-py` y los estilos de `app/bibliografia/estilos/`, con huella fijada). En pruebas, el escenario compartido de T16 y T18 está en `pruebas/integracion/escenario_rag.py`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

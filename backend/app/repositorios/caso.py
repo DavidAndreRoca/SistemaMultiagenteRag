@@ -14,6 +14,8 @@ from app.bd.modelos import (
     Caso,
     Coleccion,
     Decision,
+    Documento,
+    Fragmento,
     FragmentoRecuperado,
     FuenteAportada,
     Resultado,
@@ -96,6 +98,35 @@ class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):
 
 class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):
     modelo = FragmentoRecuperado
+
+    async def identificadores(self, contexto: ContextoAcceso, solicitud_id: uuid.UUID) -> set[str]:
+        """``F1`` a ``Fn`` recuperados para una solicitud del caso (comprobación 3, T18)."""
+        resultado = await self._sesion.execute(
+            select(FragmentoRecuperado.identificador_visible).where(
+                FragmentoRecuperado.caso_id == contexto.caso_exigido(),
+                FragmentoRecuperado.solicitud_id == solicitud_id,
+            )
+        )
+        return set(resultado.scalars().all())
+
+    async def documentos_citados(
+        self, contexto: ContextoAcceso, solicitud_id: uuid.UUID, identificadores: Sequence[str]
+    ) -> list[tuple[str, Documento]]:
+        """El documento de cada identificador citado, en el orden pedido (T18)."""
+        if not identificadores:
+            return []
+        resultado = await self._sesion.execute(
+            select(FragmentoRecuperado.identificador_visible, Documento)
+            .join(Fragmento, Fragmento.id == FragmentoRecuperado.fragmento_id)
+            .join(Documento, Documento.id == Fragmento.documento_id)
+            .where(
+                FragmentoRecuperado.caso_id == contexto.caso_exigido(),
+                FragmentoRecuperado.solicitud_id == solicitud_id,
+                FragmentoRecuperado.identificador_visible.in_(list(identificadores)),
+            )
+        )
+        por_identificador = {i: d for i, d in resultado.all()}
+        return [(i, por_identificador[i]) for i in identificadores if i in por_identificador]
 
 
 class RepositorioResultados(RepositorioDeCaso[Resultado]):

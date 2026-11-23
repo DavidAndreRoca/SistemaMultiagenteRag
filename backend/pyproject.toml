@@ -20,6 +20,7 @@ dependencies = [
     "pypdf>=7.0,<8",
     "python-multipart>=0.0.20,<1",  # subida de PDF a la API (T10)
     "python-docx>=1.2,<2",  # borradores .docx (T11); MIT
+    "citeproc-py==0.12.3",  # referencias en IEEE, APA 7 y Vancouver con CSL (T18); BSD
 ]
 
 [project.optional-dependencies]
@@ -65,6 +66,11 @@ files = ["app"]
 # adaptador los importa al usarlos y se prueba en el trabajo corpus de la CI.
 [[tool.mypy.overrides]]
 module = ["docling.*", "docling_core.*", "tokenizers.*"]
+ignore_missing_imports = true
+
+# citeproc-py (T18) no publica tipos; solo lo usa app/bibliografia/csl.py.
+[[tool.mypy.overrides]]
+module = ["citeproc", "citeproc.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
