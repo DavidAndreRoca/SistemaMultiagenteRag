@@ -30,6 +30,7 @@ from app.repositorios.investigador import (
     RepositorioColeccionesInvestigador,
     RepositorioCuentasInvestigador,
 )
+from app.repositorios.recuperacion import RepositorioRecuperacion
 from app.repositorios.sistema import (
     RepositorioCacheMetadatos,
     RepositorioConfiguracion,
@@ -57,6 +58,7 @@ class UnidadDeTrabajo:
         self.decisiones = RepositorioDecisiones(sesion)
         self.fuentes_aportadas = RepositorioFuentesAportadas(sesion)
         self.colecciones = RepositorioColecciones(sesion)
+        self.recuperacion = RepositorioRecuperacion(sesion)
         # Investigador (A2)
         self.casos_investigador = RepositorioCasosInvestigador(sesion)
         self.colecciones_investigador = RepositorioColeccionesInvestigador(sesion)

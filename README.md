@@ -242,6 +242,25 @@ Decisiones: `docs/decisiones/T15-importador-referencias.md`.
 
 Decisiones: `docs/decisiones/T17-adaptador-modelos.md`.
 
+## Recuperación y suficiencia (T16)
+
+`backend/app/rag/` recupera la evidencia de una solicitud y decide si alcanza (RF-10):
+1. busca solo en las colecciones que el tipo y el caso permiten;
+2. combina la búsqueda densa (bge-m3) y la léxica con fusión por rangos recíprocos;
+3. reordena los mejores 20 con bge-reranker-v2-m3;
+4. toma hasta 8 fragmentos sin superar 2 400 tokens y los numera `F1` a `Fn`.
+
+La suficiencia se decide en dos pasos: primero un umbral (2 fragmentos con puntaje de 0,5 o más) y después el juicio del modelo, con el adaptador de T17. Si la evidencia no alcanza, no se genera nada y la abstención queda registrada (CP-05).
+- **Línea base:** con el servicio de modelos y el corpus provisional, solo lectura:
+
+  ```bash
+  python -m app.rag.evaluar ../evaluacion/conjuntos/recuperacion-t16.json --salida ../evaluacion/resultados/linea-base-t16.json
+  ```
+
+- **Conjunto de consultas:** `evaluacion/conjuntos/recuperacion-t16.json` es un borrador que revisa el equipo.
+
+Decisiones: `docs/decisiones/T16-recuperacion-suficiencia.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

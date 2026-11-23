@@ -1,0 +1,189 @@
+{
+  "nombre": "Consultas de recuperación sobre el corpus provisional (T16)",
+  "version": "borrador-1",
+  "estado": "borrador",
+  "fecha": "2026-11-22",
+  "nota": "Borrador redactado por el asistente a pedido del equipo (T16-01, apartado 7). Cada consulta imita lo que escribiría un estudiante en su borrador (una afirmación que quiere sustentar o una duda), sin copiar frases del título ni del resumen. 'origen' es el documento del que salió la consulta; 'documentos_esperados' lista por DOI los documentos que deberían aparecer en el contexto. El equipo revisará, reescribirá o agregará consultas y documentos esperados antes de las métricas finales de T34 y T38.",
+  "consultas": [
+    {
+      "id": "T1-01",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Necesito respaldar que, antes de llevar los modelos de lenguaje al aula, hay que cuidar la privacidad de los datos de los alumnos y revisar sus sesgos.",
+      "origen": {"doi": "10.1016/j.lindif.2023.102274", "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education"},
+      "documentos_esperados": ["10.1016/j.lindif.2023.102274"]
+    },
+    {
+      "id": "T1-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los universitarios son conscientes de que ChatGPT puede equivocarse porque responde con patrones estadísticos y no entiende emociones?",
+      "origen": {"doi": "10.1186/s41239-023-00411-8", "titulo": "Students' voices on generative AI: perceptions, benefits, and challenges in higher education"},
+      "documentos_esperados": ["10.1186/s41239-023-00411-8"]
+    },
+    {
+      "id": "T1-03",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sostener que la carga de tareas y la presión del tiempo llevan a los estudiantes a apoyarse cada vez más en la IA generativa.",
+      "origen": {"doi": "10.1186/s41239-024-00444-7", "titulo": "Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students"},
+      "documentos_esperados": ["10.1186/s41239-024-00444-7"]
+    },
+    {
+      "id": "T1-04",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué piensan los profesores de una universidad del Perú cuando sus alumnos usan herramientas de inteligencia artificial en clase?",
+      "origen": {"doi": "10.18800/educacion.202401.m001", "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú"},
+      "documentos_esperados": ["10.18800/educacion.202401.m001"]
+    },
+    {
+      "id": "T1-05",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "Busco datos de una encuesta a alumnos de una universidad mexicana sobre si el chatbot de OpenAI les sirve para investigar y analizar información de sus cursos.",
+      "origen": {"doi": "10.36825/riti.11.23.009", "titulo": "Uso y Percepción de ChatGPT en la Educación Superior"},
+      "documentos_esperados": ["10.36825/riti.11.23.009"]
+    },
+    {
+      "id": "T1-06",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Hay algún experimento con grupo de control en el que los alumnos de colegio que usaron ChatGPT para armar sus proyectos obtuvieran trabajos de mejor calidad?",
+      "origen": {"doi": "10.33386/593dp.2024.4.2493", "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos"},
+      "documentos_esperados": ["10.33386/593dp.2024.4.2493"]
+    },
+    {
+      "id": "T1-07",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero argumentar que un profesor de inglés puede preparar con ayuda de un chatbot diálogos y lecturas ajustados a lo que necesita cada estudiante.",
+      "origen": {"doi": "10.21093/ijeltal.v7i2.1387", "titulo": "Exploring the Implications of ChatGPT for Language Learning in Higher Education"},
+      "documentos_esperados": ["10.21093/ijeltal.v7i2.1387"]
+    },
+    {
+      "id": "T1-08",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué reglas o normas recomiendan los estudios para que las universidades usen la inteligencia artificial sin dejar de lado la ética y la inclusión?",
+      "origen": {"doi": "10.5944/ried.28.2.43511", "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión"},
+      "documentos_esperados": ["10.5944/ried.28.2.43511"]
+    },
+    {
+      "id": "T1-09",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Necesito evidencia de que saber escribir bien y otras competencias explican, junto con el uso de ChatGPT, las notas de los universitarios, medido con un modelo PLS.",
+      "origen": {"doi": "10.37467/revhuman.v21.5077", "titulo": "Predictores del desempeño académico mediante el uso del ChatGPT"},
+      "documentos_esperados": ["10.37467/revhuman.v21.5077"]
+    },
+    {
+      "id": "T1-10",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué porcentaje de alumnos de maestría a distancia conoce estos asistentes conversacionales y cuántos los han usado para estudiar?",
+      "origen": {"doi": "10.35869/reined.v21i3.4974", "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio"},
+      "documentos_esperados": ["10.35869/reined.v21i3.4974"]
+    },
+    {
+      "id": "T2-01",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Que a los dueños les parezca fácil y útil influye en que las pequeñas empresas de México promocionen sus productos en Facebook o Instagram?",
+      "origen": {"doi": "10.17013/risti.18.49-65", "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas"},
+      "documentos_esperados": ["10.17013/risti.18.49-65"]
+    },
+    {
+      "id": "T2-02",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sostener que, para que una empresa pequeña empiece a usar inteligencia artificial, importan más sus propias habilidades tecnológicas que la ayuda que reciba de afuera.",
+      "origen": {"doi": "10.1016/j.techsoc.2024.102733", "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment"},
+      "documentos_esperados": ["10.1016/j.techsoc.2024.102733"]
+    },
+    {
+      "id": "T2-03",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Probar formas nuevas de ganar dinero y organizar el negocio mejora los resultados de las pymes que ya trabajan con tecnología digital?",
+      "origen": {"doi": "10.1016/j.telpol.2019.101828", "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?"},
+      "documentos_esperados": ["10.1016/j.telpol.2019.101828"]
+    },
+    {
+      "id": "T2-04",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "Necesito cifras de cuánto tiempo aguantan sin dinero en caja los pequeños negocios de Ecuador y de cuánto subieron las ventas por internet con la pandemia.",
+      "origen": {"doi": "10.48082/espacios-a20v41n42p09", "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19"},
+      "documentos_esperados": ["10.48082/espacios-a20v41n42p09"]
+    },
+    {
+      "id": "T2-05",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué cuentan en entrevistas los administradores de negocios pequeños sobre por qué compran o no sistemas informáticos y qué papel tiene el liderazgo?",
+      "origen": {"doi": "10.17013/risti.22.20-36", "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo"},
+      "documentos_esperados": ["10.17013/risti.22.20-36"]
+    },
+    {
+      "id": "T2-06",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero argumentar que los gerentes de pymes de Chile más abiertos a lo nuevo tienen una actitud más favorable a vender por internet.",
+      "origen": {"doi": "10.4067/s0718-18762018000300102", "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis"},
+      "documentos_esperados": ["10.4067/s0718-18762018000300102"]
+    },
+    {
+      "id": "T2-07",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los microemprendedores que pasaron por cursos usan más la web para promocionarse y comunicarse con clientes y proveedores que los que no se capacitaron?",
+      "origen": {"doi": "10.4067/s0718-07642017000600008", "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile"},
+      "documentos_esperados": ["10.4067/s0718-07642017000600008"]
+    },
+    {
+      "id": "T2-08",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Empezar a vender en línea lleva a las empresas pequeñas a cambiar también sus procesos internos? Busco un análisis con ecuaciones estructurales y efectos mediadores.",
+      "origen": {"doi": "10.3390/jtaer18040086", "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis"},
+      "documentos_esperados": ["10.3390/jtaer18040086"]
+    },
+    {
+      "id": "T2-09",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Las empresas ahorran en materiales y mantenimiento cuando dejan el papel y emiten sus comprobantes de venta en formato digital ante el fisco?",
+      "origen": {"doi": "10.22370/riace.2021.10.1.2987", "titulo": "Facturación electrónica un mecanismo de control para el cumplimiento tributario, caso sector carrocero"},
+      "documentos_esperados": ["10.22370/riace.2021.10.1.2987"]
+    },
+    {
+      "id": "T2-10",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sustentar que los comentarios que los clientes dejan en internet hacen que otros decidan por impulso comer en una cevichería.",
+      "origen": {"doi": "10.62754/joe.v3i4.3469", "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú"},
+      "documentos_esperados": ["10.62754/joe.v3i4.3469"]
+    }
+  ]
+}

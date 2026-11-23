@@ -549,3 +549,22 @@ def test_la_migracion_0012_agrega_los_modelos_de_lenguaje(base_vacia: str) -> No
     _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
     with pytest.raises(RuntimeError, match="congelada"):
         command.upgrade(cfg, "0012")
+
+
+def test_la_migracion_0013_agrega_los_parametros_de_recuperacion(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0013")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict)
+    assert (parametros["candidatos_reranking"], parametros["presupuesto_tokens_contexto"]) == (
+        20,
+        2400,
+    )
+    assert parametros["versiones_instrucciones"] == {"suficiencia": "v1"}
+    command.downgrade(cfg, "0012")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and "candidatos_reranking" not in parametros
+    assert parametros["versiones_instrucciones"] == {}
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    with pytest.raises(RuntimeError, match="congelada"):
+        command.upgrade(cfg, "0013")

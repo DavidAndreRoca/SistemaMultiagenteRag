@@ -85,6 +85,8 @@ Importador O1 (T15): `app/importacion/` (`extraccion.py` sin acceso a la base; `
 
 Modelos de lenguaje (T17): `app/llm/` (`ModeloLenguaje` en `interfaces.py`, proveedores Groq, DeepSeek, Gemini y simulado en `proveedores.py`, `CadenaModelos` con reintentos, respaldo y registro en `cadena.py`, `limitador.py`, `fabrica.crear_cadena`). Orden en `PROVEEDORES_MODELO` (validado al arrancar; en pruebas, `simulado`); modelos, límites y precios en la configuración (migración 0012). Instrucciones en `backend/instrucciones/<agente>/<version>.md`, cargadas con `app/instrucciones/cargador.py`; una versión publicada no se edita (`registro.json`, `python -m app.instrucciones registrar`). Ninguna prueba automática llama a un proveedor real: el contrato usa `pruebas/contrato/modelos/` (`python -m pruebas.contrato.grabar_modelos`).
 
+Recuperación (T16): `app/rag/` (`fusion.py` con RRF y presupuesto de contexto, `recuperacion.Recuperador`, `suficiencia.decidir` en dos pasos, `servicio.ServicioEvidencia` con `preparar` y `atender`, que solo genera con evidencia suficiente y registra `fragmento_recuperado`, eventos y la abstención). Consultas por tipo y contexto en `app/repositorios/recuperacion.py`, nunca por colección. Instrucción `instrucciones/suficiencia/v1.md`. Línea base con `python -m app.rag.evaluar` sobre `evaluacion/conjuntos/` (transacción revertida, no escribe en la base). En pruebas, `pruebas/dobles_rag.py` (reordenador por coincidencia de palabras).
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.
