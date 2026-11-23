@@ -1478,6 +1478,7 @@ Decisiones del equipo del 22 de noviembre de 2026:
 - **El registro de instrucciones se escribía con finales de línea de Windows:** `python -m app.instrucciones registrar` escribe ahora siempre con LF.
 - **psycopg asíncrono no funciona con el bucle Proactor de Windows:** el evaluador usa el bucle Selector en Windows.
 - **El contenedor de pruebas no veía `evaluacion/`:** se monta en solo lectura, igual que `docs/`.
+- **La CI de la solicitud falló en `ruff format --check`:** la migración 0013 no estaba formateada, porque en local solo se había pasado Ruff por `app` y `pruebas`. Se formateó (el SQL no cambia, solo las comillas de Python) y ahora se revisa todo `backend/` antes de subir.
 - **El reordenador fue más lento que en T08:** 28,2 s con 30 candidatos, frente a 18,6 s. De ahí la decisión de usar 20 (T16-01, apartado 3).
 
 ### 20.5. Pendientes y riesgos

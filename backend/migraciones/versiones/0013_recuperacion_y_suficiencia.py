@@ -54,7 +54,7 @@ def upgrade() -> None:
             " 'presupuesto_tokens_contexto', CAST(:presupuesto AS integer))"
             " || jsonb_build_object('versiones_instrucciones',"
             " coalesce(parametros -> 'versiones_instrucciones', '{}'::jsonb)"
-            " || '{\"suficiencia\": \"v1\"}'::jsonb)"
+            ' || \'{"suficiencia": "v1"}\'::jsonb)'
             " WHERE numero_version = 1"
         ),
         {"candidatos": CANDIDATOS_RERANKING, "presupuesto": PRESUPUESTO_TOKENS_CONTEXTO},
