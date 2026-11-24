@@ -54,3 +54,15 @@ class RepositorioEvaluacion:
 
     async def revertir(self) -> None:
         await self._sesion.rollback()
+
+    async def estados_oa(
+        self, contexto: ContextoAcceso, ids: Sequence[uuid.UUID]
+    ) -> dict[uuid.UUID, str]:
+        """Estado de acceso abierto de cada documento (evaluador de D4, T19)."""
+        contexto.exigir_investigador()
+        if not ids:
+            return {}
+        filas = await self._sesion.execute(
+            select(Documento.id, Documento.estado_oa).where(Documento.id.in_(list(ids)))
+        )
+        return {i: e.value for i, e in filas.all()}

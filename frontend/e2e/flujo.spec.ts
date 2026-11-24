@@ -159,6 +159,18 @@ test("un caso ingresa, carga su borrador y ve la versión", async ({ page }, inf
   await salir(page);
 });
 
+test("un caso abre la búsqueda de evidencia (T19)", async ({ page }, info) => {
+  const caso = credenciales.get(CASO_A);
+  if (!caso) throw new Error("El caso A no se registró");
+  await entrar(page, caso.cuenta, CONTRASENA_NUEVA);
+  await expect(page.getByRole("heading", { name: "Panel del caso" })).toBeVisible();
+  await page.getByRole("link", { name: "Buscar evidencia en las fuentes de su tema" }).click();
+  await expect(page.getByRole("heading", { name: "Buscar evidencia" })).toBeVisible();
+  await expect(page.getByLabel("Consulta o afirmación")).toBeVisible();
+  await revisarAccesibilidad(page, "búsqueda de evidencia", info);
+  await salir(page);
+});
+
 test("un caso no ve las versiones de otro", async ({ page }) => {
   const caso = credenciales.get(CASO_B);
   if (!caso) throw new Error("El caso B no se registró");

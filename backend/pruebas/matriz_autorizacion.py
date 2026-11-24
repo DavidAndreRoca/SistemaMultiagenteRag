@@ -28,6 +28,10 @@ class Entrada:
     # Formulario con archivo (multipart): campos y nombre de un .docx de pruebas/datos/docx/.
     formulario: dict[str, str] = field(default_factory=dict)
     archivo: str | None = None
+    # Códigos que el propio caso puede recibir sin que sea un error de autorización:
+    # 503 si la ruta necesita un servicio que las pruebas no tienen, 404 si el
+    # ejemplo usa un identificador ficticio (T19).
+    admite_propio: frozenset[int] = frozenset()
 
 
 ID_FICTICIO = "00000000-0000-4000-8000-000000000000"  # basta para comprobar 401 y 403
@@ -46,6 +50,17 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         Politica.CASO, datos_de_caso=True, formulario={"hito": "avance_1"}, archivo="valido.docx"
     ),
     ("GET", "/caso/versiones"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Búsqueda de evidencia (T19). Sin servicio de modelos en las pruebas responde 503.
+    ("POST", "/caso/evidencias"): Entrada(
+        Politica.CASO,
+        cuerpo={"consulta": "¿La tutoría entre pares reduce la ansiedad?"},
+        admite_propio=frozenset({503}),
+    ),
+    ("GET", "/caso/evidencias/{solicitud_id}"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/evidencias/{ID_FICTICIO}",
+        admite_propio=frozenset({404}),
+    ),
     ("GET", "/caso/versiones/{version_id}"): Entrada(
         Politica.CASO, ejemplo="/caso/versiones/{VERSION_A}", datos_de_caso=True
     ),

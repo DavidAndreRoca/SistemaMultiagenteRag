@@ -139,6 +139,13 @@ class ParametrosFuncionales(_Estricto):
         le=1,
         description="Sobre el puntaje del reranker normalizado entre 0 y 1 (sigmoide). Provisional",
     )
+    # Validación previa de la consulta de evidencia (T19-01; Fase 1, 7.2): reglas y
+    # clasificador de pertinencia (similitud coseno máxima con el corpus del caso)
+    consulta_min_palabras: int = Field(5, ge=1)
+    consulta_max_caracteres: int = Field(1000, ge=50)
+    pertinencia_umbral: float = Field(
+        0.55, ge=0, le=1, description="Similitud coseno mínima con el corpus. Provisional"
+    )
     # Segmentación (Fase 1, 18.4)
     ventana_tokens: VentanaTokens = Field(
         default_factory=lambda: VentanaTokens(minimo=300, maximo=450, objetivo=400)
@@ -166,7 +173,9 @@ class ParametrosFuncionales(_Estricto):
         default_factory=lambda: list(MODELOS_INICIALES), min_length=1
     )
     # Versión vigente de la instrucción de cada agente (RNF-21): agente -> vN
-    versiones_instrucciones: dict[str, str] = Field(default_factory=lambda: {"suficiencia": "v1"})
+    versiones_instrucciones: dict[str, str] = Field(
+        default_factory=lambda: {"suficiencia": "v1", "evidencia": "v1"}
+    )
 
     @model_validator(mode="after")
     def _coherencia(self) -> Self:
