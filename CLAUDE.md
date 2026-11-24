@@ -89,6 +89,8 @@ Recuperación (T16): `app/rag/` (`fusion.py` con RRF y presupuesto de contexto, 
 
 Contrato de agentes (T18): `app/agentes/contrato.py` (`EstadoAgente` sin historial; `Agente.atender` recupera, decide suficiencia y genera con el esquema del tipo de `app/agentes/esquemas.py`, que no tiene campos de referencias). Comprobaciones 1 (esquema) y 3 (citas a `fragmento_recuperado`) en `app/verificacion/comprobaciones.py`. Referencias en `app/bibliografia/referencias.py` (doi.org con DOI; si no, `csl.py` con `citeproc-py` y los estilos de `app/bibliografia/estilos/`, con huella fijada). En pruebas, el escenario compartido de T16 y T18 está en `pruebas/integracion/escenario_rag.py`.
 
+Evidencia (T19): agente D4 en `app/agentes/evidencia.py` (`AgenteEvidencia`; `AtencionEvidencia` crea la solicitud y la atiende en segundo plano), validación previa en `app/agentes/validacion_consulta.py` (reglas y similitud con bge-m3, umbral en la configuración, migración 0014), comprobación 5 de acceso abierto en `app/verificacion/comprobaciones.py`, rutas en `app/api/evidencia.py`, pantalla `frontend/src/paginas/Evidencia.tsx`. Sin reintento hasta T30: una comprobación fallida da "Con advertencias". Estado OA del corpus con `python -m app.corpus.acceso_abierto` (solo metadatos, tras un respaldo). Comportamiento con modelo real: `python -m app.agentes.evaluar_evidencia` (transacción revertida; con solo Groq, `ESPERA_MAXIMA_LIMITADOR_S=65`).
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

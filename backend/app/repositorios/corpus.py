@@ -17,7 +17,12 @@ from dataclasses import dataclass
 from sqlalchemy import ColumnElement, and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bd.enumeraciones import EstadoDocumento, EstadoReferencia
+from app.bd.enumeraciones import (
+    EstadoAccesoAbierto,
+    EstadoDocumento,
+    EstadoReferencia,
+    TipoColeccion,
+)
 from app.bd.modelos import (
     Coleccion,
     Documento,
@@ -218,6 +223,31 @@ class RepositorioCorpus:
             )
         )
         await self._sesion.refresh(coleccion)
+
+    async def sin_acceso_abierto_comprobado(
+        self, contexto: ContextoAcceso, coleccion_id: uuid.UUID
+    ) -> Sequence[Documento]:
+        """Documentos con DOI cuyo acceso abierto sigue sin consultar (T19)."""
+        contexto.exigir_investigador()
+        resultado = await self._sesion.scalars(
+            select(Documento)
+            .where(
+                Documento.coleccion_id == coleccion_id,
+                Documento.doi.is_not(None),
+                Documento.estado_oa == EstadoAccesoAbierto.DESCONOCIDO,
+                Documento.estado != EstadoDocumento.RETIRADO,
+            )
+            .order_by(Documento.creado_en, Documento.id)
+        )
+        return resultado.all()
+
+    async def coleccion_del_tema(self, contexto: ContextoAcceso, tema: str) -> Coleccion | None:
+        contexto.exigir_investigador()
+        return await self._sesion.scalar(
+            select(Coleccion).where(
+                Coleccion.tipo == TipoColeccion.CIENTIFICA, Coleccion.tema == tema
+            )
+        )
 
     async def por_reindexar(
         self, contexto: ContextoAcceso, modelo: str, revision: str, forzar: bool

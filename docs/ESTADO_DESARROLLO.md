@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 23 de noviembre de 2026. T18 implementada y verificada en su rama (apartado 21). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 24 de noviembre de 2026. T19 implementada en la rama `t19-agente-evidencia` (apartado 22). T18 integrada en `main` (solicitud de cambio #14, apartado 21.7). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -26,8 +26,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T15 (F3)** | Importador de referencias del artículo O1 | **Integrada en `main`** (solicitud de cambio #11, apartado 18.7), verificada con servicios simulados y con un artículo base real en un proyecto aislado; criterios cumplidos y RN-19 comprobado en disco y en la base (apartado 18) |
 | **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Integrada en `main`** (solicitud de cambio #12, apartado 19.7), verificada con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
 | **T16 (F3)** | Recuperación híbrida y suficiencia | **Integrada en `main`** (solicitud de cambio #13, apartado 20.7); criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
-| **T18 (F3)** | Contrato común de agentes y comprobaciones deterministas | **Implementada y verificada** en la rama `t18-contrato-agentes`; criterios cumplidos (apartado 21) |
-| T19 en adelante | | No iniciadas |
+| **T18 (F3)** | Contrato común de agentes y comprobaciones deterministas | **Integrada en `main`** (solicitud de cambio #14, apartado 21.7); criterios cumplidos (apartado 21) |
+| **T19 (F3)** | Agente D4: búsqueda de evidencia | **Implementada y verificada en la rama** `t19-agente-evidencia`, con modelo simulado y una ejecución con Groq; criterios cumplidos (apartado 22). Los conjuntos del equipo siguen pendientes |
+| T20 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1593,3 +1594,107 @@ Rama `t18-contrato-agentes`, desde `main` con T16 (`73b506d`). Decisión: `docs/
   - `backend/pyproject.toml` y `restricciones-corpus.txt` (`citeproc-py==0.12.3`);
   - `backend/pruebas/contrato/grabar_modelos.py` (cabeceras de la grabadora), `integracion/conftest.py` y `test_rag.py`;
   - `README.md`, `CLAUDE.md` y este archivo.
+
+### 21.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t18-contrato-agentes`: `8f62988` (`T18: agregar el contrato común de agentes, las comprobaciones 1 y 3 y el constructor de referencias`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#14 |
+| CI de la solicitud | **Verde**, ejecución 45200473182 (la de `8f62988`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `07c7215` |
+| CI de `main` tras integrar | Ejecución 45212472022: **verde** |
+
+## 22. Fase 3 (F3): T19. Agente D4: búsqueda de evidencia
+
+Rama `t19-agente-evidencia`, desde `main` con T18 (`07c7215`). Decisión: `docs/decisiones/T19-agente-evidencia.md` (T19-01). Decisión del equipo del 24 de noviembre de 2026 ("paquete recomendado"):
+- pertinencia con reglas y similitud de bge-m3 local, sin modelo de lenguaje;
+- trabajo en segundo plano con consulta del avance;
+- sin reintento hasta T30: una comprobación fallida se entrega "Con advertencias";
+- un comando que completa solo los metadatos de acceso abierto desde Unpaywall, tras un respaldo.
+
+**Insumos del equipo:** T19 no necesita borradores con errores ni la hoja de errores, que son de T20, T23, T24, T26 y T27. Necesita la revisión de `evaluacion/conjuntos/recuperacion-t16.json` y el conjunto `evaluacion/conjuntos/validacion-consultas-t19.json`. Ese conjunto lleva unas 15 consultas aceptadas y 15 rechazadas, redactadas por el equipo, con los campos `id`, `consulta`, `esperado`, `motivo` y `nota` (T19-01, apartado 9). Mientras llegan, se trabajó con un borrador de 16 consultas y con datos simulados.
+
+### 22.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Instrucciones de D4 (versión 1) | Hecha | `backend/instrucciones/evidencia/v1.md`, registrada con su huella. Esquema de la tabla 15, sin campos de referencias (RN-17) |
+| 2. Validación previa de la consulta | Hecha | `app/agentes/validacion_consulta.py`: las reglas dan `muy_corta`, `muy_larga`, `fuera_de_alcance` o `ambigua`. Después, la similitud con bge-m3 contra las fuentes del caso, con umbral 0,55. Una consulta rechazada queda como solicitud `rechazada` con su `motivo` y no se encola. El mensaje explica qué se puede pedir. Los parámetros están en la configuración (migración 0014) |
+| 3. Agente sobre el contrato común | Hecha | `app/agentes/evidencia.py` (`AgenteEvidencia`), con las comprobaciones 1, 3 y 5 y el resultado guardado con sus advertencias |
+| 4. Regla de acceso abierto | Hecha | Solo se recomiendan los documentos citados con estado OA comprobado (`gold`, `green`, `hybrid` o `bronze`). La comprobación 5 falla si se cita uno sin comprobar. `python -m app.corpus.acceso_abierto` completa el estado desde Unpaywall |
+| 5. Ruta directa | Hecha | `POST /caso/evidencias` (202) y `GET /caso/evidencias/{id}` en `app/api/evidencia.py`, en segundo plano (`AtencionEvidencia`). Una solicitud cortada por un reinicio queda `no_atendida` con el motivo `interrumpida` |
+| 6. Pantalla de evidencia | Hecha | `frontend/src/paginas/Evidencia.tsx` en `/panel/evidencia`. Cada cita se despliega con el fragmento, el documento, la sección, las páginas y el enlace OA |
+| Tarea: abstención registrada y mostrada | Hecha | "Sin evidencia suficiente", con la invitación a aportar una fuente (el aporte llega en T32) |
+| Tarea: evidencia divergente sin elegir | Hecha | Las posturas se presentan tal como aparecen; la instrucción prohíbe elegir |
+
+### 22.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| CP-05 superado | **Cumplido** | `test_cp05_sin_evidencia_se_abstiene_e_invita_a_aportar`: una consulta sin fragmentos pertinentes no genera contenido. Entrega "Sin evidencia suficiente" con la invitación, sin llamar al modelo, y la abstención queda registrada en `resultado` con el caso de la solicitud |
+| CP-11 superado | **Cumplido** | `test_cp11_una_fuente_cerrada_no_se_recomienda_y_la_verificacion_falla`: con un documento `closed` entre lo recuperado y citado, no aparece en las fuentes recomendadas. La comprobación 5 no se supera y la respuesta va "Con advertencias" con el motivo |
+| Ninguna salida del conjunto de prueba cita algo fuera de lo recuperado | **Cumplido con modelo simulado; con modelo real, ver 22.3** | Con el modelo simulado lo garantiza la comprobación 3: una cita inventada se marca "Con advertencias" (`test_una_cita_inventada_se_marca_con_advertencias`). Con Groq, 0 citas fuera de lo recuperado en las 4 respuestas generadas |
+| Una fuente cerrada nunca aparece como recomendada | **Cumplido** | Por construcción: las fuentes recomendadas se filtran por estado OA comprobado (CP-11 y la prueba con la base real). En la ejecución con Groq, 0 fuentes cerradas recomendadas |
+
+### 22.3. Pruebas
+
+- **Backend en contenedor (Python 3.12):** 734 pruebas superadas y 7 omitidas, cobertura del 91,64 %. Las omitidas necesitan GROBID o el servicio de modelos, o son las de contrato de DeepSeek y Gemini. Ruff (formato y estilo sobre todo `backend/`) y mypy (estricto sobre `app/`, como la CI) sin observaciones.
+- **Unitarias (`unitarias/test_evidencia.py`, 19):**
+  - las reglas rechazan con su motivo y aceptan consultas bien formuladas;
+  - ninguna consulta del conjunto de T16 se rechaza por reglas;
+  - el borrador del conjunto de validación se cumple;
+  - los parámetros están en la configuración;
+  - la comprobación 5.
+- **Integración (`integracion/test_evidencia.py`, 11, con la base real y el modelo simulado):**
+  - una consulta fuera de alcance no se encola;
+  - el clasificador rechaza una consulta ajena al tema;
+  - la entrega con citas desplegables y fuentes abiertas;
+  - CP-11, una cita inventada y CP-05;
+  - modelo caído (CP-07) y solicitud cortada por un reinicio;
+  - aislamiento: otro caso no ve la solicitud y sin versión no se pide;
+  - el registro no lleva la consulta ni la salida;
+  - el comando de acceso abierto cambia solo esos metadatos.
+- **Migraciones:** 0014 sube y baja, y respeta una versión 1 congelada.
+- **Matriz de autorización:** las dos rutas nuevas, con `admite_propio` para 503 y 404 del propio caso.
+- **Interfaz:** 4 pruebas nuevas en `src/pruebas/evidencia.test.tsx` (rechazo, entrega con citas, abstención y no atendida), 20 en total. Extremo a extremo con Playwright: 6 de 6, con la pantalla nueva sin errores graves de accesibilidad.
+- **Validación con bge-m3 real** (corpus provisional): las consultas del tema dan 0,61 a 0,74, las ajenas 0,36 a 0,49 y las del otro tema 0,41 a 0,63. De ahí el umbral 0,55 (T19-01, apartado 2).
+- **Comportamiento con Groq** (`python -m app.agentes.evaluar_evidencia`, 3 consultas por tema del conjunto de T16, transacción revertida): 4 respuestas generadas y 2 abstenciones del juicio del modelo, sin errores del proveedor; 0 citas fuera de lo recuperado y 0 fuentes cerradas recomendadas. Una respuesta (T2-03) cita 4 fragmentos de documentos sin OA comprobado: en el flujo real iría "Con advertencias". Cada respuesta tardó entre 88 y 122 s por la espera del límite por minuto (T19-01, apartado 7). Informe en `evaluacion/resultados/comportamiento-d4-t19.json`.
+- **Acceso abierto del corpus de desarrollo**, tras el respaldo `datos/respaldos/antes-de-acceso-abierto-2026-11-24.*`:
+  - 86 documentos con DOI consultados en Unpaywall;
+  - 83 quedan con acceso abierto comprobado (72 `gold`, 6 `hybrid`, 3 `green`, 2 `bronze`);
+  - 3 no tienen registro y los 16 sin DOI siguen sin comprobar;
+  - los 2.785 fragmentos no cambiaron.
+
+### 22.4. Problemas encontrados y soluciones
+
+- **Límite por minuto de Groq:** cada consulta hace dos llamadas (suficiencia y generación) y el limitador, con la espera máxima de 30 s, hacía fallar la segunda. Como D4 trabaja en segundo plano, con solo Groq se usa `ESPERA_MAXIMA_LIMITADOR_S=65` (`.env.example` y T19-01, apartado 7). No cambia el valor por defecto de T17.
+- **La limpieza entre pruebas no restauraba los parámetros de la configuración:** una prueba que bajaba el umbral de pertinencia hacía fallar la de la semilla según el orden. `bd_limpia` ahora restaura los parámetros tal como los deja la migración.
+- **La matriz exigía 403 o 401 para todo:** las rutas de evidencia dan 503 sin servicio de modelos y 404 para una solicitud ajena. Se agregó `admite_propio` por entrada.
+- **Un archivo JSON guardado por PowerShell llevaba BOM:** los evaluadores leen con `utf-8-sig`.
+
+### 22.5. Pendientes y riesgos
+
+- **Conjuntos del equipo:** la revisión del conjunto de T16 y el conjunto de validación de consultas (T19-01, apartado 9). Sin ellos no hay tasas de la validación previa con datos reales.
+- **Reintento con los motivos de la falla:** llega en T30 con el verificador.
+- **Grabaciones de DeepSeek y Gemini:** esperan sus claves (apartado 19.5).
+- **Base de desarrollo:** sigue en la migración 0013. El agente funciona con los valores por defecto de los parámetros nuevos. La 0014 se aplica cuando el equipo lo indique.
+
+### 22.6. Archivos
+
+- **Creados:**
+  - `backend/app/agentes/evidencia.py`, `validacion_consulta.py` y `evaluar_evidencia.py`;
+  - `backend/app/api/evidencia.py` y `backend/app/corpus/acceso_abierto.py`;
+  - `backend/instrucciones/evidencia/v1.md` y `backend/migraciones/versiones/0014_agente_de_evidencia.py`;
+  - `backend/pruebas/unitarias/test_evidencia.py` e `integracion/test_evidencia.py`;
+  - `frontend/src/paginas/Evidencia.tsx` y `src/pruebas/evidencia.test.tsx`;
+  - `evaluacion/conjuntos/validacion-consultas-t19.json` (borrador) y `evaluacion/resultados/comportamiento-d4-t19.json`;
+  - `docs/decisiones/T19-agente-evidencia.md`.
+- **Modificados:**
+  - `backend/app/administracion/parametros.py`, `app/main.py` y `app/verificacion/comprobaciones.py` (comprobación 5);
+  - `backend/app/repositorios/caso.py`, `corpus.py` y `evaluacion.py`;
+  - `backend/instrucciones/registro.json`;
+  - `backend/pruebas/integracion/conftest.py`, `escenario_rag.py`, `test_matriz_autorizacion.py` y `test_migraciones.py`, y `pruebas/matriz_autorizacion.py` y `unitarias/test_rag.py`;
+  - `docs/api/openapi.json` y `frontend/src/api/esquema.d.ts` (regenerados);
+  - `frontend/src/App.tsx`, `paginas/PanelCaso.tsx`, `estilos.css` y `e2e/flujo.spec.ts`;
+  - `.env.example`, `README.md`, `CLAUDE.md` y este archivo.

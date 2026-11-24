@@ -80,7 +80,7 @@ def test_parametros_iniciales_de_t16() -> None:
     parametros = parametros_iniciales()
     assert (parametros.candidatos_reranking, parametros.presupuesto_tokens_contexto) == (20, 2400)
     assert (parametros.k_denso, parametros.k_lexico, parametros.n_reranking) == (30, 30, 8)
-    assert parametros.versiones_instrucciones == {"suficiencia": "v1"}
+    assert parametros.versiones_instrucciones["suficiencia"] == "v1"
     with pytest.raises(ValueError, match="candidatos_reranking"):
         ParametrosFuncionales(candidatos_reranking=5)  # menos que n_reranking
     with pytest.raises(ValueError, match="candidatos_reranking"):

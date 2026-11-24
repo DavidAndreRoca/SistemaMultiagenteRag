@@ -31,6 +31,8 @@ from pruebas.conftest import variables_base
 RAIZ_BACKEND = Path(__file__).resolve().parents[2]
 CONTRASENA_NUEVA = "contrasena-ficticia-de-pruebas-01"
 TABLAS_CONSERVADAS = {"alembic_version", "configuracion"}
+# Parámetros de la versión 1 tal como los deja la migración, para restaurarlos entre pruebas.
+_PARAMETROS_SEMILLA: dict[str, str] = {}
 
 
 def _conninfo(url: str) -> str:
@@ -72,6 +74,12 @@ def base_temporal(servidor_pruebas: str) -> Iterator[str]:
 @pytest.fixture(scope="session")
 def url_bd_migrada(base_temporal: str) -> str:
     command.upgrade(configuracion_alembic(base_temporal), "head")
+    with psycopg.connect(_conninfo(base_temporal)) as conexion:
+        fila = conexion.execute(
+            "SELECT parametros::text FROM configuracion WHERE numero_version = 1"
+        ).fetchone()
+    assert fila is not None
+    _PARAMETROS_SEMILLA[base_temporal] = fila[0]
     return base_temporal
 
 
@@ -89,7 +97,11 @@ def bd_limpia(url_bd_migrada: str) -> str:
         if tablas:
             conexion.execute("TRUNCATE " + ", ".join(f'"{t}"' for t in tablas) + " CASCADE")
         conexion.execute("DELETE FROM configuracion WHERE numero_version <> 1")
-        conexion.execute("UPDATE configuracion SET vigente = true, congelada = false")
+        conexion.execute(
+            "UPDATE configuracion SET vigente = true, congelada = false,"
+            " parametros = CAST(%s AS jsonb)",
+            (_PARAMETROS_SEMILLA[url_bd_migrada],),
+        )
     return url_bd_migrada
 
 

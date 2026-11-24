@@ -37,6 +37,17 @@ class RepositorioVersiones(RepositorioDeCaso[VersionBorrador]):
         vigente: VersionBorrador | None = resultado.scalar_one_or_none()
         return vigente
 
+    async def vigente_mas_reciente(self, contexto: ContextoAcceso) -> VersionBorrador | None:
+        """La versión vigente cargada más recientemente, de cualquier hito (T19)."""
+        resultado = await self._sesion.execute(
+            self._consulta(contexto)
+            .where(VersionBorrador.vigente)
+            .order_by(VersionBorrador.cargada_en.desc())
+            .limit(1)
+        )
+        version: VersionBorrador | None = resultado.scalar_one_or_none()
+        return version
+
     async def con_parrafos(
         self, contexto: ContextoAcceso, version_id: uuid.UUID
     ) -> VersionBorrador | None:
@@ -128,9 +139,38 @@ class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):
         por_identificador = {i: d for i, d in resultado.all()}
         return [(i, por_identificador[i]) for i in identificadores if i in por_identificador]
 
+    async def detalle(
+        self, contexto: ContextoAcceso, solicitud_id: uuid.UUID
+    ) -> list[tuple[FragmentoRecuperado, Fragmento, Documento]]:
+        """Los fragmentos recuperados de la solicitud con su documento, en orden (T19)."""
+        resultado = await self._sesion.execute(
+            select(FragmentoRecuperado, Fragmento, Documento)
+            .join(Fragmento, Fragmento.id == FragmentoRecuperado.fragmento_id)
+            .join(Documento, Documento.id == Fragmento.documento_id)
+            .where(
+                FragmentoRecuperado.caso_id == contexto.caso_exigido(),
+                FragmentoRecuperado.solicitud_id == solicitud_id,
+            )
+            .order_by(FragmentoRecuperado.posicion)
+        )
+        return [(r, f, d) for r, f, d in resultado.all()]
+
 
 class RepositorioResultados(RepositorioDeCaso[Resultado]):
     modelo = Resultado
+
+    async def de_solicitud(
+        self, contexto: ContextoAcceso, solicitud_id: uuid.UUID
+    ) -> Resultado | None:
+        """El último intento de la solicitud del caso (T19)."""
+        resultado = await self._sesion.execute(
+            self._consulta(contexto)
+            .where(Resultado.solicitud_id == solicitud_id)
+            .order_by(Resultado.intento.desc())
+            .limit(1)
+        )
+        encontrado: Resultado | None = resultado.scalar_one_or_none()
+        return encontrado
 
 
 class RepositorioVerificaciones(RepositorioDeCaso[Verificacion]):

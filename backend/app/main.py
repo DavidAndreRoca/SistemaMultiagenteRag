@@ -10,7 +10,16 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from app import __version__
-from app.api import borradores, caso, corpus, importacion, investigador, salud, sesion
+from app.api import (
+    borradores,
+    caso,
+    corpus,
+    evidencia,
+    importacion,
+    investigador,
+    salud,
+    sesion,
+)
 from app.bd.sesion import crear_fabrica_sesiones, crear_motor
 from app.comun.errores import RespuestaError, registrar_manejadores
 from app.comun.middleware import MiddlewareIncidencia
@@ -51,6 +60,8 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
             importador = aplicacion.state.importador
             if importador is not None:
                 importador.cancelar()
+            if aplicacion.state.atencion_evidencia is not None:
+                aplicacion.state.atencion_evidencia.cancelar()
             await motor.dispose()
             obtener_registrador().info("aplicacion detenida", extra={"tipo_evento": "apagado"})
 
@@ -74,10 +85,11 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     aplicacion.state.indexador = None
     aplicacion.state.embebedor = None
     aplicacion.state.importador = None  # T15: se crea al primer uso, con el indexador
+    aplicacion.state.atencion_evidencia = None  # T19: se crea al primer uso
     aplicacion.state.candado_corpus = asyncio.Lock()
     aplicacion.state.servicio_borradores = None  # se crea al primer uso (DIRECTORIO_ARCHIVOS)
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
-    for modulo in (salud, sesion, caso, borradores, investigador, corpus, importacion):
+    for modulo in (salud, sesion, caso, borradores, investigador, corpus, importacion, evidencia):
         aplicacion.include_router(modulo.router)
     return aplicacion

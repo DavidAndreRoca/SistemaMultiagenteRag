@@ -90,7 +90,7 @@ async def test_matriz_de_autorizacion(entorno: Entorno, investigador: httpx.Asyn
                 if r.status_code != 403:
                     fallos.append(f"{metodo} {ruta} con A2 -> {r.status_code}")
                 propio = await _pedir(estudiante_a, metodo, ruta, entrada)
-                if propio.status_code >= 400:
+                if propio.status_code >= 400 and propio.status_code not in entrada.admite_propio:
                     fallos.append(f"{metodo} {ruta} con su caso -> {propio.status_code}")
             if entrada.datos_de_caso:
                 ajeno = await _pedir(estudiante_b, metodo, ruta, entrada)

@@ -269,6 +269,25 @@ Decisiones: `docs/decisiones/T16-recuperacion-suficiencia.md`.
 
 Decisiones: `docs/decisiones/T18-contrato-agentes.md`.
 
+## Búsqueda de evidencia (T19)
+
+El caso escribe una consulta o una afirmación en `/panel/evidencia` y el agente D4 responde con afirmaciones citadas, o se abstiene con "Sin evidencia suficiente".
+- **Validación previa:** reglas (longitud, pedidos de redacción completa, consultas vagas) y similitud con bge-m3 contra las fuentes del caso. Una consulta rechazada no se encola y explica qué se puede pedir.
+- **Trabajo en segundo plano:** `POST /api/caso/evidencias` responde 202 y la interfaz consulta el avance.
+- **Acceso abierto:** solo se recomiendan fuentes con estado OA comprobado (RN-14). Si se cita una que no lo tiene, la respuesta va "Con advertencias" (el reintento llega en T30). Para completar el estado OA del corpus desde Unpaywall, después de un respaldo:
+
+  ```bash
+  python -m app.corpus.acceso_abierto --tema TEMA --investigador INV-01 --aplicar
+  ```
+
+- **Comportamiento con el modelo real**, bajo demanda y sin escribir en la base:
+
+  ```bash
+  python -m app.agentes.evaluar_evidencia ../evaluacion/conjuntos/recuperacion-t16.json --limite 3
+  ```
+
+Decisiones: `docs/decisiones/T19-agente-evidencia.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

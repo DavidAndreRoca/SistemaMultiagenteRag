@@ -1,0 +1,251 @@
+// Búsqueda de evidencia del caso (T19; RF-08, CU-07, RF-21 en parte). El estudiante escribe
+// una consulta o una afirmación; el sistema la valida, busca en las fuentes de su tema y de
+// su colección personal y responde con afirmaciones citadas. Cada cita se despliega con el
+// fragmento, el documento, la sección, las páginas y el enlace de acceso abierto.
+import { useEffect, useState } from "react";
+import { Form } from "react-aria-components";
+
+import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
+import { AvisoError, Boton, CampoTextoLargo } from "../componentes/controles";
+import { Marco } from "../componentes/Marco";
+
+type Vista = Esquemas["VistaEvidencia"];
+type Afirmacion = Esquemas["AfirmacionVista"];
+type Cita = Esquemas["CitaVista"];
+
+const ESPERA_AVANCE_MS = 2000;
+const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
+const SECCIONES: Record<string, string> = {
+  resumen: "Resumen",
+  introduccion: "Introducción",
+  metodos: "Métodos",
+  resultados: "Resultados",
+  discusion: "Discusión",
+  conclusiones: "Conclusiones",
+  otra: "Otra sección",
+};
+const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
+  interrumpida: "La búsqueda se interrumpió por un reinicio del servidor. Vuelva a pedirla.",
+};
+
+function paginas(cita: Cita): string {
+  if (cita.pagina_inicio === null) return "";
+  if (cita.pagina_fin === null || cita.pagina_fin === cita.pagina_inicio) {
+    return `, página ${cita.pagina_inicio}`;
+  }
+  return `, páginas ${cita.pagina_inicio} a ${cita.pagina_fin}`;
+}
+
+export function Evidencia() {
+  const [consulta, setConsulta] = useState("");
+  const [error, setError] = useState<unknown>(null);
+  const [vista, setVista] = useState<Vista | null>(null);
+  const [solicitud, setSolicitud] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
+
+  const siguiendo = solicitud !== null && (vista === null || EN_CURSO.has(vista.estado));
+
+  useEffect(() => {
+    if (solicitud === null || !siguiendo) return;
+    let vigente = true;
+    const espera = setTimeout(() => {
+      exigir(
+        api.GET("/caso/evidencias/{solicitud_id}", {
+          params: { path: { solicitud_id: solicitud } },
+        }),
+      )
+        .then((actual) => {
+          if (vigente) setVista(actual);
+        })
+        .catch((fallo: unknown) => {
+          if (vigente) setError(fallo);
+        });
+    }, ESPERA_AVANCE_MS);
+    return () => {
+      vigente = false;
+      clearTimeout(espera);
+    };
+  }, [solicitud, siguiendo, vista]);
+
+  async function enviar() {
+    setError(null);
+    setVista(null);
+    setSolicitud(null);
+    if (consulta.trim() === "") {
+      setError(
+        errorDeValidacion("Escriba la consulta o la afirmación para la que busca evidencia."),
+      );
+      return;
+    }
+    setEnviando(true);
+    try {
+      const nueva = await exigir(
+        api.POST("/caso/evidencias", { body: { consulta: consulta.trim() } }),
+      );
+      setSolicitud(nueva.id);
+    } catch (fallo) {
+      setError(fallo);
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  return (
+    <Marco titulo="Buscar evidencia">
+      <p>
+        <a href="/panel">Volver al panel del caso</a>
+      </p>
+      <Form
+        className="formulario"
+        onSubmit={(evento) => {
+          evento.preventDefault();
+          void enviar();
+        }}
+      >
+        <CampoTextoLargo
+          etiqueta="Consulta o afirmación"
+          descripcion="Escriba la afirmación que quiere sustentar o la pregunta que quiere responder. El sistema busca solo en las fuentes de su tema y de su colección personal."
+          name="consulta"
+          value={consulta}
+          onChange={setConsulta}
+          maxLength={1000}
+        />
+        <AvisoError error={error} />
+        <Boton type="submit" isDisabled={enviando || siguiendo}>
+          {enviando ? "Enviando…" : "Buscar evidencia"}
+        </Boton>
+      </Form>
+      {siguiendo ? (
+        <p role="status" aria-live="polite">
+          Buscando evidencia en las fuentes de su tema. Puede tardar uno o dos minutos.
+        </p>
+      ) : null}
+      {vista && !EN_CURSO.has(vista.estado) ? <Resultado vista={vista} /> : null}
+    </Marco>
+  );
+}
+
+function Resultado({ vista }: { vista: Vista }) {
+  if (vista.estado === "no_atendida") {
+    return (
+      <div className="aviso aviso--error" role="alert">
+        <p>
+          {MOTIVOS_NO_ATENDIDA[vista.motivo ?? ""] ??
+            "La búsqueda no pudo atenderse. Intente de nuevo en unos minutos."}
+        </p>
+      </div>
+    );
+  }
+  if (vista.abstencion) {
+    return (
+      <section aria-labelledby="titulo-resultado" className="evidencia">
+        <h2 id="titulo-resultado">{vista.aviso ?? "Sin evidencia suficiente"}</h2>
+        <p>
+          Las fuentes de su tema no tienen evidencia suficiente para esta consulta, así que el
+          sistema no genera una respuesta.
+        </p>
+        {vista.invitacion_aporte ? <p>{vista.invitacion_aporte}</p> : null}
+      </section>
+    );
+  }
+  return (
+    <section aria-labelledby="titulo-resultado" className="evidencia">
+      <h2 id="titulo-resultado">Evidencia encontrada</h2>
+      {vista.etiqueta === "con_advertencias" ? (
+        <div className="aviso aviso--importante" role="status">
+          <p>Con advertencias: revise estas observaciones antes de usar la respuesta.</p>
+          <ul>
+            {vista.advertencias.map((advertencia) => (
+              <li key={advertencia}>{advertencia}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <ListaAfirmaciones afirmaciones={vista.respuesta} etiqueta="Respuesta con sus citas" />
+      {vista.evidencia_divergente.length > 0 ? (
+        <>
+          <h3>Evidencia divergente</h3>
+          <p>
+            Las fuentes no coinciden. Se presentan las posturas tal como aparecen; la decisión es
+            suya.
+          </p>
+          <ListaAfirmaciones afirmaciones={vista.evidencia_divergente} etiqueta="Posturas" />
+        </>
+      ) : null}
+      {vista.notas_para_el_estudiante.length > 0 ? (
+        <>
+          <h3>Notas</h3>
+          <ul>
+            {vista.notas_para_el_estudiante.map((nota) => (
+              <li key={nota}>{nota}</li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      <h3>Fuentes recomendadas</h3>
+      {vista.fuentes.length === 0 ? (
+        <p>Ninguna de las fuentes citadas tiene acceso abierto comprobado.</p>
+      ) : (
+        <ul className="fuentes">
+          {vista.fuentes.map((fuente) => (
+            <li key={fuente.documento_id}>
+              <p>{fuente.referencia}</p>
+              <p className="campo__descripcion">
+                Citada en {fuente.identificadores.join(", ")}
+                {fuente.url_acceso_abierto ? (
+                  <>
+                    {". "}
+                    <a href={fuente.url_acceso_abierto} target="_blank" rel="noopener noreferrer">
+                      Acceso abierto<span className="oculto"> (otra pestaña)</span>
+                    </a>
+                  </>
+                ) : null}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function ListaAfirmaciones({
+  afirmaciones,
+  etiqueta,
+}: {
+  afirmaciones: Afirmacion[];
+  etiqueta: string;
+}) {
+  return (
+    <ul className="afirmaciones" aria-label={etiqueta}>
+      {afirmaciones.map((afirmacion, indice) => (
+        <li key={`${indice}-${afirmacion.afirmacion}`}>
+          <p>{afirmacion.afirmacion}</p>
+          {afirmacion.citas.map((cita) => (
+            <details key={cita.identificador} className="cita">
+              <summary>
+                Cita {cita.identificador}: {cita.titulo ?? "Documento sin título"}
+              </summary>
+              <blockquote>{cita.texto}</blockquote>
+              <p className="campo__descripcion">
+                {SECCIONES[cita.seccion] ?? cita.seccion}
+                {paginas(cita)}
+                {cita.incompleto ? ". Documento con extracción incompleta" : ""}
+                {cita.acceso_abierto && cita.url_acceso_abierto ? (
+                  <>
+                    {". "}
+                    <a href={cita.url_acceso_abierto} target="_blank" rel="noopener noreferrer">
+                      Ver la fuente en acceso abierto<span className="oculto"> (otra pestaña)</span>
+                    </a>
+                  </>
+                ) : (
+                  ". Sin acceso abierto comprobado"
+                )}
+              </p>
+            </details>
+          ))}
+        </li>
+      ))}
+    </ul>
+  );
+}

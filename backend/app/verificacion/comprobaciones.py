@@ -13,7 +13,7 @@ Los motivos nombran campos e identificadores, nunca el contenido (4.6).
 from __future__ import annotations
 
 import re
-from collections.abc import Collection, Iterator
+from collections.abc import Collection, Iterator, Mapping
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, ValidationError
@@ -77,3 +77,27 @@ def comprobar_citas(salida: Any, recuperados: Collection[str]) -> Comprobacion:
             motivos=[f"cita a un fragmento no recuperado: {i}" for i in inexistentes],
         )
     return Comprobacion(numero=3, nombre="citas", superada=True)
+
+
+# Estados de Unpaywall que comprueban el acceso abierto (RN-14). ``closed`` y
+# ``desconocido`` no: una fuente sin acceso abierto comprobado no se recomienda.
+ACCESO_ABIERTO_COMPROBADO = frozenset({"gold", "green", "hybrid", "bronze"})
+
+
+def comprobar_acceso_abierto(estado_oa_por_cita: Mapping[str, str | None]) -> Comprobacion:
+    """Comprobación 5 (CP-11): toda cita es de un documento con acceso abierto comprobado.
+
+    ``estado_oa_por_cita`` da, para cada identificador citado, el estado de acceso
+    abierto del documento al que pertenece.
+    """
+    sin_acceso = [
+        i for i, estado in estado_oa_por_cita.items() if estado not in ACCESO_ABIERTO_COMPROBADO
+    ]
+    if sin_acceso:
+        return Comprobacion(
+            numero=5,
+            nombre="acceso_abierto",
+            superada=False,
+            motivos=[f"cita a una fuente sin acceso abierto comprobado: {i}" for i in sin_acceso],
+        )
+    return Comprobacion(numero=5, nombre="acceso_abierto", superada=True)

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 import pytest
@@ -55,6 +55,8 @@ class Escenario:
     solicitud_a: uuid.UUID
     reordenador: ReordenadorFicticio
     simulado: ProveedorSimulado
+    # Código de cuenta y contraseña inicial de cada caso, para entrar por la API (T19).
+    credenciales: dict[str, tuple[str, str]] = field(default_factory=dict)
 
     def servicio(self) -> ServicioEvidencia:
         async def sin_espera(_: float) -> None:
@@ -148,10 +150,15 @@ async def escenario(entorno: Entorno) -> Escenario:
             await casos.crear_caso(unidad, investigador, "CASO-C", TipoAutoria.INDIVIDUAL, "TEMA-B")
         ).caso.coleccion_cientifica_id
         contextos = {}
+        credenciales = {}
         for creado in (caso_a, caso_b):
             cuenta = await unidad.autenticacion.cuenta_por_codigo(creado.credenciales[0].codigo)
             assert cuenta is not None
             contextos[creado.caso.codigo] = ContextoAcceso(cuenta.id, Rol.CASO, creado.caso.id)
+            credenciales[creado.caso.codigo] = (
+                creado.credenciales[0].codigo,
+                creado.credenciales[0].contrasena_inicial,
+            )
 
         origen = {
             "Tema A, artículo 1": "cientifica_A",
@@ -211,4 +218,5 @@ async def escenario(entorno: Entorno) -> Escenario:
         solicitud.id,
         ReordenadorFicticio(),
         simulado,
+        credenciales,
     )

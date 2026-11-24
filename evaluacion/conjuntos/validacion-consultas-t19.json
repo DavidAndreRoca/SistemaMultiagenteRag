@@ -1,0 +1,25 @@
+{
+  "nombre": "Validación de consultas de evidencia (T19)",
+  "version": "borrador-1",
+  "estado": "borrador",
+  "fecha": "2026-11-24",
+  "nota": "Borrador redactado por el asistente con consultas ficticias, a reemplazar o completar por el equipo (T19-01, apartado 7). 'esperado' es aceptada o rechazada; 'motivo' es muy_corta, muy_larga, ambigua o fuera_de_alcance. 'detecta': 'pertinencia' marca las rechazadas que no detectan las reglas sino el clasificador de pertinencia (consultas ajenas al tema), que se prueban con el corpus.",
+  "consultas": [
+    {"id": "A-01", "consulta": "Quiero sustentar que la tutoría entre pares reduce la ansiedad ante la estadística", "esperado": "aceptada"},
+    {"id": "A-02", "consulta": "¿Qué evidencia hay sobre el uso de ChatGPT en la retroalimentación académica?", "esperado": "aceptada"},
+    {"id": "A-03", "consulta": "Necesito estudios que muestren si los docentes universitarios confían en la inteligencia artificial", "esperado": "aceptada"},
+    {"id": "A-04", "consulta": "¿Las pequeñas empresas que venden por internet mejoran su rentabilidad?", "esperado": "aceptada"},
+    {"id": "A-05", "consulta": "Busco estudios que resuman los efectos de la gamificación en el aprendizaje", "esperado": "aceptada"},
+    {"id": "A-06", "consulta": "Quiero respaldar que la falta de capacitación frena la adopción del comercio electrónico", "esperado": "aceptada"},
+    {"id": "R-01", "consulta": "ansiedad", "esperado": "rechazada", "motivo": "muy_corta"},
+    {"id": "R-02", "consulta": "ChatGPT en clase", "esperado": "rechazada", "motivo": "muy_corta"},
+    {"id": "R-03", "consulta": "¿Qué opinas de mi tema de investigación?", "esperado": "rechazada", "motivo": "ambigua", "nota": "no tiene una afirmación ni una pregunta concreta"},
+    {"id": "R-04", "consulta": "Quiero saber algo sobre esto para mi trabajo", "esperado": "rechazada", "motivo": "ambigua"},
+    {"id": "R-05", "consulta": "Redacta la introducción completa de mi artículo", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
+    {"id": "R-06", "consulta": "Escríbeme el marco teórico sobre el uso de ChatGPT", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
+    {"id": "R-07", "consulta": "Corrige este párrafo de mi borrador por favor", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
+    {"id": "R-08", "consulta": "Receta de ceviche peruano paso a paso con limón y ají", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"},
+    {"id": "R-09", "consulta": "¿Quién ganó el mundial de fútbol de 2022?", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"},
+    {"id": "R-10", "consulta": "¿Cuál es el precio del dólar hoy en Lima?", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"}
+  ]
+}

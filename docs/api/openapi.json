@@ -1,6 +1,27 @@
 {
   "components": {
     "schemas": {
+      "AfirmacionVista": {
+        "properties": {
+          "afirmacion": {
+            "title": "Afirmacion",
+            "type": "string"
+          },
+          "citas": {
+            "items": {
+              "$ref": "#/components/schemas/CitaVista"
+            },
+            "title": "Citas",
+            "type": "array"
+          }
+        },
+        "required": [
+          "afirmacion",
+          "citas"
+        ],
+        "title": "AfirmacionVista",
+        "type": "object"
+      },
       "Body_cargar_version_caso_versiones_post": {
         "properties": {
           "archivo": {
@@ -256,6 +277,87 @@
         "title": "CasoVista",
         "type": "object"
       },
+      "CitaVista": {
+        "properties": {
+          "acceso_abierto": {
+            "title": "Acceso Abierto",
+            "type": "boolean"
+          },
+          "identificador": {
+            "title": "Identificador",
+            "type": "string"
+          },
+          "incompleto": {
+            "title": "Incompleto",
+            "type": "boolean"
+          },
+          "pagina_fin": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pagina Fin"
+          },
+          "pagina_inicio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pagina Inicio"
+          },
+          "seccion": {
+            "title": "Seccion",
+            "type": "string"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          },
+          "titulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Titulo"
+          },
+          "url_acceso_abierto": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url Acceso Abierto"
+          }
+        },
+        "required": [
+          "identificador",
+          "texto",
+          "titulo",
+          "seccion",
+          "pagina_inicio",
+          "pagina_fin",
+          "acceso_abierto",
+          "url_acceso_abierto",
+          "incompleto"
+        ],
+        "title": "CitaVista",
+        "type": "object"
+      },
       "ColeccionVista": {
         "properties": {
           "id": {
@@ -299,6 +401,37 @@
           "n_pendientes"
         ],
         "title": "ColeccionVista",
+        "type": "object"
+      },
+      "ComprobacionVista": {
+        "properties": {
+          "motivos": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Motivos",
+            "type": "array"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "numero": {
+            "title": "Numero",
+            "type": "integer"
+          },
+          "superada": {
+            "title": "Superada",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "numero",
+          "nombre",
+          "superada",
+          "motivos"
+        ],
+        "title": "ComprobacionVista",
         "type": "object"
       },
       "CredencialVista": {
@@ -560,6 +693,30 @@
         "title": "EstadoSesion",
         "type": "object"
       },
+      "EstadoSolicitud": {
+        "enum": [
+          "recibida",
+          "asignada",
+          "recuperando",
+          "generando",
+          "verificando",
+          "reintentando",
+          "entregada",
+          "no_atendida",
+          "rechazada"
+        ],
+        "title": "EstadoSolicitud",
+        "type": "string"
+      },
+      "Etiqueta": {
+        "enum": [
+          "verificada",
+          "con_advertencias",
+          "sin_evidencia_suficiente"
+        ],
+        "title": "Etiqueta",
+        "type": "string"
+      },
       "ExclusionVista": {
         "properties": {
           "duplicado_de_id": {
@@ -609,6 +766,50 @@
           "registrada_en"
         ],
         "title": "ExclusionVista",
+        "type": "object"
+      },
+      "FuenteVista": {
+        "properties": {
+          "documento_id": {
+            "format": "uuid",
+            "title": "Documento Id",
+            "type": "string"
+          },
+          "identificadores": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Identificadores",
+            "type": "array"
+          },
+          "metodo": {
+            "title": "Metodo",
+            "type": "string"
+          },
+          "referencia": {
+            "title": "Referencia",
+            "type": "string"
+          },
+          "url_acceso_abierto": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url Acceso Abierto"
+          }
+        },
+        "required": [
+          "documento_id",
+          "referencia",
+          "metodo",
+          "url_acceso_abierto",
+          "identificadores"
+        ],
+        "title": "FuenteVista",
         "type": "object"
       },
       "HitoVista": {
@@ -976,6 +1177,21 @@
           "es_titulo"
         ],
         "title": "ParrafoVista",
+        "type": "object"
+      },
+      "PedidoEvidencia": {
+        "properties": {
+          "consulta": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Consulta",
+            "type": "string"
+          }
+        },
+        "required": [
+          "consulta"
+        ],
+        "title": "PedidoEvidencia",
         "type": "object"
       },
       "ReferenciaVista": {
@@ -1406,6 +1622,30 @@
         "title": "SolicitudColeccion",
         "type": "object"
       },
+      "SolicitudEvidencia": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudEvidencia",
+        "type": "object"
+      },
       "SolicitudInicio": {
         "properties": {
           "codigo": {
@@ -1614,6 +1854,148 @@
         "title": "VersionResumen",
         "type": "object"
       },
+      "VistaEvidencia": {
+        "properties": {
+          "abstencion": {
+            "title": "Abstencion",
+            "type": "boolean"
+          },
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "consulta": {
+            "title": "Consulta",
+            "type": "string"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidencia_divergente": {
+            "items": {
+              "$ref": "#/components/schemas/AfirmacionVista"
+            },
+            "title": "Evidencia Divergente",
+            "type": "array"
+          },
+          "fuentes": {
+            "items": {
+              "$ref": "#/components/schemas/FuenteVista"
+            },
+            "title": "Fuentes",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "invitacion_aporte": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invitacion Aporte"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "notas_para_el_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notas Para El Estudiante",
+            "type": "array"
+          },
+          "respuesta": {
+            "items": {
+              "$ref": "#/components/schemas/AfirmacionVista"
+            },
+            "title": "Respuesta",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "consulta",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "abstencion",
+          "aviso",
+          "invitacion_aporte",
+          "etiqueta",
+          "respuesta",
+          "evidencia_divergente",
+          "notas_para_el_estudiante",
+          "fuentes",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaEvidencia",
+        "type": "object"
+      },
       "VistaSecciones": {
         "description": "Secciones y párrafos de una versión, para que el caso elija el alcance (F-05).",
         "properties": {
@@ -1762,6 +2144,177 @@
         "summary": "Datos del propio caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/evidencias": {
+      "post": {
+        "description": "202 si la consulta se encola; 422 con el motivo y qué se puede pedir si la validación la rechaza (no se encola ni consume el modelo).",
+        "operationId": "pedir_evidencia_caso_evidencias_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoEvidencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudEvidencia"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir evidencia para una consulta o una afirmación",
+        "tags": [
+          "evidencia"
+        ]
+      }
+    },
+    "/caso/evidencias/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_evidencia_caso_evidencias__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaEvidencia"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance y resultado de una búsqueda de evidencia",
+        "tags": [
+          "evidencia"
         ]
       }
     },
