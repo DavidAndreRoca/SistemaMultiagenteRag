@@ -158,6 +158,9 @@ class ParametrosFuncionales(_Estricto):
     limite_palabras_d3: int = Field(250, ge=1)
     factor_extension_d3: float = Field(1.2, gt=0)
     limite_reescritura_palabras: int = Field(40, ge=1)
+    # Verificación de referencias (T20-01, d): explicación breve de cada discrepancia con el
+    # modelo. Apagada por defecto: el informe es determinista y completo sin ella
+    explicar_discrepancias: bool = False
     # Norma de citación (D-12)
     normas_citacion: list[str] = Field(default_factory=lambda: list(NORMAS_INICIALES), min_length=1)
     norma_por_defecto: str = NORMA_POR_DEFECTO
@@ -174,7 +177,7 @@ class ParametrosFuncionales(_Estricto):
     )
     # Versión vigente de la instrucción de cada agente (RNF-21): agente -> vN
     versiones_instrucciones: dict[str, str] = Field(
-        default_factory=lambda: {"suficiencia": "v1", "evidencia": "v1"}
+        default_factory=lambda: {"suficiencia": "v1", "evidencia": "v1", "referencias": "v1"}
     )
 
     @model_validator(mode="after")

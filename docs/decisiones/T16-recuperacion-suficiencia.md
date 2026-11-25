@@ -92,6 +92,7 @@ Siguen sin cambios `k_denso` (30), `k_lexico` (30), `rrf_constante` (60), `n_rer
 
   Ragas con modelo evaluador es del arnés de T38.
 - **Registro:** la línea base se anota en ESTADO sin umbral. El umbral de la tesis es de 0,80 para la precisión contextual y se exige en T38.
+- **Propuesta del equipo para T34 (25 de noviembre de 2026):** reportar como medida principal la precisión contextual **estricta**, con las marcas del equipo por fragmento (`juicios` del conjunto revisado: un fragmento es pertinente si el equipo marcó que responde). La precisión con documentos esperados, la de esta línea base, queda como referencia. En la primera ronda, sobre 13 consultas, dieron 0,665 y 0,786 (ESTADO, apartado 22.8). T34 la adopta o la discute al calibrar.
 
 ## 8. Pruebas
 

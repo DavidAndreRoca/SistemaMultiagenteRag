@@ -453,6 +453,48 @@
         "title": "CredencialVista",
         "type": "object"
       },
+      "DiscrepanciaVista": {
+        "properties": {
+          "campo": {
+            "title": "Campo",
+            "type": "string"
+          },
+          "etiqueta": {
+            "title": "Etiqueta",
+            "type": "string"
+          },
+          "valor_borrador": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valor Borrador"
+          },
+          "valor_fuente": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valor Fuente"
+          }
+        },
+        "required": [
+          "campo",
+          "etiqueta",
+          "valor_borrador",
+          "valor_fuente"
+        ],
+        "title": "DiscrepanciaVista",
+        "type": "object"
+      },
       "DocumentoVista": {
         "properties": {
           "anio": {
@@ -581,6 +623,24 @@
         "title": "DocumentoVista",
         "type": "object"
       },
+      "EntradaNoCitadaVista": {
+        "properties": {
+          "indice": {
+            "title": "Indice",
+            "type": "integer"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          }
+        },
+        "required": [
+          "indice",
+          "texto"
+        ],
+        "title": "EntradaNoCitadaVista",
+        "type": "object"
+      },
       "EstadoCaso": {
         "enum": [
           "habilitado",
@@ -609,7 +669,7 @@
         "title": "EstadoImportacion",
         "type": "string"
       },
-      "EstadoReferencia": {
+      "EstadoReferencia-Input": {
         "description": "Estado de una referencia del artículo O1 en la colección del tema (T15).",
         "enum": [
           "incluida",
@@ -1194,6 +1254,107 @@
         "title": "PedidoEvidencia",
         "type": "object"
       },
+      "ProgresoVista": {
+        "properties": {
+          "hechas": {
+            "title": "Hechas",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "hechas",
+          "total"
+        ],
+        "title": "ProgresoVista",
+        "type": "object"
+      },
+      "ReferenciaVerificadaVista": {
+        "properties": {
+          "citada": {
+            "title": "Citada",
+            "type": "boolean"
+          },
+          "discrepancias": {
+            "items": {
+              "$ref": "#/components/schemas/DiscrepanciaVista"
+            },
+            "title": "Discrepancias",
+            "type": "array"
+          },
+          "doi_encontrado": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi Encontrado"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/app__agentes__esquemas__EstadoReferencia"
+          },
+          "explicacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explicacion"
+          },
+          "indice": {
+            "title": "Indice",
+            "type": "integer"
+          },
+          "metodo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metodo"
+          },
+          "texto_original": {
+            "title": "Texto Original",
+            "type": "string"
+          },
+          "url_doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url Doi"
+          }
+        },
+        "required": [
+          "indice",
+          "texto_original",
+          "estado",
+          "metodo",
+          "discrepancias",
+          "doi_encontrado",
+          "url_doi",
+          "explicacion",
+          "citada"
+        ],
+        "title": "ReferenciaVerificadaVista",
+        "type": "object"
+      },
       "ReferenciaVista": {
         "properties": {
           "actualizada_en": {
@@ -1243,7 +1404,7 @@
             "title": "Doi"
           },
           "estado": {
-            "$ref": "#/components/schemas/EstadoReferencia"
+            "$ref": "#/components/schemas/app__bd__enumeraciones__EstadoReferencia"
           },
           "estado_oa": {
             "anyOf": [
@@ -1686,6 +1847,30 @@
         "title": "SolicitudNorma",
         "type": "object"
       },
+      "SolicitudVerificacion": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudVerificacion",
+        "type": "object"
+      },
       "TipoAutoria": {
         "enum": [
           "individual",
@@ -2067,6 +2252,178 @@
         ],
         "title": "VistaSecciones",
         "type": "object"
+      },
+      "VistaVerificacion": {
+        "properties": {
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "avisos": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Avisos",
+            "type": "array"
+          },
+          "citas_sin_entrada": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Citas Sin Entrada",
+            "type": "array"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entradas_no_citadas": {
+            "items": {
+              "$ref": "#/components/schemas/EntradaNoCitadaVista"
+            },
+            "title": "Entradas No Citadas",
+            "type": "array"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "norma": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Norma"
+          },
+          "norma_nombre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Norma Nombre"
+          },
+          "progreso": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProgresoVista"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "referencias": {
+            "items": {
+              "$ref": "#/components/schemas/ReferenciaVerificadaVista"
+            },
+            "title": "Referencias",
+            "type": "array"
+          },
+          "resumen": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Resumen",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "norma",
+          "norma_nombre",
+          "progreso",
+          "resumen",
+          "referencias",
+          "citas_sin_entrada",
+          "entradas_no_citadas",
+          "avisos",
+          "etiqueta",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaVerificacion",
+        "type": "object"
+      },
+      "app__agentes__esquemas__EstadoReferencia": {
+        "enum": [
+          "verificada",
+          "con_discrepancias",
+          "no_localizada",
+          "no_comprobable"
+        ],
+        "title": "EstadoReferencia",
+        "type": "string"
+      },
+      "app__bd__enumeraciones__EstadoReferencia": {
+        "description": "Estado de una referencia del artículo O1 en la colección del tema (T15).",
+        "enum": [
+          "incluida",
+          "pendiente_pdf",
+          "excluida",
+          "no_comprobable"
+        ],
+        "title": "EstadoReferencia",
+        "type": "string"
       }
     }
   },
@@ -2315,6 +2672,167 @@
         "summary": "Avance y resultado de una búsqueda de evidencia",
         "tags": [
           "evidencia"
+        ]
+      }
+    },
+    "/caso/referencias": {
+      "post": {
+        "description": "202 y el trabajo sigue en segundo plano. 409 sin versión; 422 si no se detectó la lista de referencias (hay que indicarla a mano).",
+        "operationId": "verificar_referencias_caso_referencias_post",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudVerificacion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Verificar las referencias de la versión vigente",
+        "tags": [
+          "referencias"
+        ]
+      }
+    },
+    "/caso/referencias/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_verificacion_caso_referencias__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaVerificacion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance e informe de una verificación de referencias",
+        "tags": [
+          "referencias"
         ]
       }
     },
@@ -3990,7 +4508,7 @@
             "schema": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/EstadoReferencia"
+                  "$ref": "#/components/schemas/EstadoReferencia-Input"
                 },
                 {
                   "type": "null"

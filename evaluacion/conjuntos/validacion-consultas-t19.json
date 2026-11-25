@@ -1,25 +1,224 @@
 {
   "nombre": "Validación de consultas de evidencia (T19)",
-  "version": "borrador-1",
-  "estado": "borrador",
-  "fecha": "2026-11-24",
-  "nota": "Borrador redactado por el asistente con consultas ficticias, a reemplazar o completar por el equipo (T19-01, apartado 7). 'esperado' es aceptada o rechazada; 'motivo' es muy_corta, muy_larga, ambigua o fuera_de_alcance. 'detecta': 'pertinencia' marca las rechazadas que no detectan las reglas sino el clasificador de pertinencia (consultas ajenas al tema), que se prueban con el corpus.",
+  "version": "revision-1",
+  "estado": "revisado",
+  "fecha": "2026-11-25",
+  "nota": "Revisado por el equipo en la hoja evaluacion/revision/revision-conjuntos-t16-t19.xlsx (24 y 25 de noviembre de 2026): se conservaron 14 consultas del borrador, se descartaron A-01 y A-05 (no son de ninguno de los dos temas) y se agregaron 16. 'tema' es el tema del caso contra el que se prueba la consulta. 'esperado' es aceptada o rechazada; 'motivo' es muy_corta, muy_larga, ambigua o fuera_de_alcance. 'detecta': 'pertinencia' marca las rechazadas que no detectan las reglas sino el clasificador de pertinencia (consultas ajenas al proyecto), que se prueban con el corpus.",
   "consultas": [
-    {"id": "A-01", "consulta": "Quiero sustentar que la tutoría entre pares reduce la ansiedad ante la estadística", "esperado": "aceptada"},
-    {"id": "A-02", "consulta": "¿Qué evidencia hay sobre el uso de ChatGPT en la retroalimentación académica?", "esperado": "aceptada"},
-    {"id": "A-03", "consulta": "Necesito estudios que muestren si los docentes universitarios confían en la inteligencia artificial", "esperado": "aceptada"},
-    {"id": "A-04", "consulta": "¿Las pequeñas empresas que venden por internet mejoran su rentabilidad?", "esperado": "aceptada"},
-    {"id": "A-05", "consulta": "Busco estudios que resuman los efectos de la gamificación en el aprendizaje", "esperado": "aceptada"},
-    {"id": "A-06", "consulta": "Quiero respaldar que la falta de capacitación frena la adopción del comercio electrónico", "esperado": "aceptada"},
-    {"id": "R-01", "consulta": "ansiedad", "esperado": "rechazada", "motivo": "muy_corta"},
-    {"id": "R-02", "consulta": "ChatGPT en clase", "esperado": "rechazada", "motivo": "muy_corta"},
-    {"id": "R-03", "consulta": "¿Qué opinas de mi tema de investigación?", "esperado": "rechazada", "motivo": "ambigua", "nota": "no tiene una afirmación ni una pregunta concreta"},
-    {"id": "R-04", "consulta": "Quiero saber algo sobre esto para mi trabajo", "esperado": "rechazada", "motivo": "ambigua"},
-    {"id": "R-05", "consulta": "Redacta la introducción completa de mi artículo", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
-    {"id": "R-06", "consulta": "Escríbeme el marco teórico sobre el uso de ChatGPT", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
-    {"id": "R-07", "consulta": "Corrige este párrafo de mi borrador por favor", "esperado": "rechazada", "motivo": "fuera_de_alcance"},
-    {"id": "R-08", "consulta": "Receta de ceviche peruano paso a paso con limón y ají", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"},
-    {"id": "R-09", "consulta": "¿Quién ganó el mundial de fútbol de 2022?", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"},
-    {"id": "R-10", "consulta": "¿Cuál es el precio del dólar hoy en Lima?", "esperado": "rechazada", "motivo": "fuera_de_alcance", "detecta": "pertinencia"}
+    {
+      "id": "A-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "¿Qué evidencia hay sobre el uso de ChatGPT en la retroalimentación académica?",
+      "esperado": "aceptada"
+    },
+    {
+      "id": "A-03",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Necesito estudios que muestren si los docentes universitarios confían en la inteligencia artificial",
+      "esperado": "aceptada"
+    },
+    {
+      "id": "A-04",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "¿Las pequeñas empresas que venden por internet mejoran su rentabilidad?",
+      "esperado": "aceptada"
+    },
+    {
+      "id": "A-06",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Quiero respaldar que la falta de capacitación frena la adopción del comercio electrónico",
+      "esperado": "aceptada"
+    },
+    {
+      "id": "R-01",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "ansiedad",
+      "esperado": "rechazada",
+      "motivo": "muy_corta"
+    },
+    {
+      "id": "R-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "ChatGPT en clase",
+      "esperado": "rechazada",
+      "motivo": "muy_corta"
+    },
+    {
+      "id": "R-03",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "¿Qué opinas de mi tema de investigación?",
+      "esperado": "rechazada",
+      "motivo": "ambigua",
+      "nota": "no tiene una afirmación ni una pregunta concreta"
+    },
+    {
+      "id": "R-04",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Quiero saber algo sobre esto para mi trabajo",
+      "esperado": "rechazada",
+      "motivo": "ambigua"
+    },
+    {
+      "id": "R-05",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Redacta la introducción completa de mi artículo",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance"
+    },
+    {
+      "id": "R-06",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Escríbeme el marco teórico sobre el uso de ChatGPT",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance"
+    },
+    {
+      "id": "R-07",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Corrige este párrafo de mi borrador por favor",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance"
+    },
+    {
+      "id": "R-08",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Receta de ceviche peruano paso a paso con limón y ají",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance",
+      "detecta": "pertinencia"
+    },
+    {
+      "id": "R-09",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "¿Quién ganó el mundial de fútbol de 2022?",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance",
+      "detecta": "pertinencia"
+    },
+    {
+      "id": "R-10",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "¿Cuál es el precio del dólar hoy en Lima?",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance",
+      "detecta": "pertinencia"
+    },
+    {
+      "id": "A-07",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "¿Qué percepción tienen los estudiantes universitarios sobre usar ChatGPT en sus tareas de escritura académica?",
+      "esperado": "aceptada",
+      "nota": "duda concreta sobre el tema 1"
+    },
+    {
+      "id": "A-08",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Quiero sustentar que ChatGPT puede dar retroalimentación útil a los estudiantes, aunque con límites para personalizarla.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 1"
+    },
+    {
+      "id": "A-09",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "¿Qué dicen los estudios sobre las consideraciones éticas de usar inteligencia artificial en la educación superior?",
+      "esperado": "aceptada",
+      "nota": "duda concreta sobre el tema 1"
+    },
+    {
+      "id": "A-10",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Necesito evidencia de que los alumnos que usaron ChatGPT en proyectos de aula lograron mejores resultados que un grupo de control.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 1"
+    },
+    {
+      "id": "A-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "¿Cómo perciben los docentes universitarios la llegada de ChatGPT a sus clases?",
+      "esperado": "aceptada",
+      "nota": "duda concreta sobre el tema 1"
+    },
+    {
+      "id": "A-12",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Quiero argumentar que usar ChatGPT sin citarlo aumenta el riesgo de plagio en los trabajos académicos.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 1"
+    },
+    {
+      "id": "A-13",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "¿La transformación digital mejora la rentabilidad de las pequeñas empresas del sector comercio?",
+      "esperado": "aceptada",
+      "nota": "duda concreta sobre el tema 2"
+    },
+    {
+      "id": "A-14",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Quiero sustentar que capacitar a los microemprendedores aumenta su uso de internet para vender.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 2"
+    },
+    {
+      "id": "A-15",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "¿Qué factores influyen en que una microempresa adopte tecnologías de información?",
+      "esperado": "aceptada",
+      "nota": "duda concreta sobre el tema 2"
+    },
+    {
+      "id": "A-16",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Necesito datos de cómo la pandemia aumentó el comercio electrónico en las mipymes.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 2"
+    },
+    {
+      "id": "A-17",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Quiero respaldar que la facturación electrónica reduce los costos de papel y archivo en las empresas.",
+      "esperado": "aceptada",
+      "nota": "afirmación concreta sobre el tema 2"
+    },
+    {
+      "id": "R-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "tutores con IA",
+      "esperado": "rechazada",
+      "motivo": "muy_corta",
+      "nota": "tres palabras, menos de 5"
+    },
+    {
+      "id": "R-12",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Dime algo interesante sobre la tecnología y los negocios",
+      "esperado": "rechazada",
+      "motivo": "ambigua",
+      "nota": "sin afirmación ni pregunta concreta"
+    },
+    {
+      "id": "R-13",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "consulta": "Traduce al inglés el resumen de mi tesis sobre mypes",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance",
+      "nota": "pide traducir, el sistema no lo hace"
+    },
+    {
+      "id": "R-14",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Resume en media página el artículo que te pasé sobre ChatGPT",
+      "esperado": "rechazada",
+      "motivo": "fuera_de_alcance",
+      "nota": "pide resumir, el sistema no lo hace"
+    },
+    {
+      "id": "R-15",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "consulta": "Estoy haciendo mi borrador sobre inteligencia artificial en la educación y la verdad ya no sé por dónde seguir. Primero pensé en hablar de ChatGPT, luego de los profesores, luego de las notas de los alumnos, luego de la ética, luego de si los colegios deberían prohibirlo o no, y después me acordé de que mi asesor me pidió también algo sobre plagio y sobre cómo evaluar los trabajos cuando los estudiantes usan estas herramientas en la casa. Además mi compañera me dijo que podía incluir lo de los tutores inteligentes, lo de los chatbots que corrigen tareas, lo de la brecha entre colegios públicos y privados, lo de la capacitación docente y lo de la privacidad de los datos, pero no sé si todo eso cabe en un solo artículo ni cuál debería ir primero. También me preocupa que mi marco teórico quede muy largo y que no tenga una idea central clara, así que quisiera saber qué es lo más importante que debería decir sobre todo eso y en qué orden conviene presentarlo para que mi trabajo tenga sentido y no parezca una lista de temas sueltos.",
+      "esperado": "rechazada",
+      "motivo": "muy_larga",
+      "nota": "más de 1000 caracteres"
+    }
   ]
 }

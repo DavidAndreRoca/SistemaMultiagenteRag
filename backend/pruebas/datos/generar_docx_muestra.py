@@ -7,6 +7,8 @@ la decisión T11-01, apartado 2. El cifrado es sintético: un contenedor OLE con
 del flujo ``EncryptionInfo``, que es lo que la validación examina (no se descifra nada).
 Los documentos de T12 (decisión T12-01) cubren títulos con estilos integrados y propios,
 un documento sin estilos y los campos y controles de contenido de Mendeley y Zotero.
+Los de T20 llevan citas en el texto y la lista de referencias en IEEE y en APA 7
+(``pruebas/datos/referencias_t20.py``).
 """
 
 from __future__ import annotations
@@ -22,6 +24,7 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
 from pruebas.datos import articulo_o1 as o1
+from pruebas.datos import referencias_t20 as t20
 
 CARPETA = Path(__file__).parent / "docx"
 O1 = Path(__file__).parent / "o1"
@@ -296,6 +299,30 @@ def _articulo_o1() -> bytes:
     return salida.getvalue()
 
 
+def _referencias(norma: str) -> bytes:
+    """Borrador ficticio con citas en el texto y lista de referencias en la norma (T20)."""
+    documento = Document()
+    documento.add_heading(t20.TITULO_BORRADOR, level=0)
+    documento.add_heading("1. Introducción", level=1)
+    documento.add_paragraph(t20.INTRODUCCION)
+    cuerpo = t20.cuerpo_ieee() if norma == "ieee" else t20.cuerpo_apa()
+    for parrafo in cuerpo[:2]:
+        documento.add_paragraph(parrafo)
+    documento.add_heading("2. Discusión", level=1)
+    for parrafo in cuerpo[2:]:
+        documento.add_paragraph(parrafo)
+    documento.add_heading("Referencias", level=1)
+    if norma == "ieee":
+        entradas = [t20.entrada_ieee(i, o) for i, o in enumerate(t20.lista_ieee(), start=1)]
+    else:
+        entradas = [t20.entrada_apa(o) for o in t20.lista_apa()]
+    for entrada in entradas:
+        documento.add_paragraph(entrada)
+    salida = io.BytesIO()
+    documento.save(salida)
+    return salida.getvalue()
+
+
 def generar() -> dict[str, bytes]:
     valido = _valido()
     with zipfile.ZipFile(io.BytesIO(valido)) as zip_:
@@ -332,6 +359,9 @@ def generar() -> dict[str, bytes]:
         "sin_estilos.docx": _sin_estilos(),
         "mendeley.docx": _mendeley(),
         "zotero.docx": _zotero(),
+        # T20
+        "referencias_ieee.docx": _referencias("ieee"),
+        "referencias_apa7.docx": _referencias("apa7"),
     }
 
 

@@ -62,6 +62,9 @@ export function PanelCaso() {
           <p>
             <a href="/panel/evidencia">Buscar evidencia en las fuentes de su tema</a>
           </p>
+          <p>
+            <a href="/panel/referencias">Verificar las referencias de su borrador</a>
+          </p>
           <VigentesPorHito caso={caso} versiones={versiones} />
           <CargarVersion caso={caso} alCargar={actualizar} />
           <ListaDeVersiones versiones={versiones} />

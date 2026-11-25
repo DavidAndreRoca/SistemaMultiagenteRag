@@ -58,11 +58,11 @@ def test_ninguna_consulta_del_conjunto_de_t16_se_rechaza_por_reglas() -> None:
     assert rechazadas == []
 
 
-def test_el_conjunto_de_validacion_borrador_se_cumple_con_las_reglas() -> None:
-    """El borrador de ``validacion-consultas-t19.json``: las reglas aciertan en las que no
-    dependen del clasificador de pertinencia (las ajenas al tema se prueban con la base)."""
+def test_el_conjunto_de_validacion_del_equipo_se_cumple_con_las_reglas() -> None:
+    """El conjunto del equipo de ``validacion-consultas-t19.json``: las reglas aciertan en las
+    que no dependen del clasificador de pertinencia (las ajenas al tema se prueban con la base)."""
     conjunto = json.loads((CONJUNTOS / "validacion-consultas-t19.json").read_text(encoding="utf-8"))
-    assert conjunto["estado"] == "borrador"
+    assert conjunto["estado"] == "revisado" and len(conjunto["consultas"]) == 30
     for consulta in conjunto["consultas"]:
         rechazo = por_reglas(consulta["consulta"], parametros_iniciales())
         if consulta["esperado"] == "aceptada" or consulta.get("detecta") == "pertinencia":

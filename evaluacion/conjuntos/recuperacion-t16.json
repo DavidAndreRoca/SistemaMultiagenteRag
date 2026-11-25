@@ -1,9 +1,9 @@
 {
   "nombre": "Consultas de recuperación sobre el corpus provisional (T16)",
-  "version": "borrador-1",
-  "estado": "borrador",
-  "fecha": "2026-11-22",
-  "nota": "Borrador redactado por el asistente a pedido del equipo (T16-01, apartado 7). Cada consulta imita lo que escribiría un estudiante en su borrador (una afirmación que quiere sustentar o una duda), sin copiar frases del título ni del resumen. 'origen' es el documento del que salió la consulta; 'documentos_esperados' lista por DOI los documentos que deberían aparecer en el contexto. El equipo revisará, reescribirá o agregará consultas y documentos esperados antes de las métricas finales de T34 y T38.",
+  "version": "revision-1",
+  "estado": "revisado",
+  "fecha": "2026-11-25",
+  "nota": "Primera ronda de revisión del equipo en evaluacion/revision/revision-conjuntos-t16-t19.xlsx. 'consultas' tiene las que se mantienen: 'documentos_esperados' son los documentos con algún fragmento marcado como que responde, más los que el equipo anotó como faltantes; 'juicios' guarda la marca de cada uno de los 8 fragmentos que el sistema ordenó primero el 24 de noviembre de 2026 (posición, documento, si llegó al contexto y si responde). Las reescritas y las nuevas están en 'pendientes_de_revision' hasta la segunda ronda, en la que se marcan los fragmentos que recupera su texto nuevo; el evaluador no las lee.",
   "consultas": [
     {
       "id": "T1-01",
@@ -11,17 +11,101 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Necesito respaldar que, antes de llevar los modelos de lenguaje al aula, hay que cuidar la privacidad de los datos de los alumnos y revisar sus sesgos.",
-      "origen": {"doi": "10.1016/j.lindif.2023.102274", "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education"},
-      "documentos_esperados": ["10.1016/j.lindif.2023.102274"]
-    },
-    {
-      "id": "T1-02",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Los universitarios son conscientes de que ChatGPT puede equivocarse porque responde con patrones estadísticos y no entiende emociones?",
-      "origen": {"doi": "10.1186/s41239-023-00411-8", "titulo": "Students' voices on generative AI: perceptions, benefits, and challenges in higher education"},
-      "documentos_esperados": ["10.1186/s41239-023-00411-8"]
+      "origen": {
+        "doi": "10.1016/j.lindif.2023.102274",
+        "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education"
+      },
+      "documentos_esperados": [
+        "10.1016/j.lindif.2023.102274"
+      ],
+      "criterio_esperados": "documento de origen (ningún fragmento marcado responde)",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.33262/rmc.v8i1.2935",
+          "titulo": null,
+          "seccion": "discusion",
+          "pagina": 18,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.702,
+          "responde": false,
+          "nota": "habla de desigualdad de acceso, no de privacidad ni sesgos"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.517,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.5944/ried.27.1.37716",
+          "titulo": "La nueva realidad de la educación ante los avances de la inteligencia artificial generativa The new reality of education in the face of advances in generative artificial intelligence",
+          "seccion": "discusion",
+          "pagina": 7,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.485,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.31637/epsir-2026-1628",
+          "titulo": "Impacto de la inteligencia artificial y realidad virtual como herramientas de aprendizaje en la educación superior Impact of artificial intelligence and virtual reality as learning tools in higher education",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.376,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.1016/j.lindif.2023.102274",
+          "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education",
+          "seccion": "introduccion",
+          "pagina": 7,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.287,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.1016/j.lindif.2023.102274",
+          "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education",
+          "seccion": "introduccion",
+          "pagina": 8,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.262,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.61347/ei.v2i2.57",
+          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
+          "seccion": "discusion",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.201,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.1016/j.lindif.2023.102274",
+          "titulo": "ChatGPT for good? On opportunities and challenges of large language models for education",
+          "seccion": "conclusiones",
+          "pagina": 9,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.199,
+          "responde": false,
+          "nota": "posible, pero el inicio no muestra privacidad ni sesgos"
+        }
+      ],
+      "nota_revision": "ningún fragmento responde; el artículo de origen sí aparece (pos. 5, 6 y 8) pero con fragmentos poco útiles"
     },
     {
       "id": "T1-03",
@@ -29,8 +113,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Quiero sostener que la carga de tareas y la presión del tiempo llevan a los estudiantes a apoyarse cada vez más en la IA generativa.",
-      "origen": {"doi": "10.1186/s41239-024-00444-7", "titulo": "Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students"},
-      "documentos_esperados": ["10.1186/s41239-024-00444-7"]
+      "origen": {
+        "doi": "10.1186/s41239-024-00444-7",
+        "titulo": "Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students"
+      },
+      "documentos_esperados": [
+        "10.1186/s41239-024-00444-7"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "discusion",
+          "pagina": 19,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.976,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resultados",
+          "pagina": 16,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.939,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "conclusiones",
+          "pagina": 20,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.926,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.919,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.61384/r.c.a..v5i2.1200",
+          "titulo": "EVALUACIÓN DEL USO DE LA INTELIGENCIA ARTIFICIAL GENERATIVA EN LA UNIVERSIDAD TÉCNICA DE MACHALA: BENEFICIOS Y RIESGOS EVALUATION OF THE USE OF GENERATIVE ARTIFICIAL INTELLIGENCE AT THE TECHNICAL UNIVERSITY OF MACHALA: BENEFITS AND RISKS",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.914,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.851,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.8,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.61384/r.c.a..v5i2.1200",
+          "titulo": "EVALUACIÓN DEL USO DE LA INTELIGENCIA ARTIFICIAL GENERATIVA EN LA UNIVERSIDAD TÉCNICA DE MACHALA: BENEFICIOS Y RIESGOS EVALUATION OF THE USE OF GENERATIVE ARTIFICIAL INTELLIGENCE AT THE TECHNICAL UNIVERSITY OF MACHALA: BENEFITS AND RISKS",
+          "seccion": "conclusiones",
+          "pagina": 23,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.765,
+          "responde": false
+        }
+      ],
+      "nota_revision": "el artículo de origen no aparece en los 8 resultados"
     },
     {
       "id": "T1-04",
@@ -38,17 +213,102 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Qué piensan los profesores de una universidad del Perú cuando sus alumnos usan herramientas de inteligencia artificial en clase?",
-      "origen": {"doi": "10.18800/educacion.202401.m001", "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú"},
-      "documentos_esperados": ["10.18800/educacion.202401.m001"]
-    },
-    {
-      "id": "T1-05",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "Busco datos de una encuesta a alumnos de una universidad mexicana sobre si el chatbot de OpenAI les sirve para investigar y analizar información de sus cursos.",
-      "origen": {"doi": "10.36825/riti.11.23.009", "titulo": "Uso y Percepción de ChatGPT en la Educación Superior"},
-      "documentos_esperados": ["10.36825/riti.11.23.009"]
+      "origen": {
+        "doi": "10.18800/educacion.202401.m001",
+        "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú"
+      },
+      "documentos_esperados": [
+        "10.18800/educacion.202401.m001"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.998,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.997,
+          "responde": true,
+          "nota": "mismo resumen del artículo, en portugués"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.993,
+          "responde": true,
+          "nota": "mismo resumen del artículo, en inglés"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.18687/laccei2023.1.1.336",
+          "titulo": "The ChatGPT Application: Initial Perceptions of University Teachers",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.987,
+          "responde": false,
+          "nota": "docentes, pero no se ve que sea Perú"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resultados",
+          "pagina": 18,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.986,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.61384/r.c.a..v5i2.1200",
+          "titulo": "EVALUACIÓN DEL USO DE LA INTELIGENCIA ARTIFICIAL GENERATIVA EN LA UNIVERSIDAD TÉCNICA DE MACHALA: BENEFICIOS Y RIESGOS EVALUATION OF THE USE OF GENERATIVE ARTIFICIAL INTELLIGENCE AT THE TECHNICAL UNIVERSITY OF MACHALA: BENEFITS AND RISKS",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.943,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.18800/educacion.202201.001",
+          "titulo": "Inteligencia artificial y entornos personales de aprendizaje: atentos al uso adecuado de los recursos tecnológicos de los estudiantes universitarios",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.937,
+          "responde": false
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
     },
     {
       "id": "T1-06",
@@ -56,8 +316,103 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Hay algún experimento con grupo de control en el que los alumnos de colegio que usaron ChatGPT para armar sus proyectos obtuvieran trabajos de mejor calidad?",
-      "origen": {"doi": "10.33386/593dp.2024.4.2493", "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos"},
-      "documentos_esperados": ["10.33386/593dp.2024.4.2493"]
+      "origen": {
+        "doi": "10.33386/593dp.2024.4.2493",
+        "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos"
+      },
+      "documentos_esperados": [
+        "10.33386/593dp.2024.4.2493"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "discusion",
+          "pagina": 10,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.998,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.994,
+          "responde": true,
+          "nota": "resumen del estudio con grupo de control"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "resultados",
+          "pagina": 6,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.989,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "resultados",
+          "pagina": 6,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.988,
+          "responde": false,
+          "nota": "solo método de análisis"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.987,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.53877/riced3.5-31",
+          "titulo": "Chat gpt en el aprendizaje de lengua y literatura en los estudiantes de tercero BGU Chat gpt in the learning of language and literature in third year students BGU",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.987,
+          "responde": false,
+          "nota": "grupo de control, pero mide notas de lengua, no calidad de proyectos"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.53877/riced3.5-31",
+          "titulo": "Chat gpt en el aprendizaje de lengua y literatura en los estudiantes de tercero BGU Chat gpt in the learning of language and literature in third year students BGU",
+          "seccion": "introduccion",
+          "pagina": 10,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.987,
+          "responde": false,
+          "nota": "igual que la fila anterior: mide aprendizaje, no calidad de proyectos"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "discusion",
+          "pagina": 10,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.986,
+          "responde": true
+        }
+      ],
+      "nota_revision": "5 de 8 fragmentos responden"
     },
     {
       "id": "T1-07",
@@ -65,8 +420,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Quiero argumentar que un profesor de inglés puede preparar con ayuda de un chatbot diálogos y lecturas ajustados a lo que necesita cada estudiante.",
-      "origen": {"doi": "10.21093/ijeltal.v7i2.1387", "titulo": "Exploring the Implications of ChatGPT for Language Learning in Higher Education"},
-      "documentos_esperados": ["10.21093/ijeltal.v7i2.1387"]
+      "origen": {
+        "doi": "10.21093/ijeltal.v7i2.1387",
+        "titulo": "Exploring the Implications of ChatGPT for Language Learning in Higher Education"
+      },
+      "documentos_esperados": [
+        "10.21093/ijeltal.v7i2.1387"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.823,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "resultados",
+          "pagina": 13,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.762,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.758,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.558,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.37811/cl_rcm.v8i4.12533",
+          "titulo": "Potencialidades de la Inteligencia Artificial en la Educación Superior",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.54,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.347,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.24050/reia.v20i40.1718",
+          "titulo": "Uso de ChatGPT como herramienta en las aulas de clase",
+          "seccion": "introduccion",
+          "pagina": 17,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.316,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.30944/20117582.2365",
+          "titulo": "Una revisión sistemática del uso de la inteligencia artificial en la educación A systematic review of the use of artificial intelligence in education",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.31,
+          "responde": false
+        }
+      ],
+      "nota_revision": "ningún fragmento responde; el artículo de origen no aparece"
     },
     {
       "id": "T1-08",
@@ -74,35 +520,101 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Qué reglas o normas recomiendan los estudios para que las universidades usen la inteligencia artificial sin dejar de lado la ética y la inclusión?",
-      "origen": {"doi": "10.5944/ried.28.2.43511", "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión"},
-      "documentos_esperados": ["10.5944/ried.28.2.43511"]
-    },
-    {
-      "id": "T1-09",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "afirmacion",
-      "consulta": "Necesito evidencia de que saber escribir bien y otras competencias explican, junto con el uso de ChatGPT, las notas de los universitarios, medido con un modelo PLS.",
-      "origen": {"doi": "10.37467/revhuman.v21.5077", "titulo": "Predictores del desempeño académico mediante el uso del ChatGPT"},
-      "documentos_esperados": ["10.37467/revhuman.v21.5077"]
-    },
-    {
-      "id": "T1-10",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Qué porcentaje de alumnos de maestría a distancia conoce estos asistentes conversacionales y cuántos los han usado para estudiar?",
-      "origen": {"doi": "10.35869/reined.v21i3.4974", "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio"},
-      "documentos_esperados": ["10.35869/reined.v21i3.4974"]
-    },
-    {
-      "id": "T2-01",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Que a los dueños les parezca fácil y útil influye en que las pequeñas empresas de México promocionen sus productos en Facebook o Instagram?",
-      "origen": {"doi": "10.17013/risti.18.49-65", "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas"},
-      "documentos_esperados": ["10.17013/risti.18.49-65"]
+      "origen": {
+        "doi": "10.5944/ried.28.2.43511",
+        "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión"
+      },
+      "documentos_esperados": [
+        "10.5944/ried.28.2.43511"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.997,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "discusion",
+          "pagina": 15,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.995,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "conclusiones",
+          "pagina": 16,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.994,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.55560/arete.2024.ee.10.12",
+          "titulo": "PERSPECTIVAS DE LA INTELIGENCIA ARTIFICIAL EN LA EDUCACIÓN UNIVERSITARIA: UN ANÁLISIS BASADO EN LA LITERATURA ACADÉMICA ADVANCEMENTS OF ARTIFICIAL INTELLIGENCE IN HIGHER EDUCATION: AN ANALYSIS THROUGH ACADEMIC LITERATURE",
+          "seccion": "discusion",
+          "pagina": 14,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.992,
+          "responde": false,
+          "nota": "menciona la ética pero no recomienda normas"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.989,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.55560/arete.2024.ee.10.12",
+          "titulo": "PERSPECTIVAS DE LA INTELIGENCIA ARTIFICIAL EN LA EDUCACIÓN UNIVERSITARIA: UN ANÁLISIS BASADO EN LA LITERATURA ACADÉMICA ADVANCEMENTS OF ARTIFICIAL INTELLIGENCE IN HIGHER EDUCATION: AN ANALYSIS THROUGH ACADEMIC LITERATURE",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.988,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.986,
+          "responde": true,
+          "nota": "recomienda formación para uso ético; responde en parte"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.55560/arete.2024.ee.10.12",
+          "titulo": "PERSPECTIVAS DE LA INTELIGENCIA ARTIFICIAL EN LA EDUCACIÓN UNIVERSITARIA: UN ANÁLISIS BASADO EN LA LITERATURA ACADÉMICA ADVANCEMENTS OF ARTIFICIAL INTELLIGENCE IN HIGHER EDUCATION: AN ANALYSIS THROUGH ACADEMIC LITERATURE",
+          "seccion": "discusion",
+          "pagina": 14,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.984,
+          "responde": false
+        }
+      ],
+      "nota_revision": "5 de 8 fragmentos responden"
     },
     {
       "id": "T2-02",
@@ -110,17 +622,100 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Quiero sostener que, para que una empresa pequeña empiece a usar inteligencia artificial, importan más sus propias habilidades tecnológicas que la ayuda que reciba de afuera.",
-      "origen": {"doi": "10.1016/j.techsoc.2024.102733", "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment"},
-      "documentos_esperados": ["10.1016/j.techsoc.2024.102733"]
-    },
-    {
-      "id": "T2-03",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Probar formas nuevas de ganar dinero y organizar el negocio mejora los resultados de las pymes que ya trabajan con tecnología digital?",
-      "origen": {"doi": "10.1016/j.telpol.2019.101828", "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?"},
-      "documentos_esperados": ["10.1016/j.telpol.2019.101828"]
+      "origen": {
+        "doi": "10.1016/j.techsoc.2024.102733",
+        "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment"
+      },
+      "documentos_esperados": [
+        "10.1016/j.techsoc.2024.102733"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.1016/j.techsoc.2024.102733",
+          "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.956,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.1016/j.techsoc.2024.102733",
+          "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment",
+          "seccion": "discusion",
+          "pagina": 10,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.928,
+          "responde": true,
+          "nota": "responde en parte (apoyo externo)"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.1016/j.techsoc.2024.102733",
+          "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.852,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.1016/j.techsoc.2024.102733",
+          "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment",
+          "seccion": "discusion",
+          "pagina": 10,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.67,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.665,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "conclusiones",
+          "pagina": 10,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.614,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.1016/j.techsoc.2024.102733",
+          "titulo": "Analyzing AI adoption in European SMEs: A study of digital capabilities, innovation, and external environment",
+          "seccion": "introduccion",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.602,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.493,
+          "responde": false
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden"
     },
     {
       "id": "T2-04",
@@ -128,8 +723,101 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "Necesito cifras de cuánto tiempo aguantan sin dinero en caja los pequeños negocios de Ecuador y de cuánto subieron las ventas por internet con la pandemia.",
-      "origen": {"doi": "10.48082/espacios-a20v41n42p09", "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19"},
-      "documentos_esperados": ["10.48082/espacios-a20v41n42p09"]
+      "origen": {
+        "doi": "10.48082/espacios-a20v41n42p09",
+        "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19"
+      },
+      "documentos_esperados": [
+        "10.48082/espacios-a20v41n42p09"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 14,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.994,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 14,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.974,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 13,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.951,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 12,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.94,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 11,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.911,
+          "responde": true,
+          "nota": "da cifras de compras en línea; el aumento no se ve en el inicio"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 15,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.898,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.807,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 15,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.807,
+          "responde": true,
+          "nota": "cita un estudio sobre transacciones; las cifras no se ven en el inicio"
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden (cifra de 28 días y datos de compras en línea)"
     },
     {
       "id": "T2-05",
@@ -137,8 +825,101 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Qué cuentan en entrevistas los administradores de negocios pequeños sobre por qué compran o no sistemas informáticos y qué papel tiene el liderazgo?",
-      "origen": {"doi": "10.17013/risti.22.20-36", "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo"},
-      "documentos_esperados": ["10.17013/risti.22.20-36"]
+      "origen": {
+        "doi": "10.17013/risti.22.20-36",
+        "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo"
+      },
+      "documentos_esperados": [
+        "10.17013/risti.22.20-36"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resultados",
+          "pagina": 10,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.647,
+          "responde": true,
+          "nota": "responde en parte (factores y presión de adopción)"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resultados",
+          "pagina": 10,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.455,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resultados",
+          "pagina": 8,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.382,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "metodos",
+          "pagina": 7,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.334,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "conclusiones",
+          "pagina": 10,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.22,
+          "responde": true,
+          "nota": "responde en parte (rol del administrador)"
+        },
+        {
+          "posicion": 6,
+          "doi": null,
+          "titulo": "El uso de tecnología como ventaja competitiva en el micro y pequeño comercio minorista en Hermosillo, Sonora",
+          "seccion": "resultados",
+          "pagina": 19,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.148,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": null,
+          "titulo": "El uso de tecnología como ventaja competitiva en el micro y pequeño comercio minorista en Hermosillo, Sonora",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.114,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.111,
+          "responde": false
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden"
     },
     {
       "id": "T2-06",
@@ -146,8 +927,100 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Quiero argumentar que los gerentes de pymes de Chile más abiertos a lo nuevo tienen una actitud más favorable a vender por internet.",
-      "origen": {"doi": "10.4067/s0718-18762018000300102", "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis"},
-      "documentos_esperados": ["10.4067/s0718-18762018000300102"]
+      "origen": {
+        "doi": "10.4067/s0718-18762018000300102",
+        "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis"
+      },
+      "documentos_esperados": [
+        "10.4067/s0718-18762018000300102"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.979,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "conclusiones",
+          "pagina": 11,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.969,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.954,
+          "responde": true,
+          "nota": "solo el objetivo, pero va directo a la innovación del gerente"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.929,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "conclusiones",
+          "pagina": 11,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.892,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.891,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "conclusiones",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.882,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.4067/s0718-18762018000300102",
+          "titulo": "Managers/Owners' Innovativeness and Electronic Commerce Acceptance in Chilean SMEs: A Multi-Group Analysis Based on a Structural Equation Model",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.862,
+          "responde": false
+        }
+      ],
+      "nota_revision": "2 de 8 fragmentos responden"
     },
     {
       "id": "T2-07",
@@ -155,17 +1028,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Los microemprendedores que pasaron por cursos usan más la web para promocionarse y comunicarse con clientes y proveedores que los que no se capacitaron?",
-      "origen": {"doi": "10.4067/s0718-07642017000600008", "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile"},
-      "documentos_esperados": ["10.4067/s0718-07642017000600008"]
-    },
-    {
-      "id": "T2-08",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Empezar a vender en línea lleva a las empresas pequeñas a cambiar también sus procesos internos? Busco un análisis con ecuaciones estructurales y efectos mediadores.",
-      "origen": {"doi": "10.3390/jtaer18040086", "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis"},
-      "documentos_esperados": ["10.3390/jtaer18040086"]
+      "origen": {
+        "doi": "10.4067/s0718-07642017000600008",
+        "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile"
+      },
+      "documentos_esperados": [
+        "10.4067/s0718-07642017000600008"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "resultados",
+          "pagina": 5,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "conclusiones",
+          "pagina": 7,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "resultados",
+          "pagina": 5,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.992,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.99,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "resultados",
+          "pagina": 5,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.988,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "resultados",
+          "pagina": 6,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.985,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "metodos",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.977,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "otra",
+          "pagina": 6,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.899,
+          "responde": false
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden"
     },
     {
       "id": "T2-09",
@@ -173,8 +1128,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Las empresas ahorran en materiales y mantenimiento cuando dejan el papel y emiten sus comprobantes de venta en formato digital ante el fisco?",
-      "origen": {"doi": "10.22370/riace.2021.10.1.2987", "titulo": "Facturación electrónica un mecanismo de control para el cumplimiento tributario, caso sector carrocero"},
-      "documentos_esperados": ["10.22370/riace.2021.10.1.2987"]
+      "origen": {
+        "doi": "10.22370/riace.2021.10.1.2987",
+        "titulo": "Facturación electrónica un mecanismo de control para el cumplimiento tributario, caso sector carrocero"
+      },
+      "documentos_esperados": [
+        "10.22370/riace.2021.10.1.2987"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "resultados",
+          "pagina": 9,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.85,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "resultados",
+          "pagina": 8,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.523,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.365,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.198,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.162,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.083,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "discusion",
+          "pagina": 10,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.078,
+          "responde": true
+        },
+        {
+          "posicion": 8,
+          "doi": "10.22370/riace.2021.10.1.2987",
+          "titulo": "FACTURACIÓN ELECTRÓNICA UN MECANISMO DE CONTROL PARA EL CUMPLIMIENTO TRIBUTARIO, CASO SECTOR CARROCERO",
+          "seccion": "introduccion",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.042,
+          "responde": true
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
     },
     {
       "id": "T2-10",
@@ -182,8 +1228,895 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Quiero sustentar que los comentarios que los clientes dejan en internet hacen que otros decidan por impulso comer en una cevichería.",
-      "origen": {"doi": "10.62754/joe.v3i4.3469", "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú"},
-      "documentos_esperados": ["10.62754/joe.v3i4.3469"]
+      "origen": {
+        "doi": "10.62754/joe.v3i4.3469",
+        "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú"
+      },
+      "documentos_esperados": [
+        "10.62754/joe.v3i4.3469"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "documentos_sin_doi_que_responden": [],
+      "fecha_juicios": "2026-11-24",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.863,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "conclusiones",
+          "pagina": 8,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.82,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "resultados",
+          "pagina": 6,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.339,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.174,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.11,
+          "responde": true,
+          "nota": "responde en parte (códigos de impulsividad e inmediatez)"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "introduccion",
+          "pagina": 1,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.086,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "introduccion",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.035,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.62754/joe.v3i4.3469",
+          "titulo": "Influence of E-WOM on Emotional Purchase Decisions in Ceviche, Fish, and Seafood Restaurants in Chimbote, Perú",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.017,
+          "responde": false
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
+    }
+  ],
+  "pendientes_de_revision": [
+    {
+      "id": "T1-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios saben que ChatGPT puede dar respuestas incorrectas?",
+      "accion": "reescrita",
+      "consulta_anterior": "¿Los universitarios son conscientes de que ChatGPT puede equivocarse porque responde con patrones estadísticos y no entiende emociones?",
+      "origen": {
+        "doi": "10.1186/s41239-023-00411-8",
+        "titulo": "Students' voices on generative AI: perceptions, benefits, and challenges in higher education"
+      },
+      "documentos_que_faltan": [
+        "10.1186/s41239-023-00411-8"
+      ],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.61347/ei.v2i2.57",
+          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.994,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.926,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.61347/ei.v2i2.57",
+          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
+          "seccion": "discusion",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.897,
+          "responde": false,
+          "nota": "explica el límite del modelo, no la conciencia de los estudiantes"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.878,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.26871/killkanasocial.v7i1.1270",
+          "titulo": null,
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.876,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.26871/killkanasocial.v7i1.1270",
+          "titulo": null,
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.873,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.52131/jer.2024.v5i1.2463",
+          "titulo": "Use of ChatGPT and Generative AI in Higher Education: Opportunities, Obstacles and Impact on Student Performance",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.85,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.18687/laccei2023.1.1.336",
+          "titulo": "The ChatGPT Application: Initial Perceptions of University Teachers",
+          "seccion": "resultados",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.831,
+          "responde": false
+        }
+      ],
+      "nota": "la original copia detalles del artículo («patrones estadísticos», «emociones»); el artículo de origen no aparece"
+    },
+    {
+      "id": "T1-05",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios en México usan ChatGPT para buscar y analizar información en sus cursos?",
+      "accion": "reescrita",
+      "consulta_anterior": "Busco datos de una encuesta a alumnos de una universidad mexicana sobre si el chatbot de OpenAI les sirve para investigar y analizar información de sus cursos.",
+      "origen": {
+        "doi": "10.36825/riti.11.23.009",
+        "titulo": "Uso y Percepción de ChatGPT en la Educación Superior"
+      },
+      "documentos_que_faltan": [],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.30827/eticanet.v24i2.31026",
+          "titulo": "Revista científica electrónica de Educación y Comunicación en la Sociedad del Conocimiento",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.957,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.853,
+          "responde": false,
+          "nota": "estudiantes de posgrado online, no es una universidad mexicana"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.825,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.697,
+          "responde": false,
+          "nota": "no se ve que sea México"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.435,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.33386/593dp.2024.4.2493",
+          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.423,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "metodos",
+          "pagina": 6,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.422,
+          "responde": false,
+          "nota": "solo describe el método, sin datos"
+        },
+        {
+          "posicion": 8,
+          "doi": null,
+          "titulo": "La Incorporación del ChatGPT en la Educación Superior: Una Mirada desde el Paradigma de la Complejidad",
+          "seccion": "metodos",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.415,
+          "responde": false
+        }
+      ],
+      "nota": "«chatbot de OpenAI» es una paráfrasis forzada para evitar decir ChatGPT"
+    },
+    {
+      "id": "T1-09",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "¿El uso de ChatGPT y la competencia en escritura influyen en el rendimiento académico de los universitarios?",
+      "accion": "reescrita",
+      "consulta_anterior": "Necesito evidencia de que saber escribir bien y otras competencias explican, junto con el uso de ChatGPT, las notas de los universitarios, medido con un modelo PLS.",
+      "origen": {
+        "doi": "10.37467/revhuman.v21.5077",
+        "titulo": "Predictores del desempeño académico mediante el uso del ChatGPT"
+      },
+      "documentos_que_faltan": [],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.37467/revhuman.v21.5077",
+          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.96,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.929,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resultados",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.922,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.921,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "discusion",
+          "pagina": 6,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.882,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.37467/revhuman.v21.5077",
+          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.838,
+          "responde": true,
+          "nota": "mismo resumen del artículo, en inglés"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 12,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.798,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 12,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.774,
+          "responde": false
+        }
+      ],
+      "nota": "«modelo PLS» es un detalle técnico que un estudiante no pondría"
+    },
+    {
+      "id": "T1-10",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué porcentaje de estudiantes de posgrado en línea conoce ChatGPT y cuántos lo han usado para estudiar?",
+      "accion": "reescrita",
+      "consulta_anterior": "¿Qué porcentaje de alumnos de maestría a distancia conoce estos asistentes conversacionales y cuántos los han usado para estudiar?",
+      "origen": {
+        "doi": "10.35869/reined.v21i3.4974",
+        "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio"
+      },
+      "documentos_que_faltan": [],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.98,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.508,
+          "responde": false,
+          "nota": "mismo estudio, pero solo población y muestra"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.461,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resultados",
+          "pagina": 8,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.332,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.154,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.036,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.3991/ijet.v18i17.39019",
+          "titulo": "Emerging Technologies in Learning",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.028,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "resultados",
+          "pagina": 13,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.024,
+          "responde": false
+        }
+      ],
+      "nota": "«estos asistentes conversacionales» no tiene antecedente; no se entiende sin el artículo"
+    },
+    {
+      "id": "T2-01",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿La utilidad y facilidad de uso percibidas influyen en que las MYPES de México usen redes sociales para promocionar sus productos?",
+      "accion": "reescrita",
+      "consulta_anterior": "¿Que a los dueños les parezca fácil y útil influye en que las pequeñas empresas de México promocionen sus productos en Facebook o Instagram?",
+      "origen": {
+        "doi": "10.17013/risti.18.49-65",
+        "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas"
+      },
+      "documentos_que_faltan": [],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resultados",
+          "pagina": 10,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.892,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.595,
+          "responde": false,
+          "nota": "solo el propósito del estudio, sin resultados"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.534,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resultados",
+          "pagina": 11,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.524,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.299,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.252,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.212,
+          "responde": false,
+          "nota": "solo el propósito del estudio, sin resultados"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "conclusiones",
+          "pagina": 11,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.176,
+          "responde": false
+        }
+      ],
+      "nota": "redacción rara («¿Que a los dueños les parezca…?») y copia el enfoque del artículo"
+    },
+    {
+      "id": "T2-03",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿La innovación en el modelo de negocio mejora el desempeño de las pymes que se digitalizan?",
+      "accion": "reescrita",
+      "consulta_anterior": "¿Probar formas nuevas de ganar dinero y organizar el negocio mejora los resultados de las pymes que ya trabajan con tecnología digital?",
+      "origen": {
+        "doi": "10.1016/j.telpol.2019.101828",
+        "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?"
+      },
+      "documentos_que_faltan": [
+        "10.1016/j.telpol.2019.101828"
+      ],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.975,
+          "responde": false,
+          "nota": "habla de transformación digital y rentabilidad, no de innovar el modelo de negocio"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 8,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.931,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.909,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.855,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "conclusiones",
+          "pagina": 22,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.804,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.793,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.789,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.785,
+          "responde": false
+        }
+      ],
+      "nota": "la original da rodeos para evitar «modelo de negocio»; el artículo de origen no aparece y ningún fragmento responde"
+    },
+    {
+      "id": "T2-08",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Vender por internet hace que las pymes cambien también sus procesos internos y mejoren su desempeño?",
+      "accion": "reescrita",
+      "consulta_anterior": "¿Empezar a vender en línea lleva a las empresas pequeñas a cambiar también sus procesos internos? Busco un análisis con ecuaciones estructurales y efectos mediadores.",
+      "origen": {
+        "doi": "10.3390/jtaer18040086",
+        "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis"
+      },
+      "documentos_que_faltan": [],
+      "juicios_consulta_anterior": [
+        {
+          "posicion": 1,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.844,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.3390/jtaer18040086",
+          "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis",
+          "seccion": "resultados",
+          "pagina": 13,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.602,
+          "responde": true,
+          "nota": "resultados con efecto de eficiencia operativa; responde en parte"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.508,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resultados",
+          "pagina": 10,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.438,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.341,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.3390/jtaer18040086",
+          "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.285,
+          "responde": true
+        },
+        {
+          "posicion": 7,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.279,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": null,
+          "titulo": "The Impact of Digital Marketing and social media On Small and Medium Sized Business",
+          "seccion": "introduccion",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.255,
+          "responde": false
+        }
+      ],
+      "nota": "«ecuaciones estructurales y efectos mediadores» es jerga de método"
+    },
+    {
+      "id": "T1-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios usan ChatGPT para mejorar su escritura académica?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T1-12",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sustentar que los docentes universitarios aún tienen dudas sobre usar inteligencia artificial en sus clases.",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T1-13",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué riesgos éticos tiene usar ChatGPT para hacer trabajos académicos?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T1-14",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero argumentar que ChatGPT puede dar retroalimentación útil a los estudiantes sobre sus trabajos.",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T1-15",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué piensan los estudiantes de bachillerato sobre usar inteligencia artificial generativa para aprender?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T2-11",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿El comercio electrónico mejora las ventas de las microempresas?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T2-12",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sustentar que la transformación digital mejora la rentabilidad de las MYPES del sector comercio.",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T2-13",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué barreras enfrentan las pymes de Latinoamérica para adoptar tecnologías de información?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T2-14",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Necesito respaldar que las redes sociales ayudan a los pequeños negocios a llegar a más clientes.",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
+    },
+    {
+      "id": "T2-15",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Cómo influyó la pandemia de Covid-19 en el uso del comercio electrónico en las mipymes?",
+      "accion": "nueva",
+      "documentos_que_faltan": [],
+      "nota": "por revisar: qué documentos recupera"
     }
   ]
 }

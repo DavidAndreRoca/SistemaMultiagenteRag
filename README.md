@@ -288,6 +288,19 @@ El caso escribe una consulta o una afirmación en `/panel/evidencia` y el agente
 
 Decisiones: `docs/decisiones/T19-agente-evidencia.md`.
 
+## Verificación de referencias (T20)
+
+El caso pide en `/panel/referencias` la verificación de la lista de referencias de su versión vigente. El informe da el estado de cada referencia y el cruce de las citas del texto con la lista, según la norma del caso (IEEE, APA 7 o Vancouver).
+- **Estados:** `verificada`, `con_discrepancias` (con el campo, su valor y el de la fuente), `no_localizada` y `no_comprobable` (un servicio no respondió; nunca se marca como inexistente).
+- **Proceso:** GROBID estructura la lista, Crossref y OpenAlex buscan cada obra por DOI o por metadatos y se cruzan las citas. Es determinista: el modelo no decide estados. Solo si se enciende `explicar_discrepancias` en la configuración redacta una frase por discrepancia.
+- **Con servicios reales**, bajo demanda y sin escribir en la base:
+
+  ```bash
+  python -m app.agentes.evaluar_referencias ../evaluacion/conjuntos/referencias-t20.json
+  ```
+
+Decisiones: `docs/decisiones/T20-verificacion-referencias.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

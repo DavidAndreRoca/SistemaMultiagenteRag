@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 24 de noviembre de 2026. T19 implementada en la rama `t19-agente-evidencia` (apartado 22). T18 integrada en `main` (solicitud de cambio #14, apartado 21.7). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 25 de noviembre de 2026. T20 implementada en la rama `t20-verificacion-referencias` (apartado 23). T19 integrada en `main` (solicitud de cambio #15, apartado 22.7). T18 integrada en `main` (solicitud de cambio #14, apartado 21.7). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -27,8 +27,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T17 (F3)** | Adaptador de modelos de lenguaje e instrucciones versionadas | **Integrada en `main`** (solicitud de cambio #12, apartado 19.7), verificada con proveedores simulados; criterios cumplidos (apartado 19). Faltan las grabaciones de contrato reales, que esperan las claves (apartado 19.5) |
 | **T16 (F3)** | Recuperación híbrida y suficiencia | **Integrada en `main`** (solicitud de cambio #13, apartado 20.7); criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
 | **T18 (F3)** | Contrato común de agentes y comprobaciones deterministas | **Integrada en `main`** (solicitud de cambio #14, apartado 21.7); criterios cumplidos (apartado 21) |
-| **T19 (F3)** | Agente D4: búsqueda de evidencia | **Implementada y verificada en la rama** `t19-agente-evidencia`, con modelo simulado y una ejecución con Groq; criterios cumplidos (apartado 22). Los conjuntos del equipo siguen pendientes |
-| T20 en adelante | | No iniciadas |
+| **T19 (F3)** | Agente D4: búsqueda de evidencia | **Integrada en `main`** (solicitud de cambio #15, apartado 22.7), verificada con modelo simulado y una ejecución con Groq; criterios cumplidos (apartado 22). Los conjuntos del equipo siguen pendientes |
+| **T20 (F3)** | Agente D4: verificación de referencias | **Implementada y verificada en la rama** `t20-verificacion-referencias`, con servicios simulados y con GROBID, Crossref y OpenAlex reales; criterios cumplidos (apartado 23). El conjunto de prueba está en borrador, a revisar por el equipo |
+| T21 en adelante | | No iniciadas |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1698,3 +1699,139 @@ Rama `t19-agente-evidencia`, desde `main` con T18 (`07c7215`). Decisión: `docs/
   - `docs/api/openapi.json` y `frontend/src/api/esquema.d.ts` (regenerados);
   - `frontend/src/App.tsx`, `paginas/PanelCaso.tsx`, `estilos.css` y `e2e/flujo.spec.ts`;
   - `.env.example`, `README.md`, `CLAUDE.md` y este archivo.
+
+### 22.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t19-agente-evidencia`: `4282cad` (`T19: agregar el agente D4 de búsqueda de evidencia, la validación previa de consultas y la regla de acceso abierto`), sin línea de coautoría |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#15 |
+| CI de la solicitud | **Verde**, ejecución 45342885551 (la de `4282cad`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `76fd745` |
+| CI de `main` tras integrar | Ejecución 45343961414: **verde** |
+
+### 22.8. Revisión de los conjuntos por el equipo (25 de noviembre de 2026)
+
+El equipo llenó la hoja `evaluacion/revision/revision-conjuntos-t16-t19.xlsx` y se convirtió a JSON (las versiones anteriores son el borrador del asistente).
+
+**Validación de consultas de T19** (`evaluacion/conjuntos/validacion-consultas-t19.json`, versión `revision-1`):
+- 30 consultas, 15 aceptadas y 15 rechazadas. Se conservaron 14 del borrador, se descartaron A-01 y A-05 (no son de ninguno de los dos temas) y se agregaron 16.
+- Cada consulta lleva ahora `tema`, el del caso contra el que se prueba.
+- **Con datos reales:** reglas más pertinencia con bge-m3 sobre el corpus de desarrollo, en solo lectura. **30 de 30 aciertos**, con el motivo esperado en las 15 rechazadas.
+  - La aceptada con menor similitud llega a 0,634.
+  - Las 3 ajenas al proyecto quedan entre 0,390 y 0,459.
+  - El umbral 0,55 tiene margen a ambos lados.
+  - Informe en `evaluacion/resultados/validacion-consultas-t19.json`.
+
+**Recuperación de T16, primera ronda** (`evaluacion/conjuntos/recuperacion-t16.json`, versión `revision-1`):
+- **13 consultas se mantienen** y forman el conjunto revisado:
+  - `documentos_esperados` son los documentos con algún fragmento marcado como que responde, más los que el equipo anotó como faltantes;
+  - en T1-01 ningún fragmento responde y queda el documento de origen;
+  - `juicios` guarda la marca de cada uno de los 8 fragmentos.
+- **7 reescritas y 10 nuevas** quedan en `pendientes_de_revision`, que el evaluador no lee.
+- **Segunda ronda:** se recuperaron sus 8 fragmentos con el texto nuevo, en `evaluacion/revision/revision-t16-segunda-ronda.xlsx`. Con el texto reescrito, el documento de origen de T2-03 sale primero, el de T1-02 sigue sin aparecer y el de T2-08 dejó de aparecer.
+- **Precisión contextual en las 13 revisadas:** 0,665 con las marcas del equipo por fragmento, frente a 0,786 a nivel de documento (la medida de la línea base de T16). La diferencia viene de fragmentos del documento correcto que no responden. Qué medida se reporta se decide en T34 con el conjunto completo.
+- **Pruebas:** `test_rag.py` y `test_evidencia.py` leen los conjuntos revisados (estado `revisado`, 13 y 30 consultas) y pasan.
+
+**Propuesta del equipo para T34:** reportar como medida principal la precisión contextual estricta, con marcas por fragmento, y dejar la de documentos esperados como referencia. Está anotada en la decisión T16-01, apartado 7.
+
+**Pendiente:** la segunda ronda de T16 (17 consultas).
+
+**Confirmación:** el equipo aceptó la conversión el 25 de noviembre de 2026. Estos cambios, junto con el registro de la integración de T19 (22.7), entran en el primer commit de T20.
+
+## 23. Fase 3 (F3): T20. Agente D4: verificación de referencias
+
+Rama `t20-verificacion-referencias`, desde `main` con T19 (`76fd745`). Decisión: `docs/decisiones/T20-verificacion-referencias.md` (T20-01). Decisión del equipo del 25 de noviembre de 2026 ("paquete recomendado"):
+- un DOI que lleva a otra obra da "con discrepancias", nunca "verificada";
+- un año que difiere, aunque sea en uno, es discrepancia;
+- en Vancouver, citas entre corchetes o paréntesis, sin superíndices y con aviso;
+- explicación de las discrepancias con el modelo, apagada por defecto;
+- trabajo en segundo plano con avance;
+- libros por metadatos, sin ISBN;
+- el asistente arma el borrador del conjunto de prueba y el equipo lo revisa con una hoja de Excel.
+
+**Insumos del equipo:** la revisión del conjunto de referencias de prueba con `evaluacion/revision/revision-referencias-t20.xlsx`. Es una fila por referencia (tipo, estado esperado, campos con error) y otra por cita de los dos borradores. Mientras llega, se trabajó con datos ficticios en la CI y con el borrador del asistente sobre obras reales.
+
+**Incluye también:** el registro de la integración de T19 (22.7), la revisión de los conjuntos de T16 y T19 (22.8) y la propuesta del equipo de medida para T34, que quedaron sin confirmar en `main`.
+
+### 23.1. Actividades
+
+| Actividad | Estado | Evidencia |
+| --- | --- | --- |
+| 1. Estructurar la lista con GROBID | Hecha | `AtencionReferencias` envía a `processCitationList` las entradas que detectó T12. Si GROBID no trae el DOI o el año y la entrada los tiene, se toman del texto (el año, sin mirar el DOI) |
+| 2. Extractores de citas por norma | Hecha | `app/agentes/citas.py`. IEEE: `[1]`, `[1], [3]`, `[1]-[3]` y `[2-4]`. Vancouver: además `(1)`, `(2,3)` y `(1-3)`. APA 7: entre paréntesis (`&`, `y`, `et al.`, varias obras, varios años, letras, página y `s. f.`) y narrativas |
+| 3. DOI en Crossref; sin DOI, metadatos en Crossref y OpenAlex | Hecha | `Verificador`, con los clientes de T14. Compara título, autores (también el primero) y año |
+| 4. Estados | Hecha | `verificada`, `con_discrepancias`, `no_localizada` y `no_comprobable` (RN-18). El modelo no interviene |
+| 5. Cruce de citas y lista | Hecha | Por número o por primer apellido y año, con citas sin entrada y entradas no citadas |
+| 6. Explicación con el modelo, si se configura | Hecha | `explicar_discrepancias` (migración de datos 0015, apagado por defecto) e instrucción `referencias/v1`. Al modelo solo van las discrepancias |
+| 7. Informe en la interfaz y en el registro | Hecha | `frontend/src/paginas/Referencias.tsx` en `/panel/referencias`. El informe se guarda como `resultado` con la comprobación 1 |
+| 8. Conjunto de prueba de referencias | Hecha, en borrador | `evaluacion/conjuntos/referencias-t20.json` y dos borradores .docx: 8 reales, 6 con errores y 6 fabricadas, en IEEE y APA 7. A revisar por el equipo |
+| Tarea: el modelo no decide estados | Hecha | El estado sale del `Verificador`. Una prueba comprueba que, con explicaciones, los estados no cambian |
+| Tarea: límite de búsqueda de Crossref | Hecha | Los clientes de T14 respetan su cubeta. El objetivo de 120 s para 40 referencias se mide en T30 |
+| Tarea: libros con ISBN por metadatos | Hecha | Búsqueda por título, autor y año. Escenario `libro` en las pruebas |
+
+### 23.2. Criterios de aceptación
+
+| Criterio | Estado | Cómo se comprobó |
+| --- | --- | --- |
+| CP-12 superado | **Cumplido** | `test_cp12_informe_completo_en_ieee` y `..._en_apa7`, con la base real y servicios simulados. Cada entrada se marca verificada, con discrepancias o no localizada según su escenario, con los campos esperados, y se señalan la cita sin entrada y la entrada no citada. Con servicios reales, sobre el conjunto de obras reales, los 40 estados coinciden con la clave (23.3) |
+| CP-13 superado | **Cumplido** | `test_cp13_con_los_servicios_caidos_nada_queda_inexistente`: con Crossref y OpenAlex sin responder, las 11 quedan `no_comprobable`, el informe avisa que la verificación no pudo completarse y ninguna queda `no_localizada`. En las pruebas unitarias, también cuando cae un solo servicio |
+| Ninguna referencia fabricada del conjunto queda como verificada | **Cumplido** | Sin red: las tres fabricadas de los borradores de prueba, en ambas normas. Con servicios reales: 0 de 12 (6 por norma) en el conjunto de obras reales |
+| Las citas se extraen correctamente en ambas normas sobre los borradores de prueba | **Cumplido** | 48 pruebas unitarias de extractores. En los borradores ficticios y en los de obras reales, todas las citas, la cita sin entrada y la entrada no citada coinciden con la clave en IEEE y en APA 7 |
+
+### 23.3. Pruebas
+
+- **Backend en contenedor (Python 3.12):** 816 pruebas superadas y 7 omitidas, cobertura del 91,18 %. Las omitidas necesitan GROBID o el servicio de modelos, o son los contratos de DeepSeek y Gemini. Ruff (formato y estilo sobre todo `backend/`) y mypy (estricto sobre `app/`) sin observaciones.
+- **Unitarias:** `test_citas.py` (48: extractores por norma, entradas, cruce y año desde el texto) y `test_verificacion_referencias.py` (21: estados, discrepancias, DOI ajeno, DOI mal escrito, libro, servicios caídos y salvaguardas de GROBID).
+- **Integración (`test_referencias.py`, 12):**
+  - CP-12 en IEEE y APA 7, y CP-13;
+  - el resultado registrado en la base;
+  - sin versión (409), lista no detectada (422) y GROBID caído (`no_atendida`);
+  - aislamiento entre casos;
+  - el registro no lleva el texto de las referencias;
+  - las explicaciones: apagadas por defecto, encendidas con el modelo simulado y con el modelo caído.
+- **Migraciones:** 0015 sube y baja, y respeta una versión 1 congelada. **Matriz de autorización:** las dos rutas nuevas.
+- **Interfaz:** 3 pruebas nuevas (lista no detectada, avance e informe completo, no atendida), 23 en total. Extremo a extremo con Playwright: 7 de 7, con la pantalla nueva sin errores graves de accesibilidad.
+- **Con servicios reales** (`python -m app.agentes.evaluar_referencias`, GROBID, Crossref y OpenAlex, sin base ni modelo; informe en `evaluacion/resultados/verificacion-referencias-t20.json`):
+  - 20 de 20 estados iguales a la clave en IEEE y 20 de 20 en APA 7;
+  - 0 fabricadas verificadas;
+  - en ambas normas se detectan la cita sin entrada y la entrada no citada, y se extraen 20 de 20 citas.
+
+### 23.4. Problemas encontrados y soluciones
+
+- **GROBID no devolvía el año** de tres entradas IEEE reales con páginas largas (`pp. 101805`). Ahora el año se toma del texto de la entrada, sin mirar el DOI.
+- **GROBID tomó la revista como título** en una obra cuyo título termina en "año 2023". Si el título de la fuente está tal cual en la entrada, no se marca discrepancia de título. Un título cambiado o un DOI ajeno siguen detectándose: no contienen el título real.
+- **GROBID parte los apellidos compuestos** ("Alarcón Llontop" quedaba como "Llontop") y daba citas APA sin entrada falsas. En APA el apellido sale del texto de la entrada (`Apellido, I.`).
+- **Un primer autor cambiado con coautores reales pasaba como verificada.** Ahora también se exige que coincida el primer autor.
+- **Choque de nombres en el contrato:** `ReferenciaVista` ya existía en T15, y el contrato renombraba ambos modelos. El nuevo se llama `ReferenciaVerificadaVista`.
+- **Lista no detectada:** el mensaje remitía a una pantalla de marcado que todavía no existe (la ruta es de T12). Ahora pide poner a la lista un título con estilo y volver a cargar la versión.
+
+### 23.5. Pendientes y riesgos
+
+- **Revisión del conjunto por el equipo** (`revision-referencias-t20.xlsx`). El resultado con servicios reales es sobre el borrador del asistente.
+- **Pantalla para marcar a mano** la lista de referencias o las secciones: la ruta existe desde T12; su pantalla no es de esta fase.
+- **Vancouver con servicios reales** y un borrador completo, y la **explicación con un modelo real** (apagada por defecto).
+- **Rendimiento** de 40 referencias en 120 s (RNF-12): se mide en T30.
+- **Segunda ronda de T16** (22.8).
+
+### 23.6. Archivos
+
+- **Creados:**
+  - `backend/app/agentes/citas.py`, `verificacion_referencias.py`, `referencias.py` y `evaluar_referencias.py`;
+  - `backend/app/api/referencias.py`;
+  - `backend/instrucciones/referencias/v1.md` y `backend/migraciones/versiones/0015_verificacion_de_referencias.py`;
+  - `backend/pruebas/unitarias/test_citas.py`, `test_verificacion_referencias.py` e `integracion/test_referencias.py`;
+  - `backend/pruebas/datos/referencias_t20.py` y `pruebas/dobles_referencias.py`;
+  - `backend/pruebas/contrato/grobid/referencias_t20_ieee.tei.xml` y `referencias_t20_apa7.tei.xml`, y `pruebas/datos/docx/referencias_ieee.docx` y `referencias_apa7.docx`;
+  - `frontend/src/paginas/Referencias.tsx` y `src/pruebas/referencias.test.tsx`;
+  - `evaluacion/conjuntos/referencias-t20.json` y `referencias-t20/` (dos borradores), y `evaluacion/resultados/verificacion-referencias-t20.json`;
+  - `evaluacion/revision/` (hojas de revisión de T16, T19 y T20);
+  - `docs/decisiones/T20-verificacion-referencias.md`.
+- **Modificados:**
+  - `backend/app/administracion/parametros.py` y `app/main.py`;
+  - `backend/instrucciones/registro.json`;
+  - `backend/pruebas/datos/generar_docx_muestra.py`, `pruebas/contrato/grabar_grobid_referencias.py` (graba también las listas de T20), `pruebas/matriz_autorizacion.py` e `integracion/test_migraciones.py`;
+  - `docs/api/openapi.json` y `frontend/src/api/esquema.d.ts` (regenerados);
+  - `frontend/src/App.tsx`, `paginas/PanelCaso.tsx`, `estilos.css` y `e2e/flujo.spec.ts`;
+  - `README.md`, `CLAUDE.md` y este archivo;
+  - de la revisión de T16 y T19 (22.8): los dos conjuntos, `test_rag.py`, `test_evidencia.py` y las decisiones T16-01 y T19-01.

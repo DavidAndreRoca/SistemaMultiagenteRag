@@ -151,7 +151,8 @@ T19 no necesita borradores con errores introducidos ni la hoja de errores: esos 
 
    El archivo actual es un borrador de 16 entradas. Las que llevan `"detecta": "pertinencia"` las decide el clasificador y no las reglas.
 
+**Actualización del 25 de noviembre de 2026:** el equipo entregó el conjunto de validación, con 30 consultas y el campo `tema` agregado. Con reglas y pertinencia reales acierta en las 30 (ESTADO, apartado 22.8). La revisión del conjunto de T16 tiene 13 consultas revisadas y 17 en segunda ronda.
+
 Sin validar con datos reales:
-- las tasas de la validación previa sobre el conjunto del equipo;
 - el comportamiento del agente sobre el conjunto revisado completo, que solo se probó en un subconjunto (apartado 7);
 - los contratos de DeepSeek y Gemini, porque faltan sus claves.

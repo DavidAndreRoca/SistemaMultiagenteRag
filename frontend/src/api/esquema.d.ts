@@ -58,6 +58,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/referencias": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verificar las referencias de la versión vigente
+         * @description 202 y el trabajo sigue en segundo plano. 409 sin versión; 422 si no se detectó la lista de referencias (hay que indicarla a mano).
+         */
+        post: operations["verificar_referencias_caso_referencias_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/referencias/{solicitud_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Avance e informe de una verificación de referencias */
+        get: operations["ver_verificacion_caso_referencias__solicitud_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/versiones": {
         parameters: {
             query?: never;
@@ -636,6 +673,17 @@ export interface components {
             /** Cuenta */
             cuenta: string;
         };
+        /** DiscrepanciaVista */
+        DiscrepanciaVista: {
+            /** Campo */
+            campo: string;
+            /** Etiqueta */
+            etiqueta: string;
+            /** Valor Borrador */
+            valor_borrador: string | null;
+            /** Valor Fuente */
+            valor_fuente: string | null;
+        };
         /** DocumentoVista */
         DocumentoVista: {
             /** Anio */
@@ -672,6 +720,13 @@ export interface components {
             /** Titulo */
             titulo: string | null;
         };
+        /** EntradaNoCitadaVista */
+        EntradaNoCitadaVista: {
+            /** Indice */
+            indice: number;
+            /** Texto */
+            texto: string;
+        };
         /**
          * EstadoCaso
          * @enum {string}
@@ -692,7 +747,7 @@ export interface components {
          * @description Estado de una referencia del artículo O1 en la colección del tema (T15).
          * @enum {string}
          */
-        EstadoReferencia: "incluida" | "pendiente_pdf" | "excluida" | "no_comprobable";
+        "EstadoReferencia-Input": "incluida" | "pendiente_pdf" | "excluida" | "no_comprobable";
         /** EstadoSalud */
         EstadoSalud: {
             /** Base De Datos */
@@ -918,6 +973,33 @@ export interface components {
             /** Consulta */
             consulta: string;
         };
+        /** ProgresoVista */
+        ProgresoVista: {
+            /** Hechas */
+            hechas: number;
+            /** Total */
+            total: number;
+        };
+        /** ReferenciaVerificadaVista */
+        ReferenciaVerificadaVista: {
+            /** Citada */
+            citada: boolean;
+            /** Discrepancias */
+            discrepancias: components["schemas"]["DiscrepanciaVista"][];
+            /** Doi Encontrado */
+            doi_encontrado: string | null;
+            estado: components["schemas"]["app__agentes__esquemas__EstadoReferencia"];
+            /** Explicacion */
+            explicacion: string | null;
+            /** Indice */
+            indice: number;
+            /** Metodo */
+            metodo: string | null;
+            /** Texto Original */
+            texto_original: string;
+            /** Url Doi */
+            url_doi: string | null;
+        };
         /** ReferenciaVista */
         ReferenciaVista: {
             /**
@@ -933,7 +1015,7 @@ export interface components {
             documento_id: string | null;
             /** Doi */
             doi: string | null;
-            estado: components["schemas"]["EstadoReferencia"];
+            estado: components["schemas"]["app__bd__enumeraciones__EstadoReferencia"];
             /** Estado Oa */
             estado_oa: string | null;
             /**
@@ -1099,6 +1181,20 @@ export interface components {
              */
             norma: string;
         };
+        /** SolicitudVerificacion */
+        SolicitudVerificacion: {
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
         /**
          * TipoAutoria
          * @enum {string}
@@ -1225,6 +1321,57 @@ export interface components {
             /** Version Id */
             version_id: string;
         };
+        /** VistaVerificacion */
+        VistaVerificacion: {
+            /** Advertencias */
+            advertencias: string[];
+            /** Avisos */
+            avisos: string[];
+            /** Citas Sin Entrada */
+            citas_sin_entrada: string[];
+            /** Comprobaciones */
+            comprobaciones: components["schemas"]["ComprobacionVista"][];
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Entradas No Citadas */
+            entradas_no_citadas: components["schemas"]["EntradaNoCitadaVista"][];
+            /** Entregada En */
+            entregada_en: string | null;
+            estado: components["schemas"]["EstadoSolicitud"];
+            etiqueta: components["schemas"]["Etiqueta"] | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Motivo */
+            motivo: string | null;
+            /** Norma */
+            norma: string | null;
+            /** Norma Nombre */
+            norma_nombre: string | null;
+            progreso: components["schemas"]["ProgresoVista"] | null;
+            /** Referencias */
+            referencias: components["schemas"]["ReferenciaVerificadaVista"][];
+            /** Resumen */
+            resumen: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * EstadoReferencia
+         * @enum {string}
+         */
+        app__agentes__esquemas__EstadoReferencia: "verificada" | "con_discrepancias" | "no_localizada" | "no_comprobable";
+        /**
+         * EstadoReferencia
+         * @description Estado de una referencia del artículo O1 en la colección del tema (T15).
+         * @enum {string}
+         */
+        app__bd__enumeraciones__EstadoReferencia: "incluida" | "pendiente_pdf" | "excluida" | "no_comprobable";
     };
     responses: never;
     parameters: never;
@@ -1400,6 +1547,152 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VistaEvidencia"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    verificar_referencias_caso_referencias_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudVerificacion"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ver_verificacion_caso_referencias__solicitud_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaVerificacion"];
                 };
             };
             /** @description Unauthorized */
@@ -2812,7 +3105,7 @@ export interface operations {
     listar_referencias_investigador_colecciones__coleccion_id__referencias_get: {
         parameters: {
             query?: {
-                estado?: components["schemas"]["EstadoReferencia"] | null;
+                estado?: components["schemas"]["EstadoReferencia-Input"] | null;
             };
             header?: never;
             path: {
