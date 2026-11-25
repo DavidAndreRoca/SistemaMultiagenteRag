@@ -299,3 +299,29 @@ section {
   border-left: 3px solid var(--borde);
   overflow-wrap: anywhere;
 }
+
+/* Verificación de referencias (T20) */
+.referencias {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 52rem;
+}
+.resumen-estados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-left: 1.25rem;
+}
+.lista-referencias {
+  display: grid;
+  gap: 1rem;
+  padding-left: 1.75rem;
+}
+.referencia {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+.referencia__texto {
+  overflow-wrap: anywhere;
+}

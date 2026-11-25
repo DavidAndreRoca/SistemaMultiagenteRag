@@ -1,0 +1,315 @@
+{
+  "conjunto": {
+    "version": "revision-1",
+    "fecha": "2026-11-25"
+  },
+  "umbral_pertinencia": 0.55,
+  "consultas": 30,
+  "aciertos": 30,
+  "aceptadas_bien": 15,
+  "aceptadas": 15,
+  "rechazadas_bien": 15,
+  "rechazadas": 15,
+  "detalle": [
+    {
+      "id": "A-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7995,
+      "acierto": true
+    },
+    {
+      "id": "A-03",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7615,
+      "acierto": true
+    },
+    {
+      "id": "R-01",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "muy_corta",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "muy_corta",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "muy_corta",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "muy_corta",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-03",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "ambigua",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "ambigua",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-05",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-06",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "A-07",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7949,
+      "acierto": true
+    },
+    {
+      "id": "A-08",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.8282,
+      "acierto": true
+    },
+    {
+      "id": "A-09",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7193,
+      "acierto": true
+    },
+    {
+      "id": "A-10",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7894,
+      "acierto": true
+    },
+    {
+      "id": "A-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7295,
+      "acierto": true
+    },
+    {
+      "id": "A-12",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7191,
+      "acierto": true
+    },
+    {
+      "id": "R-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "muy_corta",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "muy_corta",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-14",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-15",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "esperado": "rechazada",
+      "motivo_esperado": "muy_larga",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "muy_larga",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "A-04",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.6338,
+      "acierto": true
+    },
+    {
+      "id": "A-06",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.6551,
+      "acierto": true
+    },
+    {
+      "id": "R-04",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "ambigua",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "ambigua",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-07",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-08",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": 0.4445,
+      "acierto": true
+    },
+    {
+      "id": "R-09",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": 0.3904,
+      "acierto": true
+    },
+    {
+      "id": "R-10",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": 0.4586,
+      "acierto": true
+    },
+    {
+      "id": "A-13",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7335,
+      "acierto": true
+    },
+    {
+      "id": "A-14",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7519,
+      "acierto": true
+    },
+    {
+      "id": "A-15",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7229,
+      "acierto": true
+    },
+    {
+      "id": "A-16",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.6951,
+      "acierto": true
+    },
+    {
+      "id": "A-17",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "aceptada",
+      "motivo_esperado": null,
+      "obtenido": "aceptada",
+      "motivo_obtenido": null,
+      "similitud": 0.7269,
+      "acierto": true
+    },
+    {
+      "id": "R-12",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "ambigua",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "ambigua",
+      "similitud": null,
+      "acierto": true
+    },
+    {
+      "id": "R-13",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "esperado": "rechazada",
+      "motivo_esperado": "fuera_de_alcance",
+      "obtenido": "rechazada",
+      "motivo_obtenido": "fuera_de_alcance",
+      "similitud": null,
+      "acierto": true
+    }
+  ]
+}

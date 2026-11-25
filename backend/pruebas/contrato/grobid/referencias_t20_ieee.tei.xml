@@ -1,0 +1,231 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:mml="http://www.w3.org/1998/Math/MathML">
+	<teiHeader/>
+	<text>
+		<front/>
+		<body/>
+		<back>
+			<div>
+				<listBibl>
+<biblStruct status="extracted" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Tutoría entre pares y ansiedad ante la estadística en universitarios</title>
+		<author>
+			<persName><forename type="first">A</forename><surname>Quispe</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Huamán</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.quispe.2021</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Revista Ficticia de Pedagogía</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">1] A. Quispe and L. Huamán, “Tutoría entre pares y ansiedad ante la estadística en universitarios,” Revista Ficticia de Pedagogía, vol. 4, no. 2, pp. 10-25, 2021, doi: 10.5555/t20.quispe.2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Retroalimentación formativa en cursos de metodología de la investigación</title>
+		<author>
+			<persName><forename type="first">R</forename><surname>Mamani</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Educación y Datos Imaginarios</title>
+		<imprint>
+			<date type="published" when="2019">2019</date>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+		</imprint>
+	</monogr>
+	<note type="raw_reference">2] R. Mamani, “Retroalimentación formativa en cursos de metodología de la investigación,” Educación y Datos Imaginarios, vol. 4, no. 2, pp. 10-25, 2019.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Escritura académica asistida por herramientas digitales</title>
+		<author>
+			<persName><forename type="first">C</forename><surname>Torres</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Paredes</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.torres.2021</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Cuadernos Ficticios de Escritura</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">3] C. Torres and M. Paredes, “Escritura académica asistida por herramientas digitales,” Cuadernos Ficticios de Escritura, vol. 4, no. 2, pp. 10-25, 2022, doi: 10.5555/t20.torres.2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Uso de chatbots en la enseñanza secundaria rural</title>
+		<author>
+			<persName><forename type="first">E</forename><surname>Rojas</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.rojas.2020</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Revista Andina Ficticia</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2020">2020</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">4] E. Rojas, “Uso de chatbots en la enseñanza secundaria rural,” Revista Andina Ficticia, vol. 4, no. 2, pp. 10-25, 2020, doi: 10.5555/t20.rojas.2020.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Comercio electrónico en microempresas de la costa sur</title>
+		<author>
+			<persName><forename type="first">P</forename><surname>Gutiérrez</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Gestión Ficticia</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2018">2018</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">5] P. Gutiérrez, “Comercio electrónico en microempresas de la costa sur,” Gestión Ficticia, vol. 4, no. 2, pp. 10-25, 2018.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Tutores neuronales en la sierra andina: un ensayo controlado</title>
+		<author>
+			<persName><forename type="first">J</forename><surname>Condori</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Revista Inexistente de Tecnología Educativa</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2023">2023</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">6] J. Condori, “Tutores neuronales en la sierra andina: un ensayo controlado,” Revista Inexistente de Tecnología Educativa, vol. 4, no. 2, pp. 10-25, 2023.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Inteligencia artificial generativa y plagio en la universidad</title>
+		<author>
+			<persName><forename type="first">S</forename><surname>Villanueva</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.quispe.2021</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Ética Ficticia</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2022">2022</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">7] S. Villanueva, “Inteligencia artificial generativa y plagio en la universidad,” Ética Ficticia, vol. 4, no. 2, pp. 10-25, 2022, doi: 10.5555/t20.quispe.2021.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Algoritmos de recomendación para bibliotecas escolares</title>
+		<author>
+			<persName><forename type="first">F</forename><surname>Benites</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.no.existe</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Bibliotecología Imaginaria</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2021">2021</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">8] F. Benites, “Algoritmos de recomendación para bibliotecas escolares,” Bibliotecología Imaginaria, vol. 4, no. 2, pp. 10-25, 2021, doi: 10.5555/t20.no.existe.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b8">
+	<monogr>
+		<author>
+			<persName><forename type="first">G</forename><surname>Ramos</surname></persName>
+		</author>
+		<title level="m">Metodología de la investigación educativa</title>
+		<meeting><address><addrLine>Lima, Perú</addrLine></address></meeting>
+		<imprint>
+			<publisher>Editorial Ficticia</publisher>
+			<date type="published" when="2015">2015</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">9] G. Ramos, Metodología de la investigación educativa. Lima, Perú: Editorial Ficticia, 2015.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Brecha digital en hogares de estudiantes de secundaria</title>
+		<author>
+			<persName><forename type="first">N</forename><surname>Cárdenas</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.cardenas.2017</idno>
+	</analytic>
+	<monogr>
+		<title level="j">” Sociedad Ficticia</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2017">2017</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">10] N. Cárdenas, “Brecha digital en hogares de estudiantes de secundaria,” Sociedad Ficticia, vol. 4, no. 2, pp. 10-25, 2017, doi: 10.5555/t20.cardenas.2017.</note>
+</biblStruct>
+
+<biblStruct status="extracted" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Lectura crítica de artículos científicos en pregrado</title>
+		<author>
+			<persName><forename type="first">H</forename><surname>Espinoza</surname></persName>
+		</author>
+		<idno type="DOI">10.5555/t20.espinoza.2016</idno>
+	</analytic>
+	<monogr>
+		<title level="j">Docencia Ficticia</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="10" to="25" />
+			<date type="published" when="2016">2016</date>
+		</imprint>
+	</monogr>
+	<note type="raw_reference">11] H. Espinoza, “Lectura crítica de artículos científicos en pregrado,” Docencia Ficticia, vol. 4, no. 2, pp. 10-25, 2016, doi: 10.5555/t20.espinoza.2016.</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

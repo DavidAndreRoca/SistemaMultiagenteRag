@@ -584,3 +584,22 @@ def test_la_migracion_0014_agrega_la_validacion_de_consultas(base_vacia: str) ->
     _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
     with pytest.raises(RuntimeError, match="congelada"):
         command.upgrade(cfg, "0014")
+
+
+def test_la_migracion_0015_agrega_la_explicacion_de_discrepancias(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0015")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and parametros["explicar_discrepancias"] is False
+    assert parametros["versiones_instrucciones"] == {
+        "suficiencia": "v1",
+        "evidencia": "v1",
+        "referencias": "v1",
+    }
+    command.downgrade(cfg, "0014")
+    (parametros,) = consultar(base_vacia, "SELECT parametros FROM configuracion")[0]
+    assert isinstance(parametros, dict) and "explicar_discrepancias" not in parametros
+    assert parametros["versiones_instrucciones"] == {"suficiencia": "v1", "evidencia": "v1"}
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    with pytest.raises(RuntimeError, match="congelada"):
+        command.upgrade(cfg, "0015")

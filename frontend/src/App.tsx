@@ -10,6 +10,7 @@ import { Evidencia } from "./paginas/Evidencia";
 import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
 import { PanelCaso } from "./paginas/PanelCaso";
+import { Referencias } from "./paginas/Referencias";
 import { inicioDe, ROL_CASO, ROL_INVESTIGADOR, useSesion, type Rol } from "./sesion/sesion";
 
 function Cargando() {
@@ -86,6 +87,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Evidencia />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/referencias"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Referencias />
           </Protegida>
         }
       />
