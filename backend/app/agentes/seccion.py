@@ -1,13 +1,18 @@
-"""Atención directa de los agentes que diagnostican una sección del borrador (T23; D1, y D2 en
-T26), sin orquestador hasta T28, como la de evidencia (T19).
+"""Atención directa de los agentes que trabajan sobre una parte del borrador (T23 y T27; D1,
+D2 en T26 y D3), sin orquestador hasta T28, como la de evidencia (T19).
 
-* ``iniciar``: exige una versión vigente con secciones (T12) y una sección que no sea la
-  lista de referencias; crea la solicitud con alcance ``seccion``.
+``AtencionPorAlcance`` es el camino común:
+
+* ``iniciar``: exige una versión vigente, valida el alcance (``resolver``) antes de crear
+  nada y crea la solicitud.
 * ``atender``, en segundo plano: el agente recupera de las guías, decide la suficiencia y
-  genera (contrato de T18). Se aplican las comprobaciones 1 (esquema), 3 (citas a los
-  fragmentos recuperados) y 2 (no reescritura, CP-08). Si alguna falla, el resultado va
-  "Con advertencias" (el reintento es de T30). Los hallazgos se guardan de mayor a menor
-  severidad.
+  genera (contrato de T18); se aplican las comprobaciones del tipo. Si alguna falla, el
+  resultado va "Con advertencias" (el reintento es de T30).
+
+``AtencionSeccion`` (D1 y D2) toma una sección que no sea la lista de referencias y aplica
+las comprobaciones 1 (esquema), 3 (citas a los fragmentos recuperados) y 2 (no reescritura,
+CP-08); los hallazgos se guardan de mayor a menor severidad. D3 tiene la suya en
+``app/agentes/redaccion.py``.
 
 El registro guarda estados y cantidades, nunca el texto del borrador ni de la salida (4.6).
 """
@@ -16,10 +21,12 @@ from __future__ import annotations
 
 import asyncio
 import uuid
-from collections.abc import Callable
+from collections.abc import Callable, Collection
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, ClassVar
 
+from app.administracion.parametros import ParametrosFuncionales
 from app.agentes.contrato import Agente, EstadoAgente
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAlcance, TipoSolicitud
 from app.bd.modelos import Resultado, Solicitud, VersionBorrador
@@ -31,6 +38,7 @@ from app.llm.modelos import ErrorModelo
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.unidad import FabricaUnidades, UnidadDeTrabajo
 from app.verificacion.comprobaciones import (
+    Comprobacion,
     comprobar_citas,
     comprobar_esquema,
     comprobar_no_reescritura,
@@ -114,7 +122,11 @@ class _Avance:
     tareas: set[asyncio.Task[None]] = field(default_factory=set)
 
 
-class AtencionSeccion:
+class AtencionPorAlcance:
+    """Camino común de los agentes que trabajan sobre una parte de la versión vigente."""
+
+    alcance_tipo: ClassVar[TipoAlcance]
+
     def __init__(
         self,
         tipo: TipoSolicitud,
@@ -143,20 +155,39 @@ class AtencionSeccion:
         assert completa is not None
         return completa
 
+    def resolver(
+        self, version: VersionBorrador, referencia: str, parametros: ParametrosFuncionales
+    ) -> str:
+        """El texto del alcance que recibe el agente; lanza un error si no es válido."""
+        raise NotImplementedError
+
+    def ajustar(self, salida: dict[str, Any], texto: str) -> dict[str, Any]:
+        """Ajuste determinista de la salida antes de comprobarla y guardarla."""
+        return salida
+
+    def comprobaciones(
+        self,
+        salida: dict[str, Any],
+        texto: str,
+        parametros: ParametrosFuncionales,
+        recuperados: Collection[str],
+    ) -> list[Comprobacion]:
+        return [comprobar_esquema(self.tipo, salida), comprobar_citas(salida, recuperados)]
+
     async def iniciar(
-        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, seccion_id: str
+        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, referencia: str
     ) -> Solicitud:
         version = await self.version_vigente(unidad, contexto)
-        alcance_de_seccion(version, seccion_id)  # valida antes de crear nada
-        configuracion, _ = await unidad.configuracion.vigente()
+        configuracion, parametros = await unidad.configuracion.vigente()
+        self.resolver(version, referencia, parametros)  # valida antes de crear nada
         ahora = self._reloj()
         solicitud = await unidad.solicitudes.agregar(
             contexto,
             Solicitud(
                 version_id=version.id,
                 tipo=self.tipo,
-                alcance_tipo=TipoAlcance.SECCION,
-                alcance_ref=seccion_id,
+                alcance_tipo=self.alcance_tipo,
+                alcance_ref=referencia,
                 configuracion_id=configuracion.id,
                 estado=EstadoSolicitud.RECIBIDA,
                 creada_en=ahora,
@@ -165,7 +196,7 @@ class AtencionSeccion:
         )
         await unidad.confirmar()
         _registro.info(
-            "solicitud de revisión de sección",
+            "solicitud sobre una parte del borrador",
             extra={
                 "tipo_evento": "agentes",
                 "solicitud_id": str(solicitud.id),
@@ -200,7 +231,7 @@ class AtencionSeccion:
                 else str(getattr(error, "codigo", type(error).__name__))
             )
             _registro.warning(
-                "revisión de sección no atendida",
+                "solicitud sobre una parte del borrador no atendida",
                 extra={
                     "tipo_evento": "agentes",
                     "solicitud_id": str(solicitud.id),
@@ -220,7 +251,8 @@ class AtencionSeccion:
         await self._cambiar(unidad, contexto, solicitud.id, EstadoSolicitud.RECUPERANDO)
         version = await unidad.versiones.con_parrafos(contexto, solicitud.version_id)
         assert version is not None and solicitud.alcance_ref is not None
-        _, texto = alcance_de_seccion(version, solicitud.alcance_ref)
+        _, parametros = await unidad.configuracion.vigente()
+        texto = self.resolver(version, solicitud.alcance_ref, parametros)
         estado = EstadoAgente(
             solicitud_id=solicitud.id,
             caso_id=solicitud.caso_id,
@@ -233,18 +265,9 @@ class AtencionSeccion:
             await self._cambiar(unidad, contexto, solicitud.id, EstadoSolicitud.ENTREGADA)
             return
         assert resultado.salida is not None
-        salida = resultado.salida.model_dump(mode="json")
-        if "hallazgos" in salida:
-            salida["hallazgos"] = sorted(
-                salida["hallazgos"], key=lambda h: ORDEN_SEVERIDAD.get(h.get("severidad"), 3)
-            )
+        salida = self.ajustar(resultado.salida.model_dump(mode="json"), texto)
         recuperados = await unidad.fragmentos_recuperados.identificadores(contexto, solicitud.id)
-        _, parametros = await unidad.configuracion.vigente()
-        comprobaciones = [
-            comprobar_esquema(self.tipo, salida),
-            comprobar_no_reescritura(salida, texto, parametros.limite_reescritura_palabras),
-            comprobar_citas(salida, recuperados),
-        ]
+        comprobaciones = self.comprobaciones(salida, texto, parametros, recuperados)
         fallidas = [c for c in comprobaciones if not c.superada]
         await unidad.resultados.agregar(
             contexto,
@@ -267,11 +290,13 @@ class AtencionSeccion:
         )
         await self._cambiar(unidad, contexto, solicitud.id, EstadoSolicitud.ENTREGADA)
         _registro.info(
-            "revisión de sección entregada",
+            "solicitud sobre una parte del borrador entregada",
             extra={
                 "tipo_evento": "agentes",
                 "solicitud_id": str(solicitud.id),
+                "tipo": self.tipo.value,
                 "hallazgos": len(salida.get("hallazgos", [])),
+                "cambios": len(salida.get("cambios", [])),
                 "comprobaciones_fallidas": [c.nombre for c in fallidas],
             },
         )
@@ -303,3 +328,34 @@ class AtencionSeccion:
             await self._cambiar(
                 unidad, contexto, solicitud.id, EstadoSolicitud.NO_ATENDIDA, "interrumpida"
             )
+
+
+class AtencionSeccion(AtencionPorAlcance):
+    """D1 y D2: una sección con sus subsecciones (CP-08)."""
+
+    alcance_tipo = TipoAlcance.SECCION
+
+    def resolver(
+        self, version: VersionBorrador, referencia: str, parametros: ParametrosFuncionales
+    ) -> str:
+        return alcance_de_seccion(version, referencia)[1]
+
+    def ajustar(self, salida: dict[str, Any], texto: str) -> dict[str, Any]:
+        if "hallazgos" in salida:
+            salida["hallazgos"] = sorted(
+                salida["hallazgos"], key=lambda h: ORDEN_SEVERIDAD.get(h.get("severidad"), 3)
+            )
+        return salida
+
+    def comprobaciones(
+        self,
+        salida: dict[str, Any],
+        texto: str,
+        parametros: ParametrosFuncionales,
+        recuperados: Collection[str],
+    ) -> list[Comprobacion]:
+        return [
+            comprobar_esquema(self.tipo, salida),
+            comprobar_no_reescritura(salida, texto, parametros.limite_reescritura_palabras),
+            comprobar_citas(salida, recuperados),
+        ]

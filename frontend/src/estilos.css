@@ -639,3 +639,62 @@ a:hover {
   color: var(--info);
   background: var(--info-fondo);
 }
+
+/* Propuesta de redacción (T27): original y propuesta lado a lado. El cambio se nota por el
+   tachado y el subrayado, no solo por el color. */
+.texto-suave {
+  margin: 0;
+  color: var(--texto-suave);
+}
+.parrafo-elegido {
+  padding: 0.75rem 1rem;
+  background: var(--superficie-suave);
+  border-radius: var(--radio);
+}
+.parrafo-elegido__titulo {
+  margin: 0;
+  font-weight: 600;
+}
+.parrafo-elegido blockquote {
+  margin: 0.5rem 0 0;
+  overflow-wrap: anywhere;
+}
+.comparacion {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.comparacion__lado {
+  padding: 0.875rem 1rem;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+}
+.comparacion__lado h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+.comparacion__lado p {
+  margin: 0;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.tramo {
+  padding: 0 0.125rem;
+  border-radius: 3px;
+}
+.tramo--quitado {
+  color: var(--error);
+  background: var(--error-fondo);
+  text-decoration: line-through;
+}
+.tramo--agregado {
+  color: var(--exito);
+  background: var(--exito-fondo);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.insignia--cambio {
+  color: var(--info);
+  background: var(--info-fondo);
+}

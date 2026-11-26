@@ -638,3 +638,45 @@ def test_la_migracion_0016_crea_una_version_nueva_si_la_1_esta_en_uso(base_vacia
     assert filas == [(1, False, False), (2, True, True)]
     command.downgrade(cfg, "0015")
     assert consultar(base_vacia, "SELECT numero_version, vigente FROM configuracion") == [(1, True)]
+
+
+def test_la_migracion_0017_agrega_la_instruccion_de_redaccion(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0017")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones == {
+        "suficiencia": "v1",
+        "evidencia": "v1",
+        "referencias": "v1",
+        "estructura": "v1",
+        "redaccion": "v1",
+    }
+    command.downgrade(cfg, "0016")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert "redaccion" not in versiones and versiones["estructura"] == "v1"
+
+
+def test_la_migracion_0017_crea_una_version_nueva_si_la_vigente_esta_en_uso(
+    base_vacia: str,
+) -> None:
+    """Tras 0016 la vigente puede ser la 2; si está en uso, 0017 crea la 3 (RNF-21)."""
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0015")
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    command.upgrade(cfg, "0016")
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true WHERE vigente")
+    command.upgrade(cfg, "0017")
+    filas = consultar(
+        base_vacia,
+        "SELECT numero_version, vigente, parametros -> 'versiones_instrucciones' ? 'redaccion'"
+        " FROM configuracion ORDER BY numero_version",
+    )
+    assert filas == [(1, False, False), (2, False, False), (3, True, True)]
+    command.downgrade(cfg, "0016")
+    assert consultar(
+        base_vacia, "SELECT numero_version, vigente FROM configuracion ORDER BY numero_version"
+    ) == [(1, False), (2, True)]

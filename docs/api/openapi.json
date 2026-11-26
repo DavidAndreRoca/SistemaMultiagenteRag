@@ -125,6 +125,47 @@
         "title": "CambioNormaVista",
         "type": "object"
       },
+      "CambioVista": {
+        "properties": {
+          "antes": {
+            "title": "Antes",
+            "type": "string"
+          },
+          "citas": {
+            "items": {
+              "$ref": "#/components/schemas/CitaGuia"
+            },
+            "title": "Citas",
+            "type": "array"
+          },
+          "despues": {
+            "title": "Despues",
+            "type": "string"
+          },
+          "razon": {
+            "title": "Razon",
+            "type": "string"
+          },
+          "tipo": {
+            "title": "Tipo",
+            "type": "string"
+          },
+          "tipo_nombre": {
+            "title": "Tipo Nombre",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tipo",
+          "tipo_nombre",
+          "antes",
+          "despues",
+          "razon",
+          "citas"
+        ],
+        "title": "CambioVista",
+        "type": "object"
+      },
       "CasoCreadoVista": {
         "properties": {
           "codigo": {
@@ -1283,6 +1324,39 @@
         "title": "OrigenImportacion",
         "type": "string"
       },
+      "ParrafoRedactable": {
+        "properties": {
+          "dentro_del_limite": {
+            "title": "Dentro Del Limite",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "palabras": {
+            "title": "Palabras",
+            "type": "integer"
+          },
+          "seccion": {
+            "title": "Seccion",
+            "type": "string"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "seccion",
+          "texto",
+          "palabras",
+          "dentro_del_limite"
+        ],
+        "title": "ParrafoRedactable",
+        "type": "object"
+      },
       "ParrafoVista": {
         "properties": {
           "es_titulo": {
@@ -1327,6 +1401,27 @@
         "title": "ParrafoVista",
         "type": "object"
       },
+      "ParrafosRedactables": {
+        "properties": {
+          "limite_palabras": {
+            "title": "Limite Palabras",
+            "type": "integer"
+          },
+          "parrafos": {
+            "items": {
+              "$ref": "#/components/schemas/ParrafoRedactable"
+            },
+            "title": "Parrafos",
+            "type": "array"
+          }
+        },
+        "required": [
+          "limite_palabras",
+          "parrafos"
+        ],
+        "title": "ParrafosRedactables",
+        "type": "object"
+      },
       "PedidoEstructura": {
         "properties": {
           "seccion_id": {
@@ -1355,6 +1450,21 @@
           "consulta"
         ],
         "title": "PedidoEvidencia",
+        "type": "object"
+      },
+      "PedidoRedaccion": {
+        "properties": {
+          "parrafo_id": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Parrafo Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parrafo_id"
+        ],
+        "title": "PedidoRedaccion",
         "type": "object"
       },
       "ProgresoVista": {
@@ -1997,6 +2107,30 @@
         "title": "SolicitudNorma",
         "type": "object"
       },
+      "SolicitudRedaccion": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudRedaccion",
+        "type": "object"
+      },
       "SolicitudResumen": {
         "properties": {
           "consulta": {
@@ -2536,6 +2670,166 @@
           "comprobaciones"
         ],
         "title": "VistaEvidencia",
+        "type": "object"
+      },
+      "VistaRedaccion": {
+        "properties": {
+          "abstencion": {
+            "title": "Abstencion",
+            "type": "boolean"
+          },
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          },
+          "cambios": {
+            "items": {
+              "$ref": "#/components/schemas/CambioVista"
+            },
+            "title": "Cambios",
+            "type": "array"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "limite_palabras_propuesta": {
+            "title": "Limite Palabras Propuesta",
+            "type": "integer"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "notas_para_el_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notas Para El Estudiante",
+            "type": "array"
+          },
+          "original": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original"
+          },
+          "palabras_original": {
+            "title": "Palabras Original",
+            "type": "integer"
+          },
+          "palabras_propuesta": {
+            "title": "Palabras Propuesta",
+            "type": "integer"
+          },
+          "parrafo_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parrafo Id"
+          },
+          "propuesta": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Propuesta"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "parrafo_id",
+          "abstencion",
+          "aviso",
+          "etiqueta",
+          "original",
+          "propuesta",
+          "palabras_original",
+          "palabras_propuesta",
+          "limite_palabras_propuesta",
+          "cambios",
+          "notas_para_el_estudiante",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaRedaccion",
         "type": "object"
       },
       "VistaSecciones": {
@@ -3274,6 +3568,247 @@
         "summary": "Avance y resultado de una búsqueda de evidencia",
         "tags": [
           "evidencia"
+        ]
+      }
+    },
+    "/caso/redaccion": {
+      "post": {
+        "operationId": "pedir_redaccion_caso_redaccion_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoRedaccion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudRedaccion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir la propuesta de redacción de un párrafo",
+        "tags": [
+          "redaccion"
+        ]
+      }
+    },
+    "/caso/redaccion/parrafos": {
+      "get": {
+        "operationId": "parrafos_caso_redaccion_parrafos_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParrafosRedactables"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Párrafos de la versión vigente que admiten una propuesta de redacción",
+        "tags": [
+          "redaccion"
+        ]
+      }
+    },
+    "/caso/redaccion/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_redaccion_caso_redaccion__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaRedaccion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance y resultado de una propuesta de redacción",
+        "tags": [
+          "redaccion"
         ]
       }
     },

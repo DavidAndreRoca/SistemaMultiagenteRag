@@ -1940,3 +1940,4 @@ Rama `t22-t23-guias-y-estructura`. Decisión: `docs/decisiones/T22-T23-guias-y-e
   - la única prueba con el modelo real, sobre el borrador de demostración.
 - **Pendiente:** el conjunto de borradores con errores estructurales y su clave, que arma el asistente antes de T34, y el reintento, en T30.
 
+**Integración de T22 y T23:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#20, CI verde (ejecución 45880622403, 9 de 9 trabajos), integrada en `main`.

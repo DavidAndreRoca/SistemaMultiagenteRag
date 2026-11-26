@@ -56,6 +56,7 @@ TIPOS_CON_PANTALLA = (
     TipoSolicitud.BUSQUEDA_EVIDENCIA,
     TipoSolicitud.VERIFICACION_REFERENCIAS,
     TipoSolicitud.REVISION_ESTRUCTURA,
+    TipoSolicitud.PROPUESTA_REDACCION,
 )
 
 

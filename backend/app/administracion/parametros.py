@@ -182,6 +182,7 @@ class ParametrosFuncionales(_Estricto):
             "evidencia": "v1",
             "referencias": "v1",
             "estructura": "v1",
+            "redaccion": "v1",
         }
     )
 

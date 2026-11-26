@@ -29,6 +29,12 @@ _SELECCION = re.compile(r"p\d+(?:\s*(?:[,;\s]|-|\u2013|\.\.)\s*p\d+)+")
 _RANGO = re.compile(r"p(\d+)\s*(?:-|\u2013|\.\.)\s*p(\d+)")
 
 
+def contar_palabras(texto: str) -> int:
+    """Palabras de un texto separadas por espacios: la medida de los límites de D3 (RN-07),
+    igual para el párrafo del estudiante y para la propuesta."""
+    return len(texto.split())
+
+
 class AlcanceInvalido(ErrorAplicacion):
     def __init__(self, motivo: str, mensaje: str, **detalle: object) -> None:
         super().__init__(motivo, mensaje, estado_http=422, detalle={"motivo": motivo, **detalle})
@@ -156,7 +162,7 @@ def _consulta(tipo: TipoSolicitud, ref: str | None) -> AlcanceResuelto:
         alcance_ref=ref,
         parrafos=[],
         texto=ref,
-        palabras=len(ref.split()),
+        palabras=contar_palabras(ref),
     )
 
 
@@ -173,5 +179,5 @@ def _resuelto(
         alcance_ref=ref,
         parrafos=[p.id for p in parrafos],
         texto=texto,
-        palabras=len(texto.split()),
+        palabras=contar_palabras(texto),
     )
