@@ -26,7 +26,7 @@ export function Boton({
   variante = "principal",
   className,
   ...props
-}: ButtonProps & { variante?: "principal" | "secundario" }) {
+}: ButtonProps & { variante?: "principal" | "secundario" | "claro" }) {
   return (
     <Button
       {...props}

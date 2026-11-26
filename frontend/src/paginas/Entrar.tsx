@@ -30,7 +30,7 @@ export function Entrar() {
   }
 
   return (
-    <Marco titulo="Iniciar sesión">
+    <Marco titulo="Iniciar sesión" variante="acceso">
       <p>Ingrese el código de su cuenta y su contraseña.</p>
       <Form
         className="formulario"
