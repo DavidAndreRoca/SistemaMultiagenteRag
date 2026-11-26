@@ -168,6 +168,11 @@ function Informe({ vista }: { vista: Vista }) {
   );
 }
 
+/** El valor sin su punto final ("et al."), porque la frase ya termina en punto. */
+function valor(texto: string | null): string {
+  return texto ? texto.replace(/\.$/, "") : "no figura";
+}
+
 function FilaReferencia({ referencia }: { referencia: Referencia }) {
   return (
     <li value={referencia.indice} className="referencia">
@@ -183,8 +188,8 @@ function FilaReferencia({ referencia }: { referencia: Referencia }) {
         <ul aria-label={`Discrepancias de la referencia ${String(referencia.indice)}`}>
           {referencia.discrepancias.map((d) => (
             <li key={d.campo}>
-              {d.etiqueta}: en su referencia, {d.valor_borrador ?? "no figura"}; en la fuente,{" "}
-              {d.valor_fuente ?? "no figura"}.
+              {d.etiqueta}: en su referencia, {valor(d.valor_borrador)}; en la fuente,{" "}
+              {valor(d.valor_fuente)}.
             </li>
           ))}
         </ul>

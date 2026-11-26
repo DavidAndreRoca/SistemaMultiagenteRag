@@ -2,7 +2,7 @@
 
 Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`. Solo se marca como cumplido lo que se comprobó con una prueba o un comando cuyo resultado se anota aquí.
 
-**Última actualización:** 25 de noviembre de 2026. T20 implementada en la rama `t20-verificacion-referencias` (apartado 23). T19 integrada en `main` (solicitud de cambio #15, apartado 22.7). T18 integrada en `main` (solicitud de cambio #14, apartado 21.7). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
+**Última actualización:** 26 de noviembre de 2026. Prototipo navegable (apartado 24). T20 integrada en `main` (solicitud de cambio #16, apartado 23.7). T19 integrada en `main` (solicitud de cambio #15, apartado 22.7). T18 integrada en `main` (solicitud de cambio #14, apartado 21.7). T16 integrada en `main` (solicitud de cambio #13, apartado 20.7). T17 integrada en `main` (solicitud de cambio #12, apartado 19.7). T15 integrada en `main` (solicitud de cambio #11, apartado 18.7). T11 y T12 integradas en `main` (solicitudes de cambio #7 y #8, apartados 14.7 y 15.7). T13 integrada en `main` (solicitud de cambio #9, apartado 16.7). T14 integrada en `main` (solicitud de cambio #10, apartado 17.7). Fase 2 (T04 a T07) integrada en `main` (solicitud de cambio #1, apartado 10.10). T08 integrada en `main` (solicitud de cambio #2, apartado 11.7). T09 integrada en `main` (solicitud de cambio #4, apartado 12.8). T10 integrada en `main` (solicitud de cambio #5, apartado 13.7); su actividad 7, el corpus provisional (apartado 13.8), y la optimización del flujo de desarrollo (apartado 13.9, decisión T10-02), integradas en `main` (solicitud de cambio #6, apartado 13.10).
 
 ## Resumen
 
@@ -28,8 +28,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T16 (F3)** | Recuperación híbrida y suficiencia | **Integrada en `main`** (solicitud de cambio #13, apartado 20.7); criterios cumplidos y línea base registrada: precisión contextual 0,68 y exhaustividad 0,80 (apartado 20). El conjunto de consultas está en borrador, a revisar por el equipo |
 | **T18 (F3)** | Contrato común de agentes y comprobaciones deterministas | **Integrada en `main`** (solicitud de cambio #14, apartado 21.7); criterios cumplidos (apartado 21) |
 | **T19 (F3)** | Agente D4: búsqueda de evidencia | **Integrada en `main`** (solicitud de cambio #15, apartado 22.7), verificada con modelo simulado y una ejecución con Groq; criterios cumplidos (apartado 22). Los conjuntos del equipo siguen pendientes |
-| **T20 (F3)** | Agente D4: verificación de referencias | **Implementada y verificada en la rama** `t20-verificacion-referencias`, con servicios simulados y con GROBID, Crossref y OpenAlex reales; criterios cumplidos (apartado 23). El conjunto de prueba está en borrador, a revisar por el equipo |
-| T21 en adelante | | No iniciadas |
+| **T20 (F3)** | Agente D4: verificación de referencias | **Integrada en `main`** (solicitud de cambio #16, apartado 23.7), verificada con servicios simulados y con GROBID, Crossref y OpenAlex reales; criterios cumplidos (apartado 23). El conjunto de prueba está en borrador, a revisar por el equipo |
+| **Prototipo** | Recorrido demostrable de punta a punta | **Hecho en local** (apartado 24): `scripts/prototipo.ps1` y guion en `docs/demo/guion-prototipo.md`. Datos de demostración provisionales, sin revisión humana |
+| T21 en adelante | | Pospuestas hasta después de la presentación (apartado 24) |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1835,3 +1836,49 @@ Rama `t20-verificacion-referencias`, desde `main` con T19 (`76fd745`). Decisión
   - `frontend/src/App.tsx`, `paginas/PanelCaso.tsx`, `estilos.css` y `e2e/flujo.spec.ts`;
   - `README.md`, `CLAUDE.md` y este archivo;
   - de la revisión de T16 y T19 (22.8): los dos conjuntos, `test_rag.py`, `test_evidencia.py` y las decisiones T16-01 y T19-01.
+
+### 23.7. Integración
+
+| Paso | Resultado |
+| --- | --- |
+| Rama y confirmaciones | `t20-verificacion-referencias`: `e9e17dd` (`T20: agregar la verificación de referencias del agente D4, los extractores de citas por norma y el conjunto de prueba`), sin línea de coautoría. Incluye el registro de la integración de T19 (22.7) y la revisión de los conjuntos (22.8) |
+| Solicitud de cambio | DavidAndreRoca/SistemaMultiagenteRag#16 |
+| CI de la solicitud | **Verde**, ejecución 45551444643 (la de `e9e17dd`), 9 de 9 trabajos |
+| Integración en `main` | Commit de integración `0d3870c` |
+| CI de `main` tras integrar | Ejecución 45556140317: **verde** |
+
+## 24. Prototipo navegable (cambio de plan del 26 de noviembre de 2026)
+
+El equipo pidió priorizar un prototipo demostrable de punta a punta para el docente: el estudiante entra, carga su borrador, consulta evidencia y verifica sus referencias. Se cierra en forma ligera: solicitud de cambio, CI e integración.
+
+**Fases para el recorrido:**
+- **Imprescindibles, ya hechas:** T03 a T20 (autenticación, casos, borradores y secciones, corpus, recuperación, modelos, agente D4 de evidencia y de referencias, interfaz).
+- **Pospuestas hasta después de la presentación:**
+  - T21 (ensayo en Oracle: la demostración es local);
+  - T22 a T27 (guías y agentes D1, D2 y D3);
+  - T28 a T33 (orquestador, verificador completo, decisiones, aportes e historial);
+  - T34 y T38 (calibración y mediciones finales);
+  - T35 a T37 y T39 a T44.
+
+**Prototipo** (`scripts/prototipo.ps1`, `docker-compose.demo.yml`, guion en `docs/demo/guion-prototipo.md`):
+- Usa la base de desarrollo con el corpus provisional (`sma_rag`), los servicios compartidos y la interfaz en http://127.0.0.1:5173.
+- `python -m app.bd.demo` crea el investigador `INV-DEMO` y el caso `DEMO-01` (TEMA-1-IA-EDUCACION, IEEE). Las contraseñas van solo a `datos/demo/credenciales.txt`, fuera de Git. La demostración anterior (`scripts/demo.ps1`, base vacía, para el asesor) no cambia.
+- **Base de desarrollo:** migrada de 0013 a 0015 (solo configuración) tras el respaldo `datos/respaldos/antes-de-0015-2026-11-26.*`.
+- **Títulos del corpus:** 9 títulos vacíos, cortos o en mayúsculas se tomaron de Crossref (`python -m app.corpus.titulos`). Solo cambia el título; los 2.785 fragmentos siguen iguales.
+- **Corrección:** las referencias de doi.org ya no muestran entidades HTML ("&amp;").
+- **Recorrido comprobado en el navegador** el 26 de noviembre de 2026:
+  - entrada con `DEMO-01-1`;
+  - carga del borrador de demostración;
+  - evidencia en 92 s, con 5 afirmaciones citadas y 3 fuentes de acceso abierto recomendadas;
+  - verificación de referencias en unos 7 s, con 4 verificadas, 2 con discrepancias, 1 no localizada, la cita [8] sin entrada y la entrada [7] no citada, como se preparó.
+- **Limitación visible:** sin historial (T33), un resultado de evidencia solo se ve en la pestaña donde se pidió. El guion usa dos pestañas.
+
+**Conjuntos revisados por el equipo** (hojas entregadas el 26 de noviembre de 2026):
+- **T16:** 30 consultas (13 de la primera ronda y 17 de la segunda). Precisión contextual estricta, con las marcas del equipo por fragmento: 0,647; en 6 consultas ningún fragmento del contexto responde.
+- **T20:** 32 referencias (20 del asistente, con dos correcciones, y 12 del equipo), con la lista APA en orden alfabético sin acentos. Con GROBID, Crossref y OpenAlex reales: 64 de 64 estados iguales a la clave, 0 fabricadas verificadas, y la cita sin entrada y la entrada no citada detectadas en IEEE y APA 7.
+
+**Provisional, sin revisión humana** (decidido por el asistente, según las reglas del equipo del 26 de noviembre de 2026):
+- el borrador de demostración (`docs/demo/borrador-demostracion.docx`): texto ficticio y elección de sus 7 referencias y errores;
+- la consulta del guion y los textos del guion;
+- la aplicación de los comentarios de las hojas: R-04 queda verificada pese al año ambiguo; en T16, las consultas nuevas sin documento de origen toman como origen su primer documento esperado;
+- la corrección de títulos del corpus desde Crossref.

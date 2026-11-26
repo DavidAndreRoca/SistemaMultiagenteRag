@@ -225,10 +225,10 @@ def test_metricas_de_la_linea_base() -> None:
     assert exhaustividad({"a", "b"}, {"a", "c"}) == 0.5
     assert exhaustividad(set(), {"a"}) == 0.0
     # El conjunto versionado se lee con su esquema: primera ronda de revisión del equipo, con
-    # 13 consultas revisadas (las reescritas y las nuevas esperan la segunda ronda).
+    # 30 consultas revisadas en dos rondas.
     ruta = Path(__file__).parents[3] / "evaluacion" / "conjuntos" / "recuperacion-t16.json"
     conjunto = Conjunto.model_validate_json(ruta.read_text(encoding="utf-8"))
-    assert conjunto.estado == "revisado" and len(conjunto.consultas) == 13
+    assert conjunto.estado == "revisado" and len(conjunto.consultas) == 30
     assert {c.tema for c in conjunto.consultas} == {
         "TEMA-1-IA-EDUCACION",
         "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",

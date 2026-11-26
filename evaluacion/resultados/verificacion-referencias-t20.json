@@ -1,30 +1,30 @@
 {
   "conjunto": {
     "nombre": "Referencias de prueba de la verificación (T20)",
-    "version": "borrador-1"
+    "version": "revision-1"
   },
   "fabricadas_verificadas": 0,
   "borradores": [
     {
       "norma": "ieee",
-      "referencias": 20,
-      "aciertos_estado": 20,
+      "referencias": 32,
+      "aciertos_estado": 32,
       "fabricadas_verificadas": 0,
       "estados": {
-        "verificada": 8,
-        "con_discrepancias": 8,
-        "no_localizada": 4
+        "verificada": 11,
+        "con_discrepancias": 14,
+        "no_localizada": 7
       },
       "citas_sin_entrada": [
-        "[21]"
+        "[33]"
       ],
       "citas_sin_entrada_ok": true,
       "entradas_no_citadas": [
-        20
+        32
       ],
       "entradas_no_citadas_ok": true,
-      "citas_extraidas": 20,
-      "citas_esperadas": 20,
+      "citas_extraidas": 32,
+      "citas_esperadas": 32,
       "detalle": [
         {
           "indice": 1,
@@ -245,29 +245,161 @@
           "acierto": true,
           "metodo": "metadatos",
           "campos": []
+        },
+        {
+          "indice": 21,
+          "id": "R-21",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": [
+            "anio"
+          ]
+        },
+        {
+          "indice": 22,
+          "id": "R-22",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "anio"
+          ]
+        },
+        {
+          "indice": 23,
+          "id": "R-23",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": [
+            "autores"
+          ]
+        },
+        {
+          "indice": 24,
+          "id": "R-24",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "autores"
+          ]
+        },
+        {
+          "indice": 25,
+          "id": "R-25",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "doi"
+          ]
+        },
+        {
+          "indice": 26,
+          "id": "R-26",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "doi"
+          ]
+        },
+        {
+          "indice": 27,
+          "id": "R-27",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 28,
+          "id": "R-28",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 29,
+          "id": "R-29",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 30,
+          "id": "R-30",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
+        },
+        {
+          "indice": 31,
+          "id": "R-31",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
+        },
+        {
+          "indice": 32,
+          "id": "R-32",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
         }
       ]
     },
     {
       "norma": "apa7",
-      "referencias": 20,
-      "aciertos_estado": 20,
+      "referencias": 32,
+      "aciertos_estado": 32,
       "fabricadas_verificadas": 0,
       "estados": {
-        "verificada": 8,
-        "con_discrepancias": 8,
-        "no_localizada": 4
+        "verificada": 11,
+        "no_localizada": 7,
+        "con_discrepancias": 14
       },
       "citas_sin_entrada": [
         "(Castañeda, 2019)"
       ],
       "citas_sin_entrada_ok": true,
       "entradas_no_citadas": [
-        5
+        27
       ],
       "entradas_no_citadas_ok": true,
-      "citas_extraidas": 20,
-      "citas_esperadas": 20,
+      "citas_extraidas": 32,
+      "citas_esperadas": 32,
       "detalle": [
         {
           "indice": 1,
@@ -281,6 +413,16 @@
         },
         {
           "indice": 2,
+          "id": "R-29",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 3,
           "id": "R-06",
           "tipo": "real",
           "esperado": "verificada",
@@ -290,7 +432,7 @@
           "campos": []
         },
         {
-          "indice": 3,
+          "indice": 4,
           "id": "R-01",
           "tipo": "real",
           "esperado": "verificada",
@@ -300,7 +442,29 @@
           "campos": []
         },
         {
-          "indice": 4,
+          "indice": 5,
+          "id": "R-21",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": [
+            "anio"
+          ]
+        },
+        {
+          "indice": 6,
+          "id": "R-20",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 7,
           "id": "R-11",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -312,17 +476,7 @@
           ]
         },
         {
-          "indice": 5,
-          "id": "R-20",
-          "tipo": "fabricada",
-          "esperado": "no_localizada",
-          "obtenido": "no_localizada",
-          "acierto": true,
-          "metodo": "metadatos",
-          "campos": []
-        },
-        {
-          "indice": 6,
+          "indice": 8,
           "id": "R-12",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -334,7 +488,29 @@
           ]
         },
         {
-          "indice": 7,
+          "indice": 9,
+          "id": "R-23",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": [
+            "autores"
+          ]
+        },
+        {
+          "indice": 10,
+          "id": "R-31",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
+        },
+        {
+          "indice": 11,
           "id": "R-05",
           "tipo": "real",
           "esperado": "verificada",
@@ -344,7 +520,19 @@
           "campos": []
         },
         {
-          "indice": 8,
+          "indice": 12,
+          "id": "R-22",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "anio"
+          ]
+        },
+        {
+          "indice": 13,
           "id": "R-07",
           "tipo": "real",
           "esperado": "verificada",
@@ -354,7 +542,7 @@
           "campos": []
         },
         {
-          "indice": 9,
+          "indice": 14,
           "id": "R-02",
           "tipo": "real",
           "esperado": "verificada",
@@ -364,7 +552,19 @@
           "campos": []
         },
         {
-          "indice": 10,
+          "indice": 15,
+          "id": "R-26",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "doi"
+          ]
+        },
+        {
+          "indice": 16,
           "id": "R-08",
           "tipo": "real",
           "esperado": "verificada",
@@ -374,7 +574,17 @@
           "campos": []
         },
         {
-          "indice": 11,
+          "indice": 17,
+          "id": "R-28",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 18,
           "id": "R-15",
           "tipo": "fabricada",
           "esperado": "no_localizada",
@@ -384,7 +594,7 @@
           "campos": []
         },
         {
-          "indice": 12,
+          "indice": 19,
           "id": "R-13",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -396,7 +606,7 @@
           ]
         },
         {
-          "indice": 13,
+          "indice": 20,
           "id": "R-14",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -408,7 +618,31 @@
           ]
         },
         {
-          "indice": 14,
+          "indice": 21,
+          "id": "R-24",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "autores"
+          ]
+        },
+        {
+          "indice": 22,
+          "id": "R-25",
+          "tipo": "con_errores",
+          "esperado": "con_discrepancias",
+          "obtenido": "con_discrepancias",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": [
+            "doi"
+          ]
+        },
+        {
+          "indice": 23,
           "id": "R-19",
           "tipo": "fabricada",
           "esperado": "no_localizada",
@@ -418,7 +652,17 @@
           "campos": []
         },
         {
-          "indice": 15,
+          "indice": 24,
+          "id": "R-27",
+          "tipo": "fabricada",
+          "esperado": "no_localizada",
+          "obtenido": "no_localizada",
+          "acierto": true,
+          "metodo": "metadatos",
+          "campos": []
+        },
+        {
+          "indice": 25,
           "id": "R-18",
           "tipo": "fabricada",
           "esperado": "con_discrepancias",
@@ -432,7 +676,7 @@
           ]
         },
         {
-          "indice": 16,
+          "indice": 26,
           "id": "R-10",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -444,7 +688,17 @@
           ]
         },
         {
-          "indice": 17,
+          "indice": 27,
+          "id": "R-32",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
+        },
+        {
+          "indice": 28,
           "id": "R-16",
           "tipo": "fabricada",
           "esperado": "no_localizada",
@@ -454,7 +708,7 @@
           "campos": []
         },
         {
-          "indice": 18,
+          "indice": 29,
           "id": "R-04",
           "tipo": "real",
           "esperado": "verificada",
@@ -464,7 +718,7 @@
           "campos": []
         },
         {
-          "indice": 19,
+          "indice": 30,
           "id": "R-09",
           "tipo": "con_errores",
           "esperado": "con_discrepancias",
@@ -476,7 +730,17 @@
           ]
         },
         {
-          "indice": 20,
+          "indice": 31,
+          "id": "R-30",
+          "tipo": "real",
+          "esperado": "verificada",
+          "obtenido": "verificada",
+          "acierto": true,
+          "metodo": "doi",
+          "campos": []
+        },
+        {
+          "indice": 32,
           "id": "R-17",
           "tipo": "fabricada",
           "esperado": "con_discrepancias",

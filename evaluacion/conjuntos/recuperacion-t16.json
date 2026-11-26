@@ -1,9 +1,9 @@
 {
   "nombre": "Consultas de recuperación sobre el corpus provisional (T16)",
-  "version": "revision-1",
+  "version": "revision-2",
   "estado": "revisado",
-  "fecha": "2026-11-25",
-  "nota": "Primera ronda de revisión del equipo en evaluacion/revision/revision-conjuntos-t16-t19.xlsx. 'consultas' tiene las que se mantienen: 'documentos_esperados' son los documentos con algún fragmento marcado como que responde, más los que el equipo anotó como faltantes; 'juicios' guarda la marca de cada uno de los 8 fragmentos que el sistema ordenó primero el 24 de noviembre de 2026 (posición, documento, si llegó al contexto y si responde). Las reescritas y las nuevas están en 'pendientes_de_revision' hasta la segunda ronda, en la que se marcan los fragmentos que recupera su texto nuevo; el evaluador no las lee.",
+  "fecha": "2026-11-26",
+  "nota": "Revisado por el equipo en dos rondas (evaluacion/revision/revision-conjuntos-t16-t19.xlsx y revision-t16-segunda-ronda.xlsx). 30 consultas: 13 de la primera ronda, 7 reescritas y 10 nuevas. 'documentos_esperados' son los documentos con algún fragmento marcado como que responde, más los que el equipo anotó como faltantes; si no hay ninguno, el documento de origen. 'juicios' guarda la marca del equipo para cada uno de los 8 fragmentos que el sistema ordenó primero (fecha en 'fecha_juicios'). Las consultas nuevas no tienen documento de origen: 'origen.doi' repite el primer documento esperado.",
   "consultas": [
     {
       "id": "T1-01",
@@ -106,6 +106,109 @@
         }
       ],
       "nota_revision": "ningún fragmento responde; el artículo de origen sí aparece (pos. 5, 6 y 8) pero con fragmentos poco útiles"
+    },
+    {
+      "id": "T1-02",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios saben que ChatGPT puede dar respuestas incorrectas?",
+      "origen": {
+        "doi": "10.1186/s41239-023-00411-8",
+        "titulo": "Students' voices on generative AI: perceptions, benefits, and challenges in higher education"
+      },
+      "documentos_esperados": [
+        "10.1186/s41239-023-00411-8"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": null,
+          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.99,
+          "responde": false,
+          "nota": "dice que el modelo puede errar, pero no sobre si los estudiantes lo saben"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.61347/ei.v2i2.57",
+          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
+          "seccion": "discusion",
+          "pagina": 4,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.985,
+          "responde": false,
+          "nota": "explica la limitación del modelo, no la conciencia de los estudiantes"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.977,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35869/reined.v21i3.4973",
+          "titulo": "ChatGPT ha llegado ¿Y ahora qué hacemos? La creatividad, nuestro último refugio ChatGPT has arrived! What do we do now? Creativity, our last refuge",
+          "seccion": "otra",
+          "pagina": 6,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.976,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.35869/reined.v21i3.4973",
+          "titulo": "ChatGPT ha llegado ¿Y ahora qué hacemos? La creatividad, nuestro último refugio ChatGPT has arrived! What do we do now? Creativity, our last refuge",
+          "seccion": "otra",
+          "pagina": 6,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.969,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.14201/shhmo2023451101146",
+          "titulo": "Reinventing the Teaching of Early Modern History in Secondary School: the use of ChatGPT to Enhance Learning and Educational Innovation",
+          "seccion": "discusion",
+          "pagina": 41,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.966,
+          "responde": false,
+          "nota": "habla del error del modelo, no de lo que saben los estudiantes"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.966,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "metodos",
+          "pagina": 3,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.955,
+          "responde": false
+        }
+      ],
+      "consulta_anterior": "¿Los universitarios son conscientes de que ChatGPT puede equivocarse porque responde con patrones estadísticos y no entiende emociones?",
+      "nota_revision": "ningún fragmento responde; el artículo de origen sigue sin aparecer"
     },
     {
       "id": "T1-03",
@@ -309,6 +412,113 @@
         }
       ],
       "nota_revision": "4 de 8 fragmentos responden"
+    },
+    {
+      "id": "T1-05",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios en México usan ChatGPT para buscar y analizar información en sus cursos?",
+      "origen": {
+        "doi": "10.36825/riti.11.23.009",
+        "titulo": "Uso y Percepción de ChatGPT en la Educación Superior"
+      },
+      "documentos_esperados": [
+        "10.30827/eticanet.v24i2.31026",
+        "10.36825/riti.11.23.009",
+        "10.32719/26312816.2024.8.1.6"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.997,
+          "responde": false,
+          "nota": "no se ve que sea México"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.30827/eticanet.v24i2.31026",
+          "titulo": "Revista científica electrónica de Educación y Comunicación en la Sociedad del Conocimiento",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.997,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resultados",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.995,
+          "responde": false,
+          "nota": "no se ve que sea México"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "metodos",
+          "pagina": 3,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.993,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.30827/eticanet.v24i2.31026",
+          "titulo": "Revista científica electrónica de Educación y Comunicación en la Sociedad del Conocimiento",
+          "seccion": "conclusiones",
+          "pagina": 21,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.992,
+          "responde": true,
+          "nota": "mismo estudio de la Ciudad de México; responde en parte"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.991,
+          "responde": false,
+          "nota": "solo el objetivo del artículo; no se ve el país"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.98,
+          "responde": true
+        },
+        {
+          "posicion": 8,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resultados",
+          "pagina": 9,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.974,
+          "responde": false,
+          "nota": "posgrado online, no es una universidad mexicana"
+        }
+      ],
+      "consulta_anterior": "Busco datos de una encuesta a alumnos de una universidad mexicana sobre si el chatbot de OpenAI les sirve para investigar y analizar información de sus cursos.",
+      "nota_revision": "3 de 8 fragmentos responden"
     },
     {
       "id": "T1-06",
@@ -617,6 +827,820 @@
       "nota_revision": "5 de 8 fragmentos responden"
     },
     {
+      "id": "T1-09",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿El uso de ChatGPT y la competencia en escritura influyen en el rendimiento académico de los universitarios?",
+      "origen": {
+        "doi": "10.37467/revhuman.v21.5077",
+        "titulo": "Predictores del desempeño académico mediante el uso del ChatGPT"
+      },
+      "documentos_esperados": [
+        "10.37467/revhuman.v21.5077"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.37467/revhuman.v21.5077",
+          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "discusion",
+          "pagina": 6,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 1.0,
+          "responde": false,
+          "nota": "percepción en escritura académica; no mide rendimiento"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resultados",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 1.0,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.37467/revhuman.v21.5077",
+          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.37135/chk.002.25.14",
+          "titulo": null,
+          "seccion": "conclusiones",
+          "pagina": 18,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "conclusiones",
+          "pagina": 7,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "discusion",
+          "pagina": 6,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        }
+      ],
+      "consulta_anterior": "Necesito evidencia de que saber escribir bien y otras competencias explican, junto con el uso de ChatGPT, las notas de los universitarios, medido con un modelo PLS.",
+      "nota_revision": "solo 1 fragmento responde. Ojo: la columna Forma dice «afirmacion» pero el texto es una pregunta"
+    },
+    {
+      "id": "T1-10",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué porcentaje de estudiantes de posgrado en línea conoce ChatGPT y cuántos lo han usado para estudiar?",
+      "origen": {
+        "doi": "10.35869/reined.v21i3.4974",
+        "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio"
+      },
+      "documentos_esperados": [
+        "10.35869/reined.v21i3.4974"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.999,
+          "responde": false,
+          "nota": "mismo estudio, pero solo población y muestra"
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.996,
+          "responde": false,
+          "nota": "otro estudio, no es posgrado online"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.993,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": null,
+          "titulo": "La Incorporación del ChatGPT en la Educación Superior: Una Mirada desde el Paradigma de la Complejidad",
+          "seccion": "resultados",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.986,
+          "responde": false
+        }
+      ],
+      "consulta_anterior": "¿Qué porcentaje de alumnos de maestría a distancia conoce estos asistentes conversacionales y cuántos los han usado para estudiar?",
+      "nota_revision": "1 de 8 responde; el estudio de posgrado online aparece en primer lugar"
+    },
+    {
+      "id": "T1-11",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Los estudiantes universitarios usan ChatGPT para mejorar su escritura académica?",
+      "origen": {
+        "doi": "10.35383/educare.v12i2.1195",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.35383/educare.v12i2.1195",
+        "10.31637/epsir-2026-2132"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "conclusiones",
+          "pagina": 7,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "resultados",
+          "pagina": 4,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "discusion",
+          "pagina": 6,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "resultados",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.37135/chk.002.25.14",
+          "titulo": null,
+          "seccion": "conclusiones",
+          "pagina": 18,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.35383/educare.v12i2.1195",
+          "titulo": "EDUCARE COMUNICARE ET",
+          "seccion": "metodos",
+          "pagina": 3,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.999,
+          "responde": false,
+          "nota": "solo el diseño del estudio"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        }
+      ],
+      "nota_revision": "5 de 8 fragmentos responden"
+    },
+    {
+      "id": "T1-12",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sustentar que los docentes universitarios aún tienen dudas sobre usar inteligencia artificial en sus clases.",
+      "origen": {
+        "doi": "10.5944/ried.28.2.43511",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.5944/ried.28.2.43511",
+        "10.18800/educacion.202401.m001"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "otra",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.993,
+          "responde": false,
+          "nota": "solo palabras clave"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.5944/ried.28.2.43511",
+          "titulo": "Marcos normativos para una IA ética y confiable en la educación superior: estado de la cuestión Normative framework for ethical and trustworthy AI in higher education: state of the art",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.993,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.993,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.992,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "discusion",
+          "pagina": 19,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.975,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resultados",
+          "pagina": 11,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.97,
+          "responde": false,
+          "nota": "solo describe el método de entrevistas"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.18800/educacion.202401.m001",
+          "titulo": "Docentes ante la inteligencia artificial en una universidad pública del norte del Perú",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F7",
+          "puntaje_reordenador": 0.963,
+          "responde": true
+        },
+        {
+          "posicion": 8,
+          "doi": "10.36825/riti.11.23.009",
+          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F8",
+          "puntaje_reordenador": 0.961,
+          "responde": false,
+          "nota": "percepción de estudiantes, no de docentes"
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
+    },
+    {
+      "id": "T1-13",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué riesgos éticos tiene usar ChatGPT para hacer trabajos académicos?",
+      "origen": {
+        "doi": "10.61347/ei.v2i2.57",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.61347/ei.v2i2.57",
+        "10.52131/jer.2024.v5i1.2463",
+        "10.37135/chk.002.25.14"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": null,
+          "titulo": "La Incorporación del ChatGPT en la Educación Superior: Una Mirada desde el Paradigma de la Complejidad",
+          "seccion": "metodos",
+          "pagina": 4,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.61347/ei.v2i2.57",
+          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
+          "seccion": "discusion",
+          "pagina": 7,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.995,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.30827/eticanet.v24i2.31026",
+          "titulo": "Revista científica electrónica de Educación y Comunicación en la Sociedad del Conocimiento",
+          "seccion": "conclusiones",
+          "pagina": 21,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.52131/jer.2024.v5i1.2463",
+          "titulo": "Use of ChatGPT and Generative AI in Higher Education: Opportunities, Obstacles and Impact on Student Performance",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.994,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.55560/arete.2024.ee.10.12",
+          "titulo": "PERSPECTIVAS DE LA INTELIGENCIA ARTIFICIAL EN LA EDUCACIÓN UNIVERSITARIA: UN ANÁLISIS BASADO EN LA LITERATURA ACADÉMICA ADVANCEMENTS OF ARTIFICIAL INTELLIGENCE IN HIGHER EDUCATION: AN ANALYSIS THROUGH ACADEMIC LITERATURE",
+          "seccion": "discusion",
+          "pagina": 14,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.993,
+          "responde": false,
+          "nota": "pide abordar la ética en general, sin riesgos concretos"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.37135/chk.002.25.14",
+          "titulo": null,
+          "seccion": "resultados",
+          "pagina": 17,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.993,
+          "responde": true
+        },
+        {
+          "posicion": 8,
+          "doi": "10.3991/ijet.v18i17.39019",
+          "titulo": "Emerging Technologies in Learning",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.984,
+          "responde": false
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden"
+    },
+    {
+      "id": "T1-14",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero argumentar que ChatGPT puede dar retroalimentación útil a los estudiantes sobre sus trabajos.",
+      "origen": {
+        "doi": "10.31637/epsir-2026-2132",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.31637/epsir-2026-2132"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "conclusiones",
+          "pagina": 13,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.997,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "discusion",
+          "pagina": 11,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.997,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "resultados",
+          "pagina": 6,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.992,
+          "responde": false,
+          "nota": "solo anuncia cómo se organizan los resultados"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.991,
+          "responde": false,
+          "nota": "idea general sobre la utilidad de la retroalimentación, sin evidencia"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.99,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "resultados",
+          "pagina": 9,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.989,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "metodos",
+          "pagina": 5,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.988,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.31637/epsir-2026-2132",
+          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
+          "seccion": "resultados",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.984,
+          "responde": true
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
+    },
+    {
+      "id": "T1-15",
+      "tema": "TEMA-1-IA-EDUCACION",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Qué piensan los estudiantes de bachillerato sobre usar inteligencia artificial generativa para aprender?",
+      "origen": {
+        "doi": "10.23913/ride.v14i28.1830",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.23913/ride.v14i28.1830"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "discusion",
+          "pagina": 19,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resultados",
+          "pagina": 18,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resultados",
+          "pagina": 16,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resultados",
+          "pagina": 14,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.998,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.998,
+          "responde": true
+        },
+        {
+          "posicion": 6,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "conclusiones",
+          "pagina": 20,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.995,
+          "responde": true,
+          "nota": "conclusión del mismo estudio de bachillerato"
+        },
+        {
+          "posicion": 7,
+          "doi": "10.23913/ride.v14i28.1830",
+          "titulo": "Perspectiva de estudiantes de nivel medio superior respecto al uso de la inteligencia artificial generativa en su aprendizaje Perspective of high school students regarding the use of generative artificial intelligence in their learning Perspectiva de estudantes do ensino médio quanto ao uso da inteligência artificial generativa em sua aprendizagem",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.995,
+          "responde": true
+        },
+        {
+          "posicion": 8,
+          "doi": "10.35869/reined.v21i3.4974",
+          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
+          "seccion": "discusion",
+          "pagina": 13,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.994,
+          "responde": false,
+          "nota": "estudiantes de posgrado, no de bachillerato"
+        }
+      ],
+      "nota_revision": "7 de 8 fragmentos responden"
+    },
+    {
+      "id": "T2-01",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿La utilidad y facilidad de uso percibidas influyen en que las MYPES de México usen redes sociales para promocionar sus productos?",
+      "origen": {
+        "doi": "10.17013/risti.18.49-65",
+        "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas"
+      },
+      "documentos_esperados": [
+        "10.17013/risti.18.49-65"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resultados",
+          "pagina": 10,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.998,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resultados",
+          "pagina": 11,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.995,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resultados",
+          "pagina": 9,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.974,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.961,
+          "responde": false,
+          "nota": "solo el propósito del estudio, sin resultados"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.954,
+          "responde": false,
+          "nota": "explica el modelo TAM en general, no el caso de México"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.935,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.929,
+          "responde": false,
+          "nota": "solo el propósito del estudio, sin resultados"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.8,
+          "responde": true
+        }
+      ],
+      "consulta_anterior": "¿Que a los dueños les parezca fácil y útil influye en que las pequeñas empresas de México promocionen sus productos en Facebook o Instagram?",
+      "nota_revision": "3 de 8 fragmentos responden"
+    },
+    {
       "id": "T2-02",
       "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
       "tipo": "busqueda_evidencia",
@@ -716,6 +1740,108 @@
         }
       ],
       "nota_revision": "3 de 8 fragmentos responden"
+    },
+    {
+      "id": "T2-03",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿La innovación en el modelo de negocio mejora el desempeño de las pymes que se digitalizan?",
+      "origen": {
+        "doi": "10.1016/j.telpol.2019.101828",
+        "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?"
+      },
+      "documentos_esperados": [
+        "10.1016/j.telpol.2019.101828"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.1016/j.telpol.2019.101828",
+          "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?",
+          "seccion": "otra",
+          "pagina": 2,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.985,
+          "responde": true,
+          "nota": "inicio del resumen del artículo; el resultado de desempeño no se ve"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.941,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 8,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.845,
+          "responde": false,
+          "nota": "trata de herramientas digitales y ganancias, no de innovar el modelo de negocio"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 10,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.822,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.81,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "metodos",
+          "pagina": 18,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.737,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "metodos",
+          "pagina": 20,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.721,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "introduccion",
+          "pagina": 12,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.671,
+          "responde": false
+        }
+      ],
+      "consulta_anterior": "¿Probar formas nuevas de ganar dinero y organizar el negocio mejora los resultados de las pymes que ya trabajan con tecnología digital?",
+      "nota_revision": "solo 1 fragmento responde; el artículo de origen ya aparece (pos. 1), por eso quité el DOI faltante"
     },
     {
       "id": "T2-04",
@@ -1123,6 +2249,108 @@
       "nota_revision": "3 de 8 fragmentos responden"
     },
     {
+      "id": "T2-08",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "duda",
+      "consulta": "¿Vender por internet hace que las pymes cambien también sus procesos internos y mejoren su desempeño?",
+      "origen": {
+        "doi": "10.3390/jtaer18040086",
+        "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis"
+      },
+      "documentos_esperados": [
+        "10.3390/jtaer18040086"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 8,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.604,
+          "responde": false,
+          "nota": "habla de herramientas digitales en general, no de vender por internet"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "metodos",
+          "pagina": 18,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.561,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "conclusiones",
+          "pagina": 12,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.481,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "introduccion",
+          "pagina": 11,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.356,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "introduccion",
+          "pagina": 9,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.291,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.263,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 15,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.237,
+          "responde": false,
+          "nota": "ejemplo de una empresa virtual, sin mostrar cambio en procesos internos"
+        },
+        {
+          "posicion": 8,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "introduccion",
+          "pagina": 10,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.235,
+          "responde": false
+        }
+      ],
+      "consulta_anterior": "¿Empezar a vender en línea lleva a las empresas pequeñas a cambiar también sus procesos internos? Busco un análisis con ecuaciones estructurales y efectos mediadores.",
+      "nota_revision": "ningún fragmento responde; el artículo de origen no aparece"
+    },
+    {
       "id": "T2-09",
       "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
       "tipo": "busqueda_evidencia",
@@ -1322,658 +2550,64 @@
         }
       ],
       "nota_revision": "4 de 8 fragmentos responden"
-    }
-  ],
-  "pendientes_de_revision": [
-    {
-      "id": "T1-02",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Los estudiantes universitarios saben que ChatGPT puede dar respuestas incorrectas?",
-      "accion": "reescrita",
-      "consulta_anterior": "¿Los universitarios son conscientes de que ChatGPT puede equivocarse porque responde con patrones estadísticos y no entiende emociones?",
-      "origen": {
-        "doi": "10.1186/s41239-023-00411-8",
-        "titulo": "Students' voices on generative AI: perceptions, benefits, and challenges in higher education"
-      },
-      "documentos_que_faltan": [
-        "10.1186/s41239-023-00411-8"
-      ],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.61347/ei.v2i2.57",
-          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
-          "seccion": "introduccion",
-          "pagina": 2,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.994,
-          "responde": false
-        },
-        {
-          "posicion": 2,
-          "doi": "10.35383/educare.v12i2.1195",
-          "titulo": "EDUCARE COMUNICARE ET",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.926,
-          "responde": false
-        },
-        {
-          "posicion": 3,
-          "doi": "10.61347/ei.v2i2.57",
-          "titulo": "ChatGPT en el ámbito educativo ChatGPT in the educational field",
-          "seccion": "discusion",
-          "pagina": 4,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.897,
-          "responde": false,
-          "nota": "explica el límite del modelo, no la conciencia de los estudiantes"
-        },
-        {
-          "posicion": 4,
-          "doi": "10.31637/epsir-2026-2132",
-          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
-          "seccion": "discusion",
-          "pagina": 11,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.878,
-          "responde": false
-        },
-        {
-          "posicion": 5,
-          "doi": "10.26871/killkanasocial.v7i1.1270",
-          "titulo": null,
-          "seccion": "introduccion",
-          "pagina": 3,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.876,
-          "responde": false
-        },
-        {
-          "posicion": 6,
-          "doi": "10.26871/killkanasocial.v7i1.1270",
-          "titulo": null,
-          "seccion": "introduccion",
-          "pagina": 2,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.873,
-          "responde": false
-        },
-        {
-          "posicion": 7,
-          "doi": "10.52131/jer.2024.v5i1.2463",
-          "titulo": "Use of ChatGPT and Generative AI in Higher Education: Opportunities, Obstacles and Impact on Student Performance",
-          "seccion": "introduccion",
-          "pagina": 4,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.85,
-          "responde": false
-        },
-        {
-          "posicion": 8,
-          "doi": "10.18687/laccei2023.1.1.336",
-          "titulo": "The ChatGPT Application: Initial Perceptions of University Teachers",
-          "seccion": "resultados",
-          "pagina": 5,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.831,
-          "responde": false
-        }
-      ],
-      "nota": "la original copia detalles del artículo («patrones estadísticos», «emociones»); el artículo de origen no aparece"
     },
     {
-      "id": "T1-05",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Los estudiantes universitarios en México usan ChatGPT para buscar y analizar información en sus cursos?",
-      "accion": "reescrita",
-      "consulta_anterior": "Busco datos de una encuesta a alumnos de una universidad mexicana sobre si el chatbot de OpenAI les sirve para investigar y analizar información de sus cursos.",
-      "origen": {
-        "doi": "10.36825/riti.11.23.009",
-        "titulo": "Uso y Percepción de ChatGPT en la Educación Superior"
-      },
-      "documentos_que_faltan": [],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.30827/eticanet.v24i2.31026",
-          "titulo": "Revista científica electrónica de Educación y Comunicación en la Sociedad del Conocimiento",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.957,
-          "responde": true
-        },
-        {
-          "posicion": 2,
-          "doi": "10.35869/reined.v21i3.4974",
-          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.853,
-          "responde": false,
-          "nota": "estudiantes de posgrado online, no es una universidad mexicana"
-        },
-        {
-          "posicion": 3,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.825,
-          "responde": true
-        },
-        {
-          "posicion": 4,
-          "doi": "10.35383/educare.v12i2.1195",
-          "titulo": "EDUCARE COMUNICARE ET",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.697,
-          "responde": false,
-          "nota": "no se ve que sea México"
-        },
-        {
-          "posicion": 5,
-          "doi": "10.35869/reined.v21i3.4974",
-          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.435,
-          "responde": false
-        },
-        {
-          "posicion": 6,
-          "doi": "10.33386/593dp.2024.4.2493",
-          "titulo": "ChatGPT como herramienta pedagógica en la metodología de Aprendizaje Basado en Proyectos",
-          "seccion": "introduccion",
-          "pagina": 4,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.423,
-          "responde": false
-        },
-        {
-          "posicion": 7,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "metodos",
-          "pagina": 6,
-          "en_contexto": "F7",
-          "puntaje_reordenador": 0.422,
-          "responde": false,
-          "nota": "solo describe el método, sin datos"
-        },
-        {
-          "posicion": 8,
-          "doi": null,
-          "titulo": "La Incorporación del ChatGPT en la Educación Superior: Una Mirada desde el Paradigma de la Complejidad",
-          "seccion": "metodos",
-          "pagina": 4,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.415,
-          "responde": false
-        }
-      ],
-      "nota": "«chatbot de OpenAI» es una paráfrasis forzada para evitar decir ChatGPT"
-    },
-    {
-      "id": "T1-09",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "afirmacion",
-      "consulta": "¿El uso de ChatGPT y la competencia en escritura influyen en el rendimiento académico de los universitarios?",
-      "accion": "reescrita",
-      "consulta_anterior": "Necesito evidencia de que saber escribir bien y otras competencias explican, junto con el uso de ChatGPT, las notas de los universitarios, medido con un modelo PLS.",
-      "origen": {
-        "doi": "10.37467/revhuman.v21.5077",
-        "titulo": "Predictores del desempeño académico mediante el uso del ChatGPT"
-      },
-      "documentos_que_faltan": [],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.37467/revhuman.v21.5077",
-          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.96,
-          "responde": true
-        },
-        {
-          "posicion": 2,
-          "doi": "10.31637/epsir-2026-2132",
-          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
-          "seccion": "discusion",
-          "pagina": 11,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.929,
-          "responde": false
-        },
-        {
-          "posicion": 3,
-          "doi": "10.35383/educare.v12i2.1195",
-          "titulo": "EDUCARE COMUNICARE ET",
-          "seccion": "resultados",
-          "pagina": 4,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.922,
-          "responde": false
-        },
-        {
-          "posicion": 4,
-          "doi": "10.35383/educare.v12i2.1195",
-          "titulo": "EDUCARE COMUNICARE ET",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.921,
-          "responde": false
-        },
-        {
-          "posicion": 5,
-          "doi": "10.35383/educare.v12i2.1195",
-          "titulo": "EDUCARE COMUNICARE ET",
-          "seccion": "discusion",
-          "pagina": 6,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.882,
-          "responde": false
-        },
-        {
-          "posicion": 6,
-          "doi": "10.37467/revhuman.v21.5077",
-          "titulo": "PREDICTORES DEL DESEMPEÑO ACADÉMICO MEDIANTE EL USO DEL CHATGPT EN",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.838,
-          "responde": true,
-          "nota": "mismo resumen del artículo, en inglés"
-        },
-        {
-          "posicion": 7,
-          "doi": "10.31637/epsir-2026-2132",
-          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
-          "seccion": "discusion",
-          "pagina": 12,
-          "en_contexto": "F7",
-          "puntaje_reordenador": 0.798,
-          "responde": false
-        },
-        {
-          "posicion": 8,
-          "doi": "10.31637/epsir-2026-2132",
-          "titulo": "ChatGPT como agente inteligente de retroalimentación académica: análisis correlacional de su percepción en estudiantes universitarios ChatGPT as an intelligent academic feedback agent: correlational analysis of its perception among university students",
-          "seccion": "discusion",
-          "pagina": 12,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.774,
-          "responde": false
-        }
-      ],
-      "nota": "«modelo PLS» es un detalle técnico que un estudiante no pondría"
-    },
-    {
-      "id": "T1-10",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Qué porcentaje de estudiantes de posgrado en línea conoce ChatGPT y cuántos lo han usado para estudiar?",
-      "accion": "reescrita",
-      "consulta_anterior": "¿Qué porcentaje de alumnos de maestría a distancia conoce estos asistentes conversacionales y cuántos los han usado para estudiar?",
-      "origen": {
-        "doi": "10.35869/reined.v21i3.4974",
-        "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio"
-      },
-      "documentos_que_faltan": [],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.35869/reined.v21i3.4974",
-          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
-          "seccion": "resultados",
-          "pagina": 7,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.98,
-          "responde": true
-        },
-        {
-          "posicion": 2,
-          "doi": "10.35869/reined.v21i3.4974",
-          "titulo": "Percepción y uso de los chatbots entre estudiantes de posgrado online: Un estudio exploratorio Perception and usage of chatbots among online postgraduate students: An exploratory study",
-          "seccion": "metodos",
-          "pagina": 5,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.508,
-          "responde": false,
-          "nota": "mismo estudio, pero solo población y muestra"
-        },
-        {
-          "posicion": 3,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "resultados",
-          "pagina": 7,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.461,
-          "responde": false
-        },
-        {
-          "posicion": 4,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "resultados",
-          "pagina": 8,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.332,
-          "responde": false
-        },
-        {
-          "posicion": 5,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "resultados",
-          "pagina": 7,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.154,
-          "responde": false
-        },
-        {
-          "posicion": 6,
-          "doi": "10.36825/riti.11.23.009",
-          "titulo": "Uso y Percepción de ChatGPT en la Educación Superior Usage and Perception of ChatGPT in Higher Education",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.036,
-          "responde": false
-        },
-        {
-          "posicion": 7,
-          "doi": "10.3991/ijet.v18i17.39019",
-          "titulo": "Emerging Technologies in Learning",
-          "seccion": "metodos",
-          "pagina": 5,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.028,
-          "responde": false
-        },
-        {
-          "posicion": 8,
-          "doi": null,
-          "titulo": "Aplicaciones de Chat GPT como inteligencia artificial para el aprendizaje de idioma inglés: avances, desafíos y perspectivas futuras Applications of Chat GPT as Artificial Intelligence for English Language Learning: Advances, Challenges, and Future Perspectives",
-          "seccion": "resultados",
-          "pagina": 13,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.024,
-          "responde": false
-        }
-      ],
-      "nota": "«estos asistentes conversacionales» no tiene antecedente; no se entiende sin el artículo"
-    },
-    {
-      "id": "T2-01",
+      "id": "T2-11",
       "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
       "tipo": "busqueda_evidencia",
       "forma": "duda",
-      "consulta": "¿La utilidad y facilidad de uso percibidas influyen en que las MYPES de México usen redes sociales para promocionar sus productos?",
-      "accion": "reescrita",
-      "consulta_anterior": "¿Que a los dueños les parezca fácil y útil influye en que las pequeñas empresas de México promocionen sus productos en Facebook o Instagram?",
+      "consulta": "¿El comercio electrónico mejora las ventas de las microempresas?",
       "origen": {
-        "doi": "10.17013/risti.18.49-65",
-        "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas"
+        "doi": "10.36791/tcg.v7i21sept-dic.180",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
       },
-      "documentos_que_faltan": [],
-      "juicios_consulta_anterior": [
+      "documentos_esperados": [
+        "10.36791/tcg.v7i21sept-dic.180"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
         {
           "posicion": 1,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "resultados",
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
           "pagina": 10,
           "en_contexto": "F1",
-          "puntaje_reordenador": 0.892,
-          "responde": true
+          "puntaje_reordenador": 0.988,
+          "responde": false,
+          "nota": "beneficios de innovar en general, sin hablar de ventas"
         },
         {
           "posicion": 2,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.595,
-          "responde": false,
-          "nota": "solo el propósito del estudio, sin resultados"
-        },
-        {
-          "posicion": 3,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "conclusiones",
-          "pagina": 12,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.534,
-          "responde": true
-        },
-        {
-          "posicion": 4,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "resultados",
-          "pagina": 11,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.524,
-          "responde": true
-        },
-        {
-          "posicion": 5,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
           "seccion": "introduccion",
           "pagina": 2,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.299,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.985,
           "responde": false
         },
         {
-          "posicion": 6,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "posicion": 3,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 14,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.981,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
           "seccion": "introduccion",
           "pagina": 2,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.252,
-          "responde": false
-        },
-        {
-          "posicion": 7,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "resumen",
-          "pagina": 1,
-          "en_contexto": "F7",
-          "puntaje_reordenador": 0.212,
-          "responde": false,
-          "nota": "solo el propósito del estudio, sin resultados"
-        },
-        {
-          "posicion": 8,
-          "doi": "10.17013/risti.18.49-65",
-          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
-          "seccion": "conclusiones",
-          "pagina": 11,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.176,
-          "responde": false
-        }
-      ],
-      "nota": "redacción rara («¿Que a los dueños les parezca…?») y copia el enfoque del artículo"
-    },
-    {
-      "id": "T2-03",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿La innovación en el modelo de negocio mejora el desempeño de las pymes que se digitalizan?",
-      "accion": "reescrita",
-      "consulta_anterior": "¿Probar formas nuevas de ganar dinero y organizar el negocio mejora los resultados de las pymes que ya trabajan con tecnología digital?",
-      "origen": {
-        "doi": "10.1016/j.telpol.2019.101828",
-        "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?"
-      },
-      "documentos_que_faltan": [
-        "10.1016/j.telpol.2019.101828"
-      ],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "conclusiones",
-          "pagina": 12,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.975,
-          "responde": false,
-          "nota": "habla de transformación digital y rentabilidad, no de innovar el modelo de negocio"
-        },
-        {
-          "posicion": 2,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 8,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.931,
-          "responde": false
-        },
-        {
-          "posicion": 3,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "conclusiones",
-          "pagina": 12,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.909,
-          "responde": false
-        },
-        {
-          "posicion": 4,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 3,
           "en_contexto": "F4",
-          "puntaje_reordenador": 0.855,
-          "responde": false
-        },
-        {
-          "posicion": 5,
-          "doi": "10.37811/cl_rcm.v7i5.8128",
-          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
-          "seccion": "conclusiones",
-          "pagina": 22,
-          "en_contexto": "F5",
-          "puntaje_reordenador": 0.804,
-          "responde": false
-        },
-        {
-          "posicion": 6,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 5,
-          "en_contexto": "F6",
-          "puntaje_reordenador": 0.793,
-          "responde": false
-        },
-        {
-          "posicion": 7,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 3,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.789,
-          "responde": false
-        },
-        {
-          "posicion": 8,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 4,
-          "en_contexto": null,
-          "puntaje_reordenador": 0.785,
-          "responde": false
-        }
-      ],
-      "nota": "la original da rodeos para evitar «modelo de negocio»; el artículo de origen no aparece y ningún fragmento responde"
-    },
-    {
-      "id": "T2-08",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Vender por internet hace que las pymes cambien también sus procesos internos y mejoren su desempeño?",
-      "accion": "reescrita",
-      "consulta_anterior": "¿Empezar a vender en línea lleva a las empresas pequeñas a cambiar también sus procesos internos? Busco un análisis con ecuaciones estructurales y efectos mediadores.",
-      "origen": {
-        "doi": "10.3390/jtaer18040086",
-        "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis"
-      },
-      "documentos_que_faltan": [],
-      "juicios_consulta_anterior": [
-        {
-          "posicion": 1,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 3,
-          "en_contexto": "F1",
-          "puntaje_reordenador": 0.844,
-          "responde": false
-        },
-        {
-          "posicion": 2,
-          "doi": "10.3390/jtaer18040086",
-          "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis",
-          "seccion": "resultados",
-          "pagina": 13,
-          "en_contexto": "F2",
-          "puntaje_reordenador": 0.602,
-          "responde": true,
-          "nota": "resultados con efecto de eficiencia operativa; responde en parte"
-        },
-        {
-          "posicion": 3,
-          "doi": "10.52080/rvgluz.30",
-          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
-          "seccion": "introduccion",
-          "pagina": 4,
-          "en_contexto": "F3",
-          "puntaje_reordenador": 0.508,
-          "responde": false
-        },
-        {
-          "posicion": 4,
-          "doi": "10.17013/risti.22.20-36",
-          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
-          "seccion": "resultados",
-          "pagina": 10,
-          "en_contexto": "F4",
-          "puntaje_reordenador": 0.438,
-          "responde": false
+          "puntaje_reordenador": 0.972,
+          "responde": false,
+          "nota": "beneficios del e-commerce en general, sin hablar de ventas"
         },
         {
           "posicion": 5,
@@ -1982,17 +2616,117 @@
           "seccion": "introduccion",
           "pagina": 2,
           "en_contexto": "F5",
-          "puntaje_reordenador": 0.341,
+          "puntaje_reordenador": 0.965,
           "responde": false
         },
         {
           "posicion": 6,
-          "doi": "10.3390/jtaer18040086",
-          "titulo": "The Business Digitalization Process in SMEs from the Implementation of e-Commerce: An Empirical Analysis",
-          "seccion": "resumen",
-          "pagina": 1,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 15,
           "en_contexto": "F6",
-          "puntaje_reordenador": 0.285,
+          "puntaje_reordenador": 0.963,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "conclusiones",
+          "pagina": 7,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.954,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 11,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.929,
+          "responde": false
+        }
+      ],
+      "nota_revision": "ningún fragmento responde; revisar si el corpus tiene artículos sobre ventas con e-commerce"
+    },
+    {
+      "id": "T2-12",
+      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
+      "tipo": "busqueda_evidencia",
+      "forma": "afirmacion",
+      "consulta": "Quiero sustentar que la transformación digital mejora la rentabilidad de las MYPES del sector comercio.",
+      "origen": {
+        "doi": "10.52080/rvgluz.30",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.52080/rvgluz.30"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "resumen",
+          "pagina": 2,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 1.0,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.999,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 7,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 4,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 6,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.998,
+          "responde": false,
+          "nota": "solo método y confiabilidad"
+        },
+        {
+          "posicion": 5,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.997,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
+          "seccion": "introduccion",
+          "pagina": 8,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.996,
           "responde": true
         },
         {
@@ -2002,91 +2736,22 @@
           "seccion": "introduccion",
           "pagina": 5,
           "en_contexto": null,
-          "puntaje_reordenador": 0.279,
-          "responde": false
+          "puntaje_reordenador": 0.995,
+          "responde": false,
+          "nota": "solo el propósito del estudio"
         },
         {
           "posicion": 8,
-          "doi": null,
-          "titulo": "The Impact of Digital Marketing and social media On Small and Medium Sized Business",
+          "doi": "10.52080/rvgluz.30",
+          "titulo": "Transformación digital y rentabilidad financiera en MYPES del comercio peruano",
           "seccion": "introduccion",
-          "pagina": 1,
+          "pagina": 3,
           "en_contexto": null,
-          "puntaje_reordenador": 0.255,
-          "responde": false
+          "puntaje_reordenador": 0.995,
+          "responde": true
         }
       ],
-      "nota": "«ecuaciones estructurales y efectos mediadores» es jerga de método"
-    },
-    {
-      "id": "T1-11",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Los estudiantes universitarios usan ChatGPT para mejorar su escritura académica?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T1-12",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "afirmacion",
-      "consulta": "Quiero sustentar que los docentes universitarios aún tienen dudas sobre usar inteligencia artificial en sus clases.",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T1-13",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Qué riesgos éticos tiene usar ChatGPT para hacer trabajos académicos?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T1-14",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "afirmacion",
-      "consulta": "Quiero argumentar que ChatGPT puede dar retroalimentación útil a los estudiantes sobre sus trabajos.",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T1-15",
-      "tema": "TEMA-1-IA-EDUCACION",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿Qué piensan los estudiantes de bachillerato sobre usar inteligencia artificial generativa para aprender?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T2-11",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "duda",
-      "consulta": "¿El comercio electrónico mejora las ventas de las microempresas?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
-    },
-    {
-      "id": "T2-12",
-      "tema": "TEMA-2-TRANSFORMACION-DIGITAL-MYPES",
-      "tipo": "busqueda_evidencia",
-      "forma": "afirmacion",
-      "consulta": "Quiero sustentar que la transformación digital mejora la rentabilidad de las MYPES del sector comercio.",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
+      "nota_revision": "4 de 8 fragmentos responden"
     },
     {
       "id": "T2-13",
@@ -2094,9 +2759,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Qué barreras enfrentan las pymes de Latinoamérica para adoptar tecnologías de información?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
+      "origen": {
+        "doi": "10.37811/cl_rcm.v7i5.8128",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.37811/cl_rcm.v7i5.8128",
+        "10.17013/risti.22.20-36"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.969,
+          "responde": false
+        },
+        {
+          "posicion": 2,
+          "doi": "10.37811/cl_rcm.v7i5.8128",
+          "titulo": "Transformación Digital un Reto para las Pymes: Articulación de TIC -Tecnología de la Información-en las Pequeñas Empresas (Pymes) del Sector Manufacturero de Risaralda",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.948,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.18041/2382-3240/saber.2018v13n2.4630",
+          "titulo": "Análisis del Impacto de las Tecnologías de la Información y Comunicación en las pequeñas y medianas empresas de Cartagena-Colombia Analysis of the impact of information and communication technologies on small and medium-sized companies in Cartagena",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.939,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.92,
+          "responde": true
+        },
+        {
+          "posicion": 5,
+          "doi": "10.4067/s0718-07642017000600008",
+          "titulo": "Relación de Capacitación con Adopción de Internet y E-Commerce: Diferencias entre Microemprendedores de Chile",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.879,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.877,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.18041/2382-3240/saber.2018v13n2.4630",
+          "titulo": "Análisis del Impacto de las Tecnologías de la Información y Comunicación en las pequeñas y medianas empresas de Cartagena-Colombia Analysis of the impact of information and communication technologies on small and medium-sized companies in Cartagena",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.874,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.17013/risti.22.20-36",
+          "titulo": "Factores que Afectan la Adopción de Tecnologías de Información en Micro y Pequeñas empresas: un Estudio Cualitativo",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.583,
+          "responde": true
+        }
+      ],
+      "nota_revision": "3 de 8 fragmentos responden"
     },
     {
       "id": "T2-14",
@@ -2104,9 +2859,102 @@
       "tipo": "busqueda_evidencia",
       "forma": "afirmacion",
       "consulta": "Necesito respaldar que las redes sociales ayudan a los pequeños negocios a llegar a más clientes.",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
+      "origen": {
+        "doi": "10.2478/mmcks-2021-0003",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.2478/mmcks-2021-0003"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.914,
+          "responde": false,
+          "nota": "dice que las empresas usan redes sociales para estar cerca de sus clientes, sin evidencia"
+        },
+        {
+          "posicion": 2,
+          "doi": "10.2478/mmcks-2021-0003",
+          "titulo": "Antecedents of Sustainable SMEs in the Social Media Space: A Partial Least Square-Structural Equation Modeling (PLS-SEM) Approach",
+          "seccion": "introduccion",
+          "pagina": 4,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.867,
+          "responde": false
+        },
+        {
+          "posicion": 3,
+          "doi": "10.2478/mmcks-2021-0003",
+          "titulo": "Antecedents of Sustainable SMEs in the Social Media Space: A Partial Least Square-Structural Equation Modeling (PLS-SEM) Approach",
+          "seccion": "discusion",
+          "pagina": 12,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.859,
+          "responde": true,
+          "nota": "hallazgo de que la publicidad en redes ayuda a la sostenibilidad de las pymes; responde en parte"
+        },
+        {
+          "posicion": 4,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.841,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.2478/mmcks-2021-0003",
+          "titulo": "Antecedents of Sustainable SMEs in the Social Media Space: A Partial Least Square-Structural Equation Modeling (PLS-SEM) Approach",
+          "seccion": "introduccion",
+          "pagina": 5,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.826,
+          "responde": false,
+          "nota": "habla de relación con clientes, no de llegar a más clientes"
+        },
+        {
+          "posicion": 6,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.766,
+          "responde": false
+        },
+        {
+          "posicion": 7,
+          "doi": "10.2478/mmcks-2021-0003",
+          "titulo": "Antecedents of Sustainable SMEs in the Social Media Space: A Partial Least Square-Structural Equation Modeling (PLS-SEM) Approach",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.76,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.17013/risti.18.49-65",
+          "titulo": "Análisis de la percepción de uso de las redes sociales como herramienta de marketing en las MiPYMES de Tamaulipas, México",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.717,
+          "responde": false,
+          "nota": "solo afirma que las redes abren canales con los consumidores"
+        }
+      ],
+      "nota_revision": "solo 1 fragmento responde"
     },
     {
       "id": "T2-15",
@@ -2114,9 +2962,99 @@
       "tipo": "busqueda_evidencia",
       "forma": "duda",
       "consulta": "¿Cómo influyó la pandemia de Covid-19 en el uso del comercio electrónico en las mipymes?",
-      "accion": "nueva",
-      "documentos_que_faltan": [],
-      "nota": "por revisar: qué documentos recupera"
+      "origen": {
+        "doi": "10.48082/espacios-a20v41n42p09",
+        "titulo": "consulta nueva del equipo, sin documento de origen"
+      },
+      "documentos_esperados": [
+        "10.48082/espacios-a20v41n42p09"
+      ],
+      "criterio_esperados": "fragmentos marcados y documentos que faltan",
+      "fecha_juicios": "2026-11-25",
+      "juicios": [
+        {
+          "posicion": 1,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resumen",
+          "pagina": 1,
+          "en_contexto": "F1",
+          "puntaje_reordenador": 0.999,
+          "responde": true
+        },
+        {
+          "posicion": 2,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 14,
+          "en_contexto": "F2",
+          "puntaje_reordenador": 0.997,
+          "responde": true
+        },
+        {
+          "posicion": 3,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F3",
+          "puntaje_reordenador": 0.996,
+          "responde": false
+        },
+        {
+          "posicion": 4,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 3,
+          "en_contexto": "F4",
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 5,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 2,
+          "en_contexto": "F5",
+          "puntaje_reordenador": 0.995,
+          "responde": false
+        },
+        {
+          "posicion": 6,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 12,
+          "en_contexto": "F6",
+          "puntaje_reordenador": 0.994,
+          "responde": true
+        },
+        {
+          "posicion": 7,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "introduccion",
+          "pagina": 13,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.993,
+          "responde": false
+        },
+        {
+          "posicion": 8,
+          "doi": "10.48082/espacios-a20v41n42p09",
+          "titulo": "El e-commerce y las Mipymes en tiempos de Covid-19 E-commerce and MSMEs in times of Covid-19",
+          "seccion": "resultados",
+          "pagina": 15,
+          "en_contexto": null,
+          "puntaje_reordenador": 0.984,
+          "responde": true,
+          "nota": "lado del consumidor: la pandemia lo llevó al canal electrónico"
+        }
+      ],
+      "nota_revision": "4 de 8 fragmentos responden"
     }
   ]
 }

@@ -12,6 +12,7 @@ un estilo modificado no se usa.
 from __future__ import annotations
 
 import hashlib
+import html
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -71,7 +72,8 @@ class EstiloAlterado(RuntimeError):
 
 
 def quitar_numero(texto: str) -> str:
-    return _NUMERO_DE_LISTA.sub("", " ".join(texto.split()))
+    """Sin el número de lista ni entidades HTML ("&amp;" de doi.org)."""
+    return _NUMERO_DE_LISTA.sub("", " ".join(html.unescape(texto).split()))
 
 
 def huella_estilo(ruta: Path) -> str:

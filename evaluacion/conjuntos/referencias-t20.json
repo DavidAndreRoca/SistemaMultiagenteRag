@@ -1,9 +1,9 @@
 {
   "nombre": "Referencias de prueba de la verificación (T20)",
-  "version": "borrador-1",
-  "estado": "borrador",
-  "fecha": "2026-11-25",
-  "nota": "Borrador armado por el asistente (decisión T20-01, g), a revisar por el equipo. Las obras 'real' y 'con_errores' son reales, tomadas del corpus provisional con los metadatos de Crossref; los errores se introdujeron a propósito. Las 'fabricadas' son inventadas: dos sin DOI, dos con el DOI real de otra obra y dos con un DOI inexistente. Cada referencia se escribe en IEEE y en APA 7 en los dos borradores de referencias-t20/, que las citan; la clave de cada borrador dice el estado esperado de cada entrada, las citas, la cita sin entrada y la entrada no citada. 'campos_esperados' son las discrepancias que deben aparecer.",
+  "version": "revision-1",
+  "estado": "revisado",
+  "fecha": "2026-11-26",
+  "nota": "Revisado por el equipo en evaluacion/revision/revision-referencias-t20.xlsx (26-11-2026): 20 referencias del borrador del asistente, con dos correcciones (R-17 y R-18 también difieren en el año) y 12 agregadas por el equipo (R-21 a R-32): años y primeros autores cambiados, DOI con un dígito cambiado, tres fabricadas y tres correctas. La lista APA va en orden alfabético sin acentos. R-04 tiene el año ambiguo (2023 en línea, 2024 el volumen); Crossref registra 2023 y se deja como verificada. Cada referencia se escribe en IEEE y en APA 7 en los dos borradores de referencias-t20/, que las citan; la clave de cada borrador da el estado esperado de cada entrada, las citas, la cita sin entrada y la entrada no citada.",
   "referencias": [
     {
       "id": "R-01",
@@ -123,7 +123,8 @@
       "numero": "1",
       "paginas": "1-13",
       "doi": "10.1344/reire.44018",
-      "doi_de_la_fuente": "10.1344/reire.44018"
+      "doi_de_la_fuente": "10.1344/reire.44018",
+      "comentario_revision": "Existe y coincide todo (título, autores, revista, 1-13, DOI). Ojo con el año: la cita recomendada del propio artículo dice 2024 (vol. 17); 2023 es el año de copyright y de publicación en línea. Si el sistema usa el año del DOI, queda verificada. Caso ambiguo: como una diferencia de un año cuenta como discrepancia, conviene cambiar la referencia a 2024 o confirmar el año «issued» en Crossref antes de fijarla como verificada."
     },
     {
       "id": "R-05",
@@ -223,7 +224,8 @@
       "numero": "4",
       "paginas": "717-734",
       "doi": null,
-      "doi_de_la_fuente": "10.1007/s10796-015-9554-5"
+      "doi_de_la_fuente": "10.1007/s10796-015-9554-5",
+      "comentario_revision": "Existe y coincide todo (Aston/RePEc/Springer). Ojo con el año: 2015 es la publicación en línea (28 abr 2015); el número 18(4) salió en agosto de 2016. Si el equipo prefiere el año del número impreso, pasaría a con_discrepancias (anio). Caso ambiguo: confirmar el año «issued» en Crossref/OpenAlex antes de fijarla como verificada."
     },
     {
       "id": "R-09",
@@ -262,7 +264,8 @@
       "numero": null,
       "paginas": "109405",
       "doi": "10.1016/j.ijpe.2024.109405",
-      "doi_de_la_fuente": "10.1016/j.ijpe.2024.109405"
+      "doi_de_la_fuente": "10.1016/j.ijpe.2024.109405",
+      "comentario_revision": "Verificado en RePEc/HAL: vol. 277 es de 2024; autores, título y DOI coinciden. El único error es el año."
     },
     {
       "id": "R-10",
@@ -324,7 +327,8 @@
       "numero": null,
       "paginas": "102733",
       "doi": "10.1016/j.techsoc.2024.102733",
-      "doi_de_la_fuente": "10.1016/j.techsoc.2024.102733"
+      "doi_de_la_fuente": "10.1016/j.techsoc.2024.102733",
+      "comentario_revision": "Verificado (Essex/Greenwich): el título real es «Analyzing AI adoption in European SMEs: a study of digital capabilities, innovation, and external environment». Autores, año, vol. y DOI coinciden."
     },
     {
       "id": "R-12",
@@ -355,7 +359,8 @@
       "numero": "9",
       "paginas": "101828",
       "doi": "10.1016/j.telpol.2019.101828",
-      "doi_de_la_fuente": "10.1016/j.telpol.2019.101828"
+      "doi_de_la_fuente": "10.1016/j.telpol.2019.101828",
+      "comentario_revision": "Verificado (TU Delft, RePEc): el título real es «Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?». Autores, año, vol. 43(9) y DOI coinciden (el artículo no tiene rango de páginas; es el artículo 101828)."
     },
     {
       "id": "R-13",
@@ -390,7 +395,8 @@
       "numero": "12",
       "paginas": "283-292",
       "doi": null,
-      "doi_de_la_fuente": "10.13106/jafeb.2020.vol7.no12.283"
+      "doi_de_la_fuente": "10.13106/jafeb.2020.vol7.no12.283",
+      "comentario_revision": "Verificado: el primer autor real es Patma, T. S. (Wardana, Wibowo y Narmaditya coinciden). El artículo sí tiene DOI (10.13106/jafeb.2020.vol7.no12.283), pero la referencia no lo escribe. Opcional: los apellidos en mayúsculas mezclan formatos."
     },
     {
       "id": "R-14",
@@ -413,7 +419,8 @@
       "numero": "1",
       "paginas": "151-161",
       "doi": null,
-      "doi_de_la_fuente": "10.1515/foli-2015-0025"
+      "doi_de_la_fuente": "10.1515/foli-2015-0025",
+      "comentario_revision": "Verificado (RePEc/Sciendo): primer autor real Rutkowska-Ziarko, A., publicado en 2015, 15(1), 151-161; DOI 10.1515/foli-2015-0025 (la referencia no lo escribe)."
     },
     {
       "id": "R-15",
@@ -438,7 +445,8 @@
       "numero": "1",
       "paginas": "45-62",
       "doi": null,
-      "doi_de_la_fuente": null
+      "doi_de_la_fuente": null,
+      "comentario_revision": "Búsqueda del título exacto sin resultados."
     },
     {
       "id": "R-16",
@@ -467,7 +475,8 @@
       "estado_esperado": "con_discrepancias",
       "campos_esperados": [
         "titulo",
-        "autores"
+        "autores",
+        "anio"
       ],
       "nota": "fabricada con el DOI real de otra obra (T20-01, a)",
       "autores": [
@@ -483,7 +492,8 @@
       "numero": "2",
       "paginas": "10-24",
       "doi": "10.1016/j.inffus.2023.101805",
-      "doi_de_la_fuente": "10.1016/j.inffus.2023.101805"
+      "doi_de_la_fuente": "10.1016/j.inffus.2023.101805",
+      "comentario_revision": "El DOI 10.1016/j.inffus.2023.101805 lleva a la obra de R-01 (Ali et al., 2023). Como el año de la referencia (2022) también difiere del real (2023), Campos con error debería decir: titulo, autores, anio."
     },
     {
       "id": "R-18",
@@ -491,7 +501,8 @@
       "estado_esperado": "con_discrepancias",
       "campos_esperados": [
         "titulo",
-        "autores"
+        "autores",
+        "anio"
       ],
       "nota": "fabricada con el DOI real de otra obra (T20-01, a)",
       "autores": [
@@ -511,7 +522,8 @@
       "numero": "2",
       "paginas": "10-24",
       "doi": "10.1186/s41239-023-00411-8",
-      "doi_de_la_fuente": "10.1186/s41239-023-00411-8"
+      "doi_de_la_fuente": "10.1186/s41239-023-00411-8",
+      "comentario_revision": "El DOI 10.1186/s41239-023-00411-8 lleva a la obra de R-02 (Chan y Hu, 2023). Como el año de la referencia (2021) también difiere del real (2023), Campos con error debería decir: titulo, autores, anio."
     },
     {
       "id": "R-19",
@@ -558,6 +570,362 @@
       "paginas": "1-15",
       "doi": "10.17013/risti.99.1-15",
       "doi_de_la_fuente": null
+    },
+    {
+      "id": "R-21",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "anio"
+      ],
+      "nota": "Año equivocado. Base: R-01 (Ali et al.). Cambié solo el año: 2023 → 2022.",
+      "autores": [
+        [
+          "Ali",
+          "S."
+        ],
+        [
+          "Abuhmed",
+          "T."
+        ],
+        [
+          "El-Sappagh",
+          "S."
+        ],
+        [
+          "Muhammad",
+          "K."
+        ],
+        [
+          "Alonso-Moral",
+          "J. M."
+        ],
+        [
+          "Confalonieri",
+          "R."
+        ]
+      ],
+      "anio": 2022,
+      "titulo": "Explainable Artificial Intelligence (XAI): What we know and what is left to attain Trustworthy Artificial Intelligence",
+      "revista": "Information Fusion",
+      "volumen": "99",
+      "numero": null,
+      "paginas": "101805",
+      "doi": "10.1016/j.inffus.2023.101805",
+      "doi_de_la_fuente": "10.1016/j.inffus.2023.101805",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-22",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "anio"
+      ],
+      "nota": "Año equivocado. Base: R-05. Cambié solo el año: 2023 → 2022. Sin DOI en la referencia.",
+      "autores": [
+        [
+          "Carrasco Rodríguez",
+          "A."
+        ]
+      ],
+      "anio": 2022,
+      "titulo": "Reinventando la enseñanza de la Historia Moderna en Secundaria: la utilización de ChatGPT para potenciar el aprendizaje y la innovación docente",
+      "revista": "Studia Historica: Historia Moderna",
+      "volumen": "45",
+      "numero": "1",
+      "paginas": "101-145",
+      "doi": null,
+      "doi_de_la_fuente": null,
+      "origen": "equipo"
+    },
+    {
+      "id": "R-23",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "autores"
+      ],
+      "nota": "Autor cambiado. Base: R-03 (Abbas et al.). Cambié solo el primer autor: Abbas, M. → Bouwman, H. (autor de R-12, del corpus). El DOI lleva a la obra real de Abbas et al.",
+      "autores": [
+        [
+          "Bouwman",
+          "H."
+        ],
+        [
+          "Jam",
+          "F. A."
+        ],
+        [
+          "Khan",
+          "T. I."
+        ]
+      ],
+      "anio": 2024,
+      "titulo": "Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students",
+      "revista": "International Journal of Educational Technology in Higher Education",
+      "volumen": "21",
+      "numero": "1",
+      "paginas": null,
+      "doi": "10.1186/s41239-024-00444-7",
+      "doi_de_la_fuente": "10.1186/s41239-024-00444-7",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-24",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "autores"
+      ],
+      "nota": "Autor cambiado. Base: R-07. Cambié solo el autor: Castillejos López, B. → Pasapera Ramírez, S. (autora de R-06, del corpus). Sin DOI.",
+      "autores": [
+        [
+          "Pasapera Ramírez",
+          "S."
+        ]
+      ],
+      "anio": 2022,
+      "titulo": "Inteligencia artificial y los entornos personales de aprendizaje: atentos al uso adecuado de los recursos tecnológicos de los estudiantes universitarios",
+      "revista": "Educación",
+      "volumen": "31",
+      "numero": "60",
+      "paginas": "9-24",
+      "doi": null,
+      "doi_de_la_fuente": null,
+      "origen": "equipo"
+    },
+    {
+      "id": "R-25",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "doi"
+      ],
+      "nota": "DOI con un dígito cambiado. Base: R-13 con los autores reales. DOI real 10.13106/jafeb.2020.vol7.no12.283 → ...no12.288 (283 es la página de inicio; 288 cae dentro del mismo artículo, no puede ser otro). La obra se localiza por título y autores, por eso con_discrepancias (doi) y no no_localizada. Confirmar al correr el sistema.",
+      "autores": [
+        [
+          "Patma",
+          "T. S."
+        ],
+        [
+          "Wardana",
+          "L. W."
+        ],
+        [
+          "Wibowo",
+          "A."
+        ],
+        [
+          "Narmaditya",
+          "B. S."
+        ]
+      ],
+      "anio": 2020,
+      "titulo": "The Shifting of Business Activities during the COVID-19 Pandemic: Does Social Media Marketing Matter?",
+      "revista": "The Journal of Asian Finance, Economics and Business",
+      "volumen": "7",
+      "numero": "12",
+      "paginas": "283-292",
+      "doi": "10.13106/jafeb.2020.vol7.no12.288",
+      "doi_de_la_fuente": "10.13106/jafeb.2020.vol7.no12.288",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-26",
+      "tipo": "con_errores",
+      "estado_esperado": "con_discrepancias",
+      "campos_esperados": [
+        "doi"
+      ],
+      "nota": "DOI con un dígito cambiado. Base: R-02. Cambié solo el último carácter: ...00411-8 → ...00411-3 (en los DOI de Springer Nature suele ser de control, así que no debería existir). La obra se localiza por título y autores: con_discrepancias (doi). Confirmar al correr el sistema.",
+      "autores": [
+        [
+          "Chan",
+          "C. K. Y."
+        ],
+        [
+          "Hu",
+          "W."
+        ]
+      ],
+      "anio": 2023,
+      "titulo": "Students’ voices on generative AI: perceptions, benefits, and challenges in higher education",
+      "revista": "International Journal of Educational Technology in Higher Education",
+      "volumen": "20",
+      "numero": "1",
+      "paginas": null,
+      "doi": "10.1186/s41239-023-00411-3",
+      "doi_de_la_fuente": "10.1186/s41239-023-00411-3",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-27",
+      "tipo": "fabricada",
+      "estado_esperado": "no_localizada",
+      "campos_esperados": [],
+      "nota": "Referencia fabricada: título verosímil que no existe (búsqueda del título exacto sin resultados). Autores tomados del corpus (R-04, R-05). Sin DOI.",
+      "autores": [
+        [
+          "Pizà-Mir",
+          "B."
+        ],
+        [
+          "Carrasco Rodríguez",
+          "A."
+        ]
+      ],
+      "anio": 2024,
+      "titulo": "Asistentes conversacionales y motivación del alumnado universitario en entornos híbridos de aprendizaje",
+      "revista": "Revista Andina de Tecnología Educativa Aplicada",
+      "volumen": "12",
+      "numero": "2",
+      "paginas": "33-49",
+      "doi": null,
+      "doi_de_la_fuente": null,
+      "origen": "equipo"
+    },
+    {
+      "id": "R-28",
+      "tipo": "fabricada",
+      "estado_esperado": "no_localizada",
+      "campos_esperados": [],
+      "nota": "Referencia fabricada: mezcla temas de R-08 y R-10, pero la obra no existe. Autores del corpus. Sin DOI.",
+      "autores": [
+        [
+          "Dijkman",
+          "R."
+        ],
+        [
+          "Rahayu",
+          "R."
+        ]
+      ],
+      "anio": 2021,
+      "titulo": "Madurez de procesos y adopción de comercio electrónico en pymes latinoamericanas",
+      "revista": "Revista de Gestión y Analítica Empresarial",
+      "volumen": "6",
+      "numero": "3",
+      "paginas": "77-94",
+      "doi": null,
+      "doi_de_la_fuente": null,
+      "origen": "equipo"
+    },
+    {
+      "id": "R-29",
+      "tipo": "fabricada",
+      "estado_esperado": "no_localizada",
+      "campos_esperados": [],
+      "nota": "Referencia fabricada: título verosímil que no existe. Autores del corpus (R-03, R-06). Sin DOI.",
+      "autores": [
+        [
+          "Abbas",
+          "M."
+        ],
+        [
+          "Alarcón Llontop",
+          "L. R."
+        ]
+      ],
+      "anio": 2023,
+      "titulo": "Uso de inteligencia artificial generativa y percepción docente en universidades: un estudio comparativo",
+      "revista": "Cuadernos de Innovación Académica Digital",
+      "volumen": "4",
+      "numero": "1",
+      "paginas": "12-28",
+      "doi": null,
+      "doi_de_la_fuente": null,
+      "origen": "equipo"
+    },
+    {
+      "id": "R-30",
+      "tipo": "real",
+      "estado_esperado": "verificada",
+      "campos_esperados": [],
+      "nota": "Referencia correcta, sin cambios. Base: R-09 con el año real (2024).",
+      "autores": [
+        [
+          "Syed",
+          "T. A."
+        ],
+        [
+          "Aslam",
+          "H."
+        ],
+        [
+          "Bhatti",
+          "Z. A."
+        ],
+        [
+          "Mehmood",
+          "F."
+        ],
+        [
+          "Pahuja",
+          "A."
+        ]
+      ],
+      "anio": 2024,
+      "titulo": "Dynamic pricing for perishable goods: A data-driven digital transformation approach",
+      "revista": "International Journal of Production Economics",
+      "volumen": "277",
+      "numero": null,
+      "paginas": "109405",
+      "doi": "10.1016/j.ijpe.2024.109405",
+      "doi_de_la_fuente": "10.1016/j.ijpe.2024.109405",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-31",
+      "tipo": "real",
+      "estado_esperado": "verificada",
+      "campos_esperados": [],
+      "nota": "Referencia correcta, sin cambios. Base: R-12 con el título real (verificado en TU Delft y RePEc).",
+      "autores": [
+        [
+          "Bouwman",
+          "H."
+        ],
+        [
+          "Nikou",
+          "S."
+        ],
+        [
+          "de Reuver",
+          "M."
+        ]
+      ],
+      "anio": 2019,
+      "titulo": "Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?",
+      "revista": "Telecommunications Policy",
+      "volumen": "43",
+      "numero": "9",
+      "paginas": "101828",
+      "doi": "10.1016/j.telpol.2019.101828",
+      "doi_de_la_fuente": "10.1016/j.telpol.2019.101828",
+      "origen": "equipo"
+    },
+    {
+      "id": "R-32",
+      "tipo": "real",
+      "estado_esperado": "verificada",
+      "campos_esperados": [],
+      "nota": "Referencia correcta, sin cambios. Base: R-14 con el primer autor real y el DOI indicado en su comentario.",
+      "autores": [
+        [
+          "Rutkowska-Ziarko",
+          "A."
+        ]
+      ],
+      "anio": 2015,
+      "titulo": "The Influence of Profitability Ratios and Company Size on Profitability and Investment Risk in the Capital Market",
+      "revista": "Folia Oeconomica Stetinensia",
+      "volumen": "15",
+      "numero": "1",
+      "paginas": "151-161",
+      "doi": "10.1515/foli-2015-0025",
+      "doi_de_la_fuente": "10.1515/foli-2015-0025",
+      "origen": "equipo"
     }
   ],
   "borradores": [
@@ -664,6 +1032,66 @@
           "indice": 20,
           "id": "R-20",
           "texto": "[20] J. Arévalo, “Facturación electrónica y productividad en mypes del sector textil,” Contabilidad y Finanzas Latinoamericanas, vol. 5, no. 4, pp. 1-15, 2020, doi: 10.17013/risti.99.1-15."
+        },
+        {
+          "indice": 21,
+          "id": "R-21",
+          "texto": "[21] S. Ali, T. Abuhmed, S. El-Sappagh, K. Muhammad, J. M. Alonso-Moral, and R. Confalonieri, “Explainable Artificial Intelligence (XAI): What we know and what is left to attain Trustworthy Artificial Intelligence,” Information Fusion, vol. 99, pp. 101805, 2022, doi: 10.1016/j.inffus.2023.101805."
+        },
+        {
+          "indice": 22,
+          "id": "R-22",
+          "texto": "[22] A. Carrasco Rodríguez, “Reinventando la enseñanza de la Historia Moderna en Secundaria: la utilización de ChatGPT para potenciar el aprendizaje y la innovación docente,” Studia Historica: Historia Moderna, vol. 45, no. 1, pp. 101-145, 2022."
+        },
+        {
+          "indice": 23,
+          "id": "R-23",
+          "texto": "[23] H. Bouwman, F. A. Jam, and T. I. Khan, “Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students,” International Journal of Educational Technology in Higher Education, vol. 21, no. 1, 2024, doi: 10.1186/s41239-024-00444-7."
+        },
+        {
+          "indice": 24,
+          "id": "R-24",
+          "texto": "[24] S. Pasapera Ramírez, “Inteligencia artificial y los entornos personales de aprendizaje: atentos al uso adecuado de los recursos tecnológicos de los estudiantes universitarios,” Educación, vol. 31, no. 60, pp. 9-24, 2022."
+        },
+        {
+          "indice": 25,
+          "id": "R-25",
+          "texto": "[25] T. S. Patma, L. W. Wardana, A. Wibowo, and B. S. Narmaditya, “The Shifting of Business Activities during the COVID-19 Pandemic: Does Social Media Marketing Matter?,” The Journal of Asian Finance, Economics and Business, vol. 7, no. 12, pp. 283-292, 2020, doi: 10.13106/jafeb.2020.vol7.no12.288."
+        },
+        {
+          "indice": 26,
+          "id": "R-26",
+          "texto": "[26] C. K. Y. Chan and W. Hu, “Students’ voices on generative AI: perceptions, benefits, and challenges in higher education,” International Journal of Educational Technology in Higher Education, vol. 20, no. 1, 2023, doi: 10.1186/s41239-023-00411-3."
+        },
+        {
+          "indice": 27,
+          "id": "R-27",
+          "texto": "[27] B. Pizà-Mir and A. Carrasco Rodríguez, “Asistentes conversacionales y motivación del alumnado universitario en entornos híbridos de aprendizaje,” Revista Andina de Tecnología Educativa Aplicada, vol. 12, no. 2, pp. 33-49, 2024."
+        },
+        {
+          "indice": 28,
+          "id": "R-28",
+          "texto": "[28] R. Dijkman and R. Rahayu, “Madurez de procesos y adopción de comercio electrónico en pymes latinoamericanas,” Revista de Gestión y Analítica Empresarial, vol. 6, no. 3, pp. 77-94, 2021."
+        },
+        {
+          "indice": 29,
+          "id": "R-29",
+          "texto": "[29] M. Abbas and L. R. Alarcón Llontop, “Uso de inteligencia artificial generativa y percepción docente en universidades: un estudio comparativo,” Cuadernos de Innovación Académica Digital, vol. 4, no. 1, pp. 12-28, 2023."
+        },
+        {
+          "indice": 30,
+          "id": "R-30",
+          "texto": "[30] T. A. Syed, H. Aslam, Z. A. Bhatti, F. Mehmood, and A. Pahuja, “Dynamic pricing for perishable goods: A data-driven digital transformation approach,” International Journal of Production Economics, vol. 277, pp. 109405, 2024, doi: 10.1016/j.ijpe.2024.109405."
+        },
+        {
+          "indice": 31,
+          "id": "R-31",
+          "texto": "[31] H. Bouwman, S. Nikou, and M. de Reuver, “Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?,” Telecommunications Policy, vol. 43, no. 9, pp. 101828, 2019, doi: 10.1016/j.telpol.2019.101828."
+        },
+        {
+          "indice": 32,
+          "id": "R-32",
+          "texto": "[32] A. Rutkowska-Ziarko, “The Influence of Profitability Ratios and Company Size on Profitability and Investment Risk in the Capital Market,” Folia Oeconomica Stetinensia, vol. 15, no. 1, pp. 151-161, 2015, doi: 10.1515/foli-2015-0025."
         }
       ],
       "cuerpo": [
@@ -686,7 +1114,19 @@
         "Este hallazgo se ha reportado en otros contextos [17].",
         "Diversos autores coinciden en esta interpretación [18].",
         "Esa evidencia respalda la pregunta del estudio [19].",
-        "Finalmente, un estudio no incluido en la lista también lo menciona [21]."
+        "Un antecedente cercano analiza el mismo problema [20].",
+        "La literatura revisada aborda este aspecto [21].",
+        "Este hallazgo se ha reportado en otros contextos [22].",
+        "Diversos autores coinciden en esta interpretación [23].",
+        "Esa evidencia respalda la pregunta del estudio [24].",
+        "Un antecedente cercano analiza el mismo problema [25].",
+        "La literatura revisada aborda este aspecto [26].",
+        "Este hallazgo se ha reportado en otros contextos [27].",
+        "Diversos autores coinciden en esta interpretación [28].",
+        "Esa evidencia respalda la pregunta del estudio [29].",
+        "Un antecedente cercano analiza el mismo problema [30].",
+        "La literatura revisada aborda este aspecto [31].",
+        "Finalmente, un estudio no incluido en la lista también lo menciona [33]."
       ],
       "clave": {
         "estados": {
@@ -709,7 +1149,19 @@
           "17": "con_discrepancias",
           "18": "con_discrepancias",
           "19": "no_localizada",
-          "20": "no_localizada"
+          "20": "no_localizada",
+          "21": "con_discrepancias",
+          "22": "con_discrepancias",
+          "23": "con_discrepancias",
+          "24": "con_discrepancias",
+          "25": "con_discrepancias",
+          "26": "con_discrepancias",
+          "27": "no_localizada",
+          "28": "no_localizada",
+          "29": "no_localizada",
+          "30": "verificada",
+          "31": "verificada",
+          "32": "verificada"
         },
         "citas": [
           {
@@ -846,16 +1298,100 @@
             "nota": ""
           },
           {
+            "cita": "[20]",
+            "entradas": [
+              20
+            ],
+            "nota": ""
+          },
+          {
             "cita": "[21]",
+            "entradas": [
+              21
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[22]",
+            "entradas": [
+              22
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[23]",
+            "entradas": [
+              23
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[24]",
+            "entradas": [
+              24
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[25]",
+            "entradas": [
+              25
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[26]",
+            "entradas": [
+              26
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[27]",
+            "entradas": [
+              27
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[28]",
+            "entradas": [
+              28
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[29]",
+            "entradas": [
+              29
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[30]",
+            "entradas": [
+              30
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[31]",
+            "entradas": [
+              31
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "[33]",
             "entradas": [],
             "nota": "cita sin entrada"
           }
         ],
         "citas_sin_entrada": [
-          "[21]"
+          "[33]"
         ],
         "entradas_no_citadas": [
-          20
+          32
         ]
       }
     },
@@ -870,144 +1406,228 @@
         },
         {
           "indice": 2,
+          "id": "R-29",
+          "texto": "Abbas, M., & Alarcón Llontop, L. R. (2023). Uso de inteligencia artificial generativa y percepción docente en universidades: un estudio comparativo. Cuadernos de Innovación Académica Digital, 4(1), 12-28."
+        },
+        {
+          "indice": 3,
           "id": "R-06",
           "texto": "Alarcón Llontop, L. R., Pasapera Ramírez, S., & Torres-Mirez, K. (2023). The ChatGPT Application: Initial Perceptions of University Teachers. Proceedings of the 21th LACCEI International Multi-Conference for Engineering, Education and Technology (LACCEI 2023): “Leadership in Education and Innovation in Engineering in the Framework of Global Transformations: Integration and Alliances for Integral Development”."
         },
         {
-          "indice": 3,
+          "indice": 4,
           "id": "R-01",
           "texto": "Ali, S., Abuhmed, T., El-Sappagh, S., Muhammad, K., Alonso-Moral, J. M., & Confalonieri, R. (2023). Explainable Artificial Intelligence (XAI): What we know and what is left to attain Trustworthy Artificial Intelligence. Information Fusion, 99, 101805. https://doi.org/10.1016/j.inffus.2023.101805"
         },
         {
-          "indice": 4,
-          "id": "R-11",
-          "texto": "Arroyabe, M. F., Arranz, C. F., Fernandez De Arroyabe, I., & Fernandez de Arroyabe, J. C. (2024). Efectos de la tecnología en el aprendizaje: una revisión. Technology in Society, 79, 102733. https://doi.org/10.1016/j.techsoc.2024.102733"
+          "indice": 5,
+          "id": "R-21",
+          "texto": "Ali, S., Abuhmed, T., El-Sappagh, S., Muhammad, K., Alonso-Moral, J. M., & Confalonieri, R. (2022). Explainable Artificial Intelligence (XAI): What we know and what is left to attain Trustworthy Artificial Intelligence. Information Fusion, 99, 101805. https://doi.org/10.1016/j.inffus.2023.101805"
         },
         {
-          "indice": 5,
+          "indice": 6,
           "id": "R-20",
           "texto": "Arévalo, J. (2020). Facturación electrónica y productividad en mypes del sector textil. Contabilidad y Finanzas Latinoamericanas, 5(4), 1-15. https://doi.org/10.17013/risti.99.1-15"
         },
         {
-          "indice": 6,
+          "indice": 7,
+          "id": "R-11",
+          "texto": "Arroyabe, M. F., Arranz, C. F., Fernandez De Arroyabe, I., & Fernandez de Arroyabe, J. C. (2024). Efectos de la tecnología en el aprendizaje: una revisión. Technology in Society, 79, 102733. https://doi.org/10.1016/j.techsoc.2024.102733"
+        },
+        {
+          "indice": 8,
           "id": "R-12",
           "texto": "Bouwman, H., Nikou, S., & de Reuver, M. (2019). Factores asociados a la adopción digital en organizaciones. Telecommunications Policy, 43(9), 101828. https://doi.org/10.1016/j.telpol.2019.101828"
         },
         {
-          "indice": 7,
+          "indice": 9,
+          "id": "R-23",
+          "texto": "Bouwman, H., Jam, F. A., & Khan, T. I. (2024). Is it harmful or helpful? Examining the causes and consequences of generative AI usage among university students. International Journal of Educational Technology in Higher Education, 21(1). https://doi.org/10.1186/s41239-024-00444-7"
+        },
+        {
+          "indice": 10,
+          "id": "R-31",
+          "texto": "Bouwman, H., Nikou, S., & de Reuver, M. (2019). Digitalization, business models, and SMEs: How do business model innovation practices improve performance of digitalizing SMEs?. Telecommunications Policy, 43(9), 101828. https://doi.org/10.1016/j.telpol.2019.101828"
+        },
+        {
+          "indice": 11,
           "id": "R-05",
           "texto": "Carrasco Rodríguez, A. (2023). Reinventando la enseñanza de la Historia Moderna en Secundaria: la utilización de ChatGPT para potenciar el aprendizaje y la innovación docente. Studia Historica: Historia Moderna, 45(1), 101-145."
         },
         {
-          "indice": 8,
+          "indice": 12,
+          "id": "R-22",
+          "texto": "Carrasco Rodríguez, A. (2022). Reinventando la enseñanza de la Historia Moderna en Secundaria: la utilización de ChatGPT para potenciar el aprendizaje y la innovación docente. Studia Historica: Historia Moderna, 45(1), 101-145."
+        },
+        {
+          "indice": 13,
           "id": "R-07",
           "texto": "Castillejos López, B. (2022). Inteligencia artificial y los entornos personales de aprendizaje: atentos al uso adecuado de los recursos tecnológicos de los estudiantes universitarios. Educación, 31(60), 9-24."
         },
         {
-          "indice": 9,
+          "indice": 14,
           "id": "R-02",
           "texto": "Chan, C. K. Y., & Hu, W. (2023). Students’ voices on generative AI: perceptions, benefits, and challenges in higher education. International Journal of Educational Technology in Higher Education, 20(1). https://doi.org/10.1186/s41239-023-00411-8"
         },
         {
-          "indice": 10,
+          "indice": 15,
+          "id": "R-26",
+          "texto": "Chan, C. K. Y., & Hu, W. (2023). Students’ voices on generative AI: perceptions, benefits, and challenges in higher education. International Journal of Educational Technology in Higher Education, 20(1). https://doi.org/10.1186/s41239-023-00411-3"
+        },
+        {
+          "indice": 16,
           "id": "R-08",
           "texto": "Dijkman, R., Lammers, S. V., & de Jong, A. (2015). Properties that influence business process management maturity and its effect on organizational performance. Information Systems Frontiers, 18(4), 717-734."
         },
         {
-          "indice": 11,
+          "indice": 17,
+          "id": "R-28",
+          "texto": "Dijkman, R., & Rahayu, R. (2021). Madurez de procesos y adopción de comercio electrónico en pymes latinoamericanas. Revista de Gestión y Analítica Empresarial, 6(3), 77-94."
+        },
+        {
+          "indice": 18,
           "id": "R-15",
           "texto": "Huamaní, R., & Ccori, L. (2022). Tutores conversacionales y rendimiento en matemática de escolares de la sierra sur. Revista Peruana de Innovación Educativa, 8(1), 45-62."
         },
         {
-          "indice": 12,
+          "indice": 19,
           "id": "R-13",
           "texto": "Mendívil, C., WARDANA, L. W., WIBOWO, A., & NARMADITYA, B. S. (2020). The Shifting of Business Activities during the COVID-19 Pandemic: Does Social Media Marketing Matter?. The Journal of Asian Finance, Economics and Business, 7(12), 283-292."
         },
         {
-          "indice": 13,
+          "indice": 20,
           "id": "R-14",
           "texto": "Olivares, D. (2015). The Influence of Profitability Ratios and Company Size on Profitability and Investment Risk in the Capital Market. Folia Oeconomica Stetinensia, 15(1), 151-161."
         },
         {
-          "indice": 14,
+          "indice": 21,
+          "id": "R-24",
+          "texto": "Pasapera Ramírez, S. (2022). Inteligencia artificial y los entornos personales de aprendizaje: atentos al uso adecuado de los recursos tecnológicos de los estudiantes universitarios. Educación, 31(60), 9-24."
+        },
+        {
+          "indice": 22,
+          "id": "R-25",
+          "texto": "Patma, T. S., Wardana, L. W., Wibowo, A., & Narmaditya, B. S. (2020). The Shifting of Business Activities during the COVID-19 Pandemic: Does Social Media Marketing Matter?. The Journal of Asian Finance, Economics and Business, 7(12), 283-292. https://doi.org/10.13106/jafeb.2020.vol7.no12.288"
+        },
+        {
+          "indice": 23,
           "id": "R-19",
           "texto": "Paucar, E., & Lozano, T. (2023). Detección automática de plagio con modelos de lenguaje en universidades públicas. Revista Iberoamericana de Integridad Académica, 5(4), 1-15. https://doi.org/10.62754/joe.v9i9.99991"
         },
         {
-          "indice": 15,
+          "indice": 24,
+          "id": "R-27",
+          "texto": "Pizà-Mir, B., & Carrasco Rodríguez, A. (2024). Asistentes conversacionales y motivación del alumnado universitario en entornos híbridos de aprendizaje. Revista Andina de Tecnología Educativa Aplicada, 12(2), 33-49."
+        },
+        {
+          "indice": 25,
           "id": "R-18",
           "texto": "Quiroz, A., & Neyra, P. (2021). Marketing digital y ventas de microempresas rurales. Empresa y Territorio, 3(2), 10-24. https://doi.org/10.1186/s41239-023-00411-8"
         },
         {
-          "indice": 16,
+          "indice": 26,
           "id": "R-10",
           "texto": "Rahayu, R., & Day, J. (2014). Determinant Factors of E-commerce Adoption by SMEs in Developing Country: Evidence from Indonesia. Procedia - Social and Behavioral Sciences, 195, 142-150. https://doi.org/10.1016/j.sbspro.2015.06.423"
         },
         {
-          "indice": 17,
+          "indice": 27,
+          "id": "R-32",
+          "texto": "Rutkowska-Ziarko, A. (2015). The Influence of Profitability Ratios and Company Size on Profitability and Investment Risk in the Capital Market. Folia Oeconomica Stetinensia, 15(1), 151-161. https://doi.org/10.1515/foli-2015-0025"
+        },
+        {
+          "indice": 28,
           "id": "R-16",
           "texto": "Saavedra, M. (2021). Comercio electrónico y supervivencia de bodegas limeñas durante la pandemia. Gestión y Desarrollo Andino, 8(1), 45-62."
         },
         {
-          "indice": 18,
+          "indice": 29,
           "id": "R-04",
           "texto": "Saz-Pérez, F., & Pizà-Mir, B. (2023). Desafiando el estado del arte en el uso de ChatGPT en educación en el año 2023. REIRE Revista d'Innovació i Recerca en Educació, 17(1), 1-13. https://doi.org/10.1344/reire.44018"
         },
         {
-          "indice": 19,
+          "indice": 30,
           "id": "R-09",
           "texto": "Syed, T. A., Aslam, H., Bhatti, Z. A., Mehmood, F., & Pahuja, A. (2025). Dynamic pricing for perishable goods: A data-driven digital transformation approach. International Journal of Production Economics, 277, 109405. https://doi.org/10.1016/j.ijpe.2024.109405"
         },
         {
-          "indice": 20,
+          "indice": 31,
+          "id": "R-30",
+          "texto": "Syed, T. A., Aslam, H., Bhatti, Z. A., Mehmood, F., & Pahuja, A. (2024). Dynamic pricing for perishable goods: A data-driven digital transformation approach. International Journal of Production Economics, 277, 109405. https://doi.org/10.1016/j.ijpe.2024.109405"
+        },
+        {
+          "indice": 32,
           "id": "R-17",
           "texto": "Valdivia, S. (2022). Inteligencia artificial generativa y evaluación formativa en posgrado. Educación Superior Digital, 3(2), 10-24. https://doi.org/10.1016/j.inffus.2023.101805"
         }
       ],
       "cuerpo": [
         "La literatura revisada aborda este aspecto (Abbas et al., 2024).",
-        "Este hallazgo se ha reportado en otros contextos (Alarcón Llontop et al., 2023).",
-        "Diversos autores coinciden en esta interpretación (Ali et al., 2023).",
-        "Esa evidencia respalda la pregunta del estudio (Arroyabe et al., 2024).",
-        "La literatura revisada aborda este aspecto (Bouwman et al., 2019).",
-        "Este hallazgo se ha reportado en otros contextos (Carrasco Rodríguez, 2023).",
+        "Este hallazgo se ha reportado en otros contextos (Abbas y Alarcón Llontop, 2023).",
+        "Diversos autores coinciden en esta interpretación (Alarcón Llontop et al., 2023).",
+        "Esa evidencia respalda la pregunta del estudio (Ali et al., 2023).",
+        "Un antecedente cercano analiza el mismo problema (Ali et al., 2022).",
+        "La literatura revisada aborda este aspecto (Arévalo, 2020).",
+        "Este hallazgo se ha reportado en otros contextos (Arroyabe et al., 2024).",
+        "Diversos autores coinciden en esta interpretación (Bouwman et al., 2019).",
+        "Esa evidencia respalda la pregunta del estudio (Bouwman et al., 2024).",
+        "Un antecedente cercano analiza el mismo problema (Bouwman et al., 2019).",
+        "La literatura revisada aborda este aspecto (Carrasco Rodríguez, 2023).",
+        "Este hallazgo se ha reportado en otros contextos (Carrasco Rodríguez, 2022).",
         "Diversos autores coinciden en esta interpretación (Castillejos López, 2022).",
         "Esa evidencia respalda la pregunta del estudio (Chan y Hu, 2023).",
-        "Un antecedente cercano analiza el mismo problema (Dijkman et al., 2015).",
-        "La literatura revisada aborda este aspecto (Huamaní y Ccori, 2022).",
-        "Este hallazgo se ha reportado en otros contextos (Mendívil et al., 2020).",
-        "Diversos autores coinciden en esta interpretación (Olivares, 2015).",
-        "Esa evidencia respalda la pregunta del estudio (Paucar y Lozano, 2023).",
+        "Un antecedente cercano analiza el mismo problema (Chan y Hu, 2023).",
+        "La literatura revisada aborda este aspecto (Dijkman et al., 2015).",
+        "Este hallazgo se ha reportado en otros contextos (Dijkman y Rahayu, 2021).",
+        "Diversos autores coinciden en esta interpretación (Huamaní y Ccori, 2022).",
+        "Esa evidencia respalda la pregunta del estudio (Mendívil et al., 2020).",
+        "Un antecedente cercano analiza el mismo problema (Olivares, 2015).",
+        "La literatura revisada aborda este aspecto (Pasapera Ramírez, 2022).",
+        "Este hallazgo se ha reportado en otros contextos (Patma et al., 2020).",
+        "Diversos autores coinciden en esta interpretación (Paucar y Lozano, 2023).",
+        "Esa evidencia respalda la pregunta del estudio (Pizà-Mir y Carrasco Rodríguez, 2024).",
         "Un antecedente cercano analiza el mismo problema (Quiroz y Neyra, 2021).",
         "La literatura revisada aborda este aspecto (Rahayu y Day, 2014).",
-        "Este hallazgo se ha reportado en otros contextos (Saavedra, 2021).",
-        "Diversos autores coinciden en esta interpretación (Saz-Pérez y Pizà-Mir, 2023).",
-        "Esa evidencia respalda la pregunta del estudio (Syed et al., 2025).",
-        "Un antecedente cercano analiza el mismo problema (Valdivia, 2022).",
+        "Diversos autores coinciden en esta interpretación (Saavedra, 2021).",
+        "Esa evidencia respalda la pregunta del estudio (Saz-Pérez y Pizà-Mir, 2023).",
+        "Un antecedente cercano analiza el mismo problema (Syed et al., 2025).",
+        "La literatura revisada aborda este aspecto (Syed et al., 2024).",
+        "Este hallazgo se ha reportado en otros contextos (Valdivia, 2022).",
         "Finalmente, un estudio no incluido en la lista también lo menciona (Castañeda, 2019)."
       ],
       "clave": {
         "estados": {
           "1": "verificada",
-          "2": "verificada",
+          "2": "no_localizada",
           "3": "verificada",
-          "4": "con_discrepancias",
-          "5": "no_localizada",
-          "6": "con_discrepancias",
-          "7": "verificada",
-          "8": "verificada",
-          "9": "verificada",
+          "4": "verificada",
+          "5": "con_discrepancias",
+          "6": "no_localizada",
+          "7": "con_discrepancias",
+          "8": "con_discrepancias",
+          "9": "con_discrepancias",
           "10": "verificada",
-          "11": "no_localizada",
+          "11": "verificada",
           "12": "con_discrepancias",
-          "13": "con_discrepancias",
-          "14": "no_localizada",
+          "13": "verificada",
+          "14": "verificada",
           "15": "con_discrepancias",
-          "16": "con_discrepancias",
+          "16": "verificada",
           "17": "no_localizada",
-          "18": "verificada",
+          "18": "no_localizada",
           "19": "con_discrepancias",
-          "20": "con_discrepancias"
+          "20": "con_discrepancias",
+          "21": "con_discrepancias",
+          "22": "con_discrepancias",
+          "23": "no_localizada",
+          "24": "no_localizada",
+          "25": "con_discrepancias",
+          "26": "con_discrepancias",
+          "27": "verificada",
+          "28": "no_localizada",
+          "29": "verificada",
+          "30": "con_discrepancias",
+          "31": "verificada",
+          "32": "con_discrepancias"
         },
         "citas": [
           {
@@ -1018,128 +1638,212 @@
             "nota": ""
           },
           {
-            "cita": "(Alarcón Llontop et al., 2023)",
+            "cita": "(Abbas y Alarcón Llontop, 2023)",
             "entradas": [
               2
             ],
             "nota": ""
           },
           {
-            "cita": "(Ali et al., 2023)",
+            "cita": "(Alarcón Llontop et al., 2023)",
             "entradas": [
               3
             ],
             "nota": ""
           },
           {
-            "cita": "(Arroyabe et al., 2024)",
+            "cita": "(Ali et al., 2023)",
             "entradas": [
               4
             ],
             "nota": ""
           },
           {
-            "cita": "(Bouwman et al., 2019)",
+            "cita": "(Ali et al., 2022)",
+            "entradas": [
+              5
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Arévalo, 2020)",
             "entradas": [
               6
             ],
             "nota": ""
           },
           {
-            "cita": "(Carrasco Rodríguez, 2023)",
+            "cita": "(Arroyabe et al., 2024)",
             "entradas": [
               7
             ],
             "nota": ""
           },
           {
-            "cita": "(Castillejos López, 2022)",
+            "cita": "(Bouwman et al., 2019)",
             "entradas": [
               8
             ],
             "nota": ""
           },
           {
-            "cita": "(Chan y Hu, 2023)",
+            "cita": "(Bouwman et al., 2024)",
             "entradas": [
               9
             ],
             "nota": ""
           },
           {
-            "cita": "(Dijkman et al., 2015)",
+            "cita": "(Bouwman et al., 2019)",
             "entradas": [
               10
             ],
             "nota": ""
           },
           {
-            "cita": "(Huamaní y Ccori, 2022)",
+            "cita": "(Carrasco Rodríguez, 2023)",
             "entradas": [
               11
             ],
             "nota": ""
           },
           {
-            "cita": "(Mendívil et al., 2020)",
+            "cita": "(Carrasco Rodríguez, 2022)",
             "entradas": [
               12
             ],
             "nota": ""
           },
           {
-            "cita": "(Olivares, 2015)",
+            "cita": "(Castillejos López, 2022)",
             "entradas": [
               13
             ],
             "nota": ""
           },
           {
-            "cita": "(Paucar y Lozano, 2023)",
+            "cita": "(Chan y Hu, 2023)",
             "entradas": [
               14
             ],
             "nota": ""
           },
           {
-            "cita": "(Quiroz y Neyra, 2021)",
+            "cita": "(Chan y Hu, 2023)",
             "entradas": [
               15
             ],
             "nota": ""
           },
           {
-            "cita": "(Rahayu y Day, 2014)",
+            "cita": "(Dijkman et al., 2015)",
             "entradas": [
               16
             ],
             "nota": ""
           },
           {
-            "cita": "(Saavedra, 2021)",
+            "cita": "(Dijkman y Rahayu, 2021)",
             "entradas": [
               17
             ],
             "nota": ""
           },
           {
-            "cita": "(Saz-Pérez y Pizà-Mir, 2023)",
+            "cita": "(Huamaní y Ccori, 2022)",
             "entradas": [
               18
             ],
             "nota": ""
           },
           {
-            "cita": "(Syed et al., 2025)",
+            "cita": "(Mendívil et al., 2020)",
             "entradas": [
               19
             ],
             "nota": ""
           },
           {
-            "cita": "(Valdivia, 2022)",
+            "cita": "(Olivares, 2015)",
             "entradas": [
               20
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Pasapera Ramírez, 2022)",
+            "entradas": [
+              21
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Patma et al., 2020)",
+            "entradas": [
+              22
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Paucar y Lozano, 2023)",
+            "entradas": [
+              23
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Pizà-Mir y Carrasco Rodríguez, 2024)",
+            "entradas": [
+              24
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Quiroz y Neyra, 2021)",
+            "entradas": [
+              25
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Rahayu y Day, 2014)",
+            "entradas": [
+              26
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Saavedra, 2021)",
+            "entradas": [
+              28
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Saz-Pérez y Pizà-Mir, 2023)",
+            "entradas": [
+              29
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Syed et al., 2025)",
+            "entradas": [
+              30
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Syed et al., 2024)",
+            "entradas": [
+              31
+            ],
+            "nota": ""
+          },
+          {
+            "cita": "(Valdivia, 2022)",
+            "entradas": [
+              32
             ],
             "nota": ""
           },
@@ -1153,7 +1857,7 @@
           "(Castañeda, 2019)"
         ],
         "entradas_no_citadas": [
-          5
+          27
         ]
       }
     }
