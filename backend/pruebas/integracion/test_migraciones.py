@@ -603,3 +603,38 @@ def test_la_migracion_0015_agrega_la_explicacion_de_discrepancias(base_vacia: st
     _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
     with pytest.raises(RuntimeError, match="congelada"):
         command.upgrade(cfg, "0015")
+
+
+def test_la_migracion_0016_agrega_la_instruccion_de_estructura(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0016")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones == {
+        "suficiencia": "v1",
+        "evidencia": "v1",
+        "referencias": "v1",
+        "estructura": "v1",
+    }
+    command.downgrade(cfg, "0015")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones == {"suficiencia": "v1", "evidencia": "v1", "referencias": "v1"}
+
+
+def test_la_migracion_0016_crea_una_version_nueva_si_la_1_esta_en_uso(base_vacia: str) -> None:
+    """Base con solicitudes (como la de desarrollo): no toca la versión 1 (RNF-21)."""
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0015")
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true")
+    command.upgrade(cfg, "0016")
+    filas = consultar(
+        base_vacia,
+        "SELECT numero_version, vigente, parametros -> 'versiones_instrucciones' ? 'estructura'"
+        " FROM configuracion ORDER BY numero_version",
+    )
+    assert filas == [(1, False, False), (2, True, True)]
+    command.downgrade(cfg, "0015")
+    assert consultar(base_vacia, "SELECT numero_version, vigente FROM configuracion") == [(1, True)]

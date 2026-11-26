@@ -30,6 +30,14 @@ class RepositorioColeccionesInvestigador:
         )
         return resultado.scalar_one_or_none()
 
+    async def guias(self, contexto: ContextoAcceso) -> Coleccion | None:
+        """La colección de guías, única y compartida (T22)."""
+        contexto.exigir_investigador()
+        resultado = await self._sesion.execute(
+            select(Coleccion).where(Coleccion.tipo == TipoColeccion.GUIAS).limit(1)
+        )
+        return resultado.scalar_one_or_none()
+
     async def listar(self, contexto: ContextoAcceso) -> Sequence[Coleccion]:
         """Colecciones compartidas (guías y científicas); las personales se ven por caso."""
         contexto.exigir_investigador()

@@ -52,7 +52,11 @@ async def caso_propio(contexto: ContextoCaso, unidad: Unidad) -> CasoPropio:
     )
 
 
-TIPOS_CON_PANTALLA = (TipoSolicitud.BUSQUEDA_EVIDENCIA, TipoSolicitud.VERIFICACION_REFERENCIAS)
+TIPOS_CON_PANTALLA = (
+    TipoSolicitud.BUSQUEDA_EVIDENCIA,
+    TipoSolicitud.VERIFICACION_REFERENCIAS,
+    TipoSolicitud.REVISION_ESTRUCTURA,
+)
 
 
 class SolicitudResumen(BaseModel):

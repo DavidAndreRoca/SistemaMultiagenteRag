@@ -277,6 +277,48 @@
         "title": "CasoVista",
         "type": "object"
       },
+      "CitaGuia": {
+        "properties": {
+          "apartado": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apartado"
+          },
+          "guia": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Guia"
+          },
+          "identificador": {
+            "title": "Identificador",
+            "type": "string"
+          },
+          "texto": {
+            "title": "Texto",
+            "type": "string"
+          }
+        },
+        "required": [
+          "identificador",
+          "texto",
+          "guia",
+          "apartado"
+        ],
+        "title": "CitaGuia",
+        "type": "object"
+      },
       "CitaVista": {
         "properties": {
           "acceso_abierto": {
@@ -872,6 +914,52 @@
         "title": "FuenteVista",
         "type": "object"
       },
+      "HallazgoVista": {
+        "properties": {
+          "citas": {
+            "items": {
+              "$ref": "#/components/schemas/CitaGuia"
+            },
+            "title": "Citas",
+            "type": "array"
+          },
+          "descripcion": {
+            "title": "Descripcion",
+            "type": "string"
+          },
+          "indicador": {
+            "title": "Indicador",
+            "type": "string"
+          },
+          "indicador_nombre": {
+            "title": "Indicador Nombre",
+            "type": "string"
+          },
+          "recomendacion": {
+            "title": "Recomendacion",
+            "type": "string"
+          },
+          "severidad": {
+            "title": "Severidad",
+            "type": "string"
+          },
+          "ubicacion": {
+            "title": "Ubicacion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "indicador",
+          "indicador_nombre",
+          "ubicacion",
+          "descripcion",
+          "severidad",
+          "recomendacion",
+          "citas"
+        ],
+        "title": "HallazgoVista",
+        "type": "object"
+      },
       "HitoVista": {
         "properties": {
           "codigo": {
@@ -1237,6 +1325,21 @@
           "es_titulo"
         ],
         "title": "ParrafoVista",
+        "type": "object"
+      },
+      "PedidoEstructura": {
+        "properties": {
+          "seccion_id": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Seccion Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "seccion_id"
+        ],
+        "title": "PedidoEstructura",
         "type": "object"
       },
       "PedidoEvidencia": {
@@ -1714,6 +1817,29 @@
         "title": "Seccion",
         "type": "object"
       },
+      "SeccionRevisable": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "palabras": {
+            "title": "Palabras",
+            "type": "integer"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "titulo",
+          "palabras"
+        ],
+        "title": "SeccionRevisable",
+        "type": "object"
+      },
       "SolicitudCambioContrasena": {
         "properties": {
           "contrasena_actual": {
@@ -1781,6 +1907,30 @@
           "tema"
         ],
         "title": "SolicitudColeccion",
+        "type": "object"
+      },
+      "SolicitudEstructura": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudEstructura",
         "type": "object"
       },
       "SolicitudEvidencia": {
@@ -2103,6 +2253,147 @@
           "palabras"
         ],
         "title": "VersionResumen",
+        "type": "object"
+      },
+      "VistaEstructura": {
+        "properties": {
+          "abstencion": {
+            "title": "Abstencion",
+            "type": "boolean"
+          },
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fortalezas": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fortalezas",
+            "type": "array"
+          },
+          "hallazgos": {
+            "items": {
+              "$ref": "#/components/schemas/HallazgoVista"
+            },
+            "title": "Hallazgos",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "notas_para_el_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notas Para El Estudiante",
+            "type": "array"
+          },
+          "seccion_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion Id"
+          },
+          "seccion_titulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion Titulo"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "seccion_id",
+          "seccion_titulo",
+          "abstencion",
+          "aviso",
+          "etiqueta",
+          "hallazgos",
+          "fortalezas",
+          "notas_para_el_estudiante",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaEstructura",
         "type": "object"
       },
       "VistaEvidencia": {
@@ -2567,6 +2858,251 @@
         "summary": "Datos del propio caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/estructura": {
+      "post": {
+        "operationId": "pedir_estructura_caso_estructura_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoEstructura"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudEstructura"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir el diagnóstico de estructura y coherencia de una sección",
+        "tags": [
+          "estructura"
+        ]
+      }
+    },
+    "/caso/estructura/secciones": {
+      "get": {
+        "operationId": "secciones_caso_estructura_secciones_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeccionRevisable"
+                  },
+                  "title": "Response Secciones Caso Estructura Secciones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Secciones de la versión vigente que se pueden revisar",
+        "tags": [
+          "estructura"
+        ]
+      }
+    },
+    "/caso/estructura/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_estructura_caso_estructura__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaEstructura"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance y resultado de un diagnóstico de estructura",
+        "tags": [
+          "estructura"
         ]
       }
     },

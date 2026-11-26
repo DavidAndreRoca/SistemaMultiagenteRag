@@ -6,6 +6,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import { Marco } from "./componentes/Marco";
 import { CambiarContrasena } from "./paginas/CambiarContrasena";
 import { Entrar } from "./paginas/Entrar";
+import { Estructura } from "./paginas/Estructura";
 import { Evidencia } from "./paginas/Evidencia";
 import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
@@ -87,6 +88,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Evidencia />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/estructura"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Estructura />
           </Protegida>
         }
       />

@@ -62,6 +62,16 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         admite_propio=frozenset({404}),
     ),
     ("GET", "/caso/solicitudes"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Estructura y coherencia (T23). Sin servicio de modelos en las pruebas responde 503.
+    ("GET", "/caso/estructura/secciones"): Entrada(Politica.CASO, datos_de_caso=True),
+    ("POST", "/caso/estructura"): Entrada(
+        Politica.CASO, cuerpo={"seccion_id": "s1"}, admite_propio=frozenset({503})
+    ),
+    ("GET", "/caso/estructura/{solicitud_id}"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/estructura/{ID_FICTICIO}",
+        admite_propio=frozenset({404}),
+    ),
     # Verificación de referencias (T20). Sin GROBID en las pruebas responde 503.
     ("POST", "/caso/referencias"): Entrada(Politica.CASO, admite_propio=frozenset({503})),
     ("GET", "/caso/referencias/{solicitud_id}"): Entrada(

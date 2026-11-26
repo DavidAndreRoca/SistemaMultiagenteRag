@@ -31,7 +31,8 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T20 (F3)** | Agente D4: verificación de referencias | **Integrada en `main`** (solicitud de cambio #16, apartado 23.7), verificada con servicios simulados y con GROBID, Crossref y OpenAlex reales; criterios cumplidos (apartado 23). El conjunto de prueba está en borrador, a revisar por el equipo |
 | **Prototipo** | Recorrido demostrable de punta a punta | **Hecho en local** (apartado 24): `scripts/prototipo.ps1` y guion en `docs/demo/guion-prototipo.md`. Datos de demostración provisionales, sin revisión humana |
 | T21 | Ensayo de despliegue en Oracle | Pospuesta: la demostración es local (apartado 24) |
-| T22 a T33 | Guías, agentes D1 a D3, orquestador, verificador, decisiones, aportes e historial | Reactivadas, en curso (apartado 24) |
+| **T22 y T23** | Corpus de guías y agente de estructura (D1) | **Hechas** (apartado 25), con guías provisionales |
+| T24 a T33 | Plan de tarea, agentes D2 y D3, orquestador, verificador, decisiones, aportes e historial | Reactivadas, pendientes |
 | T34 en adelante | | No iniciadas; T34 y T38 al final, con revisión del equipo |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
@@ -1909,4 +1910,33 @@ Ninguna fase de la hoja de ruta cubre el diseño visual: T13 dejó la interfaz b
 - **Pruebas:** extremo a extremo con Playwright y revisión automática de accesibilidad, 7 de 7; 24 pruebas de la interfaz, lint, tipos y compilación.
 - **Capturas:** antes y después en `docs/demo/capturas/` (`frontend/capturas/`, que no forma parte de las pruebas).
 - **Provisional, sin revisión humana:** la descripción del sistema en el inicio de sesión y los textos de las tarjetas de acciones.
+
+**Integración del diseño visual:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#19, CI verde (ejecución 45876704509, 9 de 9 trabajos), integrada en `main`.
+
+## 25. Bloque 2: T22 (corpus de guías) y T23 (agente de estructura y coherencia)
+
+Rama `t22-t23-guias-y-estructura`. Decisión: `docs/decisiones/T22-T23-guias-y-estructura.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **T22:**
+  - comando `python -m app.corpus.guias`, con segmentación por apartado y la sección registrada;
+  - la rúbrica se rechaza por nombre y por huella;
+  - en la base de desarrollo quedan indexadas 4 guías provisionales, con 28 fragmentos;
+  - las 4 consultas de prueba, una por tipo de guía, traen primero el apartado esperado;
+  - pruebas: 6 unitarias y 2 de integración (indexación sin duplicar, recuperación solo para D1 a D3 y rechazo de la rúbrica).
+- **T23:**
+  - el agente `AgenteEstructura`, con la instrucción `estructura/v1`;
+  - la comprobación 2 de no reescritura (CP-08), con 4 pruebas unitarias;
+  - la atención por sección, las rutas `/caso/estructura` y la pantalla `/panel/estructura`; la tarjeta del panel ya está activa;
+  - la migración 0016, que en la base de desarrollo creó la versión 2 de la configuración porque la 1 ya la usaban solicitudes (RNF-21).
+  - **Pruebas:**
+    - 5 de integración: secciones revisables, CP-08 con orden por severidad y criterios, reescritura "Con advertencias", abstención sin guías y aislamiento;
+    - 2 de la migración y 1 de la interfaz;
+    - extremo a extremo 8 de 8, con accesibilidad.
+  - **Modelo real:** con la introducción del borrador de demostración, 3 hallazgos con citas a las guías y comprobaciones superadas, en 20 s.
+- **Provisional, sin revisión humana:**
+  - las 4 guías de `backend/guias/provisionales/`;
+  - la instrucción `estructura/v1`;
+  - los textos de la pantalla;
+  - la única prueba con el modelo real, sobre el borrador de demostración.
+- **Pendiente:** el conjunto de borradores con errores estructurales y su clave, que arma el asistente antes de T34, y el reintento, en T30.
 

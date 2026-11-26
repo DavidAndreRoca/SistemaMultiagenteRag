@@ -265,6 +265,17 @@ function ListaDeVersiones({ versiones }: { versiones: Version[] }) {
   );
 }
 
+const PANTALLAS: Record<string, string> = {
+  busqueda_evidencia: "/panel/evidencia",
+  verificacion_referencias: "/panel/referencias",
+  revision_estructura: "/panel/estructura",
+};
+const NOMBRES_PEDIDO: Record<string, string> = {
+  busqueda_evidencia: "Búsqueda de evidencia",
+  verificacion_referencias: "Verificación de referencias",
+  revision_estructura: "Revisión de estructura y coherencia",
+};
+
 const ESTADOS_SOLICITUD: Record<string, string> = {
   recibida: "En curso",
   asignada: "En curso",
@@ -278,15 +289,12 @@ const ESTADOS_SOLICITUD: Record<string, string> = {
 function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }) {
   return (
     <section aria-labelledby="titulo-solicitudes">
-      <h2 id="titulo-solicitudes">Sus búsquedas y verificaciones</h2>
+      <h2 id="titulo-solicitudes">Sus solicitudes</h2>
       {solicitudes.length === 0 ? (
-        <p className="vacio">Todavía no pidió evidencia ni verificó sus referencias.</p>
+        <p className="vacio">Todavía no hizo ninguna solicitud.</p>
       ) : (
         <table className="tabla">
-          <caption className="oculto">
-            Búsquedas de evidencia y verificaciones de referencias, de la más reciente a la más
-            antigua
-          </caption>
+          <caption className="oculto">Sus solicitudes, de la más reciente a la más antigua</caption>
           <thead>
             <tr>
               <th scope="col">Pedido</th>
@@ -298,13 +306,13 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
           <tbody>
             {solicitudes.map((solicitud) => {
               const evidencia = solicitud.tipo === "busqueda_evidencia";
-              const pantalla = evidencia ? "/panel/evidencia" : "/panel/referencias";
+              const pantalla = PANTALLAS[solicitud.tipo] ?? "/panel";
               return (
                 <tr key={solicitud.id}>
                   <th scope="row">
                     {evidencia
                       ? `Evidencia: ${solicitud.consulta ?? ""}`
-                      : "Verificación de referencias"}
+                      : (NOMBRES_PEDIDO[solicitud.tipo] ?? solicitud.tipo)}
                   </th>
                   <td>{fechaHora(solicitud.creada_en)}</td>
                   <td>
@@ -316,7 +324,7 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
                     <a href={`${pantalla}?solicitud=${solicitud.id}`}>
                       Ver resultado
                       <span className="oculto">
-                        {evidencia ? " de la búsqueda de evidencia" : " de la verificación"}
+                        {` de: ${NOMBRES_PEDIDO[solicitud.tipo] ?? solicitud.tipo}`}
                       </span>
                     </a>
                   </td>
@@ -352,6 +360,7 @@ const ACCIONES: Accion[] = [
   {
     titulo: "Estructura y coherencia",
     descripcion: "Diagnóstico de una sección según las guías del programa.",
+    enlace: { href: "/panel/estructura", texto: "Revisar la estructura de una sección" },
   },
   {
     titulo: "Metodología",

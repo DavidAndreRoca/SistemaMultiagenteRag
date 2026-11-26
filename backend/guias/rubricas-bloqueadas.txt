@@ -1,0 +1,3 @@
+# Huellas SHA-256 de archivos de la rúbrica que nunca se indexan (RN-11, T22).
+# Una por línea. Además, cualquier archivo o título con la palabra "rúbrica" se rechaza.
+# Para registrar el archivo de la rúbrica del programa: sha256sum ARCHIVO y pegar aquí la huella.

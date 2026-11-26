@@ -19,6 +19,8 @@ COPY alembic.ini ./
 COPY migraciones ./migraciones
 # Instrucciones versionadas de los agentes (T17): /app/instrucciones/<agente>/<version>.md
 COPY instrucciones ./instrucciones
+# Guías del corpus (T22) y huellas de la rúbrica que nunca se indexa (RN-11)
+COPY guias ./guias
 
 # --- Ejecución (desarrollo y producción) ---
 FROM base AS ejecucion
