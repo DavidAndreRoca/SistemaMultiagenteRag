@@ -30,7 +30,9 @@ Registro del avance **verificado** frente a `docs/HOJA-DE-RUTA-TECNICA-DESARROLL
 | **T19 (F3)** | Agente D4: búsqueda de evidencia | **Integrada en `main`** (solicitud de cambio #15, apartado 22.7), verificada con modelo simulado y una ejecución con Groq; criterios cumplidos (apartado 22). Los conjuntos del equipo siguen pendientes |
 | **T20 (F3)** | Agente D4: verificación de referencias | **Integrada en `main`** (solicitud de cambio #16, apartado 23.7), verificada con servicios simulados y con GROBID, Crossref y OpenAlex reales; criterios cumplidos (apartado 23). El conjunto de prueba está en borrador, a revisar por el equipo |
 | **Prototipo** | Recorrido demostrable de punta a punta | **Hecho en local** (apartado 24): `scripts/prototipo.ps1` y guion en `docs/demo/guion-prototipo.md`. Datos de demostración provisionales, sin revisión humana |
-| T21 en adelante | | Pospuestas hasta después de la presentación (apartado 24) |
+| T21 | Ensayo de despliegue en Oracle | Pospuesta: la demostración es local (apartado 24) |
+| T22 a T33 | Guías, agentes D1 a D3, orquestador, verificador, decisiones, aportes e historial | Reactivadas, en curso (apartado 24) |
+| T34 en adelante | | No iniciadas; T34 y T38 al final, con revisión del equipo |
 
 **Interpretación de las fases:** la hoja de ruta (apartado 5) hace corresponder F1 con T01 a T03 y F2 con T04 a T07. T00 (F0) es administrativa y no la puede hacer el asistente. El detalle de la Fase 2 está en el apartado 10.
 
@@ -1853,12 +1855,10 @@ El equipo pidió priorizar un prototipo demostrable de punta a punta para el doc
 
 **Fases para el recorrido:**
 - **Imprescindibles, ya hechas:** T03 a T20 (autenticación, casos, borradores y secciones, corpus, recuperación, modelos, agente D4 de evidencia y de referencias, interfaz).
-- **Pospuestas hasta después de la presentación:**
-  - T21 (ensayo en Oracle: la demostración es local);
-  - T22 a T27 (guías y agentes D1, D2 y D3);
-  - T28 a T33 (orquestador, verificador completo, decisiones, aportes e historial);
-  - T34 y T38 (calibración y mediciones finales);
-  - T35 a T37 y T39 a T44.
+- **Corrección del equipo (26 de noviembre de 2026):** el cambio de plan omite las revisiones humanas, no recorta el sistema.
+  - **Reactivadas:** T22 a T33, en el orden de la hoja de ruta, empezando por lo de más valor visible en la demostración.
+  - **Siguen pospuestas:** T21 (ensayo en Oracle; la demostración es local), T34 y T38 (mediciones finales, al final y con revisión del equipo) y T35 a T37 y T39 a T44.
+  - **Pantalla:** mientras un agente no esté completo, el panel lo muestra como "Pendiente", sin enlace.
 
 **Prototipo** (`scripts/prototipo.ps1`, `docker-compose.demo.yml`, guion en `docs/demo/guion-prototipo.md`):
 - Usa la base de desarrollo con el corpus provisional (`sma_rag`), los servicios compartidos y la interfaz en http://127.0.0.1:5173.
@@ -1891,3 +1891,22 @@ El equipo pidió priorizar un prototipo demostrable de punta a punta para el doc
 **Integración:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#17, CI verde (ejecución 45870830391, 9 de 9 trabajos), integrada en `main`.
 
 **Lugar de la presentación (equipo, 26 de noviembre de 2026):** por ahora desde la computadora local con `scripts/prototipo.ps1`; el servidor (T21) sigue pospuesto.
+
+**Integración de la lista de solicitudes:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#18, CI verde (ejecución 45873636447, 9 de 9 trabajos), integrada en `main`.
+
+### 24.1. Diseño visual del prototipo (cambio visual sin impacto funcional)
+
+Ninguna fase de la hoja de ruta cubre el diseño visual: T13 dejó la interfaz base, T33 completa el contenido del panel y T41 endurece la accesibilidad. A pedido del equipo, se hizo como mejora acotada.
+
+- **Qué cambia:**
+  - **Hoja de estilos:** paleta con variables (azul marino principal, verde azulado de acento, fondo gris claro, estados con texto sobre fondo claro), tipografía del sistema con jerarquía de títulos y espaciado uniforme.
+  - **Componentes:** tarjetas para las secciones e insignias de estado con palabra, no solo color.
+  - **Encabezado:** oscuro, con un ícono simple (`Logo.tsx`, decorativo) y el nombre del sistema, que no cambia.
+  - **Inicio de sesión:** centrado, con el ícono, el nombre y una descripción breve.
+  - **Panel:** "Qué puede pedir" con tarjetas. Evidencia y referencias están activas; estructura, metodología y redacción figuran como "Pendiente".
+- **Qué no cambia:** la lógica, las rutas, los datos y los textos que usan las pruebas.
+- **Accesibilidad:** contraste AA en todos los textos, foco visible (amarillo sobre el encabezado oscuro) y el mismo orden de tabulación.
+- **Pruebas:** extremo a extremo con Playwright y revisión automática de accesibilidad, 7 de 7; 24 pruebas de la interfaz, lint, tipos y compilación.
+- **Capturas:** antes y después en `docs/demo/capturas/` (`frontend/capturas/`, que no forma parte de las pruebas).
+- **Provisional, sin revisión humana:** la descripción del sistema en el inicio de sesión y los textos de las tarjetas de acciones.
+

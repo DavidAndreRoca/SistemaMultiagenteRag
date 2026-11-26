@@ -66,12 +66,7 @@ export function PanelCaso() {
       ) : (
         <>
           <DatosDelCaso caso={caso} />
-          <p>
-            <a href="/panel/evidencia">Buscar evidencia en las fuentes de su tema</a>
-          </p>
-          <p>
-            <a href="/panel/referencias">Verificar las referencias de su borrador</a>
-          </p>
+          <Acciones />
           <ListaDeSolicitudes solicitudes={solicitudes} />
           <VigentesPorHito caso={caso} versiones={versiones} />
           <CargarVersion caso={caso} alCargar={actualizar} />
@@ -232,7 +227,7 @@ function ListaDeVersiones({ versiones }: { versiones: Version[] }) {
     <section aria-labelledby="titulo-versiones">
       <h2 id="titulo-versiones">Versiones cargadas</h2>
       {versiones.length === 0 ? (
-        <p>Todavía no hay versiones.</p>
+        <p className="vacio">Todavía no hay versiones.</p>
       ) : (
         <table className="tabla">
           <caption className="oculto">
@@ -252,7 +247,13 @@ function ListaDeVersiones({ versiones }: { versiones: Version[] }) {
               <tr key={version.id}>
                 <th scope="row">{version.nombre_hito ?? version.hito}</th>
                 <td>{fechaHora(version.cargada_en)}</td>
-                <td>{version.vigente ? "Vigente" : "Anterior"}</td>
+                <td>
+                  {version.vigente ? (
+                    <span className="insignia insignia--entregada">Vigente</span>
+                  ) : (
+                    "Anterior"
+                  )}
+                </td>
                 <td>{numero(version.palabras)}</td>
                 <td>{tamano(version.tamano_bytes)}</td>
               </tr>
@@ -279,7 +280,7 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
     <section aria-labelledby="titulo-solicitudes">
       <h2 id="titulo-solicitudes">Sus búsquedas y verificaciones</h2>
       {solicitudes.length === 0 ? (
-        <p>Todavía no pidió evidencia ni verificó sus referencias.</p>
+        <p className="vacio">Todavía no pidió evidencia ni verificó sus referencias.</p>
       ) : (
         <table className="tabla">
           <caption className="oculto">
@@ -306,7 +307,11 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
                       : "Verificación de referencias"}
                   </th>
                   <td>{fechaHora(solicitud.creada_en)}</td>
-                  <td>{ESTADOS_SOLICITUD[solicitud.estado] ?? solicitud.estado}</td>
+                  <td>
+                    <span className={`insignia insignia--${solicitud.estado}`}>
+                      {ESTADOS_SOLICITUD[solicitud.estado] ?? solicitud.estado}
+                    </span>
+                  </td>
                   <td>
                     <a href={`${pantalla}?solicitud=${solicitud.id}`}>
                       Ver resultado
@@ -321,6 +326,62 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
           </tbody>
         </table>
       )}
+    </section>
+  );
+}
+
+interface Accion {
+  titulo: string;
+  descripcion: string;
+  enlace?: { href: string; texto: string };
+}
+
+// Lo que el caso puede pedir. Los agentes aún no implementados figuran como pendientes, sin
+// enlace (prototipo, 26-11-2026).
+const ACCIONES: Accion[] = [
+  {
+    titulo: "Evidencia",
+    descripcion: "Respalde una afirmación o responda una pregunta con fragmentos citados.",
+    enlace: { href: "/panel/evidencia", texto: "Buscar evidencia en las fuentes de su tema" },
+  },
+  {
+    titulo: "Referencias",
+    descripcion: "Compruebe cada referencia en las bases bibliográficas y cruce sus citas.",
+    enlace: { href: "/panel/referencias", texto: "Verificar las referencias de su borrador" },
+  },
+  {
+    titulo: "Estructura y coherencia",
+    descripcion: "Diagnóstico de una sección según las guías del programa.",
+  },
+  {
+    titulo: "Metodología",
+    descripcion: "Diagnóstico del diseño, la muestra y el análisis.",
+  },
+  {
+    titulo: "Redacción",
+    descripcion: "Propuesta acotada para un párrafo, con cada cambio justificado.",
+  },
+];
+
+function Acciones() {
+  return (
+    <section aria-labelledby="titulo-acciones" className="sin-tarjeta">
+      <h2 id="titulo-acciones">Qué puede pedir</h2>
+      <ul className="acciones">
+        {ACCIONES.map((accion) => (
+          <li key={accion.titulo} className={accion.enlace ? "accion" : "accion accion--pendiente"}>
+            <h3>{accion.titulo}</h3>
+            <p>{accion.descripcion}</p>
+            {accion.enlace ? (
+              <a className="accion__enlace" href={accion.enlace.href}>
+                {accion.enlace.texto}
+              </a>
+            ) : (
+              <span className="insignia insignia--pendiente">Pendiente</span>
+            )}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
