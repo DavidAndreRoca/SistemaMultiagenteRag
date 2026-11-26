@@ -61,6 +61,7 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         ejemplo=f"/caso/evidencias/{ID_FICTICIO}",
         admite_propio=frozenset({404}),
     ),
+    ("GET", "/caso/solicitudes"): Entrada(Politica.CASO, datos_de_caso=True),
     # Verificación de referencias (T20). Sin GROBID en las pruebas responde 503.
     ("POST", "/caso/referencias"): Entrada(Politica.CASO, admite_propio=frozenset({503})),
     ("GET", "/caso/referencias/{solicitud_id}"): Entrada(

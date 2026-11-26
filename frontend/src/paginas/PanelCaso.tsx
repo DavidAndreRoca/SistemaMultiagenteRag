@@ -18,23 +18,30 @@ type Caso = Esquemas["CasoPropio"];
 type Version = Esquemas["VersionResumen"];
 type Carga = Esquemas["ResultadoCarga"];
 type CuerpoCarga = Esquemas["Body_cargar_version_caso_versiones_post"];
+type SolicitudResumen = Esquemas["SolicitudResumen"];
 
 const TIPO_DOCX = ".docx";
 
 export function PanelCaso() {
   const [caso, setCaso] = useState<Caso | null>(null);
   const [versiones, setVersiones] = useState<Version[] | null>(null);
+  const [solicitudes, setSolicitudes] = useState<SolicitudResumen[]>([]);
   const [errorCarga, setErrorCarga] = useState<unknown>(null);
 
   const [ronda, setRonda] = useState(0);
 
   useEffect(() => {
     let vigente = true;
-    Promise.all([exigir(api.GET("/caso")), exigir(api.GET("/caso/versiones"))])
-      .then(([datos, lista]) => {
+    Promise.all([
+      exigir(api.GET("/caso")),
+      exigir(api.GET("/caso/versiones")),
+      exigir(api.GET("/caso/solicitudes")),
+    ])
+      .then(([datos, lista, pedidas]) => {
         if (!vigente) return;
         setCaso(datos);
         setVersiones(lista);
+        setSolicitudes(pedidas);
         setErrorCarga(null);
       })
       .catch((fallo: unknown) => {
@@ -65,6 +72,7 @@ export function PanelCaso() {
           <p>
             <a href="/panel/referencias">Verificar las referencias de su borrador</a>
           </p>
+          <ListaDeSolicitudes solicitudes={solicitudes} />
           <VigentesPorHito caso={caso} versiones={versiones} />
           <CargarVersion caso={caso} alCargar={actualizar} />
           <ListaDeVersiones versiones={versiones} />
@@ -249,6 +257,67 @@ function ListaDeVersiones({ versiones }: { versiones: Version[] }) {
                 <td>{tamano(version.tamano_bytes)}</td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
+const ESTADOS_SOLICITUD: Record<string, string> = {
+  recibida: "En curso",
+  asignada: "En curso",
+  recuperando: "En curso",
+  generando: "En curso",
+  entregada: "Entregada",
+  no_atendida: "No atendida",
+};
+
+/** Búsquedas de evidencia y verificaciones de referencias, para volver a abrir su resultado. */
+function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }) {
+  return (
+    <section aria-labelledby="titulo-solicitudes">
+      <h2 id="titulo-solicitudes">Sus búsquedas y verificaciones</h2>
+      {solicitudes.length === 0 ? (
+        <p>Todavía no pidió evidencia ni verificó sus referencias.</p>
+      ) : (
+        <table className="tabla">
+          <caption className="oculto">
+            Búsquedas de evidencia y verificaciones de referencias, de la más reciente a la más
+            antigua
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Pedido</th>
+              <th scope="col">Fecha y hora</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Resultado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {solicitudes.map((solicitud) => {
+              const evidencia = solicitud.tipo === "busqueda_evidencia";
+              const pantalla = evidencia ? "/panel/evidencia" : "/panel/referencias";
+              return (
+                <tr key={solicitud.id}>
+                  <th scope="row">
+                    {evidencia
+                      ? `Evidencia: ${solicitud.consulta ?? ""}`
+                      : "Verificación de referencias"}
+                  </th>
+                  <td>{fechaHora(solicitud.creada_en)}</td>
+                  <td>{ESTADOS_SOLICITUD[solicitud.estado] ?? solicitud.estado}</td>
+                  <td>
+                    <a href={`${pantalla}?solicitud=${solicitud.id}`}>
+                      Ver resultado
+                      <span className="oculto">
+                        {evidencia ? " de la búsqueda de evidencia" : " de la verificación"}
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}

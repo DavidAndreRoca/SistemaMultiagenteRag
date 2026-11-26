@@ -1847,6 +1847,59 @@
         "title": "SolicitudNorma",
         "type": "object"
       },
+      "SolicitudResumen": {
+        "properties": {
+          "consulta": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consulta"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoSolicitud"
+          }
+        },
+        "required": [
+          "id",
+          "tipo",
+          "estado",
+          "consulta",
+          "creada_en",
+          "entregada_en"
+        ],
+        "title": "SolicitudResumen",
+        "type": "object"
+      },
       "SolicitudVerificacion": {
         "properties": {
           "creada_en": {
@@ -1886,6 +1939,19 @@
           "personal"
         ],
         "title": "TipoColeccion",
+        "type": "string"
+      },
+      "TipoSolicitud": {
+        "description": "Los seis tipos de solicitud (insumos de T04, tabla 3) y el agente que los atiende.",
+        "enum": [
+          "revision_estructura",
+          "plan_tarea",
+          "revision_metodologica",
+          "propuesta_redaccion",
+          "busqueda_evidencia",
+          "verificacion_referencias"
+        ],
+        "title": "TipoSolicitud",
         "type": "string"
       },
       "TituloMarcado": {
@@ -2833,6 +2899,81 @@
         "summary": "Avance e informe de una verificación de referencias",
         "tags": [
           "referencias"
+        ]
+      }
+    },
+    "/caso/solicitudes": {
+      "get": {
+        "operationId": "solicitudes_del_caso_caso_solicitudes_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SolicitudResumen"
+                  },
+                  "title": "Response Solicitudes Del Caso Caso Solicitudes Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Búsquedas de evidencia y verificaciones de referencias del caso",
+        "tags": [
+          "caso"
         ]
       }
     },

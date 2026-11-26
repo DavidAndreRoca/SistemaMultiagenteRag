@@ -70,7 +70,10 @@ function vista(cambios: Record<string, unknown>) {
   };
 }
 
+/** El GET devuelve `get` o, si es una lista, cada elemento en orden (el último se repite). */
 function apiFicticia(post: Response, get: unknown, llamadas: Request[] = []) {
+  const respuestas = Array.isArray(get) ? get : [get];
+  let consultas = 0;
   return vi.fn((peticion: Request) => {
     llamadas.push(peticion);
     const ruta = new URL(peticion.url).pathname.replace(/^\/api/, "");
@@ -78,7 +81,11 @@ function apiFicticia(post: Response, get: unknown, llamadas: Request[] = []) {
     if (ruta === "/caso/evidencias" && peticion.method === "POST") {
       return Promise.resolve(post.clone());
     }
-    if (ruta === `/caso/evidencias/${SOLICITUD}`) return Promise.resolve(respuestaJson(get));
+    if (ruta === `/caso/evidencias/${SOLICITUD}`) {
+      const actual: unknown = respuestas[Math.min(consultas, respuestas.length - 1)];
+      consultas += 1;
+      return Promise.resolve(respuestaJson(actual));
+    }
     return Promise.resolve(respuestaJson({ codigo: "no_existe", mensaje: "No existe." }, 404));
   });
 }
@@ -136,7 +143,8 @@ describe("búsqueda de evidencia", () => {
         },
       ],
     });
-    vi.stubGlobal("fetch", apiFicticia(aceptada(), conCerrada, llamadas));
+    const enCurso = vista({ estado: "recuperando", respuesta: [], fuentes: [] });
+    vi.stubGlobal("fetch", apiFicticia(aceptada(), [enCurso, conCerrada], llamadas));
     const usuario = await buscar("Quiero sustentar que la tutoría entre pares reduce la ansiedad");
     expect(await screen.findByText(/Buscando evidencia/)).toBeInTheDocument();
     expect(
@@ -197,5 +205,24 @@ describe("búsqueda de evidencia", () => {
     expect(await screen.findByRole("alert", {}, { timeout: 5000 })).toHaveTextContent(
       "La búsqueda no pudo atenderse.",
     );
+  }, 10000);
+
+  it("abre un resultado guardado desde la dirección, sin volver a pedirlo", async () => {
+    const llamadas: Request[] = [];
+    vi.stubGlobal("fetch", apiFicticia(aceptada(), vista({}), llamadas));
+    render(
+      <MemoryRouter initialEntries={[`/panel/evidencia?solicitud=${SOLICITUD}`]}>
+        <ProveedorSesion>
+          <App />
+        </ProveedorSesion>
+      </MemoryRouter>,
+    );
+    expect(
+      await screen.findByRole("heading", { name: "Evidencia encontrada" }, { timeout: 5000 }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Consulta o afirmación" })).toHaveValue(
+      "Quiero sustentar que la tutoría entre pares reduce la ansiedad",
+    );
+    expect(llamadas.some((p) => p.method === "POST")).toBe(false);
   }, 10000);
 });

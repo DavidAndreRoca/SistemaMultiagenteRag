@@ -1,11 +1,19 @@
-"""Rutas del caso (A1). Toda lectura usa el contexto de la sesión."""
+"""Rutas del caso (A1). Toda lectura usa el contexto de la sesión.
+
+``GET /caso/solicitudes`` lista las búsquedas de evidencia y las verificaciones de
+referencias del caso para volver a abrir su resultado (prototipo, 26-11-2026; versión
+reducida del historial de T33).
+"""
 
 from __future__ import annotations
+
+import uuid
+from datetime import datetime
 
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.bd.enumeraciones import TipoAutoria
+from app.bd.enumeraciones import EstadoSolicitud, TipoAutoria, TipoSolicitud
 from app.casos.servicio import CasoInexistente
 from app.seguridad.dependencias import ContextoCaso, Unidad
 
@@ -42,3 +50,34 @@ async def caso_propio(contexto: ContextoCaso, unidad: Unidad) -> CasoPropio:
         norma_citacion=caso.norma_citacion,
         hitos=[HitoVista.model_validate(h.model_dump()) for h in parametros.hitos],
     )
+
+
+TIPOS_CON_PANTALLA = (TipoSolicitud.BUSQUEDA_EVIDENCIA, TipoSolicitud.VERIFICACION_REFERENCIAS)
+
+
+class SolicitudResumen(BaseModel):
+    id: uuid.UUID
+    tipo: TipoSolicitud
+    estado: EstadoSolicitud
+    consulta: str | None  # la del estudiante, en las búsquedas de evidencia
+    creada_en: datetime
+    entregada_en: datetime | None
+
+
+@router.get(
+    "/solicitudes",
+    response_model=list[SolicitudResumen],
+    summary="Búsquedas de evidencia y verificaciones de referencias del caso",
+)
+async def solicitudes_del_caso(contexto: ContextoCaso, unidad: Unidad) -> list[SolicitudResumen]:
+    return [
+        SolicitudResumen(
+            id=s.id,
+            tipo=s.tipo,
+            estado=s.estado,
+            consulta=s.alcance_ref if s.tipo is TipoSolicitud.BUSQUEDA_EVIDENCIA else None,
+            creada_en=s.creada_en,
+            entregada_en=s.entregada_en,
+        )
+        for s in await unidad.solicitudes.recientes(contexto, TIPOS_CON_PANTALLA)
+    ]

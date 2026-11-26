@@ -3,6 +3,7 @@
 // su colección personal y responde con afirmaciones citadas. Cada cita se despliega con el
 // fragmento, el documento, la sección, las páginas y el enlace de acceso abierto.
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 import { Form } from "react-aria-components";
 
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
@@ -40,7 +41,10 @@ export function Evidencia() {
   const [consulta, setConsulta] = useState("");
   const [error, setError] = useState<unknown>(null);
   const [vista, setVista] = useState<Vista | null>(null);
-  const [solicitud, setSolicitud] = useState<string | null>(null);
+  // La solicitud va en la dirección (?solicitud=...): el resultado sobrevive a una
+  // recarga y se puede abrir desde la lista del panel.
+  const [parametros, setParametros] = useSearchParams();
+  const [solicitud, setSolicitud] = useState<string | null>(parametros.get("solicitud"));
   const [enviando, setEnviando] = useState(false);
 
   const siguiendo = solicitud !== null && (vista === null || EN_CURSO.has(vista.estado));
@@ -48,19 +52,24 @@ export function Evidencia() {
   useEffect(() => {
     if (solicitud === null || !siguiendo) return;
     let vigente = true;
-    const espera = setTimeout(() => {
-      exigir(
-        api.GET("/caso/evidencias/{solicitud_id}", {
-          params: { path: { solicitud_id: solicitud } },
-        }),
-      )
-        .then((actual) => {
-          if (vigente) setVista(actual);
-        })
-        .catch((fallo: unknown) => {
-          if (vigente) setError(fallo);
-        });
-    }, ESPERA_AVANCE_MS);
+    const espera = setTimeout(
+      () => {
+        exigir(
+          api.GET("/caso/evidencias/{solicitud_id}", {
+            params: { path: { solicitud_id: solicitud } },
+          }),
+        )
+          .then((actual) => {
+            if (!vigente) return;
+            setVista(actual);
+            setConsulta((escrita) => escrita || actual.consulta);
+          })
+          .catch((fallo: unknown) => {
+            if (vigente) setError(fallo);
+          });
+      },
+      vista === null ? 0 : ESPERA_AVANCE_MS,
+    );
     return () => {
       vigente = false;
       clearTimeout(espera);
@@ -83,6 +92,7 @@ export function Evidencia() {
         api.POST("/caso/evidencias", { body: { consulta: consulta.trim() } }),
       );
       setSolicitud(nueva.id);
+      setParametros({ solicitud: nueva.id }, { replace: true });
     } catch (fallo) {
       setError(fallo);
     } finally {

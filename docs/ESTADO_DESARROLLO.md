@@ -1871,7 +1871,12 @@ El equipo pidió priorizar un prototipo demostrable de punta a punta para el doc
   - carga del borrador de demostración;
   - evidencia en 92 s, con 5 afirmaciones citadas y 3 fuentes de acceso abierto recomendadas;
   - verificación de referencias en unos 7 s, con 4 verificadas, 2 con discrepancias, 1 no localizada, la cita [8] sin entrada y la entrada [7] no citada, como se preparó.
-- **Limitación visible:** sin historial (T33), un resultado de evidencia solo se ve en la pestaña donde se pidió. El guion usa dos pestañas.
+- **Lista de solicitudes en el panel** (pedida por el equipo el 26 de noviembre de 2026; versión reducida del historial de T33):
+  - `GET /caso/solicitudes` lista las búsquedas de evidencia y las verificaciones del caso, sin las rechazadas;
+  - el panel muestra la tabla "Sus búsquedas y verificaciones" con "Ver resultado";
+  - las pantallas guardan la solicitud en la dirección (`?solicitud=...`), así un resultado sobrevive a una recarga y se abre desde la lista;
+  - una prueba de integración comprueba que otro caso no ve la lista (aislamiento), y la matriz incluye la ruta;
+  - comprobado en el navegador.
 
 **Conjuntos revisados por el equipo** (hojas entregadas el 26 de noviembre de 2026):
 - **T16:** 30 consultas (13 de la primera ronda y 17 de la segunda). Precisión contextual estricta, con las marcas del equipo por fragmento: 0,647; en 6 consultas ningún fragmento del contexto responde.
@@ -1882,3 +1887,7 @@ El equipo pidió priorizar un prototipo demostrable de punta a punta para el doc
 - la consulta del guion y los textos del guion;
 - la aplicación de los comentarios de las hojas: R-04 queda verificada pese al año ambiguo; en T16, las consultas nuevas sin documento de origen toman como origen su primer documento esperado;
 - la corrección de títulos del corpus desde Crossref.
+
+**Integración:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#17, CI verde (ejecución 45870830391, 9 de 9 trabajos), integrada en `main`.
+
+**Lugar de la presentación (equipo, 26 de noviembre de 2026):** por ahora desde la computadora local con `scripts/prototipo.ps1`; el servidor (T21) sigue pospuesto.

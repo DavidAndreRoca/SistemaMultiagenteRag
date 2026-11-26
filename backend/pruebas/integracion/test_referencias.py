@@ -296,3 +296,17 @@ async def test_si_el_modelo_falla_el_informe_sale_igual(
     vista = await verificacion.verificar(cliente, verificacion.atencion(modelo=cadena))
     assert vista["estado"] == "entregada" and AVISO_SIN_EXPLICACIONES in vista["avisos"]
     assert len(vista["referencias"]) == 11
+
+
+async def test_la_lista_de_solicitudes_solo_muestra_las_del_caso(
+    verificacion: Verificacion,
+) -> None:
+    """Prototipo: la lista del panel para volver a abrir un resultado (aislamiento por caso)."""
+    cliente_a = await verificacion.caso("CASO-A")
+    cliente_b = await verificacion.caso("CASO-B")
+    vista = await verificacion.verificar(cliente_a, verificacion.atencion())
+    propias = (await cliente_a.get("/caso/solicitudes")).json()
+    assert [(s["id"], s["tipo"], s["estado"], s["consulta"]) for s in propias] == [
+        (vista["id"], "verificacion_referencias", "entregada", None)
+    ]
+    assert (await cliente_b.get("/caso/solicitudes")).json() == []
