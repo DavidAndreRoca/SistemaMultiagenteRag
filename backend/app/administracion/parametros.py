@@ -177,7 +177,12 @@ class ParametrosFuncionales(_Estricto):
     )
     # Versión vigente de la instrucción de cada agente (RNF-21): agente -> vN
     versiones_instrucciones: dict[str, str] = Field(
-        default_factory=lambda: {"suficiencia": "v1", "evidencia": "v1", "referencias": "v1"}
+        default_factory=lambda: {
+            "suficiencia": "v1",
+            "evidencia": "v1",
+            "referencias": "v1",
+            "estructura": "v1",
+        }
     )
 
     @model_validator(mode="after")

@@ -625,3 +625,17 @@ a:hover {
   color: var(--neutro);
   background: var(--neutro-fondo);
 }
+
+/* Estructura y coherencia (T23) */
+.insignia--severidad-alta {
+  color: var(--error);
+  background: var(--error-fondo);
+}
+.insignia--severidad-media {
+  color: var(--advertencia);
+  background: var(--advertencia-fondo);
+}
+.insignia--severidad-baja {
+  color: var(--info);
+  background: var(--info-fondo);
+}

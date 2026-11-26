@@ -95,6 +95,8 @@ Referencias (T20): extractores de citas por norma y cruce en `app/agentes/citas.
 
 Prototipo (26-11-2026, cambio de plan del equipo): `scripts/prototipo.ps1` con `docker-compose.demo.yml` levanta la base de desarrollo con el corpus, la API y la interfaz en :5173; `python -m app.bd.demo --credenciales RUTA` prepara INV-DEMO y DEMO-01 (contraseñas solo en `datos/demo/`); borrador en `docs/demo/borrador-demostracion.docx` (`scripts/generar_borrador_demo.py`); guion en `docs/demo/guion-prototipo.md`. `python -m app.corpus.titulos` corrige títulos dudosos desde Crossref. Reglas del equipo: decidir solo lo no técnico y anotarlo en ESTADO como provisional; preguntar solo lo técnico sensible (datos reales, claves, costos, despliegue, seguridad, privacidad); cierre ligero.
 
+Guías y estructura (T22 y T23): `app/corpus/guias.py` (`python -m app.corpus.guias --investigador I --carpeta DIR [--aplicar]`, por apartado, rúbrica bloqueada por nombre y por huella en `backend/guias/rubricas-bloqueadas.txt`; guías provisionales en `backend/guias/provisionales/`). Agente D1 en `app/agentes/estructura.py`; atención genérica por sección en `app/agentes/seccion.py` (la reutiliza D2); comprobación 2 `comprobar_no_reescritura`; rutas `app/api/estructura.py`; pantalla `frontend/src/paginas/Estructura.tsx`. Una migración de datos que agrega una instrucción crea una versión nueva de la configuración si la 1 ya la usan solicitudes (0016).
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

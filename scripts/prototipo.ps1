@@ -36,6 +36,10 @@ New-Item -ItemType Directory -Force "datos/demo" | Out-Null
 docker compose @Compose run --rm --no-deps -v "${Raiz}/datos/demo:/demo" api python -m app.bd.demo --credenciales /demo/credenciales.txt 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "No se pudieron preparar las cuentas de demostración." }
 
+Write-Host "    Guías del programa (provisionales)..."
+docker compose @Compose run --rm --no-deps api python -m app.corpus.guias --investigador INV-DEMO --carpeta guias/provisionales --aplicar 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) { throw "No se pudieron indexar las guías." }
+
 Write-Host "4/4 Borrador de demostración..."
 if (-not (Test-Path "docs/demo/borrador-demostracion.docx")) {
     & backend/.venv/Scripts/python.exe scripts/generar_borrador_demo.py

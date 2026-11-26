@@ -21,6 +21,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/estructura": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pedir el diagnóstico de estructura y coherencia de una sección */
+        post: operations["pedir_estructura_caso_estructura_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/estructura/secciones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Secciones de la versión vigente que se pueden revisar */
+        get: operations["secciones_caso_estructura_secciones_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/estructura/{solicitud_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Avance y resultado de un diagnóstico de estructura */
+        get: operations["ver_estructura_caso_estructura__solicitud_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/evidencias": {
         parameters: {
             query?: never;
@@ -631,6 +682,17 @@ export interface components {
             tema: string;
             tipo_autoria: components["schemas"]["TipoAutoria"];
         };
+        /** CitaGuia */
+        CitaGuia: {
+            /** Apartado */
+            apartado: string | null;
+            /** Guia */
+            guia: string | null;
+            /** Identificador */
+            identificador: string;
+            /** Texto */
+            texto: string;
+        };
         /** CitaVista */
         CitaVista: {
             /** Acceso Abierto */
@@ -844,6 +906,23 @@ export interface components {
             /** Url Acceso Abierto */
             url_acceso_abierto: string | null;
         };
+        /** HallazgoVista */
+        HallazgoVista: {
+            /** Citas */
+            citas: components["schemas"]["CitaGuia"][];
+            /** Descripcion */
+            descripcion: string;
+            /** Indicador */
+            indicador: string;
+            /** Indicador Nombre */
+            indicador_nombre: string;
+            /** Recomendacion */
+            recomendacion: string;
+            /** Severidad */
+            severidad: string;
+            /** Ubicacion */
+            ubicacion: string;
+        };
         /** HitoVista */
         HitoVista: {
             /** Codigo */
@@ -984,6 +1063,11 @@ export interface components {
             seccion: string | null;
             /** Texto */
             texto: string;
+        };
+        /** PedidoEstructura */
+        PedidoEstructura: {
+            /** Seccion Id */
+            seccion_id: string;
         };
         /** PedidoEvidencia */
         PedidoEvidencia: {
@@ -1143,6 +1227,15 @@ export interface components {
             /** Titulo */
             titulo: string;
         };
+        /** SeccionRevisable */
+        SeccionRevisable: {
+            /** Id */
+            id: string;
+            /** Palabras */
+            palabras: number;
+            /** Titulo */
+            titulo: string;
+        };
         /** SolicitudCambioContrasena */
         SolicitudCambioContrasena: {
             /** Contrasena Actual */
@@ -1168,6 +1261,20 @@ export interface components {
              * @example TEMA-01
              */
             tema: string;
+        };
+        /** SolicitudEstructura */
+        SolicitudEstructura: {
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
         };
         /** SolicitudEvidencia */
         SolicitudEvidencia: {
@@ -1306,6 +1413,43 @@ export interface components {
             /** Vigente */
             vigente: boolean;
         };
+        /** VistaEstructura */
+        VistaEstructura: {
+            /** Abstencion */
+            abstencion: boolean;
+            /** Advertencias */
+            advertencias: string[];
+            /** Aviso */
+            aviso: string | null;
+            /** Comprobaciones */
+            comprobaciones: components["schemas"]["ComprobacionVista"][];
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Entregada En */
+            entregada_en: string | null;
+            estado: components["schemas"]["EstadoSolicitud"];
+            etiqueta: components["schemas"]["Etiqueta"] | null;
+            /** Fortalezas */
+            fortalezas: string[];
+            /** Hallazgos */
+            hallazgos: components["schemas"]["HallazgoVista"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Motivo */
+            motivo: string | null;
+            /** Notas Para El Estudiante */
+            notas_para_el_estudiante: string[];
+            /** Seccion Id */
+            seccion_id: string | null;
+            /** Seccion Titulo */
+            seccion_titulo: string | null;
+        };
         /** VistaEvidencia */
         VistaEvidencia: {
             /** Abstencion */
@@ -1439,6 +1583,221 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CasoPropio"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    pedir_estructura_caso_estructura_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoEstructura"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudEstructura"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    secciones_caso_estructura_secciones_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeccionRevisable"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    ver_estructura_caso_estructura__solicitud_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaEstructura"];
                 };
             };
             /** @description Unauthorized */

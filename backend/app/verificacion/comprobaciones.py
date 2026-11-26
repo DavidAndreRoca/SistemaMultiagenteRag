@@ -1,4 +1,4 @@
-"""Comprobaciones deterministas 1 y 3 del módulo de verificación (6.7; D-07; T18-01).
+"""Comprobaciones deterministas 1, 2, 3 y 5 del módulo de verificación (6.7; D-07; T18-01).
 
 Viven fuera de los agentes para que el módulo de integración y verificación (T30) las
 reutilice sobre la salida guardada de cualquier tipo.
@@ -101,3 +101,47 @@ def comprobar_acceso_abierto(estado_oa_por_cita: Mapping[str, str | None]) -> Co
             motivos=[f"cita a una fuente sin acceso abierto comprobado: {i}" for i in sin_acceso],
         )
     return Comprobacion(numero=5, nombre="acceso_abierto", superada=True)
+
+
+# --- Comprobación 2 para D1 y D2: no reescritura (T23; CP-08) -----------------------------
+
+CAMPOS_DE_TEXTO = ("descripcion", "recomendacion", "fortalezas", "notas_para_el_estudiante")
+_COMILLAS = re.compile(r"[\"“”«»]([^\"“”«»]+)[\"“”«»]")
+
+
+def _palabras(texto: str) -> list[str]:
+    return re.findall(r"\w+", texto.lower())
+
+
+def _textos_con_ruta(valor: Any, ruta: str = "") -> Iterator[tuple[str, str]]:
+    if isinstance(valor, str):
+        yield ruta, valor
+    elif isinstance(valor, dict):
+        for clave, contenido in valor.items():
+            yield from _textos_con_ruta(contenido, f"{ruta}.{clave}" if ruta else clave)
+    elif isinstance(valor, list):
+        for indice, contenido in enumerate(valor):
+            yield from _textos_con_ruta(contenido, f"{ruta}[{indice}]")
+
+
+def comprobar_no_reescritura(salida: Any, texto_estudiante: str, limite: int) -> Comprobacion:
+    """Comprobación 2 (D1 y D2): ningún texto de la salida tiene más de ``limite`` palabras
+    propias, sin contar lo que cita entre comillas del propio estudiante. Un texto más largo
+    sería una versión reescrita de la sección, que estos agentes no entregan (CP-08)."""
+    datos = salida.model_dump(mode="json") if isinstance(salida, BaseModel) else salida
+    estudiante = " ".join(_palabras(texto_estudiante))
+    motivos: list[str] = []
+    for ruta, texto in _textos_con_ruta(datos):
+        campo = re.sub(r"\[\d+\]", "", ruta.split(".")[-1])
+        if campo not in CAMPOS_DE_TEXTO:
+            continue
+        propio = texto
+        for cita in _COMILLAS.findall(texto):
+            if " ".join(_palabras(cita)) in estudiante:
+                propio = propio.replace(cita, " ")
+        cantidad = len(_palabras(propio))
+        if cantidad > limite:
+            motivos.append(f"posible reescritura en {ruta}: {cantidad} palabras (límite {limite})")
+    return Comprobacion(
+        numero=2, nombre="no_reescritura", superada=not motivos, motivos=motivos[:20]
+    )
