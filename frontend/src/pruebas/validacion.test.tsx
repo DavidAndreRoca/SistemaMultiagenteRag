@@ -67,6 +67,7 @@ describe("panel del caso", () => {
           );
         }
         if (ruta === "/caso/versiones") return Promise.resolve(respuestaJson([]));
+        if (ruta === "/caso/solicitudes") return Promise.resolve(respuestaJson([]));
         return Promise.resolve(respuestaJson({ codigo: "no_existe", mensaje: "No existe." }, 404));
       }),
     );

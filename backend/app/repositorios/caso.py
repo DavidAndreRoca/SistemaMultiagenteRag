@@ -9,7 +9,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import undefer
 
-from app.bd.enumeraciones import TipoColeccion
+from app.bd.enumeraciones import EstadoSolicitud, TipoColeccion, TipoSolicitud
 from app.bd.modelos import (
     Caso,
     Coleccion,
@@ -105,6 +105,19 @@ class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):
             self._consulta(contexto).where(Solicitud.version_id == version_id).limit(1)
         )
         return resultado.first() is not None
+
+    async def recientes(
+        self, contexto: ContextoAcceso, tipos: Sequence[TipoSolicitud], limite: int = 30
+    ) -> Sequence[Solicitud]:
+        """Las solicitudes del caso de esos tipos, de la más reciente a la más antigua, sin las
+        rechazadas por la validación previa (no tienen resultado)."""
+        resultado = await self._sesion.scalars(
+            self._consulta(contexto)
+            .where(Solicitud.tipo.in_(list(tipos)), Solicitud.estado != EstadoSolicitud.RECHAZADA)
+            .order_by(Solicitud.creada_en.desc(), Solicitud.id)
+            .limit(limite)
+        )
+        return resultado.all()
 
 
 class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):

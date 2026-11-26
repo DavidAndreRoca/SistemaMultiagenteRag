@@ -4,6 +4,7 @@
 // sistema; si un servicio no responde, la referencia queda "No comprobable", nunca
 // inexistente (RN-18).
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 
 import { api, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton } from "../componentes/controles";
@@ -36,7 +37,10 @@ const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
 export function Referencias() {
   const [error, setError] = useState<unknown>(null);
   const [vista, setVista] = useState<Vista | null>(null);
-  const [solicitud, setSolicitud] = useState<string | null>(null);
+  // La solicitud va en la dirección (?solicitud=...): el resultado sobrevive a una
+  // recarga y se puede abrir desde la lista del panel.
+  const [parametros, setParametros] = useSearchParams();
+  const [solicitud, setSolicitud] = useState<string | null>(parametros.get("solicitud"));
   const [enviando, setEnviando] = useState(false);
 
   const siguiendo = solicitud !== null && (vista === null || EN_CURSO.has(vista.estado));
@@ -44,19 +48,22 @@ export function Referencias() {
   useEffect(() => {
     if (solicitud === null || !siguiendo) return;
     let vigente = true;
-    const espera = setTimeout(() => {
-      exigir(
-        api.GET("/caso/referencias/{solicitud_id}", {
-          params: { path: { solicitud_id: solicitud } },
-        }),
-      )
-        .then((actual) => {
-          if (vigente) setVista(actual);
-        })
-        .catch((fallo: unknown) => {
-          if (vigente) setError(fallo);
-        });
-    }, ESPERA_AVANCE_MS);
+    const espera = setTimeout(
+      () => {
+        exigir(
+          api.GET("/caso/referencias/{solicitud_id}", {
+            params: { path: { solicitud_id: solicitud } },
+          }),
+        )
+          .then((actual) => {
+            if (vigente) setVista(actual);
+          })
+          .catch((fallo: unknown) => {
+            if (vigente) setError(fallo);
+          });
+      },
+      vista === null ? 0 : ESPERA_AVANCE_MS,
+    );
     return () => {
       vigente = false;
       clearTimeout(espera);
@@ -71,6 +78,7 @@ export function Referencias() {
     try {
       const nueva = await exigir(api.POST("/caso/referencias"));
       setSolicitud(nueva.id);
+      setParametros({ solicitud: nueva.id }, { replace: true });
     } catch (fallo) {
       setError(fallo);
     } finally {

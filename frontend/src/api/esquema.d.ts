@@ -95,6 +95,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/solicitudes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Búsquedas de evidencia y verificaciones de referencias del caso */
+        get: operations["solicitudes_del_caso_caso_solicitudes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/versiones": {
         parameters: {
             query?: never;
@@ -1181,6 +1198,25 @@ export interface components {
              */
             norma: string;
         };
+        /** SolicitudResumen */
+        SolicitudResumen: {
+            /** Consulta */
+            consulta: string | null;
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Entregada En */
+            entregada_en: string | null;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            tipo: components["schemas"]["TipoSolicitud"];
+        };
         /** SolicitudVerificacion */
         SolicitudVerificacion: {
             /**
@@ -1205,6 +1241,12 @@ export interface components {
          * @enum {string}
          */
         TipoColeccion: "guias" | "cientifica" | "personal";
+        /**
+         * TipoSolicitud
+         * @description Los seis tipos de solicitud (insumos de T04, tabla 3) y el agente que los atiende.
+         * @enum {string}
+         */
+        TipoSolicitud: "revision_estructura" | "plan_tarea" | "revision_metodologica" | "propuesta_redaccion" | "busqueda_evidencia" | "verificacion_referencias";
         /** TituloMarcado */
         TituloMarcado: {
             /**
@@ -1693,6 +1735,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VistaVerificacion"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    solicitudes_del_caso_caso_solicitudes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudResumen"][];
                 };
             };
             /** @description Unauthorized */
