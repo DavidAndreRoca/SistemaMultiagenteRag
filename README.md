@@ -301,6 +301,16 @@ El caso pide en `/panel/referencias` la verificación de la lista de referencias
 
 Decisiones: `docs/decisiones/T20-verificacion-referencias.md`.
 
+## Prototipo navegable
+
+Recorrido de punta a punta del estudiante (entrar, cargar el borrador, buscar evidencia y verificar referencias) con el corpus provisional:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\prototipo.ps1
+```
+
+Abre http://127.0.0.1:5173. Las cuentas quedan en `datos/demo/credenciales.txt` (fuera de Git) y el guion de 5 minutos está en `docs/demo/guion-prototipo.md`.
+
 ## Diagnóstico de claves externas
 
 Con las claves cargadas en el entorno, prueba con una llamada mínima Groq y OpenAlex sin imprimir ninguna clave:

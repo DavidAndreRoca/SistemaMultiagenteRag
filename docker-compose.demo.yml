@@ -1,0 +1,10 @@
+# Ajustes del prototipo navegable (scripts/prototipo.ps1). Se suma a docker-compose.yml y
+# docker-compose.corpus.yml:
+#   docker compose -f docker-compose.yml -f docker-compose.corpus.yml -f docker-compose.demo.yml \
+#     --profile interfaz up -d --wait bd api interfaz
+services:
+  api:
+    environment:
+      # Con solo Groq (8 000 tokens por minuto), la búsqueda de evidencia necesita esperar una
+      # ventana completa entre la suficiencia y la generación (decisión T19-01, apartado 7).
+      ESPERA_MAXIMA_LIMITADOR_S: "65"

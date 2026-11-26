@@ -224,6 +224,22 @@ class RepositorioCorpus:
         )
         await self._sesion.refresh(coleccion)
 
+    async def con_doi(
+        self, contexto: ContextoAcceso, coleccion_id: uuid.UUID
+    ) -> Sequence[Documento]:
+        """Documentos con DOI de la colección, sin los retirados (títulos desde Crossref)."""
+        contexto.exigir_investigador()
+        resultado = await self._sesion.scalars(
+            select(Documento)
+            .where(
+                Documento.coleccion_id == coleccion_id,
+                Documento.doi.is_not(None),
+                Documento.estado != EstadoDocumento.RETIRADO,
+            )
+            .order_by(Documento.creado_en, Documento.id)
+        )
+        return resultado.all()
+
     async def sin_acceso_abierto_comprobado(
         self, contexto: ContextoAcceso, coleccion_id: uuid.UUID
     ) -> Sequence[Documento]:
