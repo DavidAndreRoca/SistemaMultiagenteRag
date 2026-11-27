@@ -1498,6 +1498,18 @@
         "title": "PedidoMetodologia",
         "type": "object"
       },
+      "PedidoMismoAlcance": {
+        "properties": {
+          "tipo": {
+            "$ref": "#/components/schemas/TipoSolicitud"
+          }
+        },
+        "required": [
+          "tipo"
+        ],
+        "title": "PedidoMismoAlcance",
+        "type": "object"
+      },
       "PedidoPlan": {
         "properties": {
           "hito": {
@@ -2227,6 +2239,47 @@
         "title": "SolicitudNorma",
         "type": "object"
       },
+      "SolicitudNueva": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "solicitud_origen_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solicitud Origen Id"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoSolicitud"
+          }
+        },
+        "required": [
+          "id",
+          "tipo",
+          "estado",
+          "creada_en",
+          "solicitud_origen_id"
+        ],
+        "title": "SolicitudNueva",
+        "type": "object"
+      },
       "SolicitudPlan": {
         "properties": {
           "creada_en": {
@@ -2313,6 +2366,18 @@
             "title": "Id",
             "type": "string"
           },
+          "solicitud_origen_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solicitud Origen Id"
+          },
           "tipo": {
             "$ref": "#/components/schemas/TipoSolicitud"
           }
@@ -2323,7 +2388,8 @@
           "estado",
           "consulta",
           "creada_en",
-          "entregada_en"
+          "entregada_en",
+          "solicitud_origen_id"
         ],
         "title": "SolicitudResumen",
         "type": "object"
@@ -4996,6 +5062,270 @@
         "summary": "Búsquedas de evidencia y verificaciones de referencias del caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/eventos": {
+      "get": {
+        "operationId": "eventos_caso_solicitudes__solicitud_id__eventos_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/event-stream": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Estado de una solicitud en tiempo real (eventos enviados por el servidor)",
+        "tags": [
+          "solicitudes"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/mismo-alcance": {
+      "post": {
+        "operationId": "mismo_alcance_caso_solicitudes__solicitud_id__mismo_alcance_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoMismoAlcance"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudNueva"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir otro tipo de revisión sobre el mismo alcance",
+        "tags": [
+          "solicitudes"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/reenvio": {
+      "post": {
+        "operationId": "reenviar_caso_solicitudes__solicitud_id__reenvio_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudNueva"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Volver a pedir una solicitud no atendida, enlazada a la original",
+        "tags": [
+          "solicitudes"
         ]
       }
     },

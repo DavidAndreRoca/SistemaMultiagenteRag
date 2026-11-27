@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router";
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
+import { AvanceSolicitud, NoAtendida } from "../componentes/Seguimiento";
 import { fechaHora } from "../formato";
 import { EN_CURSO } from "../solicitudes";
 
@@ -90,6 +91,12 @@ export function Plan() {
     };
   }, [solicitud, siguiendo, vista]);
 
+  function seguir(nueva: string) {
+    setVista(null);
+    setSolicitud(nueva);
+    setParametros({ solicitud: nueva }, { replace: true });
+  }
+
   async function enviar() {
     setError(null);
     setVista(null);
@@ -150,25 +157,37 @@ export function Plan() {
         </Form>
       )}
       {siguiendo ? (
-        <p role="status" aria-live="polite">
-          Preparando el plan con las instrucciones del programa. Puede tardar uno o dos minutos.
-        </p>
+        <AvanceSolicitud
+          solicitud={solicitud}
+          alTerminar={() => {
+            setVista(null);
+          }}
+          mensaje={
+            <>
+              Preparando el plan con las instrucciones del programa. Puede tardar uno o dos minutos.
+            </>
+          }
+        />
       ) : null}
-      {vista && !EN_CURSO.has(vista.estado) ? <Resultado vista={vista} /> : null}
+      {vista && !EN_CURSO.has(vista.estado) ? (
+        <Resultado vista={vista} alReenviar={seguir} />
+      ) : null}
     </Marco>
   );
 }
 
-function Resultado({ vista }: { vista: Vista }) {
+function Resultado({ vista, alReenviar }: { vista: Vista; alReenviar: (nueva: string) => void }) {
   const [copiado, setCopiado] = useState<string | null>(null);
   if (vista.estado === "no_atendida") {
     return (
-      <div className="aviso aviso--error" role="alert">
-        <p>
-          {MOTIVOS_NO_ATENDIDA[vista.motivo ?? ""] ??
-            "El plan no pudo atenderse. Intente de nuevo en unos minutos."}
-        </p>
-      </div>
+      <NoAtendida
+        solicitud={vista.id}
+        mensaje={
+          MOTIVOS_NO_ATENDIDA[vista.motivo ?? ""] ??
+          "El plan no pudo atenderse. Intente de nuevo en unos minutos."
+        }
+        alReenviar={alReenviar}
+      />
     );
   }
   if (vista.abstencion) {

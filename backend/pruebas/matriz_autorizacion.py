@@ -62,6 +62,23 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         admite_propio=frozenset({404}),
     ),
     ("GET", "/caso/solicitudes"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Estado en tiempo real, reenvío y mismo alcance (T29): la solicitud ficticia no existe.
+    ("GET", "/caso/solicitudes/{solicitud_id}/eventos"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/eventos",
+        admite_propio=frozenset({404}),
+    ),
+    ("POST", "/caso/solicitudes/{solicitud_id}/reenvio"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/reenvio",
+        admite_propio=frozenset({404}),
+    ),
+    ("POST", "/caso/solicitudes/{solicitud_id}/mismo-alcance"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/mismo-alcance",
+        cuerpo={"tipo": "revision_metodologica"},
+        admite_propio=frozenset({404}),
+    ),
     # Estructura y coherencia (T23). Sin servicio de modelos en las pruebas responde 503.
     ("GET", "/caso/estructura/secciones"): Entrada(Politica.CASO, datos_de_caso=True),
     ("POST", "/caso/estructura"): Entrada(

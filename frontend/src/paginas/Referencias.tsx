@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router";
 import { api, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
+import { AvanceSolicitud, NoAtendida } from "../componentes/Seguimiento";
 import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaVerificacion"];
@@ -70,6 +71,12 @@ export function Referencias() {
     };
   }, [solicitud, siguiendo, vista]);
 
+  function seguir(nueva: string) {
+    setVista(null);
+    setSolicitud(nueva);
+    setParametros({ solicitud: nueva }, { replace: true });
+  }
+
   async function verificar() {
     setError(null);
     setVista(null);
@@ -101,27 +108,37 @@ export function Referencias() {
         {enviando ? "Enviando…" : "Verificar las referencias"}
       </Boton>
       {siguiendo ? (
-        <p role="status" aria-live="polite">
-          {vista?.progreso
-            ? `Verificando referencias: ${String(vista.progreso.hechas)} de ${String(vista.progreso.total)}.`
-            : "Preparando la lista de referencias."}{" "}
-          Puede tardar unos minutos.
-        </p>
+        <AvanceSolicitud
+          solicitud={solicitud}
+          alTerminar={() => {
+            setVista(null);
+          }}
+          mensaje={
+            <>
+              {vista?.progreso
+                ? `Verificando referencias: ${String(vista.progreso.hechas)} de ${String(vista.progreso.total)}.`
+                : "Preparando la lista de referencias."}{" "}
+              Puede tardar unos minutos.
+            </>
+          }
+        />
       ) : null}
-      {vista && !EN_CURSO.has(vista.estado) ? <Informe vista={vista} /> : null}
+      {vista && !EN_CURSO.has(vista.estado) ? <Informe vista={vista} alReenviar={seguir} /> : null}
     </Marco>
   );
 }
 
-function Informe({ vista }: { vista: Vista }) {
+function Informe({ vista, alReenviar }: { vista: Vista; alReenviar: (nueva: string) => void }) {
   if (vista.estado === "no_atendida") {
     return (
-      <div className="aviso aviso--error" role="alert">
-        <p>
-          {MOTIVOS_NO_ATENDIDA[vista.motivo ?? ""] ??
-            "La verificación no pudo atenderse. Intente de nuevo en unos minutos."}
-        </p>
-      </div>
+      <NoAtendida
+        solicitud={vista.id}
+        mensaje={
+          MOTIVOS_NO_ATENDIDA[vista.motivo ?? ""] ??
+          "La verificación no pudo atenderse. Intente de nuevo en unos minutos."
+        }
+        alReenviar={alReenviar}
+      />
     );
   }
   return (

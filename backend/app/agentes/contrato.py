@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import uuid
 from abc import ABC, abstractmethod
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import ClassVar
 
@@ -118,8 +118,14 @@ class Agente(ABC):
         ]
 
     async def atender(
-        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, estado: EstadoAgente
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        estado: EstadoAgente,
+        al_generar: Callable[[], Awaitable[None]] | None = None,
     ) -> ResultadoAgente:
+        """``al_generar`` se llama con la evidencia suficiente, justo antes de generar: el
+        orquestador marca la solicitud "generando" (T29, estado visible)."""
         if estado.tipo not in self.tipos:
             raise TipoNoAtendido(f"{type(self).__name__} no atiende {estado.tipo.value}")
         if contexto.caso_id != estado.caso_id:
@@ -138,6 +144,8 @@ class Agente(ABC):
         )
         if not evidencia.suficiente:
             return ResultadoAgente(estado=estado, abstencion=True, salida=None, evidencia=evidencia)
+        if al_generar is not None:
+            await al_generar()
         if self._versiones is not None:
             versiones = self._versiones()
         else:

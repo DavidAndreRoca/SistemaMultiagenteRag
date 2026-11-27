@@ -316,6 +316,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/solicitudes/{solicitud_id}/eventos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Estado de una solicitud en tiempo real (eventos enviados por el servidor) */
+        get: operations["eventos_caso_solicitudes__solicitud_id__eventos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/solicitudes/{solicitud_id}/mismo-alcance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pedir otro tipo de revisión sobre el mismo alcance */
+        post: operations["mismo_alcance_caso_solicitudes__solicitud_id__mismo_alcance_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/solicitudes/{solicitud_id}/reenvio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Volver a pedir una solicitud no atendida, enlazada a la original */
+        post: operations["reenviar_caso_solicitudes__solicitud_id__reenvio_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/versiones": {
         parameters: {
             query?: never;
@@ -1276,6 +1327,10 @@ export interface components {
             /** Seccion Id */
             seccion_id: string;
         };
+        /** PedidoMismoAlcance */
+        PedidoMismoAlcance: {
+            tipo: components["schemas"]["TipoSolicitud"];
+        };
         /** PedidoPlan */
         PedidoPlan: {
             /** Hito */
@@ -1542,6 +1597,23 @@ export interface components {
              */
             norma: string;
         };
+        /** SolicitudNueva */
+        SolicitudNueva: {
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Solicitud Origen Id */
+            solicitud_origen_id: string | null;
+            tipo: components["schemas"]["TipoSolicitud"];
+        };
         /** SolicitudPlan */
         SolicitudPlan: {
             /**
@@ -1587,6 +1659,8 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** Solicitud Origen Id */
+            solicitud_origen_id: string | null;
             tipo: components["schemas"]["TipoSolicitud"];
         };
         /** SolicitudVerificacion */
@@ -3225,6 +3299,232 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["RespuestaError"];
                 };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    eventos_caso_solicitudes__solicitud_id__eventos_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    mismo_alcance_caso_solicitudes__solicitud_id__mismo_alcance_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoMismoAlcance"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudNueva"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    reenviar_caso_solicitudes__solicitud_id__reenvio_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudNueva"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Unprocessable Content */
             422: {
