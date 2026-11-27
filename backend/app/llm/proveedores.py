@@ -12,6 +12,7 @@ respaldo) o ``ErrorSolicitud`` (no). Nada de la entrada ni de la salida llega al
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Protocol
@@ -55,11 +56,31 @@ def _espera(respuesta: httpx.Response) -> float | None:
         return None
 
 
+def _codigo_error(respuesta: httpx.Response) -> str:
+    """El código de error del cuerpo (``error.code``), solo si es un identificador: nunca se
+    registra el mensaje ni la generación fallida, que pueden traer contenido."""
+    try:
+        cuerpo = respuesta.json()
+    except ValueError:
+        return ""
+    error = cuerpo.get("error") if isinstance(cuerpo, dict) else None
+    codigo = error.get("code") if isinstance(error, dict) else None
+    return codigo if isinstance(codigo, str) and re.fullmatch(r"[a-z0-9_]{1,40}", codigo) else ""
+
+
 def clasificar(proveedor: Proveedor, respuesta: httpx.Response) -> None:
-    """Lanza el error que corresponde a un estado distinto de 200."""
+    """Lanza el error que corresponde a un estado distinto de 200.
+
+    Un 400 ``json_validate_failed`` (Groq con esquema estricto) es una generación que no
+    cumplió el esquema, por ejemplo cortada por el tope de salida: es ocasional, así que se
+    trata como respuesta ilegible y se reintenta (T27-01).
+    """
     estado = respuesta.status_code
     if estado == 200:
         return
+    codigo = _codigo_error(respuesta)
+    if estado == 400 and codigo == "json_validate_failed":
+        raise ErrorDisponibilidad(MotivoError.RESPUESTA_ILEGIBLE, proveedor, f"http_400:{codigo}")
     if estado == 429:
         raise ErrorDisponibilidad(
             MotivoError.LIMITE_DE_TASA, proveedor, "http_429", _espera(respuesta)
@@ -74,7 +95,8 @@ def clasificar(proveedor: Proveedor, respuesta: httpx.Response) -> None:
         raise ErrorDisponibilidad(MotivoError.ERROR_DEL_SERVICIO, proveedor, f"http_{estado}")
     if estado in (401, 403):
         raise ErrorSolicitud(MotivoError.CLAVE_RECHAZADA, proveedor, f"http_{estado}")
-    raise ErrorSolicitud(MotivoError.SOLICITUD_RECHAZADA, proveedor, f"http_{estado}")
+    detalle = f"http_{estado}:{codigo}" if codigo else f"http_{estado}"
+    raise ErrorSolicitud(MotivoError.SOLICITUD_RECHAZADA, proveedor, detalle)
 
 
 async def _post(

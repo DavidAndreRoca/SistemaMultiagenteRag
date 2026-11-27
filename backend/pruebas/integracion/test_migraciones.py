@@ -660,6 +660,17 @@ def test_la_migracion_0017_agrega_la_instruccion_de_redaccion(base_vacia: str) -
     assert "redaccion" not in versiones and versiones["estructura"] == "v1"
 
 
+def _topes(url: str) -> dict[str, int]:
+    """Tope de salida de cada proveedor en la configuración vigente, en su orden."""
+    filas = consultar(
+        url,
+        "SELECT m ->> 'proveedor', (m ->> 'max_tokens_salida')::int FROM configuracion,"
+        " jsonb_array_elements(parametros -> 'modelos') WITH ORDINALITY AS t(m, orden)"
+        " WHERE vigente ORDER BY orden",
+    )
+    return {str(p): int(t) for p, t in filas}
+
+
 def test_la_migracion_0017_crea_una_version_nueva_si_la_vigente_esta_en_uso(
     base_vacia: str,
 ) -> None:
@@ -680,3 +691,18 @@ def test_la_migracion_0017_crea_una_version_nueva_si_la_vigente_esta_en_uso(
     assert consultar(
         base_vacia, "SELECT numero_version, vigente FROM configuracion ORDER BY numero_version"
     ) == [(1, False), (2, True)]
+
+
+def test_la_migracion_0018_sube_el_tope_de_salida_de_groq(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0017")
+    assert _topes(base_vacia) == {"groq": 2048, "deepseek": 2048, "gemini": 2048}
+    command.upgrade(cfg, "0018")
+    assert _topes(base_vacia) == {"groq": 4096, "deepseek": 2048, "gemini": 2048}
+    command.downgrade(cfg, "0017")
+    assert _topes(base_vacia) == {"groq": 2048, "deepseek": 2048, "gemini": 2048}
+    # Con la vigente en uso crea una versión nueva y la anterior conserva su tope (RNF-21).
+    _ejecutar(base_vacia, "UPDATE configuracion SET congelada = true WHERE vigente")
+    command.upgrade(cfg, "0018")
+    assert _topes(base_vacia)["groq"] == 4096
+    assert consultar(base_vacia, "SELECT count(*) FROM configuracion")[0] == (2,)

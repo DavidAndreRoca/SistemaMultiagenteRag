@@ -93,7 +93,7 @@ def test_la_rubrica_se_rechaza_por_huella_registrada(tmp_path: Path) -> None:
 
 def test_las_guias_provisionales_se_leen_y_ninguna_es_la_rubrica() -> None:
     guias = [leer_guia(ruta) for ruta in archivos(PROVISIONALES)]
-    assert len(guias) == 4 and all(g.apartados for g in guias)
+    assert len(guias) == 5 and all(g.apartados for g in guias)
     for guia in guias:
         exigir_no_rubrica(guia, huellas_bloqueadas())
         assert "provisional" in guia.procedencia

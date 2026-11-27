@@ -65,7 +65,10 @@ class Modelo:
 
         simulado = ProveedorSimulado(
             respuestas={
-                "JuicioSuficiencia": lambda _: {"suficiente": True, "motivo": "Pautas pertinentes."},
+                "JuicioSuficiencia": lambda _: {
+                    "suficiente": True,
+                    "motivo": "Pautas pertinentes.",
+                },
                 "PropuestaRedaccion": self.redaccion,
             }
         )
@@ -233,7 +236,9 @@ async def _id_por_texto(redaccion: Redaccion, inicio: str) -> str:
     return next(p["id"] for p in vista["parrafos"] if p["texto"].startswith(inicio))
 
 
-async def test_aislamiento_entre_casos(redaccion: Redaccion, investigador: httpx.AsyncClient) -> None:
+async def test_aislamiento_entre_casos(
+    redaccion: Redaccion, investigador: httpx.AsyncClient
+) -> None:
     respuesta = await redaccion.pedir(await redaccion.id_de("La ansiedad ante"))
     otro = await _caso(redaccion.entorno, investigador, "CASO-C")
     assert (await otro.get(f"/caso/redaccion/{respuesta.json()['id']}")).status_code == 404

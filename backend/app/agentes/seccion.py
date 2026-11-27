@@ -236,6 +236,7 @@ class AtencionPorAlcance:
                     "tipo_evento": "agentes",
                     "solicitud_id": str(solicitud.id),
                     "motivo": motivo,
+                    "detalle": error.detalle if isinstance(error, ErrorModelo) else None,
                 },
             )
             async with self._abrir() as unidad:

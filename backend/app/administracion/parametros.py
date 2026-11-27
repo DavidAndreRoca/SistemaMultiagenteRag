@@ -73,6 +73,7 @@ MODELOS_INICIALES: tuple[ModeloConfigurado, ...] = (
     ModeloConfigurado(
         proveedor="groq",
         modelo="openai/gpt-oss-120b",
+        max_tokens_salida=4096,  # razona antes de responder (T27, migración 0017)
         precio_entrada_usd_millon=0.15,
         precio_salida_usd_millon=0.60,
         limites=LimitesModelo(rpm=30, rpd=1000, tpm=8000, tpd=200_000),

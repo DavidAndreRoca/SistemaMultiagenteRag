@@ -98,10 +98,11 @@ class AgenteRedaccion(Agente):
     instruccion = "redaccion"
 
     def consulta(self, estado: EstadoAgente) -> str:
+        # Sin "artículo científico empírico": esas palabras traían apartados de estructura
+        # por delante de las pautas de redacción (prueba con el reordenador real, T27-01).
         return (
-            "Pautas de redacción académica para un párrafo de un artículo científico empírico:"
-            " registro formal e impersonal; fluidez discursiva, conectores y precisión léxica;"
-            " corrección gramatical, concordancia, puntuación y claridad sintáctica."
+            "Pautas para revisar la redacción de un párrafo: registro formal e impersonal,"
+            " conectores y precisión léxica, concordancia, puntuación y claridad."
         )
 
     def tarea(self, estado: EstadoAgente) -> str:

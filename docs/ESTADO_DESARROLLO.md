@@ -1941,3 +1941,34 @@ Rama `t22-t23-guias-y-estructura`. Decisión: `docs/decisiones/T22-T23-guias-y-e
 - **Pendiente:** el conjunto de borradores con errores estructurales y su clave, que arma el asistente antes de T34, y el reintento, en T30.
 
 **Integración de T22 y T23:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#20, CI verde (ejecución 45880622403, 9 de 9 trabajos), integrada en `main`.
+
+## 26. Bloque 2: T27 (agente estilístico, propuesta de redacción)
+
+Rama `t27-agente-redaccion`. Decisión: `docs/decisiones/T27-agente-de-redaccion.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Agente D3:**
+  - `AgenteRedaccion` y `AtencionRedaccion`, con la instrucción `redaccion/v1`;
+  - la atención común `AtencionPorAlcance`, que reutilizan D1 y D3 (y D2 en T26);
+  - las rutas `/caso/redaccion` y la pantalla `/panel/redaccion`, con original y propuesta lado a lado, cambios resaltados y la pauta de cada cambio; la tarjeta del panel ya está activa.
+- **Límites:**
+  - CP-09 antes de crear la solicitud: más de un párrafo o más de 250 palabras se rechaza; títulos y lista de referencias no se admiten (RN-17);
+  - CP-10 con la comprobación 2 `limites_propuesta`: hasta 1.2 veces, un párrafo, sin números ni citas nuevas y cambios presentes en el texto.
+- **Migraciones:**
+  - 0017, instrucción `redaccion/v1`: en la base de desarrollo creó la versión 3 de la configuración;
+  - 0018, tope de salida de Groq de 4096 tokens: creó la versión 4.
+- **Proveedor:** el 400 `json_validate_failed` de Groq (salida cortada o que no cumple el esquema) ahora se reintenta, y el registro guarda el código del proveedor, sin contenido.
+- **Pruebas:**
+  - 11 unitarias de `limites_propuesta` y `contar_palabras`;
+  - 6 de integración: párrafos sin títulos ni referencias, CP-10 superado y excedido, cita nueva, CP-09 sin crear solicitud y aislamiento;
+  - 3 de migraciones;
+  - 2 del proveedor;
+  - 4 de la interfaz, con el comparador;
+  - 1 extremo a extremo con accesibilidad.
+- **Modelo real:** 2 párrafos del borrador de demostración, con las comprobaciones superadas; entre 30 y 140 s por el límite de tokens por minuto de Groq.
+- **Provisional, sin revisión humana:**
+  - la guía `lista-comprobacion-redaccion.md`;
+  - la instrucción `redaccion/v1`;
+  - el párrafo coloquial agregado al borrador de demostración;
+  - los textos de la pantalla;
+  - las dos pruebas reales.
+- **Pendiente:** el conjunto de párrafos con errores de redacción y su clave, que arma el asistente antes de T34; el reintento y el evaluador de conservación del contenido, en T30.
