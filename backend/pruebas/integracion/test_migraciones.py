@@ -735,3 +735,14 @@ def test_la_migracion_0020_agrega_la_instruccion_del_plan(base_vacia: str) -> No
         base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
     )[0]
     assert "plan" not in versiones and versiones["metodologia"] == "v1"
+
+
+def test_la_migracion_0021_crea_y_quita_las_tablas_del_checkpointer(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0021")
+    tablas = {"checkpoints", "checkpoint_blobs", "checkpoint_writes", "checkpoint_migrations"}
+    assert tablas <= _tablas(base_vacia)
+    (version,) = consultar(base_vacia, "SELECT max(v) FROM checkpoint_migrations")[0]
+    assert isinstance(version, int) and version >= 9
+    command.downgrade(cfg, "0020")
+    assert not tablas & _tablas(base_vacia)

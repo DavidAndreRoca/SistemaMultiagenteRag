@@ -22,7 +22,6 @@ from pydantic import BaseModel, Field
 
 from app.agentes.plan import (
     TIPO,
-    AgentePlan,
     AtencionPlan,
     hito_configurado,
     nombre_del_hito,
@@ -30,15 +29,9 @@ from app.agentes.plan import (
 from app.api.estructura import CitaGuia
 from app.api.evidencia import ComprobacionVista, SolicitudInexistente
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta
-from app.configuracion import Ajustes
-from app.corpus.fabrica import CorpusNoConfigurado
-from app.inferencia.servicio_modelos import cliente_desde_ajustes
-from app.llm.fabrica import crear_cadena, registrador_en_base
+from app.orquestacion.en_api import ejecutor_de, encolar
 from app.rag.modelos import AVISO_SIN_EVIDENCIA
-from app.rag.recuperacion import Recuperador
-from app.rag.servicio import ServicioEvidencia
-from app.repositorios.unidad import fabrica_de_unidades
-from app.seguridad.dependencias import ContextoCaso, Reloj, RelojDep, Unidad, obtener_reloj
+from app.seguridad.dependencias import ContextoCaso, RelojDep, Unidad
 
 router = APIRouter(prefix="/caso/plan", tags=["plan"])
 
@@ -84,23 +77,9 @@ class VistaPlan(BaseModel):
 
 
 async def obtener_atencion(peticion: Request, unidad: Unidad) -> AtencionPlan:
-    """Una por proceso; usa el servicio de modelos y el adaptador."""
-    estado = peticion.app.state
-    actual: AtencionPlan | None = getattr(estado, "atencion_plan", None)
-    if actual is not None:
-        return actual
-    ajustes: Ajustes = estado.ajustes
-    if not ajustes.url_servicio_modelos:
-        raise CorpusNoConfigurado(["URL_SERVICIO_MODELOS"])
-    _, parametros = await unidad.configuracion.vigente()
-    reloj: Reloj = obtener_reloj(peticion)
-    abrir = fabrica_de_unidades(estado.fabrica_sesiones)
-    modelos = cliente_desde_ajustes(ajustes)
-    cadena = crear_cadena(ajustes, parametros, registrador_en_base(abrir))
-    evidencia = ServicioEvidencia(Recuperador(modelos, modelos), cadena, reloj)
-    actual = AtencionPlan(TIPO, AgentePlan(evidencia, cadena), abrir, reloj)
-    estado.atencion_plan = actual
-    return actual
+    """El ejecutor del tipo, uno por proceso (``app/orquestacion/en_api.py``)."""
+    ejecutor: AtencionPlan = await ejecutor_de(peticion, unidad, TIPO)
+    return ejecutor
 
 
 AtencionDep = Annotated[AtencionPlan, Depends(obtener_atencion)]
@@ -134,10 +113,14 @@ async def hitos(contexto: ContextoCaso, unidad: Unidad) -> list[HitoDelPlan]:
     summary="Pedir el plan de tarea del hito de una versión vigente",
 )
 async def pedir_plan(
-    pedido: PedidoPlan, contexto: ContextoCaso, unidad: Unidad, atencion: AtencionDep
+    pedido: PedidoPlan,
+    peticion: Request,
+    contexto: ContextoCaso,
+    unidad: Unidad,
+    atencion: AtencionDep,
 ) -> SolicitudPlan:
     solicitud = await atencion.iniciar(unidad, contexto, pedido.hito)
-    atencion.lanzar(solicitud, contexto)
+    encolar(peticion, solicitud, contexto)
     return SolicitudPlan(id=solicitud.id, estado=solicitud.estado, creada_en=solicitud.creada_en)
 
 
@@ -156,17 +139,6 @@ async def ver_plan(
     solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
     if solicitud is None or solicitud.tipo is not TIPO:
         raise SolicitudInexistente()
-    atencion: AtencionPlan | None = getattr(peticion.app.state, "atencion_plan", None)
-    if atencion is not None:
-        await atencion.marcar_interrumpida(unidad, contexto, solicitud)
-    elif solicitud.estado in {
-        EstadoSolicitud.RECIBIDA,
-        EstadoSolicitud.RECUPERANDO,
-        EstadoSolicitud.GENERANDO,
-    }:
-        solicitud.estado, solicitud.motivo = EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-        solicitud.actualizada_en = reloj()
-        await unidad.confirmar()
     _, parametros = await unidad.configuracion.vigente()
     version = await unidad.versiones.con_parrafos(contexto, solicitud.version_id)
     hito = hito_configurado(parametros, version.hito) if version else None

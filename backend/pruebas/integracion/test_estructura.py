@@ -23,7 +23,7 @@ from app.llm.proveedores import ProveedorSimulado
 from app.rag.recuperacion import Recuperador
 from app.rag.servicio import ServicioEvidencia
 from app.repositorios.contexto import ContextoAcceso
-from app.repositorios.unidad import UnidadDeTrabajo, fabrica_de_unidades
+from app.repositorios.unidad import UnidadDeTrabajo
 from pruebas.dobles_corpus import EmbeddingsFicticios
 from pruebas.dobles_rag import ReordenadorFicticio
 from pruebas.integracion.conftest import (
@@ -32,6 +32,7 @@ from pruebas.integracion.conftest import (
     crear_caso,
     crear_tema,
     entrar_y_cambiar,
+    esperar_orquestador,
     primera_credencial,
 )
 
@@ -93,7 +94,7 @@ class Estructura:
 
     async def pedir(self, seccion_id: str) -> httpx.Response:
         respuesta = await self.cliente.post("/caso/estructura", json={"seccion_id": seccion_id})
-        await self.atencion.esperar()
+        await esperar_orquestador(self.entorno)
         return respuesta
 
     async def ver(self, solicitud_id: str) -> dict[str, Any]:
@@ -148,7 +149,6 @@ def _atencion(entorno: Entorno, modelo: Modelo) -> AtencionSeccion:
     atencion = AtencionSeccion(
         TipoSolicitud.REVISION_ESTRUCTURA,
         agente,
-        fabrica_de_unidades(entorno.aplicacion.state.fabrica_sesiones),
         entorno.reloj,
     )
     entorno.aplicacion.state.atencion_estructura = atencion
@@ -219,14 +219,14 @@ async def test_sin_guias_se_abstiene_sin_llamar_al_modelo(
 ) -> None:
     cliente = await _caso(entorno, investigador, "CASO-B")
     modelo = Modelo()
-    atencion = _atencion(entorno, modelo)
+    _atencion(entorno, modelo)
     seccion = next(
         s["id"]
         for s in (await cliente.get("/caso/estructura/secciones")).json()
         if "Introducción" in s["titulo"]
     )
     respuesta = await cliente.post("/caso/estructura", json={"seccion_id": seccion})
-    await atencion.esperar()
+    await esperar_orquestador(entorno)
     vista = (await cliente.get(f"/caso/estructura/{respuesta.json()['id']}")).json()
     assert vista["abstencion"] is True and vista["aviso"] == "Sin evidencia suficiente"
     assert modelo.entradas == []

@@ -19,19 +19,12 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Request, status
 from pydantic import BaseModel, Field
 
-from app.agentes.estructura import AgenteEstructura
 from app.agentes.seccion import AtencionSeccion, alcance_de_seccion, secciones_revisables
 from app.api.evidencia import ComprobacionVista, SolicitudInexistente
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
-from app.configuracion import Ajustes
-from app.corpus.fabrica import CorpusNoConfigurado
-from app.inferencia.servicio_modelos import cliente_desde_ajustes
-from app.llm.fabrica import crear_cadena, registrador_en_base
+from app.orquestacion.en_api import ejecutor_de, encolar
 from app.rag.modelos import AVISO_SIN_EVIDENCIA
-from app.rag.recuperacion import Recuperador
-from app.rag.servicio import ServicioEvidencia
-from app.repositorios.unidad import fabrica_de_unidades
-from app.seguridad.dependencias import ContextoCaso, Reloj, RelojDep, Unidad, obtener_reloj
+from app.seguridad.dependencias import ContextoCaso, RelojDep, Unidad
 
 router = APIRouter(prefix="/caso/estructura", tags=["estructura"])
 TIPO = TipoSolicitud.REVISION_ESTRUCTURA
@@ -94,23 +87,9 @@ class VistaEstructura(BaseModel):
 
 
 async def obtener_atencion(peticion: Request, unidad: Unidad) -> AtencionSeccion:
-    """Una por proceso; usa el servicio de modelos y el adaptador."""
-    estado = peticion.app.state
-    actual: AtencionSeccion | None = getattr(estado, "atencion_estructura", None)
-    if actual is not None:
-        return actual
-    ajustes: Ajustes = estado.ajustes
-    if not ajustes.url_servicio_modelos:
-        raise CorpusNoConfigurado(["URL_SERVICIO_MODELOS"])
-    _, parametros = await unidad.configuracion.vigente()
-    reloj: Reloj = obtener_reloj(peticion)
-    abrir = fabrica_de_unidades(estado.fabrica_sesiones)
-    modelos = cliente_desde_ajustes(ajustes)
-    cadena = crear_cadena(ajustes, parametros, registrador_en_base(abrir))
-    evidencia = ServicioEvidencia(Recuperador(modelos, modelos), cadena, reloj)
-    actual = AtencionSeccion(TIPO, AgenteEstructura(evidencia, cadena), abrir, reloj)
-    estado.atencion_estructura = actual
-    return actual
+    """El ejecutor del tipo, uno por proceso (``app/orquestacion/en_api.py``)."""
+    ejecutor: AtencionSeccion = await ejecutor_de(peticion, unidad, TIPO)
+    return ejecutor
 
 
 AtencionDep = Annotated[AtencionSeccion, Depends(obtener_atencion)]
@@ -140,10 +119,14 @@ async def secciones(contexto: ContextoCaso, unidad: Unidad) -> list[SeccionRevis
     summary="Pedir el diagnóstico de estructura y coherencia de una sección",
 )
 async def pedir_estructura(
-    pedido: PedidoEstructura, contexto: ContextoCaso, unidad: Unidad, atencion: AtencionDep
+    pedido: PedidoEstructura,
+    peticion: Request,
+    contexto: ContextoCaso,
+    unidad: Unidad,
+    atencion: AtencionDep,
 ) -> SolicitudEstructura:
     solicitud = await atencion.iniciar(unidad, contexto, pedido.seccion_id)
-    atencion.lanzar(solicitud, contexto)
+    encolar(peticion, solicitud, contexto)
     return SolicitudEstructura(
         id=solicitud.id, estado=solicitud.estado, creada_en=solicitud.creada_en
     )
@@ -164,17 +147,6 @@ async def ver_estructura(
     solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
     if solicitud is None or solicitud.tipo is not TIPO:
         raise SolicitudInexistente()
-    atencion: AtencionSeccion | None = getattr(peticion.app.state, "atencion_estructura", None)
-    if atencion is not None:
-        await atencion.marcar_interrumpida(unidad, contexto, solicitud)
-    elif solicitud.estado in {
-        EstadoSolicitud.RECIBIDA,
-        EstadoSolicitud.RECUPERANDO,
-        EstadoSolicitud.GENERANDO,
-    }:
-        solicitud.estado, solicitud.motivo = EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-        solicitud.actualizada_en = reloj()
-        await unidad.confirmar()
     titulo: str | None = None
     version = await unidad.versiones.con_parrafos(contexto, solicitud.version_id)
     if version is not None and solicitud.alcance_ref:

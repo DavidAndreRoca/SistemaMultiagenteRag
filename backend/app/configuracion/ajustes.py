@@ -140,6 +140,23 @@ class Ajustes(BaseModel):
     espera_maxima_limitador_s: float = Field(
         default=30, ge=0, le=300, validation_alias="ESPERA_MAXIMA_LIMITADOR_S"
     )
+    # Orquestación (T28). Las solicitudes las atiende el trabajador; la ejecución dentro del
+    # proceso de la API es solo para pruebas (hoja de ruta, T28, actividad 7).
+    ejecucion_en_proceso: bool = Field(default=False, validation_alias="EJECUCION_EN_PROCESO")
+    concurrencia_trabajador: int = Field(
+        default=2, ge=1, le=16, validation_alias="CONCURRENCIA_TRABAJADOR"
+    )
+    espera_cola_s: float = Field(default=1, gt=0, le=60, validation_alias="ESPERA_COLA_S")
+    espera_reintento_s: float = Field(
+        default=30, ge=0, le=3600, validation_alias="ESPERA_REINTENTO_S"
+    )
+    espera_huerfana_s: float = Field(
+        default=600, ge=60, le=86_400, validation_alias="ESPERA_HUERFANA_S"
+    )
+    # Trazas en la nube: pospuestas (decisión T28-01). Si alguien las enciende, no arranca.
+    trazas_langsmith: str | None = Field(
+        default=None, validation_alias=AliasChoices("LANGSMITH_TRACING", "LANGCHAIN_TRACING_V2")
+    )
 
     @property
     def cadena_modelos(self) -> tuple[str, ...]:
@@ -157,6 +174,13 @@ class Ajustes(BaseModel):
             if url and not url.startswith(("http://", "https://")):
                 raise ValueError(f"{nombre} debe empezar con http:// o https://")
         self._validar_modelos()
+        if (self.trazas_langsmith or "").strip().lower() in {"1", "true", "yes", "si", "sí"}:
+            raise ValueError(
+                "las trazas en la nube están pospuestas (decisión T28-01): quite"
+                " LANGSMITH_TRACING o LANGCHAIN_TRACING_V2"
+            )
+        if self.ejecucion_en_proceso and self.entorno is not Entorno.PRUEBAS:
+            raise ValueError("EJECUCION_EN_PROCESO solo se admite en el entorno de pruebas")
         faltantes: list[str] = []
         if _vacia(self.url_bd):
             faltantes.append("URL_BD")

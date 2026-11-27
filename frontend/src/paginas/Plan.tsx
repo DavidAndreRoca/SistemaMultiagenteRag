@@ -10,12 +10,12 @@ import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
 import { fechaHora } from "../formato";
+import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaPlan"];
 type Hito = Esquemas["HitoDelPlan"];
 
 const ESPERA_AVANCE_MS = 2000;
-const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
 const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
   interrumpida: "El plan se interrumpió por un reinicio del servidor. Vuelva a pedirlo.",
 };

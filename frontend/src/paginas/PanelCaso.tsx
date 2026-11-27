@@ -287,6 +287,8 @@ const ESTADOS_SOLICITUD: Record<string, string> = {
   asignada: "En curso",
   recuperando: "En curso",
   generando: "En curso",
+  verificando: "En curso",
+  reintentando: "En curso",
   entregada: "Entregada",
   no_atendida: "No atendida",
 };

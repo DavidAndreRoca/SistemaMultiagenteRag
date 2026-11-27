@@ -131,5 +131,5 @@ def crear_atencion(
         ),
     )
     return AtencionReferencias(
-        extractor, Verificador(simulados.crossref, simulados.openalex), modelo, abrir, reloj
+        extractor, Verificador(simulados.crossref, simulados.openalex), modelo, reloj
     )

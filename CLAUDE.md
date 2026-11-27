@@ -36,7 +36,7 @@ Sistema multiagente con RAG para la asistencia en la producción de artículos c
 Todo se ejecuta en contenedor con Python 3.12 (igual que la integración continua). Requiere `.env` (copiar de `.env.example`).
 
 ```bash
-docker compose up -d --wait bd api      # base con pgvector y API en http://127.0.0.1:8000
+docker compose up -d --wait bd api trabajador  # base, API en http://127.0.0.1:8000 y trabajador de la cola
 docker compose run --rm --build pruebas # suite completa con base real y cobertura
 docker compose down                     # detener (añadir -v para borrar el volumen)
 docker compose run --rm --no-deps api python -m app.seguridad.crear_investigador INV-01
@@ -102,6 +102,8 @@ Redacción (T27): agente D3 en `app/agentes/redaccion.py` (`AgenteRedaccion`, `A
 Metodología (T26): agente D2 en `app/agentes/metodologia.py` (`identificar_diseno`, herramienta `lista_de_comprobacion` sobre `RepositorioRecuperacion.por_apartado`, cuyos criterios abreviados son la consulta; `consulta_con_herramientas` en el contrato), comprobación `comprobar_numeros` (`sin_datos_inventados`), rutas `app/api/metodologia.py`, pantalla `frontend/src/paginas/Metodologia.tsx`. Las comprobaciones de los agentes por alcance reciben identificador a texto de cada fragmento recuperado.
 
 Plan de tarea (T24): `app/agentes/plan.py` (`AgentePlan`, `AtencionPlan` con alcance de hito, `instrucciones_del_hito`, `estado_del_borrador`), abstención sin insumo con `Agente.falta_insumo` y `ServicioEvidencia.abstener` (paso `herramienta`), rutas `app/api/plan.py`, pantalla `frontend/src/paginas/Plan.tsx` (copiar y descargar en texto).
+
+Orquestación (T28): `app/orquestacion/` (`grafo.py` con el grafo de LangGraph y `Orquestador`; `enrutamiento.py` con la tabla fija tipo a agente; `fabrica.py` con los ejecutores de cada tipo; `en_api.py`; `trabajador.py`, proceso aparte que toma la cola). Cada atención es un ejecutor con `ejecutar`, `verificar` y `registrar` (`app/agentes/ejecucion.py`). Cola en `app/repositorios/cola.py` (único repositorio sin caso: solo identificadores). La API solo crea solicitudes; en pruebas, `EJECUCION_EN_PROCESO=true` las atiende en su proceso (esperar con `esperar_orquestador`). Checkpointer de LangGraph en PostgreSQL (migración 0021). Trazas en la nube pospuestas: no arranca con `LANGSMITH_TRACING`.
 
 ## Estructura
 

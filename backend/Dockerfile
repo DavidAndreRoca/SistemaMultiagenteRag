@@ -6,7 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     HF_HUB_OFFLINE=1 \
     HF_HUB_DISABLE_TELEMETRY=1 \
-    DOCLING_SECURITY_REFUSE_UNPINNED_REMOTE_CODE=1
+    DOCLING_SECURITY_REFUSE_UNPINNED_REMOTE_CODE=1 \
+    LANGSMITH_TRACING=false
 WORKDIR /app
 RUN python -m pip install --upgrade "pip>=26.2"
 # Árbol completo con versiones exactas, incluido el extra corpus (T09: Docling y PyTorch en

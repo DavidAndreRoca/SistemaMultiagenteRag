@@ -22,6 +22,7 @@ from app.repositorios.caso import (
     RepositorioVerificaciones,
     RepositorioVersiones,
 )
+from app.repositorios.cola import RepositorioCola
 from app.repositorios.colecciones import RepositorioColecciones
 from app.repositorios.corpus import RepositorioCorpus
 from app.repositorios.importacion import RepositorioImportacion
@@ -65,6 +66,7 @@ class UnidadDeTrabajo:
         self.cuentas_investigador = RepositorioCuentasInvestigador(sesion)
         self.corpus = RepositorioCorpus(sesion)
         self.importacion = RepositorioImportacion(sesion)
+        self.cola = RepositorioCola(sesion)  # sin caso: solo identificadores (T28)
 
     async def confirmar(self) -> None:
         await self._sesion.commit()

@@ -10,13 +10,13 @@ import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
 import { numero } from "../formato";
+import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaEstructura"];
 type Seccion = Esquemas["SeccionRevisable"];
 type Hallazgo = Esquemas["HallazgoVista"];
 
 const ESPERA_AVANCE_MS = 2000;
-const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
 const SEVERIDADES: Record<string, string> = { alta: "Alta", media: "Media", baja: "Baja" };
 const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
   interrumpida: "La revisión se interrumpió por un reinicio del servidor. Vuelva a pedirla.",

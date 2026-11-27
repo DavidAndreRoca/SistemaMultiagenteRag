@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from collections.abc import Sequence
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import undefer
 
@@ -123,6 +123,15 @@ class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):
 class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):
     modelo = FragmentoRecuperado
 
+    async def borrar_de_solicitud(self, contexto: ContextoAcceso, solicitud_id: uuid.UUID) -> None:
+        """Antes de reintentar una solicitud cortada (T28): lo que dejó el intento anterior."""
+        await self._sesion.execute(
+            delete(FragmentoRecuperado).where(
+                FragmentoRecuperado.caso_id == contexto.caso_exigido(),
+                FragmentoRecuperado.solicitud_id == solicitud_id,
+            )
+        )
+
     async def identificadores(self, contexto: ContextoAcceso, solicitud_id: uuid.UUID) -> set[str]:
         """``F1`` a ``Fn`` recuperados para una solicitud del caso (comprobación 3, T18)."""
         resultado = await self._sesion.execute(
@@ -171,6 +180,14 @@ class RepositorioFragmentosRecuperados(RepositorioDeCaso[FragmentoRecuperado]):
 
 class RepositorioResultados(RepositorioDeCaso[Resultado]):
     modelo = Resultado
+
+    async def borrar_de_solicitud(self, contexto: ContextoAcceso, solicitud_id: uuid.UUID) -> None:
+        """Antes de reintentar una solicitud cortada (T28): lo que dejó el intento anterior."""
+        await self._sesion.execute(
+            delete(Resultado).where(
+                Resultado.caso_id == contexto.caso_exigido(), Resultado.solicitud_id == solicitud_id
+            )
+        )
 
     async def de_solicitud(
         self, contexto: ContextoAcceso, solicitud_id: uuid.UUID

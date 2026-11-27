@@ -19,10 +19,9 @@ from app.llm.modelos import EntradaModelo, Proveedor
 from app.llm.proveedores import ProveedorSimulado
 from app.rag.recuperacion import Recuperador
 from app.rag.servicio import ServicioEvidencia
-from app.repositorios.unidad import fabrica_de_unidades
 from pruebas.dobles_corpus import EmbeddingsFicticios
 from pruebas.dobles_rag import ReordenadorFicticio
-from pruebas.integracion.conftest import Entorno, consultar
+from pruebas.integracion.conftest import Entorno, consultar, esperar_orquestador
 from pruebas.integracion.test_estructura import _caso, _guias
 
 pytestmark = pytest.mark.integracion
@@ -98,7 +97,7 @@ class Redaccion:
 
     async def pedir(self, parrafo_id: str) -> httpx.Response:
         respuesta = await self.cliente.post("/caso/redaccion", json={"parrafo_id": parrafo_id})
-        await self.atencion.esperar()
+        await esperar_orquestador(self.entorno)
         return respuesta
 
     async def ver(self, solicitud_id: str) -> dict[str, Any]:
@@ -121,7 +120,6 @@ def _atencion(entorno: Entorno, modelo: Modelo) -> AtencionRedaccion:
     atencion = AtencionRedaccion(
         TipoSolicitud.PROPUESTA_REDACCION,
         agente,
-        fabrica_de_unidades(entorno.aplicacion.state.fabrica_sesiones),
         entorno.reloj,
     )
     entorno.aplicacion.state.atencion_redaccion = atencion

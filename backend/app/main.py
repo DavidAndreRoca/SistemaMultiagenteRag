@@ -31,6 +31,7 @@ from app.comun.middleware import MiddlewareIncidencia
 from app.comun.registro import configurar_registro, obtener_registrador
 from app.configuracion import Ajustes, cargar_ajustes
 from app.importacion.servicio import purgar
+from app.orquestacion.fabrica import ATRIBUTOS
 
 
 def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
@@ -65,18 +66,10 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
             importador = aplicacion.state.importador
             if importador is not None:
                 importador.cancelar()
-            if aplicacion.state.atencion_evidencia is not None:
-                aplicacion.state.atencion_evidencia.cancelar()
-            if aplicacion.state.atencion_referencias is not None:
-                aplicacion.state.atencion_referencias.cancelar()
-            if aplicacion.state.atencion_estructura is not None:
-                aplicacion.state.atencion_estructura.cancelar()
-            if aplicacion.state.atencion_redaccion is not None:
-                aplicacion.state.atencion_redaccion.cancelar()
-            if aplicacion.state.atencion_metodologia is not None:
-                aplicacion.state.atencion_metodologia.cancelar()
-            if aplicacion.state.atencion_plan is not None:
-                aplicacion.state.atencion_plan.cancelar()
+            if aplicacion.state.orquestador is not None:  # solo en pruebas (T28)
+                aplicacion.state.orquestador.cancelar()
+            if aplicacion.state.fabrica_ejecutores is not None:
+                await aplicacion.state.fabrica_ejecutores.cerrar()
             await motor.dispose()
             obtener_registrador().info("aplicacion detenida", extra={"tipo_evento": "apagado"})
 
@@ -100,12 +93,12 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     aplicacion.state.indexador = None
     aplicacion.state.embebedor = None
     aplicacion.state.importador = None  # T15: se crea al primer uso, con el indexador
-    aplicacion.state.atencion_evidencia = None  # T19: se crea al primer uso
-    aplicacion.state.atencion_referencias = None  # T20: se crea al primer uso
-    aplicacion.state.atencion_estructura = None  # T23: se crea al primer uso
-    aplicacion.state.atencion_redaccion = None  # T27: se crea al primer uso
-    aplicacion.state.atencion_metodologia = None  # T26: se crea al primer uso
-    aplicacion.state.atencion_plan = None  # T24: se crea al primer uso
+    # T28: los ejecutores de cada tipo se crean al primer uso con una fábrica compartida
+    # (``app/orquestacion/en_api.py``); las pruebas los sustituyen.
+    for atributo in ATRIBUTOS.values():
+        setattr(aplicacion.state, atributo, None)
+    aplicacion.state.fabrica_ejecutores = None
+    aplicacion.state.orquestador = None  # solo con EJECUCION_EN_PROCESO (pruebas)
     aplicacion.state.candado_corpus = asyncio.Lock()
     aplicacion.state.servicio_borradores = None  # se crea al primer uso (DIRECTORIO_ARCHIVOS)
     registrar_manejadores(aplicacion)
