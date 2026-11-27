@@ -71,6 +71,8 @@ class MetadatosBibliograficos(_Inmutable):
     paginas: str | None = None
     editorial: str | None = None
     tipo: str | None = None
+    # Resumen de la obra (T32: se indexa si el caso aporta una fuente sin PDF).
+    resumen: str | None = None
 
 
 class AccesoAbierto(_Inmutable):

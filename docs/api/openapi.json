@@ -22,6 +22,53 @@
         "title": "AfirmacionVista",
         "type": "object"
       },
+      "Body_aportar_caso_solicitudes__solicitud_id__aporte_post": {
+        "properties": {
+          "anio": {
+            "title": "Anio",
+            "type": "integer"
+          },
+          "archivo": {
+            "anyOf": [
+              {
+                "contentMediaType": "application/octet-stream",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archivo"
+          },
+          "autores": {
+            "description": "Apellidos de los autores, uno por línea.",
+            "title": "Autores",
+            "type": "string"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "titulo",
+          "autores",
+          "anio"
+        ],
+        "title": "Body_aportar_caso_solicitudes__solicitud_id__aporte_post",
+        "type": "object"
+      },
       "Body_cargar_version_caso_versiones_post": {
         "properties": {
           "archivo": {
@@ -440,6 +487,16 @@
         ],
         "title": "CitaVista",
         "type": "object"
+      },
+      "CoherenciaFuente": {
+        "enum": [
+          "coherente",
+          "parcial",
+          "no_coherente",
+          "no_evaluada"
+        ],
+        "title": "CoherenciaFuente",
+        "type": "string"
       },
       "ColeccionVista": {
         "properties": {
@@ -1009,6 +1066,15 @@
         "title": "ExclusionVista",
         "type": "object"
       },
+      "ExistenciaFuente": {
+        "enum": [
+          "confirmada",
+          "no_localizada",
+          "no_comprobable"
+        ],
+        "title": "ExistenciaFuente",
+        "type": "string"
+      },
       "FuenteVista": {
         "properties": {
           "documento_id": {
@@ -1240,6 +1306,16 @@
         "title": "ImportacionVista",
         "type": "object"
       },
+      "IndexacionAporte": {
+        "description": "Qué pasó con una fuente aportada en la colección personal (T32; CP-14 a CP-17).",
+        "enum": [
+          "indexada",
+          "ya_indexada",
+          "no_indexada"
+        ],
+        "title": "IndexacionAporte",
+        "type": "string"
+      },
       "InformeTema": {
         "description": "Informe del corpus de un tema (RF-15, RF-20).",
         "properties": {
@@ -1414,6 +1490,14 @@
           "manual"
         ],
         "title": "MetodoDeteccionSecciones",
+        "type": "string"
+      },
+      "MetodoExistencia": {
+        "enum": [
+          "doi",
+          "metadatos"
+        ],
+        "title": "MetodoExistencia",
         "type": "string"
       },
       "MotivoExclusionCorpus": {
@@ -2782,6 +2866,144 @@
           "palabras"
         ],
         "title": "VersionResumen",
+        "type": "object"
+      },
+      "VistaAporte": {
+        "properties": {
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "aportada_en": {
+            "format": "date-time",
+            "title": "Aportada En",
+            "type": "string"
+          },
+          "cita_propuesta": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cita Propuesta"
+          },
+          "coherencia": {
+            "$ref": "#/components/schemas/CoherenciaFuente"
+          },
+          "con_pdf": {
+            "title": "Con Pdf",
+            "type": "boolean"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "existencia": {
+            "$ref": "#/components/schemas/ExistenciaFuente"
+          },
+          "explicacion_coherencia": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explicacion Coherencia"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "indexacion": {
+            "$ref": "#/components/schemas/IndexacionAporte"
+          },
+          "metodo_existencia": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetodoExistencia"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "motivo_indexacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo Indexacion"
+          },
+          "nueva_solicitud_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nueva Solicitud Id"
+          },
+          "texto_indexado": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Texto Indexado"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "titulo",
+          "anio",
+          "doi",
+          "con_pdf",
+          "existencia",
+          "metodo_existencia",
+          "coherencia",
+          "explicacion_coherencia",
+          "indexacion",
+          "motivo_indexacion",
+          "texto_indexado",
+          "cita_propuesta",
+          "nueva_solicitud_id",
+          "aportada_en"
+        ],
+        "title": "VistaAporte",
         "type": "object"
       },
       "VistaDecision": {
@@ -5328,6 +5550,195 @@
         "summary": "Búsquedas de evidencia y verificaciones de referencias del caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/aporte": {
+      "post": {
+        "operationId": "aportar_caso_solicitudes__solicitud_id__aporte_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_aportar_caso_solicitudes__solicitud_id__aporte_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaAporte"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "413": {
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Aportar una fuente tras una búsqueda sin evidencia suficiente",
+        "tags": [
+          "aportes"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/aportes": {
+      "get": {
+        "operationId": "ver_aportes_caso_solicitudes__solicitud_id__aportes_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VistaAporte"
+                  },
+                  "title": "Response Ver Aportes Caso Solicitudes  Solicitud Id  Aportes Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Fuentes aportadas tras una solicitud, con su desenlace",
+        "tags": [
+          "aportes"
         ]
       }
     },

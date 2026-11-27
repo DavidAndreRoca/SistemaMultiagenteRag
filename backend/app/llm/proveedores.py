@@ -44,7 +44,11 @@ class ProveedorModelo(Protocol):
     modelo: str
 
     async def completar(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> RespuestaProveedor: ...
 
 
@@ -145,7 +149,11 @@ class ProveedorCompatibleOpenAI:
     max_tokens_salida: int = 2048
 
     def cuerpo(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> dict[str, Any]:
         estructura = esquema_estricto(esquema)
         if self.esquema_estricto:
@@ -168,19 +176,23 @@ class ProveedorCompatibleOpenAI:
                 {"role": "user", "content": mensajes.usuario(entrada)},
             ],
             "response_format": formato,
-            "max_tokens": self.max_tokens_salida,
+            "max_tokens": max_tokens or self.max_tokens_salida,
             "temperature": 0,
             "stream": False,
         }
 
     async def completar(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> RespuestaProveedor:
         datos = await _post(
             self.cliente,
             self.proveedor,
             f"{self.url_base}/chat/completions",
-            self.cuerpo(instruccion, entrada, esquema),
+            self.cuerpo(instruccion, entrada, esquema, max_tokens),
             {"Authorization": f"Bearer {self.clave}"},
         )
         try:
@@ -216,13 +228,17 @@ class ProveedorGemini:
     proveedor: Proveedor = Proveedor.GEMINI
 
     def cuerpo(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> dict[str, Any]:
         return {
             "model": self.modelo,
             "input": mensajes.usuario(entrada),
             "system_instruction": mensajes.sistema(instruccion),
-            "generation_config": {"max_output_tokens": self.max_tokens_salida},
+            "generation_config": {"max_output_tokens": max_tokens or self.max_tokens_salida},
             "response_format": {
                 "type": "text",
                 "mime_type": "application/json",
@@ -232,13 +248,17 @@ class ProveedorGemini:
         }
 
     async def completar(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> RespuestaProveedor:
         datos = await _post(
             self.cliente,
             self.proveedor,
             f"{self.url_base}/interactions",
-            self.cuerpo(instruccion, entrada, esquema),
+            self.cuerpo(instruccion, entrada, esquema, max_tokens),
             {"x-goog-api-key": self.clave, "Api-Revision": REVISION_GEMINI},
         )
         if datos.get("status") not in ("completed", "incomplete"):
@@ -278,7 +298,11 @@ class ProveedorSimulado:
     llamadas: int = 0
 
     async def completar(
-        self, instruccion: Instruccion, entrada: EntradaModelo, esquema: type[BaseModel]
+        self,
+        instruccion: Instruccion,
+        entrada: EntradaModelo,
+        esquema: type[BaseModel],
+        max_tokens: int | None = None,
     ) -> RespuestaProveedor:
         self.llamadas += 1
         if self.fallar is not None:

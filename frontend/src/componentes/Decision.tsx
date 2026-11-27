@@ -1,6 +1,7 @@
 // Decisión del investigador sobre un resultado entregado (T31; RF-12, CU-11, HU-10). Sobre una
 // propuesta: aceptarla, usarla con cambios o no usarla; tras "Sin evidencia suficiente":
-// continuar sin aportar una fuente (aportar una fuente llega en T32). Cambiar de decisión
+// continuar sin aportar una fuente o aportarla (T32: la pantalla de evidencia abre el
+// formulario, y el aporte registra la decisión). Cambiar de decisión
 // registra otra que reemplaza a la anterior; las dos se conservan en el historial.
 import { useEffect, useState } from "react";
 
@@ -18,9 +19,15 @@ export const TEXTOS_OPCION: Record<Opcion, string> = {
   continuar: "Continuar sin aportar una fuente",
   aportar: "Aportar una fuente",
 };
-const OPCION_PENDIENTE: Opcion = "aportar";
+const APORTAR: Opcion = "aportar";
 
-export function DecisionSobreResultado({ solicitud }: { solicitud: string }) {
+export function DecisionSobreResultado({
+  solicitud,
+  alAportar,
+}: {
+  solicitud: string;
+  alAportar?: () => void;
+}) {
   const [vista, setVista] = useState<VistaDecision | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [enviando, setEnviando] = useState(false);
@@ -83,13 +90,17 @@ export function DecisionSobreResultado({ solicitud }: { solicitud: string }) {
       <AvisoError error={error} />
       <div className="decision__opciones">
         {vista.opciones.map((opcion) =>
-          opcion === OPCION_PENDIENTE ? (
-            <span key={opcion} className="decision__pendiente">
-              <Boton variante="secundario" isDisabled>
+          opcion === APORTAR ? (
+            alAportar ? (
+              <Boton
+                key={opcion}
+                variante={vigente?.opcion === opcion ? "principal" : "secundario"}
+                isDisabled={enviando}
+                onPress={alAportar}
+              >
                 {TEXTOS_OPCION[opcion]}
-              </Boton>{" "}
-              <span className="insignia insignia--pendiente">Pendiente</span>
-            </span>
+              </Boton>
+            ) : null
           ) : (
             <Boton
               key={opcion}

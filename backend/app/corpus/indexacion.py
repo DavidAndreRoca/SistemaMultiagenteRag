@@ -158,6 +158,26 @@ class Indexador:
         with self._candado:
             return self._procesador.con_parametros(parametros).procesar_pdf(ruta, etapas)
 
+    async def procesar(self, unidad: UnidadDeTrabajo, ruta: Path) -> DocumentoProcesado:
+        """El canal de T09 con los parámetros vigentes, sin escribir en la base (T32: los
+        aportes de un caso se guardan con su propio repositorio)."""
+        _, vigentes = await unidad.configuracion.vigente()
+        return await asyncio.to_thread(
+            self._procesar, ruta, ParametrosCanal.desde(vigentes), Etapas()
+        )
+
+    async def embeber(self, textos: Sequence[str]) -> tuple[list[list[float]], IdentidadModelo]:
+        embebidos = await self._embeddings.embeber(list(textos))
+        return embebidos.vectores, embebidos.identidad
+
+    def guardar_archivo(self, ruta: Path) -> str:
+        assert self._almacen is not None, "indexador creado sin almacén"
+        return self._almacen.guardar(ruta)
+
+    def borrar_archivo(self, guardado: str) -> None:
+        if self._almacen is not None:
+            self._almacen.borrar(guardado)
+
     async def ingerir(
         self,
         unidad: UnidadDeTrabajo,

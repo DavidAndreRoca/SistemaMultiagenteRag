@@ -7,7 +7,8 @@
   ``verificar`` y ``registrar``). Aplica las comprobaciones 1, 3 y 5:
 
   - las fuentes recomendadas son solo los documentos citados con acceso abierto
-    comprobado (RN-14), con su referencia armada desde los metadatos (RN-17);
+    comprobado (RN-14), más las que aportó el caso (T32, RN-14 no se les aplica), con su
+    referencia armada desde los metadatos (RN-17);
   - si una comprobación falla, el resultado se entrega con la etiqueta "Con advertencias"
     y la lista de las fallidas. El reintento y la verificación completa son de T30.
 
@@ -23,7 +24,13 @@ from datetime import datetime
 from app.agentes.contrato import Agente, EstadoAgente, ResultadoAgente
 from app.agentes.ejecucion import Ejecucion, cambiar_estado
 from app.agentes.validacion_consulta import Rechazo, validar
-from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAlcance, TipoSolicitud
+from app.bd.enumeraciones import (
+    EstadoSolicitud,
+    Etiqueta,
+    OrigenDocumento,
+    TipoAlcance,
+    TipoSolicitud,
+)
 from app.bd.modelos import Resultado, Solicitud
 from app.bibliografia.interfaces import ServicioBibliografico
 from app.bibliografia.referencias import ConstructorReferencias
@@ -46,7 +53,7 @@ from app.verificacion.registro import advertencias_de
 
 TIPO = TipoSolicitud.BUSQUEDA_EVIDENCIA
 INVITACION_APORTE = (
-    "Puede aportar una fuente de acceso abierto sobre su consulta para que el sistema la"
+    "Puede aportar una fuente sobre su consulta, con o sin su PDF, para que el sistema la"
     " compruebe y la incluya en su colección personal."
 )
 _registro = obtener_registrador("agentes")
@@ -186,8 +193,13 @@ class AtencionEvidencia:
         documentos = await unidad.fragmentos_recuperados.documentos_citados(
             contexto, solicitud.id, identificadores_citados(salida)
         )
+        # RN-14 no se aplica a las fuentes que aportó el caso (T32): se recomiendan y no
+        # pasan por la comprobación 5.
+        aportados = {i for i, d in documentos if d.origen is OrigenDocumento.APORTE}
         recomendados = [
-            (i, d) for i, d in documentos if d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
+            (i, d)
+            for i, d in documentos
+            if i in aportados or d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
         ]
         _, parametros = await unidad.configuracion.vigente()
         return Ejecucion(
@@ -196,7 +208,7 @@ class AtencionEvidencia:
             intento=intento,
             datos={
                 "textos": textos,
-                "estado_oa": {i: d.estado_oa.value for i, d in documentos},
+                "estado_oa": {i: d.estado_oa.value for i, d in documentos if i not in aportados},
                 "recomendables": [i for i, _ in recomendados],
                 "documentos_recomendados": [d for _, d in recomendados],
                 "umbral": parametros.umbral_fidelidad,

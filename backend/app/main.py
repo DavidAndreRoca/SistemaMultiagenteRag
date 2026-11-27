@@ -11,6 +11,7 @@ from fastapi import FastAPI
 
 from app import __version__
 from app.api import (
+    aportes,
     borradores,
     caso,
     corpus,
@@ -116,6 +117,7 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
         plan,
         solicitudes,
         decisiones,
+        aportes,
     ):
         aplicacion.include_router(modulo.router)
     return aplicacion

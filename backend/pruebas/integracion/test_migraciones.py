@@ -760,3 +760,41 @@ def test_la_migracion_0022_agrega_la_instruccion_del_evaluador(base_vacia: str) 
         base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
     )[0]
     assert "evaluador" not in versiones and versiones["plan"] == "v1"
+
+
+def test_la_migracion_0023_agrega_el_desenlace_del_aporte_y_la_coherencia(
+    base_vacia: str,
+) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0023")
+    columnas = {
+        fila[0]
+        for fila in consultar(
+            base_vacia,
+            "SELECT column_name FROM information_schema.columns"
+            " WHERE table_name = 'fuente_aportada'",
+        )
+    }
+    assert {
+        "indexacion",
+        "motivo_indexacion",
+        "cita_propuesta",
+        "solicitud_recuperacion_id",
+    } <= columnas
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones["coherencia"] == "v1" and versiones["evaluador"] == "v1"
+    command.downgrade(cfg, "0022")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert "coherencia" not in versiones
+    assert "indexacion" not in {
+        fila[0]
+        for fila in consultar(
+            base_vacia,
+            "SELECT column_name FROM information_schema.columns"
+            " WHERE table_name = 'fuente_aportada'",
+        )
+    }

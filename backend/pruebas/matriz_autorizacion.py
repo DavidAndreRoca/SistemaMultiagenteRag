@@ -75,6 +75,17 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         admite_propio=frozenset({404}),
     ),
     ("GET", "/caso/contadores"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Aporte de fuentes (T32): la solicitud ficticia no existe; sin el formulario, 422.
+    ("POST", "/caso/solicitudes/{solicitud_id}/aporte"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/aporte",
+        admite_propio=frozenset({404, 422}),
+    ),
+    ("GET", "/caso/solicitudes/{solicitud_id}/aportes"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/aportes",
+        admite_propio=frozenset({404}),
+    ),
     # Estado en tiempo real, reenvío y mismo alcance (T29): la solicitud ficticia no existe.
     ("GET", "/caso/solicitudes/{solicitud_id}/eventos"): Entrada(
         Politica.CASO,

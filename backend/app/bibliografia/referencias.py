@@ -100,6 +100,12 @@ class ConstructorReferencias:
         )
         return referencias
 
+    async def de_documento(self, documento: Documento, norma: str) -> ReferenciaArmada:
+        """Referencia de un documento suelto: la cita propuesta de una fuente aportada (T32)."""
+        if norma not in ESTILOS:
+            raise NormaNoAdmitida(f"norma sin estilo CSL: {norma}")
+        return await self._armar(documento, [], norma)
+
     async def _armar(
         self, documento: Documento, identificadores: list[str], norma: str
     ) -> ReferenciaArmada:

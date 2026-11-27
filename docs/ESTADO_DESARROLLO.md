@@ -2125,3 +2125,43 @@ Rama `t31-decisiones-contadores`. Decisión: `docs/decisiones/T31-decisiones-con
   - los textos de los botones;
   - contar solo las decisiones vigentes;
   - medir el uso mínimo con las solicitudes entregadas de cada hito, de cualquier tipo.
+
+**Integración de T31:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#27, CI verde (ejecución 46058480079, 9 de 9 trabajos), integrada en `main`.
+
+## 33. Bloque 3: T32 (aporte de fuentes y colección personal)
+
+Rama `t32-aporte-fuentes`. Decisión: `docs/decisiones/T32-aporte-de-fuentes.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Aporte** tras "Sin evidencia suficiente" de una búsqueda de evidencia del propio caso (`POST /caso/solicitudes/{id}/aporte`):
+  - datos de la obra (título, autores y año), DOI opcional y PDF opcional;
+  - registra la decisión "aportar".
+- **Proceso:**
+  - existencia por DOI o por metadatos; un servicio caído da "no comprobable";
+  - sin duplicar en la colección personal;
+  - texto del PDF (canal de T09) o del resumen de Crossref u OpenAlex;
+  - coherencia informativa (`coherencia/v1`) y cita en la norma del caso, sin modelo;
+  - indexación solo en la colección personal;
+  - nueva búsqueda con la misma consulta, enlazada a la abstención.
+- **Migración 0023:** el desenlace del aporte en `fuente_aportada` y la instrucción de coherencia en la configuración.
+- **D4:** las fuentes aportadas se recomiendan sin pasar por la comprobación 5 (RN-14 no se les aplica).
+- **Decisiones:** tras una abstención de otro tipo solo se ofrece "continuar".
+- **Interfaz:** "Aportar una fuente" abre el formulario bajo la abstención, con el desenlace, la cita propuesta y el paso a la nueva búsqueda.
+- **Corrección de una regresión de T27:**
+  - con el tope de salida de 4 096 (migración 0018) y Groq gratuito (8 000 tokens por minuto), una búsqueda de evidencia con el contexto lleno nunca cabía en el minuto: el limitador la rechazaba siempre y la solicitud quedaba "no atendida";
+  - ahora el tope de cada llamada se reduce a lo que cabe, con un mínimo de 1 024 tokens.
+- **Pruebas:**
+  - 8 de integración (CP-14 a CP-17, servicio caído, PDF, admisión y aislamiento entre casos), 1 de decisiones y 1 de migración;
+  - 9 unitarias;
+  - 3 de la interfaz;
+  - backend 952, frontend 44 y extremo a extremo 11 de 11.
+  - **Pendiente:** el extremo a extremo automático del aporte, porque necesita una búsqueda entregada como abstención y ese entorno no tiene modelo.
+- **Prototipo, con los servicios reales:**
+  - la consulta sobre el sesgo de los detectores de IA con estudiantes de inglés como segunda lengua se abstuvo;
+  - el aporte por DOI de Liang y otros (2023) se confirmó, con coherencia "coherente", cita IEEE del registro del DOI y resumen guardado en la colección personal;
+  - la nueva búsqueda citó la fuente aportada (F1) y la recomendó, "Con advertencias" porque el evaluador marcó una inferencia sin respaldo; tardó 270 s con Groq gratuito.
+- **Provisional, sin revisión humana:**
+  - segmentar el resumen en oraciones de unas 60 palabras;
+  - procesar el aporte en la petición;
+  - usar la consulta original como afirmación;
+  - los textos de la interfaz;
+  - no guardar la explicación de la coherencia.
