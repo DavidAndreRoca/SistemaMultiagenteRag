@@ -1452,6 +1452,21 @@
         "title": "PedidoEvidencia",
         "type": "object"
       },
+      "PedidoMetodologia": {
+        "properties": {
+          "seccion_id": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Seccion Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "seccion_id"
+        ],
+        "title": "PedidoMetodologia",
+        "type": "object"
+      },
       "PedidoRedaccion": {
         "properties": {
           "parrafo_id": {
@@ -1927,6 +1942,41 @@
         "title": "Seccion",
         "type": "object"
       },
+      "SeccionMetodologica": {
+        "properties": {
+          "diseno": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Diseno"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "palabras": {
+            "title": "Palabras",
+            "type": "integer"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "titulo",
+          "palabras",
+          "diseno"
+        ],
+        "title": "SeccionMetodologica",
+        "type": "object"
+      },
       "SeccionRevisable": {
         "properties": {
           "id": {
@@ -2087,6 +2137,30 @@
           "contrasena"
         ],
         "title": "SolicitudInicio",
+        "type": "object"
+      },
+      "SolicitudMetodologia": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudMetodologia",
         "type": "object"
       },
       "SolicitudNorma": {
@@ -2670,6 +2744,159 @@
           "comprobaciones"
         ],
         "title": "VistaEvidencia",
+        "type": "object"
+      },
+      "VistaMetodologia": {
+        "properties": {
+          "abstencion": {
+            "title": "Abstencion",
+            "type": "boolean"
+          },
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "diseno": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Diseno"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hallazgos": {
+            "items": {
+              "$ref": "#/components/schemas/HallazgoVista"
+            },
+            "title": "Hallazgos",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "notas_para_el_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notas Para El Estudiante",
+            "type": "array"
+          },
+          "preguntas_al_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Preguntas Al Estudiante",
+            "type": "array"
+          },
+          "seccion_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion Id"
+          },
+          "seccion_titulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seccion Titulo"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "seccion_id",
+          "seccion_titulo",
+          "diseno",
+          "abstencion",
+          "aviso",
+          "etiqueta",
+          "hallazgos",
+          "preguntas_al_estudiante",
+          "notas_para_el_estudiante",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaMetodologia",
         "type": "object"
       },
       "VistaRedaccion": {
@@ -3568,6 +3795,251 @@
         "summary": "Avance y resultado de una búsqueda de evidencia",
         "tags": [
           "evidencia"
+        ]
+      }
+    },
+    "/caso/metodologia": {
+      "post": {
+        "operationId": "pedir_metodologia_caso_metodologia_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoMetodologia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudMetodologia"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir el diagnóstico metodológico de una sección",
+        "tags": [
+          "metodologia"
+        ]
+      }
+    },
+    "/caso/metodologia/secciones": {
+      "get": {
+        "operationId": "secciones_caso_metodologia_secciones_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeccionMetodologica"
+                  },
+                  "title": "Response Secciones Caso Metodologia Secciones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Secciones de la versión vigente, con el diseño que nombra cada una",
+        "tags": [
+          "metodologia"
+        ]
+      }
+    },
+    "/caso/metodologia/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_metodologia_caso_metodologia__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaMetodologia"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance y resultado de un diagnóstico metodológico",
+        "tags": [
+          "metodologia"
         ]
       }
     },

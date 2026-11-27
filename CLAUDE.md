@@ -99,6 +99,8 @@ Guías y estructura (T22 y T23): `app/corpus/guias.py` (`python -m app.corpus.gu
 
 Redacción (T27): agente D3 en `app/agentes/redaccion.py` (`AgenteRedaccion`, `AtencionRedaccion`, `parrafo_para_propuesta`; un párrafo del cuerpo, nunca títulos ni la lista de referencias), camino común `AtencionPorAlcance` en `app/agentes/seccion.py`, comprobación 2 `comprobar_limites_propuesta` y `contar_palabras` (en `app/borradores/alcance.py`), rutas `app/api/redaccion.py`, pantalla `frontend/src/paginas/Redaccion.tsx` con el comparador `frontend/src/diferencias.ts`. Groq con tope de salida de 4096 (0018): gpt-oss razona antes de responder; `json_validate_failed` se reintenta.
 
+Metodología (T26): agente D2 en `app/agentes/metodologia.py` (`identificar_diseno`, herramienta `lista_de_comprobacion` sobre `RepositorioRecuperacion.por_apartado`, cuyos criterios abreviados son la consulta; `consulta_con_herramientas` en el contrato), comprobación `comprobar_numeros` (`sin_datos_inventados`), rutas `app/api/metodologia.py`, pantalla `frontend/src/paginas/Metodologia.tsx`. Las comprobaciones de los agentes por alcance reciben identificador a texto de cada fragmento recuperado.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

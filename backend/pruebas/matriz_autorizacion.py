@@ -72,6 +72,16 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         ejemplo=f"/caso/estructura/{ID_FICTICIO}",
         admite_propio=frozenset({404}),
     ),
+    # Diagnóstico metodológico (T26). Sin servicio de modelos en las pruebas responde 503.
+    ("GET", "/caso/metodologia/secciones"): Entrada(Politica.CASO, datos_de_caso=True),
+    ("POST", "/caso/metodologia"): Entrada(
+        Politica.CASO, cuerpo={"seccion_id": "s1"}, admite_propio=frozenset({503})
+    ),
+    ("GET", "/caso/metodologia/{solicitud_id}"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/metodologia/{ID_FICTICIO}",
+        admite_propio=frozenset({404}),
+    ),
     # Propuesta de redacción (T27). Sin servicio de modelos en las pruebas responde 503.
     ("GET", "/caso/redaccion/parrafos"): Entrada(Politica.CASO, datos_de_caso=True),
     ("POST", "/caso/redaccion"): Entrada(

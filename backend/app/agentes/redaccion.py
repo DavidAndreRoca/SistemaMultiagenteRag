@@ -19,7 +19,7 @@ CP-10, RN-07).
 
 from __future__ import annotations
 
-from collections.abc import Collection
+from collections.abc import Mapping
 from typing import Any
 
 from app.administracion.parametros import ParametrosFuncionales
@@ -129,7 +129,7 @@ class AtencionRedaccion(AtencionPorAlcance):
         salida: dict[str, Any],
         texto: str,
         parametros: ParametrosFuncionales,
-        recuperados: Collection[str],
+        recuperados: Mapping[str, str],
     ) -> list[Comprobacion]:
         return [
             comprobar_esquema(self.tipo, salida),
