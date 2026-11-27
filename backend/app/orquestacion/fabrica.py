@@ -37,6 +37,7 @@ from app.llm.fabrica import crear_cadena, registrador_en_base
 from app.rag.recuperacion import Recuperador
 from app.rag.servicio import ServicioEvidencia
 from app.repositorios.unidad import FabricaUnidades
+from app.verificacion.evaluador import Evaluador
 
 # Atributo de ``app.state`` con el ejecutor de cada tipo (las pruebas lo sustituyen).
 ATRIBUTOS: dict[TipoSolicitud, str] = {
@@ -103,21 +104,29 @@ class FabricaEjecutores:
                 reloj,
             )
         evidencia = self._evidencia()
+        # T30: el evaluador de fidelidad tiene su propia instrucción y usa la misma cadena
+        # (podría ser otro modelo: Fase 1, 6.7).
+        evaluador = Evaluador(cadena())
         if tipo is TipoSolicitud.BUSQUEDA_EVIDENCIA:
+            servicios = crear_servicios(self._ajustes, self._abrir)
             return AtencionEvidencia(
                 AgenteEvidencia(evidencia, cadena()),
                 self._servicio_modelos(),
-                ConstructorReferencias(crear_servicios(self._ajustes, self._abrir).doi),
+                ConstructorReferencias(servicios.doi),
                 reloj,
+                evaluador,
+                servicios.crossref,
             )
         if tipo is TipoSolicitud.REVISION_ESTRUCTURA:
-            return AtencionSeccion(tipo, AgenteEstructura(evidencia, cadena()), reloj)
+            return AtencionSeccion(tipo, AgenteEstructura(evidencia, cadena()), reloj, evaluador)
         if tipo is TipoSolicitud.REVISION_METODOLOGICA:
-            return AtencionMetodologia(tipo, AgenteMetodologia(evidencia, cadena()), reloj)
+            return AtencionMetodologia(
+                tipo, AgenteMetodologia(evidencia, cadena()), reloj, evaluador
+            )
         if tipo is TipoSolicitud.PROPUESTA_REDACCION:
-            return AtencionRedaccion(tipo, AgenteRedaccion(evidencia, cadena()), reloj)
+            return AtencionRedaccion(tipo, AgenteRedaccion(evidencia, cadena()), reloj, evaluador)
         if tipo is TipoSolicitud.PLAN_TAREA:
-            return AtencionPlan(tipo, AgentePlan(evidencia, cadena()), reloj)
+            return AtencionPlan(tipo, AgentePlan(evidencia, cadena()), reloj, evaluador)
         raise ValueError(f"tipo sin ejecutor: {tipo}")
 
     async def cerrar(self) -> None:

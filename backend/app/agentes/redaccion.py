@@ -11,10 +11,11 @@ CP-10, RN-07).
   llega al modelo solo como alcance (RNF-10).
 * **Salida:** ``PropuestaRedaccion``. El sistema reemplaza ``original`` por el párrafo
   guardado, para que las comprobaciones y la vista comparada partan del texto real.
-* **Comprobaciones:** 1 (esquema), 3 (citas de las razones a los fragmentos recuperados) y
-  2 para D3: hasta 1.2 veces el original, un solo párrafo, sin números ni citas nuevas y
-  cada cambio presente en el original y en la propuesta (CP-10). La conservación del resto
-  del contenido la juzga el evaluador en T30, que recibirá esta misma salida guardada.
+* **Comprobaciones:** 1 (esquema), 3 (citas de las razones a los fragmentos recuperados), 6
+  (conservación del contenido: el evaluador de T30 comprueba que la propuesta no introduce
+  afirmaciones ausentes en el original) y 2 para D3: hasta 1.2 veces el original, un solo
+  párrafo, sin números ni citas nuevas y cada cambio presente en el original y en la
+  propuesta (CP-10).
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ from typing import Any
 
 from app.administracion.parametros import ParametrosFuncionales
 from app.agentes.contrato import Agente, EstadoAgente
+from app.agentes.ejecucion import Ejecucion
 from app.agentes.seccion import AtencionPorAlcance
 from app.bd.enumeraciones import TipoAlcance, TipoSolicitud
 from app.bd.modelos import VersionBorrador
@@ -31,6 +33,7 @@ from app.borradores.alcance import AlcanceInvalido, contar_palabras, validar_alc
 from app.borradores.extraccion import ParrafoBorrador
 from app.borradores.secciones import SeccionesVersion
 from app.borradores.servicio import parrafos_de, secciones_de
+from app.repositorios.unidad import UnidadDeTrabajo
 from app.verificacion.comprobaciones import (
     Comprobacion,
     comprobar_citas,
@@ -123,6 +126,18 @@ class AtencionRedaccion(AtencionPorAlcance):
 
     def ajustar(self, salida: dict[str, Any], texto: str) -> dict[str, Any]:
         return {**salida, "original": texto}
+
+    async def fidelidad(self, unidad: UnidadDeTrabajo, ejecucion: Ejecucion) -> Comprobacion | None:
+        """Comprobación 6 de D3: la propuesta conserva el contenido del original (T30)."""
+        if self._evaluador is None or ejecucion.salida is None:
+            return None
+        parametros: ParametrosFuncionales = ejecucion.datos["parametros"]
+        return await self._evaluador.conservacion(
+            unidad,
+            ejecucion.datos["texto"],
+            str(ejecucion.salida.get("propuesta", "")),
+            parametros.umbral_fidelidad,
+        )
 
     def comprobaciones(
         self,

@@ -20,11 +20,12 @@ import uuid
 from collections.abc import Callable, Sequence
 from datetime import datetime
 
-from app.agentes.contrato import Agente, EstadoAgente
-from app.agentes.ejecucion import Ejecucion, advertencias_de, cambiar_estado
+from app.agentes.contrato import Agente, EstadoAgente, ResultadoAgente
+from app.agentes.ejecucion import Ejecucion, cambiar_estado
 from app.agentes.validacion_consulta import Rechazo, validar
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAlcance, TipoSolicitud
 from app.bd.modelos import Resultado, Solicitud
+from app.bibliografia.interfaces import ServicioBibliografico
 from app.bibliografia.referencias import ConstructorReferencias
 from app.comun.errores import ErrorAplicacion
 from app.comun.registro import obtener_registrador
@@ -39,6 +40,9 @@ from app.verificacion.comprobaciones import (
     comprobar_esquema,
     identificadores_citados,
 )
+from app.verificacion.evaluador import Evaluador
+from app.verificacion.fuentes import comprobar_existencia
+from app.verificacion.registro import advertencias_de
 
 TIPO = TipoSolicitud.BUSQUEDA_EVIDENCIA
 INVITACION_APORTE = (
@@ -88,12 +92,18 @@ class AtencionEvidencia:
         embeddings: ProveedorEmbeddings,
         referencias: ConstructorReferencias,
         reloj: Callable[[], datetime],
+        evaluador: Evaluador | None = None,
+        crossref: ServicioBibliografico | None = None,
     ) -> None:
+        """``evaluador`` (comprobación 6) y ``crossref`` (comprobación 4 por DOI) son de T30;
+        sin ``crossref``, la existencia de las fuentes se comprueba por metadatos."""
         self.tipo = TIPO
         self._agente = agente
         self._embeddings = embeddings
         self._referencias = referencias
         self._reloj = reloj
+        self._evaluador = evaluador
+        self._crossref = crossref
 
     async def iniciar(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, consulta: str
@@ -156,22 +166,42 @@ class AtencionEvidencia:
         resultado = await self._agente.atender(unidad, contexto, estado, generando)
         if resultado.abstencion:  # T16 ya registró la abstención y sus fragmentos
             return Ejecucion(abstencion=True)
+        textos = {
+            r.identificador_visible: f.texto
+            for r, f, _ in await unidad.fragmentos_recuperados.detalle(contexto, solicitud.id)
+        }
+        return await self._ejecucion(unidad, contexto, solicitud, resultado, textos, intento=1)
+
+    async def _ejecucion(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        resultado: ResultadoAgente,
+        textos: dict[str, str],
+        intento: int,
+    ) -> Ejecucion:
         assert resultado.salida is not None
         salida = resultado.salida.model_dump(mode="json")
-        citados = identificadores_citados(salida)
         documentos = await unidad.fragmentos_recuperados.documentos_citados(
-            contexto, solicitud.id, citados
+            contexto, solicitud.id, identificadores_citados(salida)
         )
-        recuperados = await unidad.fragmentos_recuperados.identificadores(contexto, solicitud.id)
+        recomendados = [
+            (i, d) for i, d in documentos if d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
+        ]
+        _, parametros = await unidad.configuracion.vigente()
         return Ejecucion(
             abstencion=False,
             salida=salida,
+            intento=intento,
             datos={
-                "recuperados": recuperados,
+                "textos": textos,
                 "estado_oa": {i: d.estado_oa.value for i, d in documentos},
-                "recomendables": [
-                    i for i, d in documentos if d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
-                ],
+                "recomendables": [i for i, _ in recomendados],
+                "documentos_recomendados": [d for _, d in recomendados],
+                "umbral": parametros.umbral_fidelidad,
+                "estado": resultado.estado,
+                "evidencia": resultado.evidencia,
                 "modelo": {
                     "instruccion": resultado.instruccion,
                     "proveedor": resultado.proveedor,
@@ -180,13 +210,46 @@ class AtencionEvidencia:
             },
         )
 
-    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        anterior: Ejecucion,
+        motivos: Sequence[str],
+    ) -> Ejecucion:
+        datos = anterior.datos
+        resultado = await self._agente.reintentar(
+            unidad, datos["estado"], datos["evidencia"], motivos
+        )
+        return await self._ejecucion(
+            unidad, contexto, solicitud, resultado, datos["textos"], intento=2
+        )
+
+    async def verificar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+    ) -> list[Comprobacion]:
+        """Comprobaciones 1, 3, 4 (existencia de las fuentes recomendadas), 5 (su acceso
+        abierto) y 6 (fidelidad de las afirmaciones a los fragmentos citados)."""
         assert ejecucion.salida is not None
-        return [
+        datos = ejecucion.datos
+        comprobaciones = [
             comprobar_esquema(TIPO, ejecucion.salida),
-            comprobar_citas(ejecucion.salida, ejecucion.datos["recuperados"]),
-            comprobar_acceso_abierto(ejecucion.datos["estado_oa"]),
+            comprobar_citas(ejecucion.salida, datos["textos"]),
+            await comprobar_existencia(datos["documentos_recomendados"], self._crossref),
+            comprobar_acceso_abierto(datos["estado_oa"]),
         ]
+        if self._evaluador is not None:
+            comprobaciones.append(
+                await self._evaluador.fidelidad(
+                    unidad, TIPO, ejecucion.salida, datos["textos"], datos["umbral"]
+                )
+            )
+        return comprobaciones
 
     async def registrar(
         self,
@@ -195,19 +258,19 @@ class AtencionEvidencia:
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None:
+        etiqueta: Etiqueta,
+    ) -> Resultado:
         salida = ejecucion.salida or {}
         caso = await unidad.caso_propio.obtener(contexto)
         assert caso is not None
         referencias = await self._referencias.construir(
             unidad, contexto, solicitud.id, ejecucion.datos["recomendables"], caso[0].norma_citacion
         )
-        await unidad.resultados.agregar(
+        resultado = await unidad.resultados.agregar(
             contexto,
             Resultado(
                 solicitud_id=solicitud.id,
-                intento=1,
+                intento=ejecucion.intento,
                 salida={
                     **salida,
                     "fuentes": [
@@ -223,14 +286,15 @@ class AtencionEvidencia:
                 creado_en=self._reloj(),
             ),
         )
-        await unidad.confirmar()
         _registro.info(
             "evidencia registrada",
             extra={
                 "tipo_evento": "agentes",
                 "solicitud_id": str(solicitud.id),
+                "intento": ejecucion.intento,
                 "afirmaciones": len(salida.get("respuesta", [])),
                 "fuentes_recomendadas": len(referencias),
                 "comprobaciones_fallidas": [c.nombre for c in comprobaciones if not c.superada],
             },
         )
+        return resultado

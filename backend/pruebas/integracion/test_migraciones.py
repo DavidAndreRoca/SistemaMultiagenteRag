@@ -746,3 +746,17 @@ def test_la_migracion_0021_crea_y_quita_las_tablas_del_checkpointer(base_vacia: 
     assert isinstance(version, int) and version >= 9
     command.downgrade(cfg, "0020")
     assert not tablas & _tablas(base_vacia)
+
+
+def test_la_migracion_0022_agrega_la_instruccion_del_evaluador(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0022")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones["evaluador"] == "v1" and versiones["plan"] == "v1"
+    command.downgrade(cfg, "0021")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert "evaluador" not in versiones and versiones["plan"] == "v1"

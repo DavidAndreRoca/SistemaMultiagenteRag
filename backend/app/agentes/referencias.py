@@ -36,7 +36,7 @@ from app.agentes.citas import (
     entrada_desde_texto,
     extraer_citas,
 )
-from app.agentes.ejecucion import Ejecucion, advertencias_de, cambiar_estado
+from app.agentes.ejecucion import Ejecucion, cambiar_estado
 from app.agentes.esquemas import (
     EstadoReferencia,
     ReferenciaVerificada,
@@ -59,6 +59,7 @@ from app.llm.modelos import BloqueDatos, EntradaModelo, ErrorModelo
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.unidad import UnidadDeTrabajo
 from app.verificacion.comprobaciones import Comprobacion, comprobar_esquema
+from app.verificacion.registro import advertencias_de
 
 TIPO = TipoSolicitud.VERIFICACION_REFERENCIAS
 MAX_REFERENCIAS = 150
@@ -334,10 +335,30 @@ class AtencionReferencias:
             },
         )
 
-    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
-        """Comprobación 1: el informe determinista cumple su esquema (sin modelo, RN-17)."""
+    async def verificar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+    ) -> list[Comprobacion]:
+        """Comprobación 1: el informe determinista cumple su esquema (sin modelo, RN-17). Las
+        demás no aplican: el estado de cada referencia ya lo decidieron los servicios. Una falla
+        no pide reintento: el informe saldría igual."""
         assert ejecucion.salida is not None
-        return [comprobar_esquema(TIPO, ejecucion.salida)]
+        return [
+            comprobar_esquema(TIPO, ejecucion.salida).model_copy(update={"reintentable": False})
+        ]
+
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        anterior: Ejecucion,
+        motivos: Sequence[str],
+    ) -> Ejecucion:
+        raise NotImplementedError("la verificación de referencias es determinista: no se reintenta")
 
     async def registrar(
         self,
@@ -346,19 +367,19 @@ class AtencionReferencias:
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None:
+        etiqueta: Etiqueta,
+    ) -> Resultado:
         salida = dict(ejecucion.salida or {})
         explicaciones = ejecucion.datos.get("explicaciones", {})
         salida["referencias"] = [
             {**r, "explicacion": explicaciones.get(r["indice"])}
             for r in salida.get("referencias", [])
         ]
-        await unidad.resultados.agregar(
+        return await unidad.resultados.agregar(
             contexto,
             Resultado(
                 solicitud_id=solicitud.id,
-                intento=1,
+                intento=ejecucion.intento,
                 salida={
                     **salida,
                     **ejecucion.datos.get("extra", {}),
@@ -369,7 +390,6 @@ class AtencionReferencias:
                 creado_en=self._reloj(),
             ),
         )
-        await unidad.confirmar()
 
     async def _explicar(
         self,

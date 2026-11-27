@@ -20,7 +20,7 @@ from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from app.agentes.ejecucion import Ejecucion
 from app.agentes.plan import AtencionPlan
 from app.bd.enumeraciones import Etiqueta, Rol, TipoSolicitud
-from app.bd.modelos import Solicitud
+from app.bd.modelos import Resultado, Solicitud
 from app.llm.modelos import ErrorDisponibilidad, MotivoError
 from app.orquestacion.grafo import MAX_INTENTOS_TECNICOS, Orquestador
 from app.orquestacion.trabajador import Trabajador, url_checkpointer
@@ -48,7 +48,10 @@ class EjecutorDoble:
     atendidas: list[uuid.UUID] = field(default_factory=list)
     caidas: int = 0  # cuántas veces falla el proveedor antes de responder
     abstenerse: bool = False
-    falla_esquema: bool = False
+    falla_esquema: bool = False  # falla en todos los intentos
+    fallas: int = 0  # cuántas verificaciones fallan antes de superarse
+    servicio_caido: bool = False  # una falla que regenerar no arregla
+    motivos_recibidos: list[list[str]] = field(default_factory=list)
 
     async def ejecutar(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
@@ -61,8 +64,46 @@ class EjecutorDoble:
             return Ejecucion(abstencion=True)
         return Ejecucion(abstencion=False, salida={"texto": "salida ficticia del borrador"})
 
-    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
-        return [Comprobacion(numero=1, nombre="esquema", superada=not self.falla_esquema)]
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        anterior: Ejecucion,
+        motivos: Sequence[str],
+    ) -> Ejecucion:
+        self.motivos_recibidos.append(list(motivos))
+        return Ejecucion(abstencion=False, salida=anterior.salida, intento=2)
+
+    async def verificar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+    ) -> list[Comprobacion]:
+        falla = self.falla_esquema or self.fallas > 0
+        self.fallas = max(self.fallas - 1, 0)
+        comprobaciones = [
+            Comprobacion(
+                numero=1,
+                nombre="esquema",
+                superada=not falla,
+                motivos=["campo faltante"] if falla else [],
+            )
+        ]
+        if self.servicio_caido:
+            comprobaciones.append(
+                Comprobacion(
+                    numero=6,
+                    nombre="fidelidad",
+                    superada=False,
+                    reintentable=False,
+                    motivos=["no se pudo evaluar la fidelidad"],
+                    datos={"umbral": 0.9},
+                )
+            )
+        return comprobaciones
 
     async def registrar(
         self,
@@ -71,10 +112,19 @@ class EjecutorDoble:
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None:
-        solicitud.motivo = f"registrada:{etiqueta.value if etiqueta else 'sin_etiqueta'}"
-        await unidad.confirmar()
+        etiqueta: Etiqueta,
+    ) -> Resultado:
+        solicitud.motivo = f"registrada:{etiqueta.value}"
+        return await unidad.resultados.agregar(
+            contexto,
+            Resultado(
+                solicitud_id=solicitud.id,
+                intento=ejecucion.intento,
+                salida=ejecucion.salida,
+                etiqueta=etiqueta,
+                creado_en=solicitud.actualizada_en,
+            ),
+        )
 
 
 @dataclass
@@ -156,7 +206,7 @@ async def test_cp03_los_seis_tipos_llegan_a_su_agente_y_solo_a_uno(escenario: Es
         solicitud_id = escenario.crear(tipo)
         assert await orquestador.atender(solicitud_id, escenario.contexto) == "entregada"
         assert escenario.dobles[tipo].atendidas == [solicitud_id]
-        assert escenario.estado(solicitud_id) == ("entregada", "registrada:sin_etiqueta", 0)
+        assert escenario.estado(solicitud_id) == ("entregada", "registrada:verificada", 0)
     assert all(len(d.atendidas) == 1 for d in escenario.dobles.values())
 
 
@@ -172,6 +222,73 @@ async def test_una_comprobacion_fallida_etiqueta_con_advertencias_y_la_abstencio
     abstenida = escenario.crear(TipoSolicitud.PLAN_TAREA)
     await orquestador.atender(abstenida, escenario.contexto)
     assert escenario.estado(abstenida)[:2] == ("entregada", None)  # sin registrar ni verificar
+
+
+def _intentos(escenario: Escenario, solicitud_id: uuid.UUID) -> list[tuple[object, ...]]:
+    """(intento, etiqueta, verificación superada) de cada resultado de la solicitud."""
+    return consultar(
+        escenario.entorno.url_bd,
+        "SELECT r.intento, r.etiqueta, v.superada, v.intento FROM resultado r"
+        " JOIN verificacion v ON v.resultado_id = r.id WHERE r.solicitud_id = %s"
+        " ORDER BY r.intento",
+        solicitud_id,
+    )
+
+
+async def test_cp06_dos_verificaciones_fallidas_dan_con_advertencias_con_un_solo_reintento(
+    escenario: Escenario,
+) -> None:
+    doble = escenario.dobles[TipoSolicitud.REVISION_ESTRUCTURA]
+    doble.falla_esquema = True
+    solicitud_id = escenario.crear(TipoSolicitud.REVISION_ESTRUCTURA)
+    assert await escenario.orquestador().atender(solicitud_id, escenario.contexto) == "entregada"
+    assert doble.motivos_recibidos == [["campo faltante"]]  # un solo reintento, con el motivo
+    assert _intentos(escenario, solicitud_id) == [
+        (1, "con_advertencias", False, 1),
+        (2, "con_advertencias", False, 2),
+    ]
+
+
+async def test_un_reintento_que_se_supera_queda_verificado(escenario: Escenario) -> None:
+    doble = escenario.dobles[TipoSolicitud.PROPUESTA_REDACCION]
+    doble.fallas = 1
+    solicitud_id = escenario.crear(TipoSolicitud.PROPUESTA_REDACCION)
+    await escenario.orquestador().atender(solicitud_id, escenario.contexto)
+    assert _intentos(escenario, solicitud_id) == [
+        (1, "con_advertencias", False, 1),
+        (2, "verificada", True, 2),
+    ]
+    assert escenario.estado(solicitud_id)[:2] == ("entregada", "registrada:verificada")
+
+
+async def test_una_falla_que_regenerar_no_arregla_no_pide_reintento(
+    escenario: Escenario,
+) -> None:
+    doble = escenario.dobles[TipoSolicitud.BUSQUEDA_EVIDENCIA]
+    doble.servicio_caido = True
+    solicitud_id = escenario.crear(TipoSolicitud.BUSQUEDA_EVIDENCIA)
+    await escenario.orquestador().atender(solicitud_id, escenario.contexto)
+    assert doble.motivos_recibidos == []
+    assert _intentos(escenario, solicitud_id) == [(1, "con_advertencias", False, 1)]
+
+
+async def test_pi04_todo_resultado_tiene_una_etiqueta_y_su_verificacion(
+    escenario: Escenario,
+) -> None:
+    orquestador = escenario.orquestador()
+    escenario.dobles[TipoSolicitud.PLAN_TAREA].abstenerse = True
+    escenario.dobles[TipoSolicitud.REVISION_METODOLOGICA].fallas = 1
+    for tipo in TipoSolicitud:
+        await orquestador.atender(escenario.crear(tipo), escenario.contexto)
+    # Los dobles no registran la abstención (lo hace la recuperación, T16): sin resultado.
+    ((sin_etiqueta, sin_verificacion, total),) = consultar(
+        escenario.entorno.url_bd,
+        "SELECT count(*) FILTER (WHERE r.etiqueta IS NULL),"
+        " count(*) FILTER (WHERE NOT r.abstencion AND NOT EXISTS"
+        " (SELECT 1 FROM verificacion v WHERE v.resultado_id = r.id)), count(*)"
+        " FROM resultado r",
+    )
+    assert (sin_etiqueta, sin_verificacion, total) == (0, 0, 6)  # 5 tipos y un reintento
 
 
 async def test_cp07_una_caida_del_proveedor_reencola_hasta_agotar_los_intentos(

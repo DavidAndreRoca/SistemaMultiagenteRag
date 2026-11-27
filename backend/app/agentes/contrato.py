@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import uuid
 from abc import ABC, abstractmethod
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from pathlib import Path
 from typing import ClassVar
 
@@ -146,6 +146,25 @@ class Agente(ABC):
             return ResultadoAgente(estado=estado, abstencion=True, salida=None, evidencia=evidencia)
         if al_generar is not None:
             await al_generar()
+        return await self.generar(unidad, estado, evidencia)
+
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        estado: EstadoAgente,
+        evidencia: Evidencia,
+        motivos: Sequence[str],
+    ) -> ResultadoAgente:
+        """Único reintento (T30; Fase 1, 7.2): con los motivos de falla, la misma evidencia y
+        sin repetir la recuperación ni la suficiencia."""
+        segundo = estado.model_copy(
+            update={"intento": 2, "motivos_falla": [m[:300] for m in motivos][:MAX_MOTIVOS]}
+        )
+        return await self.generar(unidad, segundo, evidencia)
+
+    async def generar(
+        self, unidad: UnidadDeTrabajo, estado: EstadoAgente, evidencia: Evidencia
+    ) -> ResultadoAgente:
         if self._versiones is not None:
             versiones = self._versiones()
         else:

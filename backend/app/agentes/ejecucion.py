@@ -1,13 +1,16 @@
-"""Contrato de los ejecutores que llama el orquestador (T28).
+"""Contrato de los ejecutores que llama el orquestador (T28 y T30).
 
-Cada tipo de solicitud tiene un ejecutor con tres pasos, que el grafo de la orquestación
-recorre como nodos distintos:
+Cada tipo de solicitud tiene un ejecutor, cuyos pasos el grafo de la orquestación recorre
+como nodos distintos:
 
 * ``ejecutar``: recupera, decide la suficiencia y, si alcanza, genera (contrato de T18). Si
   se abstiene, la abstención ya quedó registrada (T16) y no hay más pasos.
-* ``verificar``: las comprobaciones deterministas del tipo, sobre la salida ajustada. T30
-  agrega aquí el evaluador y el reintento con los motivos de falla.
-* ``registrar``: guarda el resultado con su etiqueta y sus advertencias.
+* ``verificar``: las comprobaciones del tipo sobre la salida ajustada, incluidas la 4
+  (existencia de fuentes) y la 6 (fidelidad, con el evaluador) donde aplican (T30).
+* ``reintentar``: un único reintento con los motivos de falla, los mismos fragmentos y sin
+  repetir la recuperación (T30).
+* ``registrar``: guarda el resultado del intento con su etiqueta y sus advertencias, y lo
+  devuelve para enlazarle la verificación.
 
 Los cambios de estado de la solicitud los hace el orquestador, salvo ``recuperando`` y
 ``generando``, que marca el ejecutor cuando empieza cada etapa.
@@ -22,7 +25,7 @@ from datetime import datetime
 from typing import Any, Protocol
 
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
-from app.bd.modelos import Solicitud
+from app.bd.modelos import Resultado, Solicitud
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.unidad import UnidadDeTrabajo
 from app.verificacion.comprobaciones import Comprobacion
@@ -30,12 +33,13 @@ from app.verificacion.comprobaciones import Comprobacion
 
 @dataclass
 class Ejecucion:
-    """Lo que produjo el paso ``ejecutar``. ``datos`` guarda lo que necesitan los pasos
-    siguientes (alcance, fragmentos, modelo); nunca entra al estado del grafo."""
+    """Lo que produjo un intento. ``datos`` guarda lo que necesitan los pasos siguientes
+    (alcance, fragmentos, evidencia, modelo); nunca entra al estado del grafo."""
 
     abstencion: bool
     salida: dict[str, Any] | None = None
     datos: dict[str, Any] = field(default_factory=dict)
+    intento: int = 1
 
 
 class Ejecutor(Protocol):
@@ -45,7 +49,22 @@ class Ejecutor(Protocol):
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
     ) -> Ejecucion: ...
 
-    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]: ...
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        anterior: Ejecucion,
+        motivos: Sequence[str],
+    ) -> Ejecucion: ...
+
+    async def verificar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+    ) -> list[Comprobacion]: ...
 
     async def registrar(
         self,
@@ -54,17 +73,8 @@ class Ejecutor(Protocol):
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None: ...
-
-
-def etiqueta_de(comprobaciones: Sequence[Comprobacion]) -> Etiqueta | None:
-    """Con alguna comprobación fallida, "Con advertencias" (el reintento es de T30)."""
-    return Etiqueta.CON_ADVERTENCIAS if any(not c.superada for c in comprobaciones) else None
-
-
-def advertencias_de(comprobaciones: Sequence[Comprobacion]) -> list[str]:
-    return [m for c in comprobaciones if not c.superada for m in c.motivos]
+        etiqueta: Etiqueta,
+    ) -> Resultado: ...
 
 
 async def cambiar_estado(

@@ -114,7 +114,7 @@ def _comprobar_clave(vista: dict[str, Any], norma: str) -> None:
         "no_comprobable": 1,
     }
     assert vista["avisos"] == [AVISO_NO_COMPROBABLES.format(n=1)]
-    assert vista["etiqueta"] is None and vista["comprobaciones"][0]["superada"] is True
+    assert vista["etiqueta"] == "verificada" and vista["comprobaciones"][0]["superada"] is True
 
 
 async def test_cp12_informe_completo_en_ieee(verificacion: Verificacion) -> None:

@@ -107,6 +107,8 @@ Orquestación (T28): `app/orquestacion/` (`grafo.py` con el grafo de LangGraph y
 
 Seguimiento (T29): `app/api/solicitudes.py` (eventos enviados por el servidor con el estado, reenvío enlazado con `solicitud_origen_id` y otra solicitud con el mismo alcance); en la interfaz, `frontend/src/componentes/Seguimiento.tsx` (`AvanceSolicitud`, `NoAtendida`, `OtraRevision`) y los estados en curso en `frontend/src/solicitudes.ts`. En pruebas, `app.state.intervalo_eventos_s` acelera el canal.
 
+Verificación (T30): `app/verificacion/` (`comprobaciones.py` con `Comprobacion.reintentable`; `fuentes.py`, comprobación 4; `evaluador.py`, comprobación 6 con instrucción `evaluador/v1`; `registro.py`, etiqueta, motivos del reintento y fila de `verificacion` por intento). Ejecutores con `ejecutar`, `reintentar`, `verificar` (asíncrono) y `registrar` (devuelve el resultado); nodo `reintentar` en el grafo. Latencias: `python -m app.orquestacion.latencias --investigador I`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

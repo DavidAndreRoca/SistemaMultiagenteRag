@@ -12,9 +12,18 @@ from datetime import datetime
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.bd.enumeraciones import TipoColeccion
-from app.bd.modelos import CambioNorma, Caso, Coleccion, Cuenta, Sesion
+from app.bd.enumeraciones import EstadoSolicitud, TipoColeccion
+from app.bd.modelos import (
+    CambioNorma,
+    Caso,
+    Coleccion,
+    Cuenta,
+    EventoTecnico,
+    Sesion,
+    Solicitud,
+)
 from app.repositorios.contexto import ContextoAcceso
+from app.repositorios.tiempos import TiemposSolicitud
 
 
 class RepositorioColeccionesInvestigador:
@@ -141,3 +150,42 @@ class RepositorioCuentasInvestigador:
             .where(Sesion.cuenta_id.in_(cuentas_del_caso), Sesion.cerrada_en.is_(None))
             .values(cerrada_en=ahora, motivo_cierre=motivo)
         )
+
+
+class RepositorioMonitoreo:
+    """Latencias de las solicitudes entregadas (T30; RNF-12). Solo duraciones y tipos: ningún
+    contenido de los casos. A2."""
+
+    def __init__(self, sesion: AsyncSession) -> None:
+        self._sesion = sesion
+
+    async def tiempos(
+        self, contexto: ContextoAcceso, desde: datetime | None = None
+    ) -> list[TiemposSolicitud]:
+        contexto.exigir_investigador()
+        consulta = (
+            select(
+                Solicitud.id,
+                Solicitud.tipo,
+                Solicitud.creada_en,
+                Solicitud.entregada_en,
+                EventoTecnico.etapa,
+                EventoTecnico.duracion_ms,
+            )
+            .join(EventoTecnico, EventoTecnico.solicitud_id == Solicitud.id)
+            .where(
+                Solicitud.estado == EstadoSolicitud.ENTREGADA,
+                Solicitud.entregada_en.is_not(None),
+            )
+        )
+        if desde is not None:
+            consulta = consulta.where(Solicitud.creada_en >= desde)
+        por_solicitud: dict[uuid.UUID, TiemposSolicitud] = {}
+        for fila in (await self._sesion.execute(consulta)).all():
+            actual = por_solicitud.get(fila.id)
+            if actual is None:
+                total = round((fila.entregada_en - fila.creada_en).total_seconds() * 1000)
+                actual = TiemposSolicitud(fila.tipo, max(total, 0), {})
+                por_solicitud[fila.id] = actual
+            actual.etapas[fila.etapa] = actual.etapas.get(fila.etapa, 0) + fila.duracion_ms
+        return list(por_solicitud.values())

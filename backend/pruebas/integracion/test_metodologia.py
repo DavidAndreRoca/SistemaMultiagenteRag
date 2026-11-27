@@ -137,7 +137,9 @@ async def test_sin_diseno_declarado_pregunta_y_revisa_los_elementos_comunes(
     metodologia: Metodologia,
 ) -> None:
     vista = await metodologia.pedir(await metodologia.id_de("2. Método"))
-    assert vista["estado"] == "entregada" and vista["etiqueta"] is None, vista["advertencias"]
+    assert vista["estado"] == "entregada" and vista["etiqueta"] == "verificada", vista[
+        "advertencias"
+    ]
     assert vista["diseno"] is None and vista["seccion_titulo"] == "2. Método"
     assert [h["severidad"] for h in vista["hallazgos"]] == ["alta", "baja"]
     assert vista["hallazgos"][0]["indicador_nombre"] == "Justificación del diseño"

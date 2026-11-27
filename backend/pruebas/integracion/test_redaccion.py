@@ -160,7 +160,9 @@ async def test_cp10_propone_dentro_del_limite_con_cambios_justificados(
     respuesta = await redaccion.pedir(parrafo)
     assert respuesta.status_code == 202, respuesta.text
     vista = await redaccion.ver(respuesta.json()["id"])
-    assert vista["estado"] == "entregada" and vista["etiqueta"] is None, vista["advertencias"]
+    assert vista["estado"] == "entregada" and vista["etiqueta"] == "verificada", vista[
+        "advertencias"
+    ]
     assert vista["parrafo_id"] == parrafo
     assert vista["original"] == PARRAFO  # el guardado, no el que devolvió el modelo
     assert vista["propuesta"] == PROPUESTA

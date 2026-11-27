@@ -2077,3 +2077,29 @@ Rama `t29-estado-y-reenvio`. Decisión: `docs/decisiones/T29-estado-y-reenvio.md
   - extremo a extremo 11 de 11.
 - **Prototipo, con el modelo real y el trabajador:** el avance llegó en vivo por el proxy de Vite. La revisión metodológica se entregó en 90 s, y la de estructura de la misma sección, pedida desde ella, con 3 hallazgos.
 - **Pendiente:** el avance "n de m referencias" con el trabajador; el reintento (T30).
+
+**Integración de T29:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#25, CI verde (ejecución 45962950020, 9 de 9 trabajos; la primera ejecución falló por tiempos en la prueba del canal: en la CI la solicitud ya estaba asignada al suscribirse, y la prueba ahora lo admite), integrada en `main`.
+
+## 31. Bloque 3: T30 (módulo de integración y verificación completo, H4)
+
+Rama `t30-verificador-completo`. Decisión: `docs/decisiones/T30-verificacion-completa.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Las seis comprobaciones, según el tipo:**
+  - la 4, existencia de las fuentes recomendadas: DOI en Crossref o metadatos; un servicio caído da "no comprobable";
+  - la 6, fidelidad con un evaluador de instrucción propia (`evaluador/v1`, migración 0022): respaldadas sobre total, umbral 0.90; en redacción, conservación del contenido respecto del original.
+- **Reintento único** (nodo `reintentar` del grafo):
+  - con los motivos, los mismos fragmentos y sin repetir la recuperación;
+  - solo para fallas que el agente puede corregir: un servicio caído no se reintenta.
+- **Etiquetas:** "Verificada", "Con advertencias" y "Sin evidencia suficiente".
+- **Registro:** cada intento tiene su resultado y su verificación (PI-04).
+- **Latencias:** eventos técnicos por etapa (ejecución, verificación, reintento) e informe `python -m app.orquestacion.latencias`.
+- **Pruebas:**
+  - 14 unitarias;
+  - 5 de integración del orquestador (CP-06, reintento superado, falla no corregible, PI-04) y 1 con el agente real de estructura;
+  - backend 928 y frontend 38.
+- **Modelo real:**
+  - el evaluador rechazó una tarea del plan con un requisito que no está en las guías ("al menos tres citas"), se reintentó y se entregó "Con advertencias", con ambos intentos registrados;
+  - tardó 207 s;
+  - la propuesta de redacción del párrafo coloquial salió "Verificada" en el primer intento: conservación del contenido de 7 en 7, en 134 s.
+  - Con la verificación completa y solo Groq gratuito (8000 tokens por minuto), el percentil 95 supera los 60 s de RNF-12 en D1 a D3 y evidencia. Lo resuelve la elección del proveedor de producción o de otro modelo para el evaluador (T25), que tiene costos y decide el equipo.
+- **Provisional, sin revisión humana:** la instrucción `evaluador/v1`, usar la misma cadena para el evaluador y el texto de la insignia "Verificada".

@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router";
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
-import { AvanceSolicitud, NoAtendida } from "../componentes/Seguimiento";
+import { AvanceSolicitud, NoAtendida, Verificada } from "../componentes/Seguimiento";
 import { compararPalabras, type Tramo } from "../diferencias";
 import { numero } from "../formato";
 import { EN_CURSO } from "../solicitudes";
@@ -215,6 +215,7 @@ function Resultado({ vista, alReenviar }: { vista: Vista; alReenviar: (nueva: st
   return (
     <section aria-labelledby="titulo-resultado" className="evidencia">
       <h2 id="titulo-resultado">Propuesta de redacción</h2>
+      {vista.etiqueta === "verificada" ? <Verificada /> : null}
       {vista.etiqueta === "con_advertencias" ? (
         <div className="aviso aviso--importante" role="status">
           <p>Con advertencias: revise estas observaciones antes de usar la propuesta.</p>
