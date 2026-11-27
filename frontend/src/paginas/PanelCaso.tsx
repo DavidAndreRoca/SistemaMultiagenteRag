@@ -11,6 +11,7 @@ import {
   Selector,
   SelectorArchivo,
 } from "../componentes/controles";
+import { TEXTOS_OPCION } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { fechaHora, numero, tamano } from "../formato";
 
@@ -19,6 +20,7 @@ type Version = Esquemas["VersionResumen"];
 type Carga = Esquemas["ResultadoCarga"];
 type CuerpoCarga = Esquemas["Body_cargar_version_caso_versiones_post"];
 type SolicitudResumen = Esquemas["SolicitudResumen"];
+type Contadores = Esquemas["Contadores"];
 
 const TIPO_DOCX = ".docx";
 
@@ -26,6 +28,7 @@ export function PanelCaso() {
   const [caso, setCaso] = useState<Caso | null>(null);
   const [versiones, setVersiones] = useState<Version[] | null>(null);
   const [solicitudes, setSolicitudes] = useState<SolicitudResumen[]>([]);
+  const [contadores, setContadores] = useState<Contadores | null>(null);
   const [errorCarga, setErrorCarga] = useState<unknown>(null);
 
   const [ronda, setRonda] = useState(0);
@@ -52,6 +55,21 @@ export function PanelCaso() {
     };
   }, [ronda]);
 
+  // Los contadores son informativos: si no cargan, el resto del panel sigue disponible.
+  useEffect(() => {
+    let vigente = true;
+    exigir(api.GET("/caso/contadores"))
+      .then((cuentas) => {
+        if (vigente) setContadores(cuentas);
+      })
+      .catch(() => {
+        if (vigente) setContadores(null);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [ronda]);
+
   const actualizar = useCallback(() => {
     setRonda((n) => n + 1);
   }, []);
@@ -68,6 +86,7 @@ export function PanelCaso() {
           <DatosDelCaso caso={caso} />
           <Acciones />
           <ListaDeSolicitudes solicitudes={solicitudes} />
+          {contadores ? <UsoDelSistema contadores={contadores} /> : null}
           <VigentesPorHito caso={caso} versiones={versiones} />
           <CargarVersion caso={caso} alCargar={actualizar} />
           <ListaDeVersiones versiones={versiones} />
@@ -339,6 +358,76 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
                 </tr>
               );
             })}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
+const COLUMNAS_DECISION = ["aceptar", "modificar", "rechazar", "continuar"] as const;
+
+/** Uso por hito frente al mínimo orientativo y decisiones vigentes por tipo (T31; RN-08). */
+function UsoDelSistema({ contadores }: { contadores: Contadores }) {
+  return (
+    <section aria-labelledby="titulo-uso">
+      <h2 id="titulo-uso">Su uso del sistema</h2>
+      <p>
+        Solicitudes entregadas en cada hito frente al uso mínimo orientativo. Es una referencia: no
+        bloquea ninguna entrega.
+      </p>
+      <table className="tabla">
+        <caption className="oculto">Solicitudes entregadas por hito</caption>
+        <thead>
+          <tr>
+            <th scope="col">Hito</th>
+            <th scope="col">Solicitudes entregadas</th>
+            <th scope="col">Uso mínimo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contadores.por_hito.map((uso) => (
+            <tr key={uso.hito}>
+              <th scope="row">{uso.nombre}</th>
+              <td>{numero(uso.solicitudes)}</td>
+              <td>
+                {uso.cumple ? (
+                  <span className="insignia insignia--entregada">Alcanzado</span>
+                ) : (
+                  <span className="insignia insignia--pendiente">
+                    {`Faltan ${numero(uso.minimo - uso.solicitudes)}`}
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h3>Sus decisiones sobre los resultados</h3>
+      {contadores.por_tipo.length === 0 ? (
+        <p className="vacio">Todavía no registró ninguna decisión.</p>
+      ) : (
+        <table className="tabla">
+          <caption className="oculto">Decisiones vigentes por tipo de pedido</caption>
+          <thead>
+            <tr>
+              <th scope="col">Pedido</th>
+              {COLUMNAS_DECISION.map((opcion) => (
+                <th key={opcion} scope="col">
+                  {TEXTOS_OPCION[opcion]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {contadores.por_tipo.map((fila) => (
+              <tr key={fila.tipo}>
+                <th scope="row">{NOMBRES_PEDIDO[fila.tipo] ?? fila.tipo}</th>
+                {COLUMNAS_DECISION.map((opcion) => (
+                  <td key={opcion}>{numero(fila[opcion])}</td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

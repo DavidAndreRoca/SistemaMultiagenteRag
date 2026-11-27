@@ -5,11 +5,11 @@ from __future__ import annotations
 import uuid
 from collections.abc import Sequence
 
-from sqlalchemy import delete, select, update
+from sqlalchemy import delete, exists, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import undefer
+from sqlalchemy.orm import aliased, undefer
 
-from app.bd.enumeraciones import EstadoSolicitud, TipoColeccion, TipoSolicitud
+from app.bd.enumeraciones import EstadoSolicitud, OpcionDecision, TipoColeccion, TipoSolicitud
 from app.bd.modelos import (
     Caso,
     Coleccion,
@@ -105,6 +105,30 @@ class RepositorioSolicitudes(RepositorioDeCaso[Solicitud]):
             self._consulta(contexto).where(Solicitud.version_id == version_id).limit(1)
         )
         return resultado.first() is not None
+
+    async def bloquear(self, contexto: ContextoAcceso, solicitud_id: uuid.UUID) -> Solicitud | None:
+        """La solicitud del caso, bloqueada hasta el fin de la transacción (T31: dos
+        decisiones simultáneas sobre el mismo resultado se ordenan)."""
+        resultado = await self._sesion.execute(
+            self._consulta(contexto).where(Solicitud.id == solicitud_id).with_for_update()
+        )
+        solicitud: Solicitud | None = resultado.scalar_one_or_none()
+        return solicitud
+
+    async def entregadas_por_hito(self, contexto: ContextoAcceso) -> dict[str, int]:
+        """Solicitudes entregadas del caso por hito de su versión (uso mínimo, T31)."""
+        caso_id = contexto.caso_exigido()
+        resultado = await self._sesion.execute(
+            select(VersionBorrador.hito, func.count())
+            .join(Solicitud, Solicitud.version_id == VersionBorrador.id)
+            .where(
+                Solicitud.caso_id == caso_id,
+                VersionBorrador.caso_id == caso_id,
+                Solicitud.estado == EstadoSolicitud.ENTREGADA,
+            )
+            .group_by(VersionBorrador.hito)
+        )
+        return {hito: int(n) for hito, n in resultado.all()}
 
     async def recientes(
         self, contexto: ContextoAcceso, tipos: Sequence[TipoSolicitud], limite: int = 30
@@ -208,7 +232,37 @@ class RepositorioVerificaciones(RepositorioDeCaso[Verificacion]):
 
 
 class RepositorioDecisiones(RepositorioDeCaso[Decision]):
+    """Decisiones del caso (T31; RN-08). Nunca se editan: un cambio agrega otra fila que
+    reemplaza a la anterior (``decision_reemplazada_id``), y las dos se conservan."""
+
     modelo = Decision
+
+    async def de_resultado(
+        self, contexto: ContextoAcceso, resultado_id: uuid.UUID
+    ) -> Sequence[Decision]:
+        """Todas las decisiones del resultado, de la más antigua a la más reciente."""
+        resultado = await self._sesion.scalars(
+            self._consulta(contexto)
+            .where(Decision.resultado_id == resultado_id)
+            .order_by(Decision.decidida_en, Decision.id)
+        )
+        return resultado.all()
+
+    async def contadores(
+        self, contexto: ContextoAcceso
+    ) -> Sequence[tuple[TipoSolicitud, OpcionDecision, int]]:
+        """(tipo, opción, cantidad) de las decisiones vigentes, las que ninguna reemplazó."""
+        caso_id = contexto.caso_exigido()
+        reemplazo = aliased(Decision)
+        vigente = ~exists().where(reemplazo.decision_reemplazada_id == Decision.id)
+        resultado = await self._sesion.execute(
+            select(Solicitud.tipo, Decision.opcion, func.count())
+            .join(Resultado, Resultado.id == Decision.resultado_id)
+            .join(Solicitud, Solicitud.id == Resultado.solicitud_id)
+            .where(Decision.caso_id == caso_id, Solicitud.caso_id == caso_id, vigente)
+            .group_by(Solicitud.tipo, Decision.opcion)
+        )
+        return [(t, o, int(n)) for t, o, n in resultado.all()]
 
 
 class RepositorioFuentesAportadas(RepositorioDeCaso[FuenteAportada]):

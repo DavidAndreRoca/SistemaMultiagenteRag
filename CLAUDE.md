@@ -109,6 +109,8 @@ Seguimiento (T29): `app/api/solicitudes.py` (eventos enviados por el servidor co
 
 Verificación (T30): `app/verificacion/` (`comprobaciones.py` con `Comprobacion.reintentable`; `fuentes.py`, comprobación 4; `evaluador.py`, comprobación 6 con instrucción `evaluador/v1`; `registro.py`, etiqueta, motivos del reintento y fila de `verificacion` por intento). Ejecutores con `ejecutar`, `reintentar`, `verificar` (asíncrono) y `registrar` (devuelve el resultado); nodo `reintentar` en el grafo. Latencias: `python -m app.orquestacion.latencias --investigador I`.
 
+Decisiones (T31): `app/api/decisiones.py` (opciones según abstención, reemplazo sin editar con la solicitud bloqueada, historial por la cadena de reemplazos, `GET /caso/contadores` con decisiones vigentes por tipo y uso mínimo por hito), consultas en `RepositorioDecisiones` y `RepositorioSolicitudes.entregadas_por_hito`; en la interfaz, `frontend/src/componentes/Decision.tsx` bajo cada resultado entregado y "Su uso del sistema" en el panel.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

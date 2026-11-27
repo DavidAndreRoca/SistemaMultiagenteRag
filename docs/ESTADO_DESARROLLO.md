@@ -2103,3 +2103,25 @@ Rama `t30-verificador-completo`. Decisión: `docs/decisiones/T30-verificacion-co
   - la propuesta de redacción del párrafo coloquial salió "Verificada" en el primer intento: conservación del contenido de 7 en 7, en 134 s.
   - Con la verificación completa y solo Groq gratuito (8000 tokens por minuto), el percentil 95 supera los 60 s de RNF-12 en D1 a D3 y evidencia. Lo resuelve la elección del proveedor de producción o de otro modelo para el evaluador (T25), que tiene costos y decide el equipo.
 - **Provisional, sin revisión humana:** la instrucción `evaluador/v1`, usar la misma cadena para el evaluador y el texto de la insignia "Verificada".
+
+**Integración de T30:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#26, CI verde (ejecución 46046794154, 9 de 9 trabajos), integrada en `main`.
+
+## 32. Bloque 3: T31 (decisiones y contadores)
+
+Rama `t31-decisiones-contadores`. Decisión: `docs/decisiones/T31-decisiones-contadores.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Decisiones** sobre el resultado final de una solicitud entregada del propio caso:
+  - aceptar, modificar o rechazar una propuesta; continuar o aportar tras una abstención;
+  - cambiar de decisión registra otra que reemplaza a la anterior, sin editarla, con la solicitud bloqueada mientras se decide;
+  - otra solicitud responde 404; una sin resultado, 409.
+- **Contadores** (`GET /caso/contadores`): decisiones vigentes por tipo y opción, y solicitudes entregadas por hito frente al uso mínimo orientativo, que no bloquea.
+- **Interfaz:** la decisión bajo cada resultado entregado de las seis pantallas, con su historial; "Su uso del sistema" en el panel. "Aportar una fuente" figura como pendiente hasta T32.
+- **Pruebas:**
+  - 7 de integración (CP-18, reemplazo, CP-19, resultado final tras un reintento, sin resultado, uso mínimo y aislamiento);
+  - 3 de la interfaz y la sección de uso en el extremo a extremo;
+  - backend 934, frontend 41 y extremo a extremo 11 de 11.
+- **Prototipo:** sobre la propuesta de redacción entregada, "La usaré con cambios" y luego "La acepto": el historial conserva las dos y el panel cuenta solo la vigente.
+- **Provisional, sin revisión humana:**
+  - los textos de los botones;
+  - contar solo las decisiones vigentes;
+  - medir el uso mínimo con las solicitudes entregadas de cada hito, de cualquier tipo.

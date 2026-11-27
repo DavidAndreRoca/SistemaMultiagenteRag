@@ -14,6 +14,7 @@ from app.api import (
     borradores,
     caso,
     corpus,
+    decisiones,
     estructura,
     evidencia,
     importacion,
@@ -114,6 +115,7 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
         metodologia,
         plan,
         solicitudes,
+        decisiones,
     ):
         aplicacion.include_router(modulo.router)
     return aplicacion
