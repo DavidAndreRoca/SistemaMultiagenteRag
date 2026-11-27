@@ -88,12 +88,13 @@ def test_semilla_de_configuracion_vigente(url_bd_migrada: str) -> None:
     ]
 
 
-def test_la_semilla_es_la_configuracion_inicial_del_codigo(url_bd_migrada: str) -> None:
+def test_la_semilla_es_la_configuracion_inicial_del_codigo(bd_limpia: str) -> None:
     """La versión 1 que escribe la migración (copia literal) coincide con el esquema validado
-    y con sus valores por defecto: ni falta ni sobra un parámetro."""
+    y con sus valores por defecto: ni falta ni sobra un parámetro. ``bd_limpia`` restaura la
+    semilla: una prueba anterior pudo cambiar la configuración de la base compartida."""
     from app.administracion.parametros import ParametrosFuncionales, parametros_iniciales
 
-    (parametros,) = consultar(url_bd_migrada, "SELECT parametros FROM configuracion")[0]
+    (parametros,) = consultar(bd_limpia, "SELECT parametros FROM configuracion")[0]
     assert isinstance(parametros, dict)
     assert set(parametros) == set(ParametrosFuncionales.model_fields)
     assert ParametrosFuncionales.model_validate(parametros) == parametros_iniciales()
@@ -706,3 +707,17 @@ def test_la_migracion_0018_sube_el_tope_de_salida_de_groq(base_vacia: str) -> No
     command.upgrade(cfg, "0018")
     assert _topes(base_vacia)["groq"] == 4096
     assert consultar(base_vacia, "SELECT count(*) FROM configuracion")[0] == (2,)
+
+
+def test_la_migracion_0019_agrega_la_instruccion_metodologica(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0019")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones["metodologia"] == "v1" and versiones["redaccion"] == "v1"
+    command.downgrade(cfg, "0018")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert "metodologia" not in versiones and versiones["redaccion"] == "v1"

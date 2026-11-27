@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import uuid
-from collections.abc import Callable, Collection
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, ClassVar
@@ -170,7 +170,7 @@ class AtencionPorAlcance:
         salida: dict[str, Any],
         texto: str,
         parametros: ParametrosFuncionales,
-        recuperados: Collection[str],
+        recuperados: Mapping[str, str],
     ) -> list[Comprobacion]:
         return [comprobar_esquema(self.tipo, salida), comprobar_citas(salida, recuperados)]
 
@@ -267,7 +267,10 @@ class AtencionPorAlcance:
             return
         assert resultado.salida is not None
         salida = self.ajustar(resultado.salida.model_dump(mode="json"), texto)
-        recuperados = await unidad.fragmentos_recuperados.identificadores(contexto, solicitud.id)
+        recuperados = {
+            r.identificador_visible: f.texto
+            for r, f, _ in await unidad.fragmentos_recuperados.detalle(contexto, solicitud.id)
+        }
         comprobaciones = self.comprobaciones(salida, texto, parametros, recuperados)
         fallidas = [c for c in comprobaciones if not c.superada]
         await unidad.resultados.agregar(
@@ -353,7 +356,7 @@ class AtencionSeccion(AtencionPorAlcance):
         salida: dict[str, Any],
         texto: str,
         parametros: ParametrosFuncionales,
-        recuperados: Collection[str],
+        recuperados: Mapping[str, str],
     ) -> list[Comprobacion]:
         return [
             comprobar_esquema(self.tipo, salida),

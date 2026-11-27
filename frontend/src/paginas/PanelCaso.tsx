@@ -270,12 +270,14 @@ const PANTALLAS: Record<string, string> = {
   verificacion_referencias: "/panel/referencias",
   revision_estructura: "/panel/estructura",
   propuesta_redaccion: "/panel/redaccion",
+  revision_metodologica: "/panel/metodologia",
 };
 const NOMBRES_PEDIDO: Record<string, string> = {
   busqueda_evidencia: "Búsqueda de evidencia",
   verificacion_referencias: "Verificación de referencias",
   revision_estructura: "Revisión de estructura y coherencia",
   propuesta_redaccion: "Propuesta de redacción",
+  revision_metodologica: "Revisión metodológica",
 };
 
 const ESTADOS_SOLICITUD: Record<string, string> = {
@@ -367,11 +369,16 @@ const ACCIONES: Accion[] = [
   {
     titulo: "Metodología",
     descripcion: "Diagnóstico del diseño, la muestra y el análisis.",
+    enlace: { href: "/panel/metodologia", texto: "Revisar la metodología de una sección" },
   },
   {
     titulo: "Redacción",
     descripcion: "Propuesta acotada para un párrafo, con cada cambio justificado.",
     enlace: { href: "/panel/redaccion", texto: "Proponer una redacción para un párrafo" },
+  },
+  {
+    titulo: "Plan de tarea",
+    descripcion: "Tareas ordenadas para el hito, cada una con su criterio de logro.",
   },
 ];
 

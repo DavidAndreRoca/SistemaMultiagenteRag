@@ -110,6 +110,27 @@ class RepositorioRecuperacion:
         )
         return {f.id: FragmentoConDocumento(f, d) for f, d in resultado.all()}
 
+    async def por_apartado(
+        self, contexto: ContextoAcceso, tipo: TipoSolicitud, apartados: Sequence[str]
+    ) -> list[Fragmento]:
+        """Fragmentos de guía cuyo apartado (``seccion_original``) es uno de ``apartados``,
+        solo de las colecciones permitidas para el tipo, en el orden del documento (T26,
+        herramienta ``lista_de_comprobacion``)."""
+        colecciones = await self._colecciones(contexto, tipo)
+        if not colecciones or not apartados:
+            return []
+        resultado = await self._sesion.execute(
+            select(Fragmento)
+            .join(Documento, Documento.id == Fragmento.documento_id)
+            .where(
+                Fragmento.coleccion_id.in_(colecciones),
+                Fragmento.seccion_original.in_(list(apartados)),
+                recuperable(),
+            )
+            .order_by(Documento.titulo, Fragmento.orden)
+        )
+        return list(resultado.scalars().all())
+
 
 # Palabras vacías frecuentes en español e inglés: con la configuración ``simple`` no se
 # descartan solas, y en una consulta con OR coincidirían con casi todos los fragmentos.

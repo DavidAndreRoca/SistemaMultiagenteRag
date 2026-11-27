@@ -10,6 +10,7 @@ import { Estructura } from "./paginas/Estructura";
 import { Evidencia } from "./paginas/Evidencia";
 import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
+import { Metodologia } from "./paginas/Metodologia";
 import { PanelCaso } from "./paginas/PanelCaso";
 import { Redaccion } from "./paginas/Redaccion";
 import { Referencias } from "./paginas/Referencias";
@@ -97,6 +98,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Estructura />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/metodologia"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Metodologia />
           </Protegida>
         }
       />

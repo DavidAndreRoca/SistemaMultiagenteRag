@@ -54,6 +54,12 @@ METODO = [
     "El estudio propuesto es de enfoque cuantitativo, con un cuestionario aplicado a estudiantes"
     " de pregrado de una universidad privada. El instrumento se adaptará de estudios previos"
     " sobre percepción de herramientas de inteligencia artificial en escolares [5].",
+    # Errores metodológicos a propósito, para mostrar la revisión metodológica (T26): diseño
+    # correlacional con una conclusión causal, muestra por conveniencia sin justificar y un
+    # instrumento sin confiabilidad informada. Sin citas.
+    "Se aplicará un diseño correlacional con 30 estudiantes elegidos por conveniencia entre"
+    " los compañeros del investigador. Con los resultados del cuestionario se demostrará que el"
+    " uso de ChatGPT causa una mejora en la escritura académica de los estudiantes.",
 ]
 DISCUSION = [
     "Se espera que los estudiantes reporten beneficios en la organización de sus ideas y"

@@ -18,6 +18,7 @@ from app.api import (
     evidencia,
     importacion,
     investigador,
+    metodologia,
     redaccion,
     referencias,
     salud,
@@ -71,6 +72,8 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
                 aplicacion.state.atencion_estructura.cancelar()
             if aplicacion.state.atencion_redaccion is not None:
                 aplicacion.state.atencion_redaccion.cancelar()
+            if aplicacion.state.atencion_metodologia is not None:
+                aplicacion.state.atencion_metodologia.cancelar()
             await motor.dispose()
             obtener_registrador().info("aplicacion detenida", extra={"tipo_evento": "apagado"})
 
@@ -98,11 +101,12 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     aplicacion.state.atencion_referencias = None  # T20: se crea al primer uso
     aplicacion.state.atencion_estructura = None  # T23: se crea al primer uso
     aplicacion.state.atencion_redaccion = None  # T27: se crea al primer uso
+    aplicacion.state.atencion_metodologia = None  # T26: se crea al primer uso
     aplicacion.state.candado_corpus = asyncio.Lock()
     aplicacion.state.servicio_borradores = None  # se crea al primer uso (DIRECTORIO_ARCHIVOS)
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
     modulos = (salud, sesion, caso, borradores, investigador, corpus, importacion)
-    for modulo in (*modulos, evidencia, referencias, estructura, redaccion):
+    for modulo in (*modulos, evidencia, referencias, estructura, redaccion, metodologia):
         aplicacion.include_router(modulo.router)
     return aplicacion

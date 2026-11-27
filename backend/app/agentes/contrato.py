@@ -96,6 +96,13 @@ class Agente(ABC):
     def tarea(self, estado: EstadoAgente) -> str:
         """Qué se le pide al modelo para este tipo."""
 
+    async def consulta_con_herramientas(
+        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, estado: EstadoAgente
+    ) -> str:
+        """La consulta de recuperación cuando el agente usa una herramienta que lee la base
+        (por ejemplo, la lista de comprobación de D2, T26). Por defecto, ``consulta``."""
+        return self.consulta(estado)
+
     def datos(self, estado: EstadoAgente, evidencia: Evidencia) -> list[BloqueDatos]:
         """El alcance y los fragmentos del contexto cerrado, como datos (RN-23)."""
         return [BloqueDatos(etiqueta="alcance", contenido=estado.alcance[:20_000])] + [
@@ -111,7 +118,10 @@ class Agente(ABC):
         if contexto.caso_id != estado.caso_id:
             raise TipoNoAtendido("el estado no corresponde al caso del contexto")
         evidencia = await self._evidencia.preparar(
-            unidad, contexto, estado.solicitud_id, self.consulta(estado)
+            unidad,
+            contexto,
+            estado.solicitud_id,
+            await self.consulta_con_herramientas(unidad, contexto, estado),
         )
         if not evidencia.suficiente:
             return ResultadoAgente(estado=estado, abstencion=True, salida=None, evidencia=evidencia)

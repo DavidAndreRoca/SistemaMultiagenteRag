@@ -1972,3 +1972,34 @@ Rama `t27-agente-redaccion`. Decisión: `docs/decisiones/T27-agente-de-redaccion
   - los textos de la pantalla;
   - las dos pruebas reales.
 - **Pendiente:** el conjunto de párrafos con errores de redacción y su clave, que arma el asistente antes de T34; el reintento y el evaluador de conservación del contenido, en T30.
+
+**Integración de T27:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#21, CI verde (ejecución 45932874643, 9 de 9 trabajos), integrada en `main`.
+
+## 27. Bloque 2: T26 (agente metodológico)
+
+Rama `t26-agente-metodologia`. Decisión: `docs/decisiones/T26-agente-metodologico.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Agente D2:**
+  - `AgenteMetodologia` y `AtencionMetodologia`, con la instrucción `metodologia/v1`;
+  - `identificar_diseno` reconoce el diseño declarado; si no se nombra, el agente lo pregunta;
+  - la herramienta `lista_de_comprobacion(diseno)` lee del corpus de guías los criterios del diseño y los comunes, y sus criterios abreviados son la consulta de recuperación;
+  - el contrato de agentes suma `consulta_con_herramientas`;
+  - las rutas `/caso/metodologia` y la pantalla `/panel/metodologia`; la tarjeta del panel ya está activa, y "Plan de tarea" (T24) figura como pendiente.
+- **Comprobación 2 para D2:** no reescritura (CP-08), que ahora también revisa las preguntas, y `sin_datos_inventados`: ningún número que no esté en la sección del estudiante o en un fragmento citado.
+- **Migración 0019:** instrucción `metodologia/v1`. En la base de desarrollo creó la versión 5 de la configuración.
+- **Pruebas:**
+  - 13 unitarias: diseño declarado, números y consulta;
+  - 5 de integración: secciones con su diseño, diseño no identificable con pregunta, lista del diseño cuasiexperimental, valor inventado "Con advertencias" y aislamiento;
+  - 1 de migraciones y 1 de la interfaz;
+  - 1 extremo a extremo con accesibilidad.
+  - Se corrigió la prueba de la semilla de configuración, que dependía del orden: ahora restaura la semilla con `bd_limpia`.
+- **Modelo real:** el Método del borrador de demostración, con un párrafo nuevo con errores a propósito, en 85 s.
+  - **Hallazgos:** 3, de severidad alta: la afirmación causal en un diseño correlacional, la muestra y el instrumento sin justificar y el análisis sin prueba.
+  - **Preguntas:** 7, sobre lo que falta.
+  - **Comprobaciones:** las 4 superadas.
+- **Provisional, sin revisión humana:**
+  - la instrucción `metodologia/v1`;
+  - el párrafo con errores metodológicos del borrador de demostración;
+  - los textos de la pantalla;
+  - la prueba real.
+- **Pendiente:** la hoja de errores metodológicos con su clave, que arma el asistente antes de T34; el reintento, en T30.

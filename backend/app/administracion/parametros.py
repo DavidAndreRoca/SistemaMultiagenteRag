@@ -184,6 +184,7 @@ class ParametrosFuncionales(_Estricto):
             "referencias": "v1",
             "estructura": "v1",
             "redaccion": "v1",
+            "metodologia": "v1",
         }
     )
 

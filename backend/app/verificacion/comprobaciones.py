@@ -4,7 +4,8 @@ Viven fuera de los agentes para que el módulo de integración y verificación (
 reutilice sobre la salida guardada de cualquier tipo.
 
 1. **Esquema del tipo:** la salida cumple el esquema Pydantic de su tipo.
-2. **Límites del tipo:** D1 y D2 no reescriben (T23, CP-08); la propuesta de D3 no pasa de
+2. **Límites del tipo:** D1 y D2 no reescriben (T23, CP-08); D2 no da números que no estén
+   en el texto del estudiante o en un fragmento citado (T26); la propuesta de D3 no pasa de
    1.2 veces el original ni agrega datos o citas (T27, CP-10).
 3. **Citas:** todo identificador ``F<n>`` de la salida, en los campos ``citas`` o dentro de
    un texto, está entre los fragmentos recuperados para esa solicitud.
@@ -108,7 +109,13 @@ def comprobar_acceso_abierto(estado_oa_por_cita: Mapping[str, str | None]) -> Co
 
 # --- Comprobación 2 para D1 y D2: no reescritura (T23; CP-08) -----------------------------
 
-CAMPOS_DE_TEXTO = ("descripcion", "recomendacion", "fortalezas", "notas_para_el_estudiante")
+CAMPOS_DE_TEXTO = (
+    "descripcion",
+    "recomendacion",
+    "fortalezas",
+    "preguntas_al_estudiante",
+    "notas_para_el_estudiante",
+)
 _COMILLAS = re.compile(r"[\"“”«»]([^\"“”«»]+)[\"“”«»]")
 
 
@@ -205,4 +212,44 @@ def comprobar_limites_propuesta(salida: Any, factor: float) -> Comprobacion:
             motivos.append(f"cambios[{indice}].despues no está en la propuesta")
     return Comprobacion(
         numero=2, nombre="limites_propuesta", superada=not motivos, motivos=motivos[:20]
+    )
+
+
+# --- Comprobación 2 para D2: ningún dato inventado (T26) -----------------------------------
+
+# Números sueltos: no los que siguen a una letra o a un guion, como "p12", "H1" o "COR-6",
+# que son identificadores de párrafo, hipótesis o criterio.
+_NUMERO_SUELTO = re.compile(r"(?<![\w-])\d+(?:[.,]\d+)?")
+
+
+def numeros(texto: str) -> set[str]:
+    """Números del texto, con la coma decimal como punto."""
+    return {m.replace(",", ".") for m in _NUMERO_SUELTO.findall(texto)}
+
+
+def comprobar_numeros(
+    salida: Any, texto_estudiante: str, textos_recuperados: Mapping[str, str]
+) -> Comprobacion:
+    """Comprobación 2 (D2): cada número de los textos de la salida está en la sección del
+    estudiante o en un fragmento que la salida cita. Un tamaño de muestra, un coeficiente o
+    un valor p que no está en ninguno sería un dato inventado."""
+    datos = salida.model_dump(mode="json") if isinstance(salida, BaseModel) else salida
+    citados = set(identificadores_citados(datos))
+    permitidos = numeros(texto_estudiante)
+    for identificador, texto in textos_recuperados.items():
+        if identificador in citados:
+            permitidos |= numeros(texto)
+    motivos: list[str] = []
+    for ruta, texto in _textos_con_ruta(datos):
+        campo = re.sub(r"\[\d+\]", "", ruta.split(".")[-1])
+        if campo not in CAMPOS_DE_TEXTO:
+            continue
+        ajenos = sorted(numeros(texto) - permitidos)
+        if ajenos:
+            motivos.append(
+                f"dato posiblemente inventado en {ruta}: {len(ajenos)} números que no están en"
+                " el texto del estudiante ni en un fragmento citado"
+            )
+    return Comprobacion(
+        numero=2, nombre="sin_datos_inventados", superada=not motivos, motivos=motivos[:20]
     )

@@ -217,7 +217,7 @@ function Resultado({ vista }: { vista: Vista }) {
   );
 }
 
-function FilaHallazgo({ hallazgo }: { hallazgo: Hallazgo }) {
+export function FilaHallazgo({ hallazgo }: { hallazgo: Hallazgo }) {
   return (
     <li>
       <p>
