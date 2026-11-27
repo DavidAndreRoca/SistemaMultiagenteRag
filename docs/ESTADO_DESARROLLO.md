@@ -2055,3 +2055,25 @@ Rama `t28-orquestacion-cola`. Decisión: `docs/decisiones/T28-orquestacion-cola-
   - el avance "n de m referencias" solo se ve con la ejecución en proceso, y vuelve con los eventos de T29;
   - formulario, eventos y reenvío (T29);
   - reintento y evaluador (T30).
+
+**Integración de T28:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#24, CI verde (ejecución 45957688338, 9 de 9 trabajos; la primera ejecución falló en `alembic check` por las tablas del checkpointer, que ahora se omiten de la comparación), integrada en `main`.
+
+## 30. Bloque 3: T29 (estado en tiempo real, reenvío y mismo alcance)
+
+Rama `t29-estado-y-reenvio`. Decisión: `docs/decisiones/T29-estado-y-reenvio.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Canal de eventos** `GET /caso/solicitudes/{id}/eventos`:
+  - transmite el estado de la solicitud hasta el final;
+  - valida el contexto antes de transmitir: otro caso recibe 404;
+  - al reconectarse envía primero el estado actual.
+- **Estado "generando":** el contrato de agentes avisa antes de generar (`al_generar`), solo con evidencia suficiente.
+- **Reenvío** `POST /caso/solicitudes/{id}/reenvio`: solo para una no atendida, enlazado con `solicitud_origen_id`, que también muestra la lista del panel.
+- **Mismo alcance** `POST /caso/solicitudes/{id}/mismo-alcance`: estructura y metodología de una misma sección.
+- **Interfaz:** avance por pasos en todas las pantallas, "Volver a pedir" en las no atendidas y "Revisar también..." entre estructura y metodología. El formulario es el panel con la guía de cada tipo y cada pantalla con sus alcances válidos: provisional, sin revisión humana.
+- **Pruebas:**
+  - 5 de integración del seguimiento y 2 del aviso de generación;
+  - 5 de la interfaz;
+  - backend 907 y frontend 38;
+  - extremo a extremo 11 de 11.
+- **Prototipo, con el modelo real y el trabajador:** el avance llegó en vivo por el proxy de Vite. La revisión metodológica se entregó en 90 s, y la de estructura de la misma sección, pedida desde ella, con 3 hallazgos.
+- **Pendiente:** el avance "n de m referencias" con el trabajador; el reintento (T30).

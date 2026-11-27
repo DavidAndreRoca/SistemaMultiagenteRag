@@ -24,6 +24,7 @@ from app.api import (
     referencias,
     salud,
     sesion,
+    solicitudes,
 )
 from app.bd.sesion import crear_fabrica_sesiones, crear_motor
 from app.comun.errores import RespuestaError, registrar_manejadores
@@ -104,6 +105,15 @@ def crear_aplicacion(ajustes: Ajustes | None = None) -> FastAPI:
     registrar_manejadores(aplicacion)
     aplicacion.add_middleware(MiddlewareIncidencia, es_produccion=ajustes.es_produccion)
     modulos = (salud, sesion, caso, borradores, investigador, corpus, importacion)
-    for modulo in (*modulos, evidencia, referencias, estructura, redaccion, metodologia, plan):
+    for modulo in (
+        *modulos,
+        evidencia,
+        referencias,
+        estructura,
+        redaccion,
+        metodologia,
+        plan,
+        solicitudes,
+    ):
         aplicacion.include_router(modulo.router)
     return aplicacion

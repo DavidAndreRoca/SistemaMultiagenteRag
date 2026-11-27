@@ -147,7 +147,13 @@ class AtencionEvidencia:
             alcance=solicitud.alcance_ref or "",
             version_id=solicitud.version_id,
         )
-        resultado = await self._agente.atender(unidad, contexto, estado)
+
+        async def generando() -> None:
+            await cambiar_estado(
+                unidad, contexto, solicitud.id, EstadoSolicitud.GENERANDO, self._reloj
+            )
+
+        resultado = await self._agente.atender(unidad, contexto, estado, generando)
         if resultado.abstencion:  # T16 ya registró la abstención y sus fragmentos
             return Ejecucion(abstencion=True)
         assert resultado.salida is not None

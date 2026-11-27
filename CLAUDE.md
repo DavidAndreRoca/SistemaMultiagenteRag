@@ -105,6 +105,8 @@ Plan de tarea (T24): `app/agentes/plan.py` (`AgentePlan`, `AtencionPlan` con alc
 
 Orquestación (T28): `app/orquestacion/` (`grafo.py` con el grafo de LangGraph y `Orquestador`; `enrutamiento.py` con la tabla fija tipo a agente; `fabrica.py` con los ejecutores de cada tipo; `en_api.py`; `trabajador.py`, proceso aparte que toma la cola). Cada atención es un ejecutor con `ejecutar`, `verificar` y `registrar` (`app/agentes/ejecucion.py`). Cola en `app/repositorios/cola.py` (único repositorio sin caso: solo identificadores). La API solo crea solicitudes; en pruebas, `EJECUCION_EN_PROCESO=true` las atiende en su proceso (esperar con `esperar_orquestador`). Checkpointer de LangGraph en PostgreSQL (migración 0021). Trazas en la nube pospuestas: no arranca con `LANGSMITH_TRACING`.
 
+Seguimiento (T29): `app/api/solicitudes.py` (eventos enviados por el servidor con el estado, reenvío enlazado con `solicitud_origen_id` y otra solicitud con el mismo alcance); en la interfaz, `frontend/src/componentes/Seguimiento.tsx` (`AvanceSolicitud`, `NoAtendida`, `OtraRevision`) y los estados en curso en `frontend/src/solicitudes.ts`. En pruebas, `app.state.intervalo_eventos_s` acelera el canal.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

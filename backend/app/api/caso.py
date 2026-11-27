@@ -69,6 +69,7 @@ class SolicitudResumen(BaseModel):
     consulta: str | None  # la del estudiante, en las búsquedas de evidencia
     creada_en: datetime
     entregada_en: datetime | None
+    solicitud_origen_id: uuid.UUID | None  # si es el reenvío de una no atendida (T29)
 
 
 @router.get(
@@ -85,6 +86,7 @@ async def solicitudes_del_caso(contexto: ContextoCaso, unidad: Unidad) -> list[S
             consulta=s.alcance_ref if s.tipo is TipoSolicitud.BUSQUEDA_EVIDENCIA else None,
             creada_en=s.creada_en,
             entregada_en=s.entregada_en,
+            solicitud_origen_id=s.solicitud_origen_id,
         )
         for s in await unidad.solicitudes.recientes(contexto, TIPOS_CON_PANTALLA)
     ]

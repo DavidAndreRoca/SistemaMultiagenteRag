@@ -327,3 +327,37 @@ async def test_si_doi_org_no_responde_se_arma_en_local(escenario: Escenario) -> 
 async def test_otro_caso_no_obtiene_referencias_de_la_solicitud(escenario: Escenario) -> None:
     await escenario.preparar()
     assert await _referencias(escenario, DoiOrg(), "ieee", ["F1", "F2"], contexto=escenario.b) == []
+
+
+async def test_avisa_que_va_a_generar_con_evidencia_suficiente(escenario: Escenario) -> None:
+    """T29: el aviso marca la solicitud "generando" antes de llamar al modelo."""
+    avisos: list[str] = []
+
+    async def generando() -> None:
+        avisos.append("generando")
+
+    async with escenario.entorno.aplicacion.state.fabrica_sesiones() as sesion:
+        resultado = await _agente(escenario, Modelo(["F1"])).atender(
+            UnidadDeTrabajo(sesion),
+            escenario.a,
+            _estado(escenario, escenario.solicitud_a),
+            generando,
+        )
+    assert not resultado.abstencion and avisos == ["generando"]
+
+
+async def test_una_abstencion_no_avisa_que_genera(escenario: Escenario) -> None:
+    avisos: list[str] = []
+
+    async def generando() -> None:
+        avisos.append("generando")
+
+    ajena = "Efectos de la política monetaria en la inflación de economías emergentes"
+    async with escenario.entorno.aplicacion.state.fabrica_sesiones() as sesion:
+        resultado = await _agente(escenario, Modelo(["F1"])).atender(
+            UnidadDeTrabajo(sesion),
+            escenario.a,
+            _estado(escenario, escenario.solicitud_a, ajena),
+            generando,
+        )
+    assert resultado.abstencion and avisos == []
