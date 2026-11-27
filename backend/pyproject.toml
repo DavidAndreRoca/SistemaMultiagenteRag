@@ -21,6 +21,8 @@ dependencies = [
     "python-multipart>=0.0.20,<1",  # subida de PDF a la API (T10)
     "python-docx>=1.2,<2",  # borradores .docx (T11); MIT
     "citeproc-py==0.12.3",  # referencias en IEEE, APA 7 y Vancouver con CSL (T18); BSD
+    "langgraph>=1.2,<2",  # grafo de la orquestación (T28); MIT
+    "langgraph-checkpoint-postgres>=3.2,<4",  # checkpointer en PostgreSQL (T28); MIT
 ]
 
 [project.optional-dependencies]

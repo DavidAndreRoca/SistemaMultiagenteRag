@@ -9,13 +9,13 @@ import { Form } from "react-aria-components";
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton, CampoTextoLargo } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
+import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaEvidencia"];
 type Afirmacion = Esquemas["AfirmacionVista"];
 type Cita = Esquemas["CitaVista"];
 
 const ESPERA_AVANCE_MS = 2000;
-const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
 const SECCIONES: Record<string, string> = {
   resumen: "Resumen",
   introduccion: "Introducción",

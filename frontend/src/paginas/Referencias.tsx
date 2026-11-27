@@ -9,12 +9,12 @@ import { useSearchParams } from "react-router";
 import { api, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
+import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaVerificacion"];
 type Referencia = Esquemas["ReferenciaVerificadaVista"];
 
 const ESPERA_AVANCE_MS = 2000;
-const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
 const ESTADOS: Record<string, string> = {
   verificada: "Verificada",
   con_discrepancias: "Con discrepancias",

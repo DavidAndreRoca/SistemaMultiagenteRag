@@ -28,8 +28,8 @@ docker compose -f compartido/docker-compose.yml up -d --wait 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "No se pudieron levantar los servicios compartidos." }
 
 Write-Host "2/4 Base, API e interfaz (la primera vez tarda unos minutos)..."
-docker compose @Compose up -d --wait --build bd api interfaz 2>&1 | Out-Null
-if ($LASTEXITCODE -ne 0) { throw "No se pudo levantar el prototipo: revise 'docker compose logs api'." }
+docker compose @Compose up -d --wait --build bd api trabajador interfaz 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) { throw "No se pudo levantar el prototipo: revise 'docker compose logs api trabajador'." }
 
 Write-Host "3/4 Cuentas de demostración..."
 New-Item -ItemType Directory -Force "datos/demo" | Out-Null

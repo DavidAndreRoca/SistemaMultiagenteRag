@@ -2030,3 +2030,28 @@ Rama `t24-plan-de-tarea`. Decisión: `docs/decisiones/T24-plan-de-tarea.md`. Cie
   - los textos de la pantalla;
   - la prueba real.
 - **Pendiente:** el reintento, en T30.
+
+**Integración de T24:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#23, CI verde (ejecución 45941793107, 9 de 9 trabajos), integrada en `main`.
+
+## 29. Bloque 3: T28 (orquestación, cola y trabajador)
+
+Rama `t28-orquestacion-cola`. Decisión: `docs/decisiones/T28-orquestacion-cola-trabajador.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Un solo camino:** grafo de LangGraph 1.2 (validar, enrutar, ejecutar, verificar, etiquetar, registrar y entregar, o no atendida), con enrutamiento por tabla fija tipo a agente, sin modelo. Las seis atenciones son ahora ejecutores con tres pasos, y una fábrica por proceso comparte la cadena de modelos.
+- **Checkpointer en PostgreSQL:** sus tablas las crea la migración 0021. El estado guardado no lleva texto del borrador ni de la salida.
+- **Cola y trabajador:**
+  - la cola usa `FOR UPDATE SKIP LOCKED`; el trabajador es un proceso aparte (`app.orquestacion.trabajador`, servicio `trabajador`) con concurrencia configurable;
+  - recupera las solicitudes huérfanas;
+  - una caída del proveedor devuelve la solicitud a la cola, con espera, hasta 3 intentos técnicos.
+- **API:** las rutas solo crean la solicitud. La ejecución en el proceso de la API (`EJECUCION_EN_PROCESO`) queda para pruebas. Las pantallas siguen también los estados "verificando" y "reintentando".
+- **Trazas en la nube:** pospuestas por decisión del equipo; la configuración no arranca si se encienden.
+- **Pruebas:**
+  - 9 de integración del orquestador (CP-03, CP-04, CP-07, huérfanas, espera tras la caída, checkpointer real sin texto y API en cola) y 4 unitarias de enrutamiento;
+  - las pruebas de todas las pantallas pasan ahora por el grafo;
+  - backend 900 y frontend 33;
+  - extremo a extremo: se corrigió una carrera en la prueba de redacción, que abría la lista antes de que llegaran los párrafos.
+- **Modelo real, con el trabajador en el prototipo:** el plan de tarea en 37 s y la revisión de estructura pedida desde el navegador en 43 s.
+- **Pendiente:**
+  - el avance "n de m referencias" solo se ve con la ejecución en proceso, y vuelve con los eventos de T29;
+  - formulario, eventos y reenvío (T29);
+  - reintento y evaluador (T30).

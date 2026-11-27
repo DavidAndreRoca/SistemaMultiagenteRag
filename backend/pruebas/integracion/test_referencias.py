@@ -32,6 +32,7 @@ from pruebas.integracion.conftest import (
     crear_caso,
     crear_tema,
     entrar_y_cambiar,
+    esperar_orquestador,
     primera_credencial,
 )
 
@@ -80,7 +81,7 @@ class Verificacion:
     ) -> dict[str, Any]:
         respuesta = await cliente.post("/caso/referencias")
         assert respuesta.status_code == 202, respuesta.text
-        await atencion.esperar()
+        await esperar_orquestador(self.entorno)
         vista = await cliente.get(f"/caso/referencias/{respuesta.json()['id']}")
         assert vista.status_code == 200, vista.text
         datos: dict[str, Any] = vista.json()

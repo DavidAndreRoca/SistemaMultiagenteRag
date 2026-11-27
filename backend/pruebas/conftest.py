@@ -28,6 +28,10 @@ def variables_base(**cambios: str) -> dict[str, str]:
         "SECRETO_SESION": SECRETO_PRUEBAS,
     }
     variables.update(cambios)
+    # T28: las pruebas atienden las solicitudes con el orquestador en el mismo proceso, algo
+    # que solo se admite en el entorno de pruebas.
+    if variables["ENTORNO"] == "pruebas":
+        variables.setdefault("EJECUCION_EN_PROCESO", "true")
     return variables
 
 

@@ -21,10 +21,10 @@ from app.llm.proveedores import ProveedorSimulado
 from app.rag.recuperacion import Recuperador
 from app.rag.servicio import ServicioEvidencia
 from app.repositorios.contexto import ContextoAcceso
-from app.repositorios.unidad import UnidadDeTrabajo, fabrica_de_unidades
+from app.repositorios.unidad import UnidadDeTrabajo
 from pruebas.dobles_corpus import EmbeddingsFicticios
 from pruebas.dobles_rag import ReordenadorFicticio
-from pruebas.integracion.conftest import Entorno, consultar
+from pruebas.integracion.conftest import Entorno, consultar, esperar_orquestador
 from pruebas.integracion.test_estructura import PROVISIONALES, _caso, _guias
 
 pytestmark = pytest.mark.integracion
@@ -74,7 +74,7 @@ class Plan:
     async def pedir(self, hito: str) -> dict[str, Any]:
         respuesta = await self.cliente.post("/caso/plan", json={"hito": hito})
         assert respuesta.status_code == 202, respuesta.text
-        await self.atencion.esperar()
+        await esperar_orquestador(self.entorno)
         vista = await self.cliente.get(f"/caso/plan/{respuesta.json()['id']}")
         assert vista.status_code == 200, vista.text
         datos: dict[str, Any] = vista.json()
@@ -92,7 +92,6 @@ def _atencion(entorno: Entorno, modelo: Modelo) -> AtencionPlan:
     atencion = AtencionPlan(
         TipoSolicitud.PLAN_TAREA,
         agente,
-        fabrica_de_unidades(entorno.aplicacion.state.fabrica_sesiones),
         entorno.reloj,
     )
     entorno.aplicacion.state.atencion_plan = atencion

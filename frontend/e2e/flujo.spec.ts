@@ -206,10 +206,11 @@ test("un caso abre la propuesta de redacción con los párrafos de su versión (
   await entrar(page, caso.cuenta, CONTRASENA_NUEVA);
   await page.getByRole("link", { name: "Proponer una redacción para un párrafo" }).click();
   await expect(page.getByRole("heading", { name: "Proponer una redacción" })).toBeVisible();
+  // El botón se habilita cuando llegaron los párrafos: antes, la lista estaría vacía.
+  await expect(page.getByRole("button", { name: "Proponer una redacción" })).toBeEnabled();
   await page.getByRole("button", { name: /Párrafo/ }).click();
   await page.getByRole("option").first().click();
   await expect(page.getByText(/Párrafo elegido/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Proponer una redacción" })).toBeEnabled();
   await revisarAccesibilidad(page, "propuesta de redacción", info);
   await salir(page);
 });

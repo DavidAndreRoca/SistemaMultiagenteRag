@@ -21,16 +21,10 @@ from pydantic import BaseModel
 
 from app.agentes.esquemas import EstadoReferencia
 from app.agentes.referencias import AtencionReferencias
-from app.agentes.verificacion_referencias import Verificador
 from app.api.evidencia import SolicitudInexistente
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
-from app.bibliografia.fabrica import crear_servicios
-from app.configuracion import Ajustes
-from app.corpus.fabrica import CorpusNoConfigurado
-from app.corpus.grobid import ClienteGrobid
-from app.llm.fabrica import crear_cadena, registrador_en_base
-from app.repositorios.unidad import fabrica_de_unidades
-from app.seguridad.dependencias import ContextoCaso, Reloj, RelojDep, Unidad, obtener_reloj
+from app.orquestacion.en_api import ejecutor_de, encolar
+from app.seguridad.dependencias import ContextoCaso, RelojDep, Unidad
 
 router = APIRouter(prefix="/caso", tags=["referencias"])
 
@@ -100,27 +94,11 @@ class VistaVerificacion(BaseModel):
 
 
 async def obtener_atencion(peticion: Request, unidad: Unidad) -> AtencionReferencias:
-    """Una por proceso; usa GROBID, Crossref, OpenAlex y, si se configura, el adaptador."""
-    estado = peticion.app.state
-    actual: AtencionReferencias | None = getattr(estado, "atencion_referencias", None)
-    if actual is not None:
-        return actual
-    ajustes: Ajustes = estado.ajustes
-    if not ajustes.url_grobid:
-        raise CorpusNoConfigurado(["URL_GROBID"])
-    _, parametros = await unidad.configuracion.vigente()
-    reloj: Reloj = obtener_reloj(peticion)
-    abrir = fabrica_de_unidades(estado.fabrica_sesiones)
-    servicios = crear_servicios(ajustes, abrir)
-    actual = AtencionReferencias(
-        ClienteGrobid(ajustes.url_grobid),
-        Verificador(servicios.crossref, servicios.openalex),
-        crear_cadena(ajustes, parametros, registrador_en_base(abrir)),
-        abrir,
-        reloj,
+    """El ejecutor del tipo, uno por proceso (``app/orquestacion/en_api.py``)."""
+    ejecutor: AtencionReferencias = await ejecutor_de(
+        peticion, unidad, TipoSolicitud.VERIFICACION_REFERENCIAS
     )
-    estado.atencion_referencias = actual
-    return actual
+    return ejecutor
 
 
 AtencionDep = Annotated[AtencionReferencias, Depends(obtener_atencion)]
@@ -136,10 +114,10 @@ AtencionDep = Annotated[AtencionReferencias, Depends(obtener_atencion)]
     " detectó la lista de referencias (hay que indicarla a mano).",
 )
 async def verificar_referencias(
-    contexto: ContextoCaso, unidad: Unidad, atencion: AtencionDep
+    peticion: Request, contexto: ContextoCaso, unidad: Unidad, atencion: AtencionDep
 ) -> SolicitudVerificacion:
     solicitud = await atencion.iniciar(unidad, contexto)
-    atencion.lanzar(solicitud, contexto)
+    encolar(peticion, solicitud, contexto)
     return SolicitudVerificacion(
         id=solicitud.id, estado=solicitud.estado, creada_en=solicitud.creada_en
     )
@@ -164,17 +142,8 @@ async def ver_verificacion(
     solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
     if solicitud is None or solicitud.tipo is not TipoSolicitud.VERIFICACION_REFERENCIAS:
         raise SolicitudInexistente()
+    # El avance solo se conoce si el grafo corre en este proceso (pruebas).
     atencion: AtencionReferencias | None = getattr(peticion.app.state, "atencion_referencias", None)
-    if atencion is not None:
-        await atencion.marcar_interrumpida(unidad, contexto, solicitud)
-    elif solicitud.estado in {
-        EstadoSolicitud.RECIBIDA,
-        EstadoSolicitud.RECUPERANDO,
-        EstadoSolicitud.GENERANDO,
-    }:
-        solicitud.estado, solicitud.motivo = EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-        solicitud.actualizada_en = reloj()
-        await unidad.confirmar()
     resultado = await unidad.resultados.de_solicitud(contexto, solicitud_id)
     salida: dict[str, Any] = (resultado.salida or {}) if resultado else {}
     progreso = atencion.progreso(solicitud_id) if atencion is not None else None

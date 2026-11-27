@@ -2,9 +2,9 @@
 
 * ``AgenteEvidencia``: el contrato común de T18 con la instrucción ``evidencia`` y la
   consulta del estudiante como alcance.
-* ``AtencionEvidencia``: la ruta directa del bloque 1, sin orquestador (T28). Valida la
-  consulta antes de encolar, crea la solicitud y la atiende en segundo plano, una a la vez
-  por proceso. Al terminar aplica las comprobaciones 1, 3 y 5:
+* ``AtencionEvidencia``: en la API valida la consulta antes de encolar y crea la solicitud;
+  desde T28 la ejecuta el orquestador con los pasos del ejecutor (``ejecutar``,
+  ``verificar`` y ``registrar``). Aplica las comprobaciones 1, 3 y 5:
 
   - las fuentes recomendadas son solo los documentos citados con acceso abierto
     comprobado (RN-14), con su referencia armada desde los metadatos (RN-17);
@@ -16,13 +16,12 @@ El registro guarda estados, motivos y cantidades, nunca la consulta ni la salida
 
 from __future__ import annotations
 
-import asyncio
 import uuid
-from collections.abc import Callable
-from dataclasses import dataclass, field
+from collections.abc import Callable, Sequence
 from datetime import datetime
 
 from app.agentes.contrato import Agente, EstadoAgente
+from app.agentes.ejecucion import Ejecucion, advertencias_de, cambiar_estado
 from app.agentes.validacion_consulta import Rechazo, validar
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAlcance, TipoSolicitud
 from app.bd.modelos import Resultado, Solicitud
@@ -30,11 +29,11 @@ from app.bibliografia.referencias import ConstructorReferencias
 from app.comun.errores import ErrorAplicacion
 from app.comun.registro import obtener_registrador
 from app.inferencia.interfaces import ProveedorEmbeddings
-from app.llm.modelos import ErrorModelo
 from app.repositorios.contexto import ContextoAcceso
-from app.repositorios.unidad import FabricaUnidades, UnidadDeTrabajo
+from app.repositorios.unidad import UnidadDeTrabajo
 from app.verificacion.comprobaciones import (
     ACCESO_ABIERTO_COMPROBADO,
+    Comprobacion,
     comprobar_acceso_abierto,
     comprobar_citas,
     comprobar_esquema,
@@ -42,10 +41,6 @@ from app.verificacion.comprobaciones import (
 )
 
 TIPO = TipoSolicitud.BUSQUEDA_EVIDENCIA
-EN_CURSO = frozenset(
-    {EstadoSolicitud.RECIBIDA, EstadoSolicitud.ASIGNADA, EstadoSolicitud.RECUPERANDO,
-     EstadoSolicitud.GENERANDO}
-)  # fmt: skip
 INVITACION_APORTE = (
     "Puede aportar una fuente de acceso abierto sobre su consulta para que el sistema la"
     " compruebe y la incluya en su colección personal."
@@ -86,32 +81,19 @@ class ConsultaRechazada(ErrorAplicacion):
         )
 
 
-@dataclass
-class _Avance:
-    activas: set[uuid.UUID] = field(default_factory=set)
-    tareas: set[asyncio.Task[None]] = field(default_factory=set)
-
-
 class AtencionEvidencia:
     def __init__(
         self,
         agente: AgenteEvidencia,
         embeddings: ProveedorEmbeddings,
         referencias: ConstructorReferencias,
-        abrir: FabricaUnidades,
         reloj: Callable[[], datetime],
     ) -> None:
+        self.tipo = TIPO
         self._agente = agente
         self._embeddings = embeddings
         self._referencias = referencias
-        self._abrir = abrir
         self._reloj = reloj
-        self._candado = asyncio.Lock()
-        self._avance = _Avance()
-
-    @property
-    def activas(self) -> frozenset[uuid.UUID]:
-        return frozenset(self._avance.activas)
 
     async def iniciar(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, consulta: str
@@ -152,7 +134,12 @@ class AtencionEvidencia:
             raise ConsultaRechazada(rechazo, solicitud.id)
         return solicitud
 
-    def lanzar(self, solicitud: Solicitud, contexto: ContextoAcceso) -> None:
+    async def ejecutar(
+        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
+    ) -> Ejecucion:
+        await cambiar_estado(
+            unidad, contexto, solicitud.id, EstadoSolicitud.RECUPERANDO, self._reloj
+        )
         estado = EstadoAgente(
             solicitud_id=solicitud.id,
             caso_id=solicitud.caso_id,
@@ -160,80 +147,61 @@ class AtencionEvidencia:
             alcance=solicitud.alcance_ref or "",
             version_id=solicitud.version_id,
         )
-        self._avance.activas.add(solicitud.id)
-        tarea = asyncio.create_task(self.atender(contexto, estado))
-        self._avance.tareas.add(tarea)
-        tarea.add_done_callback(self._avance.tareas.discard)
-
-    async def esperar(self) -> None:
-        while self._avance.tareas:
-            await asyncio.gather(*list(self._avance.tareas), return_exceptions=True)
-
-    def cancelar(self) -> None:
-        for tarea in list(self._avance.tareas):
-            tarea.cancel()
-
-    async def atender(self, contexto: ContextoAcceso, estado: EstadoAgente) -> None:
-        self._avance.activas.add(estado.solicitud_id)
-        try:
-            async with self._candado, self._abrir() as unidad:
-                await self._atender(unidad, contexto, estado)
-        except Exception as error:
-            motivo = (
-                f"modelo:{error.motivo.value}"
-                if isinstance(error, ErrorModelo)
-                else getattr(error, "codigo", type(error).__name__)
-            )
-            _registro.warning(
-                "solicitud de evidencia no atendida",
-                extra={
-                    "tipo_evento": "agentes",
-                    "solicitud_id": str(estado.solicitud_id),
-                    "motivo": motivo,
-                },
-            )
-            async with self._abrir() as unidad:
-                await self._cambiar(
-                    unidad, contexto, estado.solicitud_id, EstadoSolicitud.NO_ATENDIDA, motivo
-                )
-        finally:
-            self._avance.activas.discard(estado.solicitud_id)
-
-    async def _atender(
-        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, estado: EstadoAgente
-    ) -> None:
-        await self._cambiar(unidad, contexto, estado.solicitud_id, EstadoSolicitud.RECUPERANDO)
         resultado = await self._agente.atender(unidad, contexto, estado)
         if resultado.abstencion:  # T16 ya registró la abstención y sus fragmentos
-            await self._cambiar(unidad, contexto, estado.solicitud_id, EstadoSolicitud.ENTREGADA)
-            return
+            return Ejecucion(abstencion=True)
         assert resultado.salida is not None
         salida = resultado.salida.model_dump(mode="json")
         citados = identificadores_citados(salida)
         documentos = await unidad.fragmentos_recuperados.documentos_citados(
-            contexto, estado.solicitud_id, citados
+            contexto, solicitud.id, citados
         )
-        recuperados = await unidad.fragmentos_recuperados.identificadores(
-            contexto, estado.solicitud_id
+        recuperados = await unidad.fragmentos_recuperados.identificadores(contexto, solicitud.id)
+        return Ejecucion(
+            abstencion=False,
+            salida=salida,
+            datos={
+                "recuperados": recuperados,
+                "estado_oa": {i: d.estado_oa.value for i, d in documentos},
+                "recomendables": [
+                    i for i, d in documentos if d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
+                ],
+                "modelo": {
+                    "instruccion": resultado.instruccion,
+                    "proveedor": resultado.proveedor,
+                    "modelo": resultado.modelo,
+                },
+            },
         )
-        estado_oa = {i: d.estado_oa.value for i, d in documentos}
-        comprobaciones = [
-            comprobar_esquema(TIPO, salida),
-            comprobar_citas(salida, recuperados),
-            comprobar_acceso_abierto(estado_oa),
+
+    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
+        assert ejecucion.salida is not None
+        return [
+            comprobar_esquema(TIPO, ejecucion.salida),
+            comprobar_citas(ejecucion.salida, ejecucion.datos["recuperados"]),
+            comprobar_acceso_abierto(ejecucion.datos["estado_oa"]),
         ]
-        recomendables = [i for i, d in documentos if d.estado_oa.value in ACCESO_ABIERTO_COMPROBADO]
+
+    async def registrar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+        comprobaciones: Sequence[Comprobacion],
+        etiqueta: Etiqueta | None,
+    ) -> None:
+        salida = ejecucion.salida or {}
         caso = await unidad.caso_propio.obtener(contexto)
         assert caso is not None
         referencias = await self._referencias.construir(
-            unidad, contexto, estado.solicitud_id, recomendables, caso[0].norma_citacion
+            unidad, contexto, solicitud.id, ejecucion.datos["recomendables"], caso[0].norma_citacion
         )
-        fallidas = [c for c in comprobaciones if not c.superada]
         await unidad.resultados.agregar(
             contexto,
             Resultado(
-                solicitud_id=estado.solicitud_id,
-                intento=estado.intento,
+                solicitud_id=solicitud.id,
+                intento=1,
                 salida={
                     **salida,
                     "fuentes": [
@@ -242,54 +210,21 @@ class AtencionEvidencia:
                     ],
                     "referencias": [r.model_dump(mode="json") for r in referencias],
                     "comprobaciones": [c.model_dump(mode="json") for c in comprobaciones],
-                    "modelo": {
-                        "instruccion": resultado.instruccion,
-                        "proveedor": resultado.proveedor,
-                        "modelo": resultado.modelo,
-                    },
+                    "modelo": ejecucion.datos.get("modelo"),
                 },
-                etiqueta=Etiqueta.CON_ADVERTENCIAS if fallidas else None,
-                advertencias=[m for c in fallidas for m in c.motivos],
+                etiqueta=etiqueta,
+                advertencias=advertencias_de(comprobaciones),
                 creado_en=self._reloj(),
             ),
         )
-        await self._cambiar(unidad, contexto, estado.solicitud_id, EstadoSolicitud.ENTREGADA)
+        await unidad.confirmar()
         _registro.info(
-            "evidencia entregada",
+            "evidencia registrada",
             extra={
                 "tipo_evento": "agentes",
-                "solicitud_id": str(estado.solicitud_id),
+                "solicitud_id": str(solicitud.id),
                 "afirmaciones": len(salida.get("respuesta", [])),
                 "fuentes_recomendadas": len(referencias),
-                "comprobaciones_fallidas": [c.nombre for c in fallidas],
+                "comprobaciones_fallidas": [c.nombre for c in comprobaciones if not c.superada],
             },
         )
-
-    async def _cambiar(
-        self,
-        unidad: UnidadDeTrabajo,
-        contexto: ContextoAcceso,
-        solicitud_id: uuid.UUID,
-        estado: EstadoSolicitud,
-        motivo: str | None = None,
-    ) -> None:
-        solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
-        if solicitud is None:
-            return
-        ahora = self._reloj()
-        solicitud.estado = estado
-        solicitud.actualizada_en = ahora
-        if motivo is not None:
-            solicitud.motivo = motivo[:200]
-        if estado is EstadoSolicitud.ENTREGADA:
-            solicitud.entregada_en = ahora
-        await unidad.confirmar()
-
-    async def marcar_interrumpida(
-        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
-    ) -> None:
-        """Una solicitud en curso que este proceso no atiende quedó cortada (reinicio)."""
-        if solicitud.estado in EN_CURSO and solicitud.id not in self.activas:
-            await self._cambiar(
-                unidad, contexto, solicitud.id, EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-            )

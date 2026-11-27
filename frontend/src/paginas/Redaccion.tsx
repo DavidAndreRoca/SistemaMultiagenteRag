@@ -12,6 +12,7 @@ import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/co
 import { Marco } from "../componentes/Marco";
 import { compararPalabras, type Tramo } from "../diferencias";
 import { numero } from "../formato";
+import { EN_CURSO } from "../solicitudes";
 
 type Vista = Esquemas["VistaRedaccion"];
 type Parrafos = Esquemas["ParrafosRedactables"];
@@ -19,7 +20,6 @@ type Cambio = Esquemas["CambioVista"];
 
 const ESPERA_AVANCE_MS = 2000;
 const PALABRAS_DE_MUESTRA = 9;
-const EN_CURSO = new Set(["recibida", "asignada", "recuperando", "generando"]);
 const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
   interrumpida: "La propuesta se interrumpió por un reinicio del servidor. Vuelva a pedirla.",
 };

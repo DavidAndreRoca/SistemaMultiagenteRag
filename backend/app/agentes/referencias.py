@@ -1,17 +1,16 @@
-"""Agente D4 de verificación de referencias y su atención directa (T20; RF-09, CU-08, CP-12,
-CP-13, RN-18; decisión T20-01).
+"""Agente D4 de verificación de referencias y su atención (T20; RF-09, CU-08, CP-12, CP-13,
+RN-18; decisión T20-01). Desde T28 la ejecuta el orquestador.
 
-La ruta directa del bloque 1, sin orquestador (T28), como la de evidencia (T19):
-
-1. ``iniciar``: exige una versión vigente con la lista de referencias detectada (T12) y crea
-   la solicitud sobre esa versión. Si la lista no se detectó, pide indicarla (RF-09, A).
-2. ``atender``, en segundo plano y con avance (referencias hechas de un total):
+1. ``iniciar`` (en la API): exige una versión vigente con la lista de referencias detectada
+   (T12) y crea la solicitud sobre esa versión. Si la lista no se detectó, pide indicarla
+   (RF-09, A).
+2. ``ejecutar`` (ejecutor de T28), con avance (referencias hechas de un total):
    - estructura las entradas con GROBID (``processCitationList``);
    - verifica cada referencia por DOI o por metadatos (``Verificador``);
    - extrae las citas del texto según la norma del caso y las cruza con la lista;
    - si se configura, pide al modelo una explicación breve de cada discrepancia. El modelo
      no decide estados ni escribe referencias (RN-17);
-   - aplica la comprobación 1 al informe y lo guarda como resultado.
+   - ``verificar`` aplica la comprobación 1 al informe y ``registrar`` lo guarda.
 
 El registro guarda estados, cantidades y motivos, nunca el texto del borrador ni de las
 referencias (4.6).
@@ -37,6 +36,7 @@ from app.agentes.citas import (
     entrada_desde_texto,
     extraer_citas,
 )
+from app.agentes.ejecucion import Ejecucion, advertencias_de, cambiar_estado
 from app.agentes.esquemas import (
     EstadoReferencia,
     ReferenciaVerificada,
@@ -57,14 +57,10 @@ from app.instrucciones.cargador import vigente
 from app.llm.interfaces import ModeloLenguaje
 from app.llm.modelos import BloqueDatos, EntradaModelo, ErrorModelo
 from app.repositorios.contexto import ContextoAcceso
-from app.repositorios.unidad import FabricaUnidades, UnidadDeTrabajo
-from app.verificacion.comprobaciones import comprobar_esquema
+from app.repositorios.unidad import UnidadDeTrabajo
+from app.verificacion.comprobaciones import Comprobacion, comprobar_esquema
 
 TIPO = TipoSolicitud.VERIFICACION_REFERENCIAS
-EN_CURSO = frozenset(
-    {EstadoSolicitud.RECIBIDA, EstadoSolicitud.ASIGNADA, EstadoSolicitud.RECUPERANDO,
-     EstadoSolicitud.GENERANDO}
-)  # fmt: skip
 MAX_REFERENCIAS = 150
 AVISO_NO_COMPROBABLES = (
     "La verificación no pudo completarse para {n} de las referencias porque un servicio"
@@ -197,8 +193,6 @@ def lista_para_cruce(referencias: Sequence[ReferenciaGrobid], norma: str) -> lis
 
 @dataclass
 class _Avance:
-    activas: set[uuid.UUID] = field(default_factory=set)
-    tareas: set[asyncio.Task[None]] = field(default_factory=set)
     progreso: dict[uuid.UUID, tuple[int, int]] = field(default_factory=dict)
 
 
@@ -208,20 +202,14 @@ class AtencionReferencias:
         extractor: ExtractorReferencias,
         verificador: Verificador,
         modelo: ModeloLenguaje | None,
-        abrir: FabricaUnidades,
         reloj: Callable[[], datetime],
     ) -> None:
+        self.tipo = TIPO
         self._extractor = extractor
         self._verificador = verificador
         self._modelo = modelo
-        self._abrir = abrir
         self._reloj = reloj
-        self._candado = asyncio.Lock()
         self._avance = _Avance()
-
-    @property
-    def activas(self) -> frozenset[uuid.UUID]:
-        return frozenset(self._avance.activas)
 
     def progreso(self, solicitud_id: uuid.UUID) -> tuple[int, int] | None:
         """Referencias verificadas y total, mientras la solicitud está en curso."""
@@ -260,53 +248,24 @@ class AtencionReferencias:
         )
         return solicitud
 
-    def lanzar(self, solicitud: Solicitud, contexto: ContextoAcceso) -> None:
-        self._avance.activas.add(solicitud.id)
-        tarea = asyncio.create_task(self.atender(contexto, solicitud.id, solicitud.version_id))
-        self._avance.tareas.add(tarea)
-        tarea.add_done_callback(self._avance.tareas.discard)
-
-    async def esperar(self) -> None:
-        while self._avance.tareas:
-            await asyncio.gather(*list(self._avance.tareas), return_exceptions=True)
-
-    def cancelar(self) -> None:
-        for tarea in list(self._avance.tareas):
-            tarea.cancel()
-
-    async def atender(
-        self, contexto: ContextoAcceso, solicitud_id: uuid.UUID, version_id: uuid.UUID
-    ) -> None:
-        self._avance.activas.add(solicitud_id)
+    async def ejecutar(
+        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
+    ) -> Ejecucion:
         try:
-            async with self._candado, self._abrir() as unidad:
-                await self._atender(unidad, contexto, solicitud_id, version_id)
-        except Exception as error:
-            motivo = str(getattr(error, "codigo", type(error).__name__))
-            _registro.warning(
-                "verificación de referencias no atendida",
-                extra={
-                    "tipo_evento": "agentes",
-                    "solicitud_id": str(solicitud_id),
-                    "motivo": motivo,
-                },
-            )
-            async with self._abrir() as unidad:
-                await self._cambiar(
-                    unidad, contexto, solicitud_id, EstadoSolicitud.NO_ATENDIDA, motivo
-                )
+            return await self._ejecutar(unidad, contexto, solicitud.id, solicitud.version_id)
         finally:
-            self._avance.activas.discard(solicitud_id)
-            self._avance.progreso.pop(solicitud_id, None)
+            self._avance.progreso.pop(solicitud.id, None)
 
-    async def _atender(
+    async def _ejecutar(
         self,
         unidad: UnidadDeTrabajo,
         contexto: ContextoAcceso,
         solicitud_id: uuid.UUID,
         version_id: uuid.UUID,
-    ) -> None:
-        await self._cambiar(unidad, contexto, solicitud_id, EstadoSolicitud.RECUPERANDO)
+    ) -> Ejecucion:
+        await cambiar_estado(
+            unidad, contexto, solicitud_id, EstadoSolicitud.RECUPERANDO, self._reloj
+        )
         version = await unidad.versiones.con_parrafos(contexto, version_id)
         caso = await unidad.caso_propio.obtener(contexto)
         assert version is not None and caso is not None
@@ -344,35 +303,11 @@ class AtencionReferencias:
                 AVISO_SIN_CITAS.format(norma=norma.upper() if norma != "apa7" else "APA 7")
             )
 
-        await self._cambiar(unidad, contexto, solicitud_id, EstadoSolicitud.GENERANDO)
+        await cambiar_estado(unidad, contexto, solicitud_id, EstadoSolicitud.GENERANDO, self._reloj)
         explicaciones, modelo = await self._explicar(unidad, verificadas, norma, avisos)
-
         salida = informe.model_dump(mode="json")
-        comprobacion = comprobar_esquema(TIPO, salida)
-        for referencia in salida["referencias"]:
-            referencia["explicacion"] = explicaciones.get(referencia["indice"])
-        await unidad.resultados.agregar(
-            contexto,
-            Resultado(
-                solicitud_id=solicitud_id,
-                intento=1,
-                salida={
-                    **salida,
-                    "norma": norma,
-                    "citas": [c.model_dump(mode="json") for c in cruce.citas],
-                    "resumen": dict(resumen),
-                    "avisos": avisos,
-                    "comprobaciones": [comprobacion.model_dump(mode="json")],
-                    "modelo": modelo,
-                },
-                etiqueta=None if comprobacion.superada else Etiqueta.CON_ADVERTENCIAS,
-                advertencias=list(comprobacion.motivos),
-                creado_en=self._reloj(),
-            ),
-        )
-        await self._cambiar(unidad, contexto, solicitud_id, EstadoSolicitud.ENTREGADA)
         _registro.info(
-            "verificación de referencias entregada",
+            "verificación de referencias hecha",
             extra={
                 "tipo_evento": "agentes",
                 "solicitud_id": str(solicitud_id),
@@ -384,6 +319,57 @@ class AtencionReferencias:
                 "entradas_no_citadas": len(cruce.entradas_no_citadas),
             },
         )
+        return Ejecucion(
+            abstencion=False,
+            salida=salida,
+            datos={
+                "explicaciones": explicaciones,
+                "extra": {
+                    "norma": norma,
+                    "citas": [c.model_dump(mode="json") for c in cruce.citas],
+                    "resumen": dict(resumen),
+                    "avisos": avisos,
+                    "modelo": modelo,
+                },
+            },
+        )
+
+    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
+        """Comprobación 1: el informe determinista cumple su esquema (sin modelo, RN-17)."""
+        assert ejecucion.salida is not None
+        return [comprobar_esquema(TIPO, ejecucion.salida)]
+
+    async def registrar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+        comprobaciones: Sequence[Comprobacion],
+        etiqueta: Etiqueta | None,
+    ) -> None:
+        salida = dict(ejecucion.salida or {})
+        explicaciones = ejecucion.datos.get("explicaciones", {})
+        salida["referencias"] = [
+            {**r, "explicacion": explicaciones.get(r["indice"])}
+            for r in salida.get("referencias", [])
+        ]
+        await unidad.resultados.agregar(
+            contexto,
+            Resultado(
+                solicitud_id=solicitud.id,
+                intento=1,
+                salida={
+                    **salida,
+                    **ejecucion.datos.get("extra", {}),
+                    "comprobaciones": [c.model_dump(mode="json") for c in comprobaciones],
+                },
+                etiqueta=etiqueta,
+                advertencias=advertencias_de(comprobaciones),
+                creado_en=self._reloj(),
+            ),
+        )
+        await unidad.confirmar()
 
     async def _explicar(
         self,
@@ -429,32 +415,3 @@ class AtencionReferencias:
             "proveedor": resultado.proveedor.value,
             "modelo": resultado.modelo,
         }
-
-    async def _cambiar(
-        self,
-        unidad: UnidadDeTrabajo,
-        contexto: ContextoAcceso,
-        solicitud_id: uuid.UUID,
-        estado: EstadoSolicitud,
-        motivo: str | None = None,
-    ) -> None:
-        solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
-        if solicitud is None:
-            return
-        ahora = self._reloj()
-        solicitud.estado = estado
-        solicitud.actualizada_en = ahora
-        if motivo is not None:
-            solicitud.motivo = motivo[:200]
-        if estado is EstadoSolicitud.ENTREGADA:
-            solicitud.entregada_en = ahora
-        await unidad.confirmar()
-
-    async def marcar_interrumpida(
-        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, solicitud: Solicitud
-    ) -> None:
-        """Una solicitud en curso que este proceso no atiende quedó cortada (reinicio)."""
-        if solicitud.estado in EN_CURSO and solicitud.id not in self.activas:
-            await self._cambiar(
-                unidad, contexto, solicitud.id, EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-            )

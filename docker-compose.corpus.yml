@@ -10,6 +10,14 @@ services:
     networks:
       - default
       - sma_compartido
+  # T28: el trabajador ejecuta los agentes, así que necesita los mismos servicios.
+  trabajador:
+    environment:
+      URL_GROBID: http://grobid:8070
+      URL_SERVICIO_MODELOS: http://servicio_modelos:8000
+    networks:
+      - default
+      - sma_compartido
 
 networks:
   sma_compartido:

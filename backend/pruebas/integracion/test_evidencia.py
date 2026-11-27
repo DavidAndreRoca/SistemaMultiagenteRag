@@ -22,9 +22,8 @@ from app.llm.cadena import CadenaModelos, Eslabon, Precio
 from app.llm.limitador import LimitadorProveedor, Limites
 from app.llm.modelos import EntradaModelo, ErrorDisponibilidad, MotivoError, Proveedor
 from app.llm.proveedores import ProveedorSimulado
-from app.repositorios.unidad import fabrica_de_unidades
 from pruebas.dobles_corpus import EmbeddingsFicticios
-from pruebas.integracion.conftest import consultar, entrar_y_cambiar
+from pruebas.integracion.conftest import consultar, entrar_y_cambiar, esperar_orquestador
 from pruebas.integracion.escenario_rag import CONSULTA, Escenario
 
 pytestmark = pytest.mark.integracion
@@ -71,7 +70,7 @@ class Evidencias:
 
     async def pedir(self, consulta: str) -> httpx.Response:
         respuesta = await self.cliente.post("/caso/evidencias", json={"consulta": consulta})
-        await self.atencion.esperar()
+        await esperar_orquestador(self.escenario.entorno)
         return respuesta
 
     async def ver(self, solicitud_id: str) -> dict[str, Any]:
@@ -107,7 +106,6 @@ def _atencion(escenario: Escenario, modelo: Modelo) -> AtencionEvidencia:
         AgenteEvidencia(escenario.servicio(), cadena, versiones=lambda: {"evidencia": "v1"}),
         EmbeddingsFicticios(),
         ConstructorReferencias(None),
-        fabrica_de_unidades(escenario.entorno.aplicacion.state.fabrica_sesiones),
         escenario.entorno.reloj,
     )
 
@@ -242,18 +240,27 @@ async def test_cp05_sin_evidencia_se_abstiene_e_invita_a_aportar(evidencias: Evi
     assert caso_id == evidencias.escenario.a.caso_id
 
 
-async def test_con_el_modelo_caido_la_solicitud_queda_no_atendida(evidencias: Evidencias) -> None:
+async def test_con_el_modelo_caido_la_solicitud_vuelve_a_la_cola(evidencias: Evidencias) -> None:
+    """T28: una caída del proveedor deja la solicitud recuperable, de nuevo en la cola."""
     evidencias.modelo.caido = True
     evidencias.escenario.entorno.aplicacion.state.atencion_evidencia = _atencion(
         evidencias.escenario, evidencias.modelo
     )
     evidencias.atencion = evidencias.escenario.entorno.aplicacion.state.atencion_evidencia
-    vista = await evidencias.ver((await evidencias.pedir(CONSULTA)).json()["id"])
-    assert (vista["estado"], vista["motivo"]) == ("no_atendida", "modelo:sobrecarga")
+    solicitud_id = (await evidencias.pedir(CONSULTA)).json()["id"]
+    vista = await evidencias.ver(solicitud_id)
+    assert (vista["estado"], vista["motivo"]) == ("recibida", "modelo:sobrecarga")
     assert vista["respuesta"] == []
+    ((intentos, fragmentos),) = consultar(
+        evidencias.escenario.entorno.url_bd,
+        "SELECT s.intentos_tecnicos, (SELECT count(*) FROM fragmento_recuperado f"
+        " WHERE f.solicitud_id = s.id) FROM solicitud s WHERE s.id = %s",
+        uuid.UUID(solicitud_id),
+    )
+    assert intentos == 1 and fragmentos > 0  # el próximo intento los borra antes de recuperar
 
 
-async def test_una_solicitud_cortada_por_un_reinicio_queda_no_atendida(
+async def test_ver_una_solicitud_en_curso_no_la_marca_interrumpida(
     evidencias: Evidencias,
 ) -> None:
     url = evidencias.escenario.entorno.url_bd
@@ -271,8 +278,9 @@ async def test_una_solicitud_cortada_por_un_reinicio_queda_no_atendida(
         version_id,
         configuracion_id,
     )
+    # T28: la API no sabe si el trabajador la atiende; las huérfanas las recupera él.
     vista = await evidencias.ver(str(solicitud_id))
-    assert (vista["estado"], vista["motivo"]) == ("no_atendida", "interrumpida")
+    assert (vista["estado"], vista["motivo"]) == ("recuperando", None)
 
 
 async def test_otro_caso_no_ve_la_solicitud_ni_pide_sin_version(evidencias: Evidencias) -> None:
@@ -294,7 +302,7 @@ async def test_el_registro_no_lleva_la_consulta_ni_la_salida(
         await evidencias.pedir(CONSULTA)
         await evidencias.pedir("Redacta la introducción completa de mi artículo")
     registro = json.dumps([r.__dict__ for r in caplog.records], default=str)
-    assert "evidencia entregada" in registro and "solicitud de evidencia" in registro
+    assert "evidencia registrada" in registro and "solicitud de evidencia" in registro
     assert (
         "tutoría entre pares reduce" not in registro and "Redacta la introducción" not in registro
     )

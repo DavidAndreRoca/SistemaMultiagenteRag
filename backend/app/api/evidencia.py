@@ -18,20 +18,12 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Request, status
 from pydantic import BaseModel, Field
 
-from app.agentes.evidencia import INVITACION_APORTE, AgenteEvidencia, AtencionEvidencia
+from app.agentes.evidencia import INVITACION_APORTE, AtencionEvidencia
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
-from app.bibliografia.fabrica import crear_servicios
-from app.bibliografia.referencias import ConstructorReferencias
 from app.comun.errores import ErrorAplicacion
-from app.configuracion import Ajustes
-from app.corpus.fabrica import CorpusNoConfigurado
-from app.inferencia.servicio_modelos import cliente_desde_ajustes
-from app.llm.fabrica import crear_cadena, registrador_en_base
+from app.orquestacion.en_api import ejecutor_de, encolar
 from app.rag.modelos import AVISO_SIN_EVIDENCIA
-from app.rag.recuperacion import Recuperador
-from app.rag.servicio import ServicioEvidencia
-from app.repositorios.unidad import fabrica_de_unidades
-from app.seguridad.dependencias import ContextoCaso, Reloj, RelojDep, Unidad, obtener_reloj
+from app.seguridad.dependencias import ContextoCaso, RelojDep, Unidad
 from app.verificacion.comprobaciones import ACCESO_ABIERTO_COMPROBADO
 
 router = APIRouter(prefix="/caso", tags=["evidencia"])
@@ -104,29 +96,11 @@ class VistaEvidencia(BaseModel):
 
 
 async def obtener_atencion(peticion: Request, unidad: Unidad) -> AtencionEvidencia:
-    """Una por proceso; usa el servicio de modelos, el adaptador y doi.org."""
-    estado = peticion.app.state
-    actual: AtencionEvidencia | None = getattr(estado, "atencion_evidencia", None)
-    if actual is not None:
-        return actual
-    ajustes: Ajustes = estado.ajustes
-    if not ajustes.url_servicio_modelos:
-        raise CorpusNoConfigurado(["URL_SERVICIO_MODELOS"])
-    _, parametros = await unidad.configuracion.vigente()
-    reloj: Reloj = obtener_reloj(peticion)
-    abrir = fabrica_de_unidades(estado.fabrica_sesiones)
-    modelos = cliente_desde_ajustes(ajustes)
-    cadena = crear_cadena(ajustes, parametros, registrador_en_base(abrir))
-    evidencia = ServicioEvidencia(Recuperador(modelos, modelos), cadena, reloj)
-    actual = AtencionEvidencia(
-        AgenteEvidencia(evidencia, cadena),
-        modelos,
-        ConstructorReferencias(crear_servicios(ajustes, abrir).doi),
-        abrir,
-        reloj,
+    """El ejecutor del tipo, uno por proceso (``app/orquestacion/en_api.py``)."""
+    ejecutor: AtencionEvidencia = await ejecutor_de(
+        peticion, unidad, TipoSolicitud.BUSQUEDA_EVIDENCIA
     )
-    estado.atencion_evidencia = actual
-    return actual
+    return ejecutor
 
 
 AtencionDep = Annotated[AtencionEvidencia, Depends(obtener_atencion)]
@@ -143,12 +117,13 @@ AtencionDep = Annotated[AtencionEvidencia, Depends(obtener_atencion)]
 )
 async def pedir_evidencia(
     pedido: PedidoEvidencia,
+    peticion: Request,
     contexto: ContextoCaso,
     unidad: Unidad,
     atencion: AtencionDep,
 ) -> SolicitudEvidencia:
     solicitud = await atencion.iniciar(unidad, contexto, pedido.consulta)
-    atencion.lanzar(solicitud, contexto)
+    encolar(peticion, solicitud, contexto)
     return SolicitudEvidencia(
         id=solicitud.id, estado=solicitud.estado, creada_en=solicitud.creada_en
     )
@@ -169,17 +144,6 @@ async def ver_evidencia(
     solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
     if solicitud is None or solicitud.tipo is not TipoSolicitud.BUSQUEDA_EVIDENCIA:
         raise SolicitudInexistente()
-    atencion: AtencionEvidencia | None = getattr(peticion.app.state, "atencion_evidencia", None)
-    if atencion is not None:
-        await atencion.marcar_interrumpida(unidad, contexto, solicitud)
-    elif solicitud.estado in {
-        EstadoSolicitud.RECIBIDA,
-        EstadoSolicitud.RECUPERANDO,
-        EstadoSolicitud.GENERANDO,
-    }:
-        solicitud.estado, solicitud.motivo = EstadoSolicitud.NO_ATENDIDA, "interrumpida"
-        solicitud.actualizada_en = reloj()
-        await unidad.confirmar()
     resultado = await unidad.resultados.de_solicitud(contexto, solicitud_id)
     detalle = {
         r.identificador_visible: (f, d)

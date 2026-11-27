@@ -207,3 +207,10 @@ def primera_credencial(caso: dict[str, object]) -> tuple[str, str]:
 
 # Escenario de recuperación compartido por T16 y T18 (al final: importa Entorno de aquí).
 from pruebas.integracion.escenario_rag import escenario  # noqa: E402, F401
+
+
+async def esperar_orquestador(entorno: Entorno) -> None:
+    """Espera las solicitudes que la API lanzó en su proceso (T28, solo en pruebas)."""
+    orquestador = entorno.aplicacion.state.orquestador
+    if orquestador is not None:
+        await orquestador.esperar()

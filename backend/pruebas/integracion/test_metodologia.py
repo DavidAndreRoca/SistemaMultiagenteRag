@@ -19,10 +19,9 @@ from app.llm.modelos import EntradaModelo, Proveedor
 from app.llm.proveedores import ProveedorSimulado
 from app.rag.recuperacion import Recuperador
 from app.rag.servicio import ServicioEvidencia
-from app.repositorios.unidad import fabrica_de_unidades
 from pruebas.dobles_corpus import EmbeddingsFicticios
 from pruebas.dobles_rag import ReordenadorFicticio
-from pruebas.integracion.conftest import Entorno, consultar
+from pruebas.integracion.conftest import Entorno, consultar, esperar_orquestador
 from pruebas.integracion.test_estructura import _caso, _guias
 
 pytestmark = pytest.mark.integracion
@@ -85,7 +84,7 @@ class Metodologia:
     async def pedir(self, seccion_id: str) -> dict[str, Any]:
         respuesta = await self.cliente.post("/caso/metodologia", json={"seccion_id": seccion_id})
         assert respuesta.status_code == 202, respuesta.text
-        await self.atencion.esperar()
+        await esperar_orquestador(self.entorno)
         vista = await self.cliente.get(f"/caso/metodologia/{respuesta.json()['id']}")
         assert vista.status_code == 200, vista.text
         datos: dict[str, Any] = vista.json()
@@ -105,7 +104,6 @@ def _atencion(entorno: Entorno, modelo: Modelo) -> AtencionMetodologia:
     atencion = AtencionMetodologia(
         TipoSolicitud.REVISION_METODOLOGICA,
         agente,
-        fabrica_de_unidades(entorno.aplicacion.state.fabrica_sesiones),
         entorno.reloj,
     )
     entorno.aplicacion.state.atencion_metodologia = atencion
