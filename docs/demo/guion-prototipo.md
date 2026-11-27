@@ -32,7 +32,8 @@ Si algo falla: `docker compose logs api --tail 50`.
 | 3:50 | **Volver al panel del caso** → **Proponer una redacción para un párrafo**, elija el párrafo de **3. Discusión** que empieza con "Como todos saben" y **Proponer una redacción** (de 30 s a 2 minutos) | Se trabaja sobre un solo párrafo de hasta 250 palabras: si se elige uno más largo, el sistema pide uno más corto. Mientras se prepara, siga con el paso siguiente. |
 | 4:10 | Pregunta de cierre en **Buscar evidencia**: *Redacta la introducción completa de mi artículo* | Se rechaza con el motivo y un ejemplo de lo que sí se puede pedir. El asistente no escribe por el estudiante. |
 | 4:30 | En **Sus solicitudes**, abra la **Revisión metodológica** (hallazgos y preguntas) y luego la **Propuesta de redacción** | Original y propuesta lado a lado: lo tachado es lo que cambia y lo subrayado es lo nuevo. Cada cambio dice por qué, con la pauta de la guía desplegable. La propuesta no pasa de 1.2 veces el original, no agrega datos ni citas y no modifica el borrador: el estudiante decide qué incorporar. |
-| 5:00 | (Opcional) Una consulta sin evidencia en el corpus | Si la evidencia no alcanza, el sistema se abstiene ("Sin evidencia suficiente") en lugar de inventar. |
+| 5:00 | (Opcional) **Preparar el plan de tarea del hito** con **Avance 1** (unos 20 s) | Compara las instrucciones del programa para el hito con lo que ya tiene el borrador y devuelve tareas ordenadas, cada una con su criterio de logro. Se puede copiar o descargar en texto. Si las guías no tienen instrucciones del hito, se abstiene. |
+| 5:30 | (Opcional) Una consulta sin evidencia en el corpus | Si la evidencia no alcanza, el sistema se abstiene ("Sin evidencia suficiente") en lugar de inventar. |
 
 ## Qué decir si preguntan
 

@@ -698,3 +698,10 @@ a:hover {
   color: var(--info);
   background: var(--info-fondo);
 }
+
+/* Plan de tarea (T24): acciones sobre el plan */
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

@@ -12,6 +12,7 @@ import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
 import { Metodologia } from "./paginas/Metodologia";
 import { PanelCaso } from "./paginas/PanelCaso";
+import { Plan } from "./paginas/Plan";
 import { Redaccion } from "./paginas/Redaccion";
 import { Referencias } from "./paginas/Referencias";
 import { inicioDe, ROL_CASO, ROL_INVESTIGADOR, useSesion, type Rol } from "./sesion/sesion";
@@ -106,6 +107,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Metodologia />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/plan"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Plan />
           </Protegida>
         }
       />

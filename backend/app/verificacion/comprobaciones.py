@@ -115,6 +115,8 @@ CAMPOS_DE_TEXTO = (
     "fortalezas",
     "preguntas_al_estudiante",
     "notas_para_el_estudiante",
+    "tarea",
+    "criterio_de_logro",
 )
 _COMILLAS = re.compile(r"[\"“”«»]([^\"“”«»]+)[\"“”«»]")
 

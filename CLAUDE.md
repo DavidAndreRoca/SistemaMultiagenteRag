@@ -101,6 +101,8 @@ Redacción (T27): agente D3 en `app/agentes/redaccion.py` (`AgenteRedaccion`, `A
 
 Metodología (T26): agente D2 en `app/agentes/metodologia.py` (`identificar_diseno`, herramienta `lista_de_comprobacion` sobre `RepositorioRecuperacion.por_apartado`, cuyos criterios abreviados son la consulta; `consulta_con_herramientas` en el contrato), comprobación `comprobar_numeros` (`sin_datos_inventados`), rutas `app/api/metodologia.py`, pantalla `frontend/src/paginas/Metodologia.tsx`. Las comprobaciones de los agentes por alcance reciben identificador a texto de cada fragmento recuperado.
 
+Plan de tarea (T24): `app/agentes/plan.py` (`AgentePlan`, `AtencionPlan` con alcance de hito, `instrucciones_del_hito`, `estado_del_borrador`), abstención sin insumo con `Agente.falta_insumo` y `ServicioEvidencia.abstener` (paso `herramienta`), rutas `app/api/plan.py`, pantalla `frontend/src/paginas/Plan.tsx` (copiar y descargar en texto).
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

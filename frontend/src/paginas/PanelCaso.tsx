@@ -271,6 +271,7 @@ const PANTALLAS: Record<string, string> = {
   revision_estructura: "/panel/estructura",
   propuesta_redaccion: "/panel/redaccion",
   revision_metodologica: "/panel/metodologia",
+  plan_tarea: "/panel/plan",
 };
 const NOMBRES_PEDIDO: Record<string, string> = {
   busqueda_evidencia: "Búsqueda de evidencia",
@@ -278,6 +279,7 @@ const NOMBRES_PEDIDO: Record<string, string> = {
   revision_estructura: "Revisión de estructura y coherencia",
   propuesta_redaccion: "Propuesta de redacción",
   revision_metodologica: "Revisión metodológica",
+  plan_tarea: "Plan de tarea",
 };
 
 const ESTADOS_SOLICITUD: Record<string, string> = {
@@ -379,6 +381,7 @@ const ACCIONES: Accion[] = [
   {
     titulo: "Plan de tarea",
     descripcion: "Tareas ordenadas para el hito, cada una con su criterio de logro.",
+    enlace: { href: "/panel/plan", texto: "Preparar el plan de tarea del hito" },
   },
 ];
 

@@ -58,6 +58,7 @@ TIPOS_CON_PANTALLA = (
     TipoSolicitud.REVISION_ESTRUCTURA,
     TipoSolicitud.PROPUESTA_REDACCION,
     TipoSolicitud.REVISION_METODOLOGICA,
+    TipoSolicitud.PLAN_TAREA,
 )
 
 

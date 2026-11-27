@@ -160,6 +160,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pedir el plan de tarea del hito de una versión vigente */
+        post: operations["pedir_plan_caso_plan_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/plan/hitos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Hitos del programa, con la versión vigente de cada uno si la hay */
+        get: operations["hitos_caso_plan_hitos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/plan/{solicitud_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Avance y resultado de un plan de tarea */
+        get: operations["ver_plan_caso_plan__solicitud_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/redaccion": {
         parameters: {
             query?: never;
@@ -1040,6 +1091,15 @@ export interface components {
             /** Ubicacion */
             ubicacion: string;
         };
+        /** HitoDelPlan */
+        HitoDelPlan: {
+            /** Codigo */
+            codigo: string;
+            /** Nombre */
+            nombre: string;
+            /** Version Cargada En */
+            version_cargada_en: string | null;
+        };
         /** HitoVista */
         HitoVista: {
             /** Codigo */
@@ -1215,6 +1275,11 @@ export interface components {
         PedidoMetodologia: {
             /** Seccion Id */
             seccion_id: string;
+        };
+        /** PedidoPlan */
+        PedidoPlan: {
+            /** Hito */
+            hito: string;
         };
         /** PedidoRedaccion */
         PedidoRedaccion: {
@@ -1477,6 +1542,20 @@ export interface components {
              */
             norma: string;
         };
+        /** SolicitudPlan */
+        SolicitudPlan: {
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
         /** SolicitudRedaccion */
         SolicitudRedaccion: {
             /**
@@ -1523,6 +1602,17 @@ export interface components {
              * Format: uuid
              */
             id: string;
+        };
+        /** TareaVista */
+        TareaVista: {
+            /** Citas */
+            citas: components["schemas"]["CitaGuia"][];
+            /** Criterio De Logro */
+            criterio_de_logro: string;
+            /** Orden */
+            orden: number;
+            /** Tarea */
+            tarea: string;
         };
         /**
          * TipoAutoria
@@ -1713,6 +1803,41 @@ export interface components {
             seccion_id: string | null;
             /** Seccion Titulo */
             seccion_titulo: string | null;
+        };
+        /** VistaPlan */
+        VistaPlan: {
+            /** Abstencion */
+            abstencion: boolean;
+            /** Advertencias */
+            advertencias: string[];
+            /** Aviso */
+            aviso: string | null;
+            /** Comprobaciones */
+            comprobaciones: components["schemas"]["ComprobacionVista"][];
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Entregada En */
+            entregada_en: string | null;
+            estado: components["schemas"]["EstadoSolicitud"];
+            etiqueta: components["schemas"]["Etiqueta"] | null;
+            /** Hito */
+            hito: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Motivo */
+            motivo: string | null;
+            /** Motivo Abstencion */
+            motivo_abstencion: string | null;
+            /** Notas Para El Estudiante */
+            notas_para_el_estudiante: string[];
+            /** Tareas */
+            tareas: components["schemas"]["TareaVista"][];
         };
         /** VistaRedaccion */
         VistaRedaccion: {
@@ -2431,6 +2556,221 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VistaMetodologia"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    pedir_plan_caso_plan_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoPlan"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudPlan"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    hitos_caso_plan_hitos_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HitoDelPlan"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    ver_plan_caso_plan__solicitud_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaPlan"];
                 };
             };
             /** @description Unauthorized */
