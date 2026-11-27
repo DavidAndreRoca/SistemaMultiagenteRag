@@ -244,9 +244,7 @@ test("un caso abre el plan de tarea con el hito de su versión (T24)", async ({ 
   await salir(page);
 });
 
-test("un caso abre su historial y el resumen para la declaración (T33)", async ({
-  page,
-}, info) => {
+test("un caso abre su historial y el resumen para la declaración (T33)", async ({ page }, info) => {
   const caso = credenciales.get(CASO_A);
   if (!caso) throw new Error("El caso A no se registró");
   await entrar(page, caso.cuenta, CONTRASENA_NUEVA);
