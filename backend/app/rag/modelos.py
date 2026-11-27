@@ -52,6 +52,7 @@ class Recuperacion(_Inmutable):
 
 
 class PasoSuficiencia(StrEnum):
+    HERRAMIENTA = "herramienta"  # antes de recuperar: falta el insumo que el agente exige (T24)
     UMBRAL = "umbral"  # paso 1: N fragmentos con puntaje >= tau
     MODELO = "modelo"  # paso 2: juicio del modelo
 

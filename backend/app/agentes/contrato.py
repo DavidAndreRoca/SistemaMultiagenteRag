@@ -96,6 +96,13 @@ class Agente(ABC):
     def tarea(self, estado: EstadoAgente) -> str:
         """Qué se le pide al modelo para este tipo."""
 
+    async def falta_insumo(
+        self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, estado: EstadoAgente
+    ) -> str | None:
+        """Motivo para abstenerse sin recuperar ni generar, si falta un insumo que el agente
+        exige (por ejemplo, las instrucciones del hito del plan de tarea, T24)."""
+        return None
+
     async def consulta_con_herramientas(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, estado: EstadoAgente
     ) -> str:
@@ -117,6 +124,12 @@ class Agente(ABC):
             raise TipoNoAtendido(f"{type(self).__name__} no atiende {estado.tipo.value}")
         if contexto.caso_id != estado.caso_id:
             raise TipoNoAtendido("el estado no corresponde al caso del contexto")
+        motivo = await self.falta_insumo(unidad, contexto, estado)
+        if motivo is not None:
+            evidencia = await self._evidencia.abstener(
+                unidad, contexto, estado.solicitud_id, motivo
+            )
+            return ResultadoAgente(estado=estado, abstencion=True, salida=None, evidencia=evidencia)
         evidencia = await self._evidencia.preparar(
             unidad,
             contexto,

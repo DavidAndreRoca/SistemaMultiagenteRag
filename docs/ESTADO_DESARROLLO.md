@@ -2003,3 +2003,30 @@ Rama `t26-agente-metodologia`. Decisión: `docs/decisiones/T26-agente-metodologi
   - los textos de la pantalla;
   - la prueba real.
 - **Pendiente:** la hoja de errores metodológicos con su clave, que arma el asistente antes de T34; el reintento, en T30.
+
+**Integración de T26:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#22, CI verde (ejecución 45936782234, 9 de 9 trabajos), integrada en `main`.
+
+## 28. Bloque 2: T24 (plan de tarea del hito)
+
+Rama `t24-plan-de-tarea`. Decisión: `docs/decisiones/T24-plan-de-tarea.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026. Con T24, los cinco tipos de solicitud con agente de lenguaje tienen pantalla, y el panel ya no muestra agentes pendientes.
+
+- **Plan de tarea:**
+  - `AgentePlan` y `AtencionPlan`, con la instrucción `plan/v1`;
+  - el alcance es de hito; al modelo va el estado del borrador (títulos, palabras y elementos detectados), no su texto;
+  - la herramienta `instrucciones_del_hito` lee el apartado del hito en las guías;
+  - las rutas `/caso/plan` y la pantalla `/panel/plan`, con el plan copiable y descargable en texto.
+- **Abstención sin instrucciones del hito:** el contrato suma `falta_insumo` y `ServicioEvidencia.abstener` (paso `herramienta`); se abstiene sin recuperar ni llamar al modelo.
+- **Guía provisional nueva:** `guia-estado-del-arte-y-plan.md`, para que el avance 2 y la entrega del plan tengan pautas. Con la consulta final, los 8 hitos traen su instrucción y una pauta pertinente sobre el umbral.
+- **Migración 0020:** instrucción `plan/v1`. En la base de desarrollo creó la versión 6 de la configuración.
+- **Pruebas:**
+  - 2 unitarias;
+  - 5 de integración: hitos con versión, plan con el estado del borrador, abstención sin instrucciones sin recuperar ni generar, hito sin versión o inexistente y aislamiento;
+  - 1 de migraciones y 3 de la interfaz, incluido el texto descargable;
+  - 1 extremo a extremo con accesibilidad.
+- **Modelo real:** el avance 1 del borrador de demostración dio 9 tareas en orden con su criterio y sus citas, en 21 s y con las comprobaciones superadas.
+- **Provisional, sin revisión humana:**
+  - la instrucción `plan/v1`;
+  - la guía `guia-estado-del-arte-y-plan.md`;
+  - los textos de la pantalla;
+  - la prueba real.
+- **Pendiente:** el reintento, en T30.

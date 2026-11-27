@@ -721,3 +721,17 @@ def test_la_migracion_0019_agrega_la_instruccion_metodologica(base_vacia: str) -
         base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
     )[0]
     assert "metodologia" not in versiones and versiones["redaccion"] == "v1"
+
+
+def test_la_migracion_0020_agrega_la_instruccion_del_plan(base_vacia: str) -> None:
+    cfg = configuracion_alembic(base_vacia)
+    command.upgrade(cfg, "0020")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert versiones["plan"] == "v1" and versiones["metodologia"] == "v1"
+    command.downgrade(cfg, "0019")
+    (versiones,) = consultar(
+        base_vacia, "SELECT parametros -> 'versiones_instrucciones' FROM configuracion"
+    )[0]
+    assert "plan" not in versiones and versiones["metodologia"] == "v1"

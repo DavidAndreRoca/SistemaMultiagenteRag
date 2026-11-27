@@ -174,11 +174,25 @@ class AtencionPorAlcance:
     ) -> list[Comprobacion]:
         return [comprobar_esquema(self.tipo, salida), comprobar_citas(salida, recuperados)]
 
+    async def version_para(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        referencia: str,
+        parametros: ParametrosFuncionales,
+    ) -> VersionBorrador:
+        """La versión sobre la que se atiende: por defecto, la vigente más reciente."""
+        return await self.version_vigente(unidad, contexto)
+
+    def referencia_guardada(self, referencia: str) -> str | None:
+        """``alcance_ref`` de la solicitud. Un alcance de hito no la lleva (T24)."""
+        return referencia
+
     async def iniciar(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso, referencia: str
     ) -> Solicitud:
-        version = await self.version_vigente(unidad, contexto)
         configuracion, parametros = await unidad.configuracion.vigente()
+        version = await self.version_para(unidad, contexto, referencia, parametros)
         self.resolver(version, referencia, parametros)  # valida antes de crear nada
         ahora = self._reloj()
         solicitud = await unidad.solicitudes.agregar(
@@ -187,7 +201,7 @@ class AtencionPorAlcance:
                 version_id=version.id,
                 tipo=self.tipo,
                 alcance_tipo=self.alcance_tipo,
-                alcance_ref=referencia,
+                alcance_ref=self.referencia_guardada(referencia),
                 configuracion_id=configuracion.id,
                 estado=EstadoSolicitud.RECIBIDA,
                 creada_en=ahora,
@@ -251,14 +265,15 @@ class AtencionPorAlcance:
     ) -> None:
         await self._cambiar(unidad, contexto, solicitud.id, EstadoSolicitud.RECUPERANDO)
         version = await unidad.versiones.con_parrafos(contexto, solicitud.version_id)
-        assert version is not None and solicitud.alcance_ref is not None
+        assert version is not None
         _, parametros = await unidad.configuracion.vigente()
-        texto = self.resolver(version, solicitud.alcance_ref, parametros)
+        texto = self.resolver(version, solicitud.alcance_ref or "", parametros)
         estado = EstadoAgente(
             solicitud_id=solicitud.id,
             caso_id=solicitud.caso_id,
             tipo=self.tipo,
             alcance=texto,
+            hito=version.hito,
             version_id=solicitud.version_id,
         )
         resultado = await self._agente.atender(unidad, contexto, estado)

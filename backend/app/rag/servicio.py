@@ -17,7 +17,12 @@ from app.bd.modelos import EventoTecnico, FragmentoRecuperado, Resultado, Solici
 from app.comun.registro import obtener_registrador
 from app.instrucciones.cargador import vigente
 from app.llm.interfaces import ModeloLenguaje
-from app.rag.modelos import AVISO_SIN_EVIDENCIA, DecisionSuficiencia, Recuperacion
+from app.rag.modelos import (
+    AVISO_SIN_EVIDENCIA,
+    DecisionSuficiencia,
+    PasoSuficiencia,
+    Recuperacion,
+)
 from app.rag.recuperacion import Recuperador
 from app.rag.suficiencia import decidir
 from app.repositorios.contexto import ContextoAcceso
@@ -70,6 +75,35 @@ class ServicioEvidencia:
         instruccion = vigente(AGENTE_SUFICIENCIA, parametros.versiones_instrucciones)
         decision = await decidir(self._modelo, instruccion, consulta, recuperacion, parametros)
         await self._registrar(unidad, contexto, solicitud, recuperacion, decision, inicio)
+        return Evidencia(recuperacion, decision)
+
+    async def abstener(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud_id: uuid.UUID,
+        motivo: str,
+    ) -> Evidencia:
+        """Abstención sin recuperar ni llamar al modelo, cuando falta el insumo que el agente
+        exige (por ejemplo, las instrucciones del hito para el plan de tarea, RF-05). Queda
+        registrada igual que las otras abstenciones (RN-04)."""
+        solicitud = await unidad.solicitudes.obtener(contexto, solicitud_id)
+        if solicitud is None:
+            raise SolicitudInexistente(str(solicitud_id))
+        recuperacion = Recuperacion(
+            consulta_tokens_estimados=0,
+            colecciones=0,
+            candidatos_densos=0,
+            candidatos_lexicos=0,
+            reordenados=0,
+            fragmentos=[],
+            duracion_recuperacion_ms=0,
+            duracion_reranking_ms=0,
+        )
+        decision = DecisionSuficiencia(
+            suficiente=False, paso=PasoSuficiencia.HERRAMIENTA, motivo=motivo, sobre_umbral=0
+        )
+        await self._registrar(unidad, contexto, solicitud, recuperacion, decision, self._reloj())
         return Evidencia(recuperacion, decision)
 
     async def atender[T](

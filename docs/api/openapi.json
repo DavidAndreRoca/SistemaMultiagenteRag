@@ -1001,6 +1001,37 @@
         "title": "HallazgoVista",
         "type": "object"
       },
+      "HitoDelPlan": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "version_cargada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Cargada En"
+          }
+        },
+        "required": [
+          "codigo",
+          "nombre",
+          "version_cargada_en"
+        ],
+        "title": "HitoDelPlan",
+        "type": "object"
+      },
       "HitoVista": {
         "properties": {
           "codigo": {
@@ -1465,6 +1496,21 @@
           "seccion_id"
         ],
         "title": "PedidoMetodologia",
+        "type": "object"
+      },
+      "PedidoPlan": {
+        "properties": {
+          "hito": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Hito",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hito"
+        ],
+        "title": "PedidoPlan",
         "type": "object"
       },
       "PedidoRedaccion": {
@@ -2181,6 +2227,30 @@
         "title": "SolicitudNorma",
         "type": "object"
       },
+      "SolicitudPlan": {
+        "properties": {
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "creada_en"
+        ],
+        "title": "SolicitudPlan",
+        "type": "object"
+      },
       "SolicitudRedaccion": {
         "properties": {
           "creada_en": {
@@ -2280,6 +2350,37 @@
           "creada_en"
         ],
         "title": "SolicitudVerificacion",
+        "type": "object"
+      },
+      "TareaVista": {
+        "properties": {
+          "citas": {
+            "items": {
+              "$ref": "#/components/schemas/CitaGuia"
+            },
+            "title": "Citas",
+            "type": "array"
+          },
+          "criterio_de_logro": {
+            "title": "Criterio De Logro",
+            "type": "string"
+          },
+          "orden": {
+            "title": "Orden",
+            "type": "integer"
+          },
+          "tarea": {
+            "title": "Tarea",
+            "type": "string"
+          }
+        },
+        "required": [
+          "orden",
+          "tarea",
+          "criterio_de_logro",
+          "citas"
+        ],
+        "title": "TareaVista",
         "type": "object"
       },
       "TipoAutoria": {
@@ -2897,6 +2998,139 @@
           "comprobaciones"
         ],
         "title": "VistaMetodologia",
+        "type": "object"
+      },
+      "VistaPlan": {
+        "properties": {
+          "abstencion": {
+            "title": "Abstencion",
+            "type": "boolean"
+          },
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "aviso": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aviso"
+          },
+          "comprobaciones": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobacionVista"
+            },
+            "title": "Comprobaciones",
+            "type": "array"
+          },
+          "creada_en": {
+            "format": "date-time",
+            "title": "Creada En",
+            "type": "string"
+          },
+          "entregada_en": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entregada En"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hito": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hito"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "motivo_abstencion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo Abstencion"
+          },
+          "notas_para_el_estudiante": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notas Para El Estudiante",
+            "type": "array"
+          },
+          "tareas": {
+            "items": {
+              "$ref": "#/components/schemas/TareaVista"
+            },
+            "title": "Tareas",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "estado",
+          "motivo",
+          "creada_en",
+          "entregada_en",
+          "hito",
+          "abstencion",
+          "aviso",
+          "motivo_abstencion",
+          "etiqueta",
+          "tareas",
+          "notas_para_el_estudiante",
+          "advertencias",
+          "comprobaciones"
+        ],
+        "title": "VistaPlan",
         "type": "object"
       },
       "VistaRedaccion": {
@@ -4040,6 +4274,251 @@
         "summary": "Avance y resultado de un diagnóstico metodológico",
         "tags": [
           "metodologia"
+        ]
+      }
+    },
+    "/caso/plan": {
+      "post": {
+        "operationId": "pedir_plan_caso_plan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoPlan"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitudPlan"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pedir el plan de tarea del hito de una versión vigente",
+        "tags": [
+          "plan"
+        ]
+      }
+    },
+    "/caso/plan/hitos": {
+      "get": {
+        "operationId": "hitos_caso_plan_hitos_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HitoDelPlan"
+                  },
+                  "title": "Response Hitos Caso Plan Hitos Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Hitos del programa, con la versión vigente de cada uno si la hay",
+        "tags": [
+          "plan"
+        ]
+      }
+    },
+    "/caso/plan/{solicitud_id}": {
+      "get": {
+        "operationId": "ver_plan_caso_plan__solicitud_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaPlan"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Avance y resultado de un plan de tarea",
+        "tags": [
+          "plan"
         ]
       }
     },
