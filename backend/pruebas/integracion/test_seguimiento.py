@@ -136,12 +136,14 @@ async def test_el_canal_transmite_la_secuencia_de_estados_hasta_el_final(
 
     orquestador = orquestador_en_proceso(seguimiento.entorno.aplicacion, _Peticion())  # type: ignore[arg-type]
     canal = asyncio.create_task(seguimiento.eventos(solicitud_id))
-    await asyncio.sleep(0.1)  # el estudiante se suscribe antes de que el trabajador la tome
+    await asyncio.sleep(0.3)  # el estudiante se suscribe antes de que el trabajador la tome
     final = await orquestador.atender(solicitud_id, seguimiento.contexto)
     eventos = await canal
     estados = [e["estado"] for e in eventos]
     assert final == "entregada"
-    assert estados[0] == "recibida" and estados[-1] == "entregada"
+    # El primer evento es el estado actual al suscribirse: en cola o ya asignada, según cuánto
+    # tarde la primera lectura (en la CI, más lenta, a veces ya se asignó).
+    assert estados[0] in {"recibida", "asignada"} and estados[-1] == "entregada"
     assert {"asignada", "verificando"} <= set(estados)
     assert estados == sorted(estados, key=ORDEN.index)  # siempre hacia adelante
     # Solo se transmite lo que cambia (el estado, o el motivo dentro de un mismo estado).
