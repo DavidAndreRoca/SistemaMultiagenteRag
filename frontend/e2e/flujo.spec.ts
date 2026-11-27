@@ -198,6 +198,22 @@ test("un caso abre la revisión de estructura con las secciones de su versión (
   await salir(page);
 });
 
+test("un caso abre la propuesta de redacción con los párrafos de su versión (T27)", async ({
+  page,
+}, info) => {
+  const caso = credenciales.get(CASO_A);
+  if (!caso) throw new Error("El caso A no se registró");
+  await entrar(page, caso.cuenta, CONTRASENA_NUEVA);
+  await page.getByRole("link", { name: "Proponer una redacción para un párrafo" }).click();
+  await expect(page.getByRole("heading", { name: "Proponer una redacción" })).toBeVisible();
+  await page.getByRole("button", { name: /Párrafo/ }).click();
+  await page.getByRole("option").first().click();
+  await expect(page.getByText(/Párrafo elegido/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Proponer una redacción" })).toBeEnabled();
+  await revisarAccesibilidad(page, "propuesta de redacción", info);
+  await salir(page);
+});
+
 test("un caso no ve las versiones de otro", async ({ page }) => {
   const caso = credenciales.get(CASO_B);
   if (!caso) throw new Error("El caso B no se registró");

@@ -11,6 +11,7 @@ import { Evidencia } from "./paginas/Evidencia";
 import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
 import { PanelCaso } from "./paginas/PanelCaso";
+import { Redaccion } from "./paginas/Redaccion";
 import { Referencias } from "./paginas/Referencias";
 import { inicioDe, ROL_CASO, ROL_INVESTIGADOR, useSesion, type Rol } from "./sesion/sesion";
 
@@ -96,6 +97,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Estructura />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/redaccion"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Redaccion />
           </Protegida>
         }
       />

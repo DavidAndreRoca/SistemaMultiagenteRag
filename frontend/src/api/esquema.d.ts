@@ -109,6 +109,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/redaccion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pedir la propuesta de redacción de un párrafo */
+        post: operations["pedir_redaccion_caso_redaccion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/redaccion/parrafos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Párrafos de la versión vigente que admiten una propuesta de redacción */
+        get: operations["parrafos_caso_redaccion_parrafos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/redaccion/{solicitud_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Avance y resultado de una propuesta de redacción */
+        get: operations["ver_redaccion_caso_redaccion__solicitud_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/referencias": {
         parameters: {
             query?: never;
@@ -631,6 +682,21 @@ export interface components {
             /** Norma Nueva */
             norma_nueva: string;
         };
+        /** CambioVista */
+        CambioVista: {
+            /** Antes */
+            antes: string;
+            /** Citas */
+            citas: components["schemas"]["CitaGuia"][];
+            /** Despues */
+            despues: string;
+            /** Razon */
+            razon: string;
+            /** Tipo */
+            tipo: string;
+            /** Tipo Nombre */
+            tipo_nombre: string;
+        };
         /** CasoCreadoVista */
         CasoCreadoVista: {
             /** Codigo */
@@ -1048,6 +1114,19 @@ export interface components {
          * @enum {string}
          */
         OrigenImportacion: "pdf" | "docx" | "doi";
+        /** ParrafoRedactable */
+        ParrafoRedactable: {
+            /** Dentro Del Limite */
+            dentro_del_limite: boolean;
+            /** Id */
+            id: string;
+            /** Palabras */
+            palabras: number;
+            /** Seccion */
+            seccion: string;
+            /** Texto */
+            texto: string;
+        };
         /** ParrafoVista */
         ParrafoVista: {
             /** Es Titulo */
@@ -1064,6 +1143,13 @@ export interface components {
             /** Texto */
             texto: string;
         };
+        /** ParrafosRedactables */
+        ParrafosRedactables: {
+            /** Limite Palabras */
+            limite_palabras: number;
+            /** Parrafos */
+            parrafos: components["schemas"]["ParrafoRedactable"][];
+        };
         /** PedidoEstructura */
         PedidoEstructura: {
             /** Seccion Id */
@@ -1073,6 +1159,11 @@ export interface components {
         PedidoEvidencia: {
             /** Consulta */
             consulta: string;
+        };
+        /** PedidoRedaccion */
+        PedidoRedaccion: {
+            /** Parrafo Id */
+            parrafo_id: string;
         };
         /** ProgresoVista */
         ProgresoVista: {
@@ -1305,6 +1396,20 @@ export interface components {
              */
             norma: string;
         };
+        /** SolicitudRedaccion */
+        SolicitudRedaccion: {
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            estado: components["schemas"]["EstadoSolicitud"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
         /** SolicitudResumen */
         SolicitudResumen: {
             /** Consulta */
@@ -1488,6 +1593,49 @@ export interface components {
             notas_para_el_estudiante: string[];
             /** Respuesta */
             respuesta: components["schemas"]["AfirmacionVista"][];
+        };
+        /** VistaRedaccion */
+        VistaRedaccion: {
+            /** Abstencion */
+            abstencion: boolean;
+            /** Advertencias */
+            advertencias: string[];
+            /** Aviso */
+            aviso: string | null;
+            /** Cambios */
+            cambios: components["schemas"]["CambioVista"][];
+            /** Comprobaciones */
+            comprobaciones: components["schemas"]["ComprobacionVista"][];
+            /**
+             * Creada En
+             * Format: date-time
+             */
+            creada_en: string;
+            /** Entregada En */
+            entregada_en: string | null;
+            estado: components["schemas"]["EstadoSolicitud"];
+            etiqueta: components["schemas"]["Etiqueta"] | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Limite Palabras Propuesta */
+            limite_palabras_propuesta: number;
+            /** Motivo */
+            motivo: string | null;
+            /** Notas Para El Estudiante */
+            notas_para_el_estudiante: string[];
+            /** Original */
+            original: string | null;
+            /** Palabras Original */
+            palabras_original: number;
+            /** Palabras Propuesta */
+            palabras_propuesta: number;
+            /** Parrafo Id */
+            parrafo_id: string | null;
+            /** Propuesta */
+            propuesta: string | null;
         };
         /**
          * VistaSecciones
@@ -1948,6 +2096,221 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VistaEvidencia"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    pedir_redaccion_caso_redaccion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoRedaccion"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolicitudRedaccion"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    parrafos_caso_redaccion_parrafos_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParrafosRedactables"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    ver_redaccion_caso_redaccion__solicitud_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaRedaccion"];
                 };
             };
             /** @description Unauthorized */

@@ -4,6 +4,8 @@ Viven fuera de los agentes para que el módulo de integración y verificación (
 reutilice sobre la salida guardada de cualquier tipo.
 
 1. **Esquema del tipo:** la salida cumple el esquema Pydantic de su tipo.
+2. **Límites del tipo:** D1 y D2 no reescriben (T23, CP-08); la propuesta de D3 no pasa de
+   1.2 veces el original ni agrega datos o citas (T27, CP-10).
 3. **Citas:** todo identificador ``F<n>`` de la salida, en los campos ``citas`` o dentro de
    un texto, está entre los fragmentos recuperados para esa solicitud.
 
@@ -20,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 
 from app.agentes.esquemas import ESQUEMAS
 from app.bd.enumeraciones import TipoSolicitud
+from app.borradores.alcance import contar_palabras
 
 _IDENTIFICADOR = re.compile(r"\bF[1-9][0-9]*\b")
 
@@ -144,4 +147,62 @@ def comprobar_no_reescritura(salida: Any, texto_estudiante: str, limite: int) ->
             motivos.append(f"posible reescritura en {ruta}: {cantidad} palabras (límite {limite})")
     return Comprobacion(
         numero=2, nombre="no_reescritura", superada=not motivos, motivos=motivos[:20]
+    )
+
+
+# --- Comprobación 2 para D3: límites de la propuesta (T27; CP-10, RN-07) -------------------
+
+_PARRAFOS = re.compile(r"\n\s*\n")
+_NUMERO = re.compile(r"\d+(?:[.,]\d+)*")
+_CITA_EN_TEXTO = re.compile(r"\[[^\[\]]*\d[^\[\]]*\]|\([^()]*\d[^()]*\)")
+
+
+def _marcas(texto: str) -> set[str]:
+    """Números y citas entre corchetes o paréntesis, sin espacios, para compararlos."""
+    return {re.sub(r"\s+", "", m) for m in _NUMERO.findall(texto)} | {
+        re.sub(r"\s+", "", m) for m in _CITA_EN_TEXTO.findall(texto)
+    }
+
+
+def _contiene(texto: str, parte: str) -> bool:
+    return " ".join(_palabras(parte)) in " ".join(_palabras(texto))
+
+
+def comprobar_limites_propuesta(salida: Any, factor: float) -> Comprobacion:
+    """Comprobación 2 (D3) sobre una salida cuyo ``original`` es el párrafo del estudiante:
+
+    * la propuesta tiene hasta ``factor`` veces las palabras del original (CP-10);
+    * es un solo párrafo;
+    * no agrega números ni citas que el original no tenga (D3 no añade datos ni citas;
+      la conservación del resto del contenido la juzga el evaluador de T30);
+    * cada cambio explicado está en el original (``antes``) y en la propuesta (``despues``).
+    """
+    datos = salida.model_dump(mode="json") if isinstance(salida, BaseModel) else salida
+    original = str(datos.get("original", ""))
+    propuesta = str(datos.get("propuesta", ""))
+    motivos: list[str] = []
+    palabras_original = contar_palabras(original)
+    palabras_propuesta = contar_palabras(propuesta)
+    limite = int(palabras_original * factor)
+    if palabras_propuesta > limite:
+        motivos.append(
+            f"la propuesta tiene {palabras_propuesta} palabras y el límite es {limite}"
+            f" ({factor:g} veces las {palabras_original} del original)"
+        )
+    if _PARRAFOS.search(propuesta.strip()):
+        motivos.append("la propuesta tiene más de un párrafo")
+    nuevas = sorted(_marcas(propuesta) - _marcas(original))
+    if nuevas:
+        motivos.append(
+            f"la propuesta agrega {len(nuevas)} números o citas que no están en el original"
+        )
+    for indice, cambio in enumerate(datos.get("cambios", [])):
+        if not isinstance(cambio, dict):
+            continue
+        if not _contiene(original, str(cambio.get("antes", ""))):
+            motivos.append(f"cambios[{indice}].antes no está en el original")
+        if not _contiene(propuesta, str(cambio.get("despues", ""))):
+            motivos.append(f"cambios[{indice}].despues no está en la propuesta")
+    return Comprobacion(
+        numero=2, nombre="limites_propuesta", superada=not motivos, motivos=motivos[:20]
     )

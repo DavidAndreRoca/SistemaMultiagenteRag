@@ -269,11 +269,13 @@ const PANTALLAS: Record<string, string> = {
   busqueda_evidencia: "/panel/evidencia",
   verificacion_referencias: "/panel/referencias",
   revision_estructura: "/panel/estructura",
+  propuesta_redaccion: "/panel/redaccion",
 };
 const NOMBRES_PEDIDO: Record<string, string> = {
   busqueda_evidencia: "Búsqueda de evidencia",
   verificacion_referencias: "Verificación de referencias",
   revision_estructura: "Revisión de estructura y coherencia",
+  propuesta_redaccion: "Propuesta de redacción",
 };
 
 const ESTADOS_SOLICITUD: Record<string, string> = {
@@ -369,6 +371,7 @@ const ACCIONES: Accion[] = [
   {
     titulo: "Redacción",
     descripcion: "Propuesta acotada para un párrafo, con cada cambio justificado.",
+    enlace: { href: "/panel/redaccion", texto: "Proponer una redacción para un párrafo" },
   },
 ];
 

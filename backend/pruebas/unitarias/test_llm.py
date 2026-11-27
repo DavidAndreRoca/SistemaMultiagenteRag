@@ -278,6 +278,11 @@ async def test_gemini_usa_la_api_de_interacciones() -> None:
         (httpx.Response(401), ErrorSolicitud, MotivoError.CLAVE_RECHAZADA),
         (httpx.Response(400), ErrorSolicitud, MotivoError.SOLICITUD_RECHAZADA),
         (
+            httpx.Response(400, json={"error": {"code": "json_validate_failed"}}),
+            ErrorDisponibilidad,
+            MotivoError.RESPUESTA_ILEGIBLE,
+        ),
+        (
             httpx.Response(200, content=b"<html>"),
             ErrorDisponibilidad,
             MotivoError.RESPUESTA_ILEGIBLE,
@@ -293,6 +298,26 @@ async def test_cada_falla_se_clasifica(
     assert getattr(info.value, "motivo", None) is motivo
     if motivo is MotivoError.LIMITE_DE_TASA:
         assert getattr(info.value, "espera_s", None) == 7.0
+
+
+async def test_el_detalle_lleva_el_codigo_del_proveedor_y_nunca_el_mensaje() -> None:
+    cuerpo = {
+        "error": {
+            "code": "json_validate_failed",
+            "message": "texto con contenido del borrador",
+            "failed_generation": '{"propuesta": "contenido"}',
+        }
+    }
+    cliente = Registro().transporte(lambda _: httpx.Response(400, json=cuerpo))
+    with pytest.raises(ErrorDisponibilidad) as info:
+        await groq(cliente).completar(INSTRUCCION, ENTRADA, Clasificacion)
+    assert info.value.detalle == "http_400:json_validate_failed"
+    assert "contenido" not in str(info.value)
+    raro = {"error": {"code": "Código con espacios y contenido"}}
+    cliente = Registro().transporte(lambda _: httpx.Response(400, json=raro))
+    with pytest.raises(ErrorSolicitud) as otro:
+        await groq(cliente).completar(INSTRUCCION, ENTRADA, Clasificacion)
+    assert otro.value.detalle == "http_400"
 
 
 async def test_sin_conexion_y_tiempo_agotado_son_de_disponibilidad() -> None:

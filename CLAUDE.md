@@ -97,6 +97,8 @@ Prototipo (26-11-2026, cambio de plan del equipo): `scripts/prototipo.ps1` con `
 
 Guías y estructura (T22 y T23): `app/corpus/guias.py` (`python -m app.corpus.guias --investigador I --carpeta DIR [--aplicar]`, por apartado, rúbrica bloqueada por nombre y por huella en `backend/guias/rubricas-bloqueadas.txt`; guías provisionales en `backend/guias/provisionales/`). Agente D1 en `app/agentes/estructura.py`; atención genérica por sección en `app/agentes/seccion.py` (la reutiliza D2); comprobación 2 `comprobar_no_reescritura`; rutas `app/api/estructura.py`; pantalla `frontend/src/paginas/Estructura.tsx`. Una migración de datos que agrega una instrucción crea una versión nueva de la configuración si la 1 ya la usan solicitudes (0016).
 
+Redacción (T27): agente D3 en `app/agentes/redaccion.py` (`AgenteRedaccion`, `AtencionRedaccion`, `parrafo_para_propuesta`; un párrafo del cuerpo, nunca títulos ni la lista de referencias), camino común `AtencionPorAlcance` en `app/agentes/seccion.py`, comprobación 2 `comprobar_limites_propuesta` y `contar_palabras` (en `app/borradores/alcance.py`), rutas `app/api/redaccion.py`, pantalla `frontend/src/paginas/Redaccion.tsx` con el comparador `frontend/src/diferencias.ts`. Groq con tope de salida de 4096 (0018): gpt-oss razona antes de responder; `json_validate_failed` se reintenta.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

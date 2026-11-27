@@ -60,6 +60,12 @@ DISCUSION = [
     " preocupación por la integridad académica, como señalan trabajos sobre evaluación"
     " formativa en posgrado [6]. También se espera que la carga académica explique parte del"
     " uso intensivo de estas herramientas [8].",
+    # Párrafo con fallas de redacción a propósito (registro coloquial, verbos genéricos, sigla
+    # sin desarrollar), para mostrar la propuesta de redacción (T27). Sin citas ni datos.
+    "Como todos saben, hoy en día la IA es algo muy importante y los alumnos la usan un montón"
+    " para hacer sus trabajos. Nosotros pensamos que esto es bueno pero también malo, porque a"
+    " veces los estudiantes copian lo que les sale sin revisarlo, y eso hace que no aprendan bien"
+    " a escribir, lo cual es un problema que hay que ver.",
 ]
 
 
