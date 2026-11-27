@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router";
 
 import { api, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton } from "../componentes/controles";
+import { DecisionSobreResultado } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { AvanceSolicitud, NoAtendida } from "../componentes/Seguimiento";
 import { EN_CURSO } from "../solicitudes";
@@ -124,6 +125,9 @@ export function Referencias() {
         />
       ) : null}
       {vista && !EN_CURSO.has(vista.estado) ? <Informe vista={vista} alReenviar={seguir} /> : null}
+      {vista?.estado === "entregada" && solicitud !== null ? (
+        <DecisionSobreResultado key={solicitud} solicitud={solicitud} />
+      ) : null}
     </Marco>
   );
 }

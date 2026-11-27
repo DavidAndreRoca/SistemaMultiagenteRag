@@ -141,6 +141,10 @@ test("un caso ingresa, carga su borrador y ve la versión", async ({ page }, inf
   await expect(versiones.getByRole("row").nth(1)).toContainText("Vigente");
   const vigentes = page.getByRole("table", { name: /Versión vigente de cada hito/ });
   await expect(vigentes.getByRole("row", { name: /Avance 1/ })).toContainText("Cargada el");
+  // Uso del sistema (T31): solicitudes entregadas por hito y decisiones, todavía en cero.
+  const uso = page.getByRole("table", { name: "Solicitudes entregadas por hito" });
+  await expect(uso.getByRole("row", { name: /Avance 1: Planteamiento/ })).toContainText("Faltan");
+  await expect(page.getByText("Todavía no registró ninguna decisión.")).toBeVisible();
   await revisarAccesibilidad(page, "panel del caso con una versión", info);
 
   // Un archivo no admitido se rechaza con su motivo y no crea versión (CP-02 desde la interfaz).

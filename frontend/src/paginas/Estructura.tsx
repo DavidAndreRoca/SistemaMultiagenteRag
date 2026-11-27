@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router";
 
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
+import { DecisionSobreResultado } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { AvanceSolicitud, NoAtendida, OtraRevision, Verificada } from "../componentes/Seguimiento";
 import { numero } from "../formato";
@@ -157,6 +158,9 @@ export function Estructura() {
       ) : null}
       {vista && !EN_CURSO.has(vista.estado) ? (
         <Resultado vista={vista} alReenviar={seguir} />
+      ) : null}
+      {vista?.estado === "entregada" && solicitud !== null ? (
+        <DecisionSobreResultado key={solicitud} solicitud={solicitud} />
       ) : null}
     </Marco>
   );

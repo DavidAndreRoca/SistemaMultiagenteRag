@@ -517,6 +517,67 @@
         "title": "ComprobacionVista",
         "type": "object"
       },
+      "ContadorTipo": {
+        "properties": {
+          "aceptar": {
+            "default": 0,
+            "title": "Aceptar",
+            "type": "integer"
+          },
+          "aportar": {
+            "default": 0,
+            "title": "Aportar",
+            "type": "integer"
+          },
+          "continuar": {
+            "default": 0,
+            "title": "Continuar",
+            "type": "integer"
+          },
+          "modificar": {
+            "default": 0,
+            "title": "Modificar",
+            "type": "integer"
+          },
+          "rechazar": {
+            "default": 0,
+            "title": "Rechazar",
+            "type": "integer"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoSolicitud"
+          }
+        },
+        "required": [
+          "tipo"
+        ],
+        "title": "ContadorTipo",
+        "type": "object"
+      },
+      "Contadores": {
+        "properties": {
+          "por_hito": {
+            "items": {
+              "$ref": "#/components/schemas/UsoHito"
+            },
+            "title": "Por Hito",
+            "type": "array"
+          },
+          "por_tipo": {
+            "items": {
+              "$ref": "#/components/schemas/ContadorTipo"
+            },
+            "title": "Por Tipo",
+            "type": "array"
+          }
+        },
+        "required": [
+          "por_tipo",
+          "por_hito"
+        ],
+        "title": "Contadores",
+        "type": "object"
+      },
       "CredencialVista": {
         "properties": {
           "contrasena_inicial": {
@@ -534,6 +595,43 @@
           "contrasena_inicial"
         ],
         "title": "CredencialVista",
+        "type": "object"
+      },
+      "DecisionVista": {
+        "properties": {
+          "decidida_en": {
+            "format": "date-time",
+            "title": "Decidida En",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "opcion": {
+            "$ref": "#/components/schemas/OpcionDecision"
+          },
+          "reemplaza_a": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reemplaza A"
+          }
+        },
+        "required": [
+          "id",
+          "opcion",
+          "decidida_en",
+          "reemplaza_a"
+        ],
+        "title": "DecisionVista",
         "type": "object"
       },
       "DiscrepanciaVista": {
@@ -1345,6 +1443,17 @@
         "title": "ObjetoExclusion",
         "type": "string"
       },
+      "OpcionDecision": {
+        "enum": [
+          "aceptar",
+          "modificar",
+          "rechazar",
+          "continuar",
+          "aportar"
+        ],
+        "title": "OpcionDecision",
+        "type": "string"
+      },
       "OrigenImportacion": {
         "description": "Formato del artículo O1 o lista de DOI (T15-01, apartado 2).",
         "enum": [
@@ -1451,6 +1560,18 @@
           "parrafos"
         ],
         "title": "ParrafosRedactables",
+        "type": "object"
+      },
+      "PedidoDecision": {
+        "properties": {
+          "opcion": {
+            "$ref": "#/components/schemas/OpcionDecision"
+          }
+        },
+        "required": [
+          "opcion"
+        ],
+        "title": "PedidoDecision",
         "type": "object"
       },
       "PedidoEstructura": {
@@ -2497,6 +2618,39 @@
         "title": "TituloMarcado",
         "type": "object"
       },
+      "UsoHito": {
+        "properties": {
+          "cumple": {
+            "title": "Cumple",
+            "type": "boolean"
+          },
+          "hito": {
+            "title": "Hito",
+            "type": "string"
+          },
+          "minimo": {
+            "title": "Minimo",
+            "type": "integer"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "solicitudes": {
+            "title": "Solicitudes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "hito",
+          "nombre",
+          "solicitudes",
+          "minimo",
+          "cumple"
+        ],
+        "title": "UsoHito",
+        "type": "object"
+      },
       "VersionDetalle": {
         "properties": {
           "cargada_en": {
@@ -2628,6 +2782,47 @@
           "palabras"
         ],
         "title": "VersionResumen",
+        "type": "object"
+      },
+      "VistaDecision": {
+        "properties": {
+          "historial": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionVista"
+            },
+            "title": "Historial",
+            "type": "array"
+          },
+          "opciones": {
+            "items": {
+              "$ref": "#/components/schemas/OpcionDecision"
+            },
+            "title": "Opciones",
+            "type": "array"
+          },
+          "solicitud_id": {
+            "format": "uuid",
+            "title": "Solicitud Id",
+            "type": "string"
+          },
+          "vigente": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DecisionVista"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "solicitud_id",
+          "opciones",
+          "vigente",
+          "historial"
+        ],
+        "title": "VistaDecision",
         "type": "object"
       },
       "VistaEstructura": {
@@ -3679,6 +3874,77 @@
         "summary": "Datos del propio caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/contadores": {
+      "get": {
+        "operationId": "contadores_caso_contadores_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contadores"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Contadores de uso del caso",
+        "tags": [
+          "decisiones"
         ]
       }
     },
@@ -5062,6 +5328,183 @@
         "summary": "Búsquedas de evidencia y verificaciones de referencias del caso",
         "tags": [
           "caso"
+        ]
+      }
+    },
+    "/caso/solicitudes/{solicitud_id}/decision": {
+      "get": {
+        "operationId": "ver_decision_caso_solicitudes__solicitud_id__decision_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VistaDecision"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Decisión vigente e historial sobre el resultado de una solicitud",
+        "tags": [
+          "decisiones"
+        ]
+      },
+      "post": {
+        "operationId": "decidir_caso_solicitudes__solicitud_id__decision_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "solicitud_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Solicitud Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoDecision"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionVista"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Registrar o cambiar la decisión sobre el resultado de una solicitud",
+        "tags": [
+          "decisiones"
         ]
       }
     },

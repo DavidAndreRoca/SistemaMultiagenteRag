@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/contadores": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Contadores de uso del caso */
+        get: operations["contadores_caso_contadores_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/estructura": {
         parameters: {
             query?: never;
@@ -310,6 +327,24 @@ export interface paths {
         get: operations["solicitudes_del_caso_caso_solicitudes_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/solicitudes/{solicitud_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Decisión vigente e historial sobre el resultado de una solicitud */
+        get: operations["ver_decision_caso_solicitudes__solicitud_id__decision_get"];
+        put?: never;
+        /** Registrar o cambiar la decisión sobre el resultado de una solicitud */
+        post: operations["decidir_caso_solicitudes__solicitud_id__decision_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -961,6 +996,42 @@ export interface components {
             /** Superada */
             superada: boolean;
         };
+        /** ContadorTipo */
+        ContadorTipo: {
+            /**
+             * Aceptar
+             * @default 0
+             */
+            aceptar: number;
+            /**
+             * Aportar
+             * @default 0
+             */
+            aportar: number;
+            /**
+             * Continuar
+             * @default 0
+             */
+            continuar: number;
+            /**
+             * Modificar
+             * @default 0
+             */
+            modificar: number;
+            /**
+             * Rechazar
+             * @default 0
+             */
+            rechazar: number;
+            tipo: components["schemas"]["TipoSolicitud"];
+        };
+        /** Contadores */
+        Contadores: {
+            /** Por Hito */
+            por_hito: components["schemas"]["UsoHito"][];
+            /** Por Tipo */
+            por_tipo: components["schemas"]["ContadorTipo"][];
+        };
         /** CredencialVista */
         CredencialVista: {
             /**
@@ -970,6 +1041,22 @@ export interface components {
             contrasena_inicial: string;
             /** Cuenta */
             cuenta: string;
+        };
+        /** DecisionVista */
+        DecisionVista: {
+            /**
+             * Decidida En
+             * Format: date-time
+             */
+            decidida_en: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            opcion: components["schemas"]["OpcionDecision"];
+            /** Reemplaza A */
+            reemplaza_a: string | null;
         };
         /** DiscrepanciaVista */
         DiscrepanciaVista: {
@@ -1271,6 +1358,11 @@ export interface components {
          */
         ObjetoExclusion: "archivo" | "referencia";
         /**
+         * OpcionDecision
+         * @enum {string}
+         */
+        OpcionDecision: "aceptar" | "modificar" | "rechazar" | "continuar" | "aportar";
+        /**
          * OrigenImportacion
          * @description Formato del artículo O1 o lista de DOI (T15-01, apartado 2).
          * @enum {string}
@@ -1311,6 +1403,10 @@ export interface components {
             limite_palabras: number;
             /** Parrafos */
             parrafos: components["schemas"]["ParrafoRedactable"][];
+        };
+        /** PedidoDecision */
+        PedidoDecision: {
+            opcion: components["schemas"]["OpcionDecision"];
         };
         /** PedidoEstructura */
         PedidoEstructura: {
@@ -1714,6 +1810,19 @@ export interface components {
             /** Parrafo */
             parrafo: string;
         };
+        /** UsoHito */
+        UsoHito: {
+            /** Cumple */
+            cumple: boolean;
+            /** Hito */
+            hito: string;
+            /** Minimo */
+            minimo: number;
+            /** Nombre */
+            nombre: string;
+            /** Solicitudes */
+            solicitudes: number;
+        };
         /** VersionDetalle */
         VersionDetalle: {
             /**
@@ -1762,6 +1871,19 @@ export interface components {
             tamano_bytes: number;
             /** Vigente */
             vigente: boolean;
+        };
+        /** VistaDecision */
+        VistaDecision: {
+            /** Historial */
+            historial: components["schemas"]["DecisionVista"][];
+            /** Opciones */
+            opciones: components["schemas"]["OpcionDecision"][];
+            /**
+             * Solicitud Id
+             * Format: uuid
+             */
+            solicitud_id: string;
+            vigente: components["schemas"]["DecisionVista"] | null;
         };
         /** VistaEstructura */
         VistaEstructura: {
@@ -2050,6 +2172,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CasoPropio"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    contadores_caso_contadores_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Contadores"];
                 };
             };
             /** @description Unauthorized */
@@ -3299,6 +3486,151 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["RespuestaError"];
                 };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    ver_decision_caso_solicitudes__solicitud_id__decision_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaDecision"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    decidir_caso_solicitudes__solicitud_id__decision_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PedidoDecision"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionVista"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Unprocessable Content */
             422: {

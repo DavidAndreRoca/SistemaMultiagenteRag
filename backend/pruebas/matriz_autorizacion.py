@@ -62,6 +62,19 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         admite_propio=frozenset({404}),
     ),
     ("GET", "/caso/solicitudes"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Decisiones y contadores (T31): la solicitud ficticia no existe.
+    ("GET", "/caso/solicitudes/{solicitud_id}/decision"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/decision",
+        admite_propio=frozenset({404}),
+    ),
+    ("POST", "/caso/solicitudes/{solicitud_id}/decision"): Entrada(
+        Politica.CASO,
+        ejemplo=f"/caso/solicitudes/{ID_FICTICIO}/decision",
+        cuerpo={"opcion": "aceptar"},
+        admite_propio=frozenset({404}),
+    ),
+    ("GET", "/caso/contadores"): Entrada(Politica.CASO, datos_de_caso=True),
     # Estado en tiempo real, reenvío y mismo alcance (T29): la solicitud ficticia no existe.
     ("GET", "/caso/solicitudes/{solicitud_id}/eventos"): Entrada(
         Politica.CASO,

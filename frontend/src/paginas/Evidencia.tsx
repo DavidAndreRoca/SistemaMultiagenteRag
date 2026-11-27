@@ -8,6 +8,7 @@ import { Form } from "react-aria-components";
 
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton, CampoTextoLargo } from "../componentes/controles";
+import { DecisionSobreResultado } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { AvanceSolicitud, NoAtendida, Verificada } from "../componentes/Seguimiento";
 import { EN_CURSO } from "../solicitudes";
@@ -145,6 +146,9 @@ export function Evidencia() {
       ) : null}
       {vista && !EN_CURSO.has(vista.estado) ? (
         <Resultado vista={vista} alReenviar={seguir} />
+      ) : null}
+      {vista?.estado === "entregada" && solicitud !== null ? (
+        <DecisionSobreResultado key={solicitud} solicitud={solicitud} />
       ) : null}
     </Marco>
   );
