@@ -154,6 +154,14 @@ async def test_cp14_fuente_con_doi_se_indexa_y_se_recupera_de_nuevo(aportes: Apo
         aporte["nueva_solicitud_id"], OBRA_MONETARIA.titulo or ""
     )
     assert identificador == "F1"
+    # RF-21: la cita de la fuente propia muestra el documento y los datos que aportó.
+    cita = nueva["respuesta"][0]["citas"][0]
+    assert (cita["titulo"], cita["autores"], cita["anio"]) == (
+        OBRA_MONETARIA.titulo,
+        "Ficticia",
+        2024,
+    )
+    assert cita["aporte"]["doi"] == OBRA_MONETARIA.doi and cita["aporte"]["autores"] == ["Ficticia"]
     ((documento_id,),) = consultar(aportes.url, "SELECT id FROM documento WHERE origen = 'aporte'")
     assert [f["documento_id"] for f in nueva["fuentes"]] == [str(documento_id)]
     # La decisión sobre la abstención quedó como "aportar".

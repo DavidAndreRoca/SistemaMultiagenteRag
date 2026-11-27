@@ -13,7 +13,7 @@ from datetime import datetime
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.bd.enumeraciones import EstadoSolicitud, TipoAutoria, TipoSolicitud
+from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAutoria, TipoSolicitud
 from app.casos.servicio import CasoInexistente
 from app.seguridad.dependencias import ContextoCaso, Unidad
 
@@ -70,6 +70,7 @@ class SolicitudResumen(BaseModel):
     creada_en: datetime
     entregada_en: datetime | None
     solicitud_origen_id: uuid.UUID | None  # si es el reenvío de una no atendida (T29)
+    etiqueta: Etiqueta | None = None  # la del resultado entregado (T33)
 
 
 @router.get(
@@ -78,6 +79,8 @@ class SolicitudResumen(BaseModel):
     summary="Búsquedas de evidencia y verificaciones de referencias del caso",
 )
 async def solicitudes_del_caso(contexto: ContextoCaso, unidad: Unidad) -> list[SolicitudResumen]:
+    solicitudes = await unidad.solicitudes.recientes(contexto, TIPOS_CON_PANTALLA)
+    etiquetas = await unidad.resultados.etiquetas_finales(contexto, [s.id for s in solicitudes])
     return [
         SolicitudResumen(
             id=s.id,
@@ -87,6 +90,7 @@ async def solicitudes_del_caso(contexto: ContextoCaso, unidad: Unidad) -> list[S
             creada_en=s.creada_en,
             entregada_en=s.entregada_en,
             solicitud_origen_id=s.solicitud_origen_id,
+            etiqueta=etiquetas.get(s.id),
         )
-        for s in await unidad.solicitudes.recientes(contexto, TIPOS_CON_PANTALLA)
+        for s in solicitudes
     ]

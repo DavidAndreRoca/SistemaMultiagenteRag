@@ -19,7 +19,8 @@ from fastapi import APIRouter, Depends, Request, status
 from pydantic import BaseModel, Field
 
 from app.agentes.evidencia import INVITACION_APORTE, AtencionEvidencia
-from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
+from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, OrigenDocumento, TipoSolicitud
+from app.bd.modelos import FuenteAportada
 from app.comun.errores import ErrorAplicacion
 from app.orquestacion.en_api import ejecutor_de, encolar
 from app.rag.modelos import AVISO_SIN_EVIDENCIA
@@ -44,16 +45,30 @@ class SolicitudEvidencia(BaseModel):
     creada_en: datetime
 
 
+class AporteCitado(BaseModel):
+    """Lo que el caso declaró al aportar la fuente (RF-21: fuente de su colección personal)."""
+
+    titulo: str
+    autores: list[str]
+    anio: int | None
+    doi: str | None
+    aportada_en: datetime
+
+
 class CitaVista(BaseModel):
     identificador: str
     texto: str
     titulo: str | None
+    autores: str | None  # del documento, abreviados (T33)
+    anio: int | None
+    doi: str | None
     seccion: str
     pagina_inicio: int | None
     pagina_fin: int | None
     acceso_abierto: bool
     url_acceso_abierto: str | None  # solo si el acceso abierto está comprobado
     incompleto: bool
+    aporte: AporteCitado | None = None  # solo si es una fuente que aportó el caso (T32)
 
 
 class AfirmacionVista(BaseModel):
@@ -129,6 +144,33 @@ async def pedir_evidencia(
     )
 
 
+def autores_abreviados(autores: list[Any] | None, maximo: int = 3) -> str | None:
+    """Apellidos de los primeros autores del documento, con "et al." si hay más."""
+    nombres = []
+    for autor in autores or []:
+        if isinstance(autor, dict):
+            nombre = autor.get("apellidos") or autor.get("nombre_completo") or autor.get("nombres")
+            if isinstance(nombre, str) and nombre.strip():
+                nombres.append(nombre.strip())
+    if not nombres:
+        return None
+    texto = ", ".join(nombres[:maximo])
+    return f"{texto} et al." if len(nombres) > maximo else texto
+
+
+def _aporte_citado(aporte: FuenteAportada) -> AporteCitado:
+    datos = aporte.datos_bibliograficos or {}
+    autores = datos.get("autores")
+    anio = datos.get("anio")
+    return AporteCitado(
+        titulo=str(datos.get("titulo", "")),
+        autores=[str(a) for a in autores] if isinstance(autores, list) else [],
+        anio=anio if isinstance(anio, int) else None,
+        doi=aporte.doi,
+        aportada_en=aporte.aportada_en,
+    )
+
+
 @router.get(
     "/evidencias/{solicitud_id}",
     response_model=VistaEvidencia,
@@ -151,6 +193,10 @@ async def ver_evidencia(
     }
     salida: dict[str, Any] = (resultado.salida or {}) if resultado else {}
     abstencion = bool(resultado and resultado.abstencion)
+    aportes = await unidad.fuentes_aportadas.por_documentos(
+        contexto,
+        [d.id for _, d in detalle.values() if d.origen is OrigenDocumento.APORTE],
+    )
 
     def citas(identificadores: list[str]) -> list[CitaVista]:
         vistas = []
@@ -159,11 +205,16 @@ async def ver_evidencia(
                 continue
             fragmento, documento = detalle[identificador]
             abierto = documento.estado_oa.value in ACCESO_ABIERTO_COMPROBADO
+            aporte = aportes.get(documento.id)
             vistas.append(
                 CitaVista(
                     identificador=identificador,
                     texto=fragmento.texto,
                     titulo=documento.titulo,
+                    autores=autores_abreviados(documento.autores),
+                    anio=documento.anio,
+                    doi=documento.doi,
+                    aporte=_aporte_citado(aporte) if aporte else None,
                     seccion=fragmento.seccion_normalizada.value,
                     pagina_inicio=fragmento.pagina_inicio,
                     pagina_fin=fragmento.pagina_fin,

@@ -22,6 +22,58 @@
         "title": "AfirmacionVista",
         "type": "object"
       },
+      "AporteCitado": {
+        "description": "Lo que el caso declaró al aportar la fuente (RF-21: fuente de su colección personal).",
+        "properties": {
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "aportada_en": {
+            "format": "date-time",
+            "title": "Aportada En",
+            "type": "string"
+          },
+          "autores": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Autores",
+            "type": "array"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "titulo": {
+            "title": "Titulo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "titulo",
+          "autores",
+          "anio",
+          "doi",
+          "aportada_en"
+        ],
+        "title": "AporteCitado",
+        "type": "object"
+      },
       "Body_aportar_caso_solicitudes__solicitud_id__aporte_post": {
         "properties": {
           "anio": {
@@ -413,6 +465,49 @@
             "title": "Acceso Abierto",
             "type": "boolean"
           },
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "aporte": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AporteCitado"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "autores": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Autores"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
           "identificador": {
             "title": "Identificador",
             "type": "string"
@@ -478,6 +573,9 @@
           "identificador",
           "texto",
           "titulo",
+          "autores",
+          "anio",
+          "doi",
           "seccion",
           "pagina_inicio",
           "pagina_fin",
@@ -487,6 +585,17 @@
         ],
         "title": "CitaVista",
         "type": "object"
+      },
+      "ClaseEvento": {
+        "enum": [
+          "version",
+          "solicitud",
+          "resultado",
+          "decision",
+          "aporte"
+        ],
+        "title": "ClaseEvento",
+        "type": "string"
       },
       "CoherenciaFuente": {
         "enum": [
@@ -1015,6 +1124,114 @@
         "title": "Etiqueta",
         "type": "string"
       },
+      "EventoHistorial": {
+        "properties": {
+          "clase": {
+            "$ref": "#/components/schemas/ClaseEvento"
+          },
+          "descripcion": {
+            "title": "Descripcion",
+            "type": "string"
+          },
+          "estado": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EstadoSolicitud"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hito": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hito"
+          },
+          "momento": {
+            "format": "date-time",
+            "title": "Momento",
+            "type": "string"
+          },
+          "nombre_hito": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre Hito"
+          },
+          "opcion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpcionDecision"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "solicitud_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solicitud Id"
+          },
+          "tipo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TipoSolicitud"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vigente": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vigente"
+          }
+        },
+        "required": [
+          "momento",
+          "clase",
+          "descripcion"
+        ],
+        "title": "EventoHistorial",
+        "type": "object"
+      },
       "ExclusionVista": {
         "properties": {
           "duplicado_de_id": {
@@ -1163,6 +1380,22 @@
           "citas"
         ],
         "title": "HallazgoVista",
+        "type": "object"
+      },
+      "Historial": {
+        "properties": {
+          "eventos": {
+            "items": {
+              "$ref": "#/components/schemas/EventoHistorial"
+            },
+            "title": "Eventos",
+            "type": "array"
+          }
+        },
+        "required": [
+          "eventos"
+        ],
+        "title": "Historial",
         "type": "object"
       },
       "HitoDelPlan": {
@@ -2565,6 +2798,16 @@
           },
           "estado": {
             "$ref": "#/components/schemas/EstadoSolicitud"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Etiqueta"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "id": {
             "format": "uuid",
@@ -4583,6 +4826,266 @@
         "summary": "Avance y resultado de una búsqueda de evidencia",
         "tags": [
           "evidencia"
+        ]
+      }
+    },
+    "/caso/historial": {
+      "get": {
+        "operationId": "historial_caso_historial_get",
+        "parameters": [
+          {
+            "description": "Código del hito.",
+            "in": "query",
+            "name": "hito",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Código del hito.",
+              "title": "Hito"
+            }
+          },
+          {
+            "description": "Fecha de Lima, AAAA-MM-DD.",
+            "in": "query",
+            "name": "desde",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha de Lima, AAAA-MM-DD.",
+              "title": "Desde"
+            }
+          },
+          {
+            "description": "Fecha de Lima, AAAA-MM-DD.",
+            "in": "query",
+            "name": "hasta",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha de Lima, AAAA-MM-DD.",
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Historial"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Historial cronológico del caso",
+        "tags": [
+          "historial"
+        ]
+      }
+    },
+    "/caso/historial/resumen": {
+      "get": {
+        "operationId": "resumen_caso_historial_resumen_get",
+        "parameters": [
+          {
+            "description": "Código del hito.",
+            "in": "query",
+            "name": "hito",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Código del hito.",
+              "title": "Hito"
+            }
+          },
+          {
+            "description": "Fecha de Lima, AAAA-MM-DD.",
+            "in": "query",
+            "name": "desde",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha de Lima, AAAA-MM-DD.",
+              "title": "Desde"
+            }
+          },
+          {
+            "description": "Fecha de Lima, AAAA-MM-DD.",
+            "in": "query",
+            "name": "hasta",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha de Lima, AAAA-MM-DD.",
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Resumen del historial para la declaración de herramientas",
+        "tags": [
+          "historial"
         ]
       }
     },

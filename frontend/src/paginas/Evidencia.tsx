@@ -11,6 +11,7 @@ import { AvisoError, Boton, CampoTextoLargo } from "../componentes/controles";
 import { AporteDeFuente } from "../componentes/Aporte";
 import { DecisionSobreResultado } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
+import { fechaHora } from "../formato";
 import { AvanceSolicitud, NoAtendida, Verificada } from "../componentes/Seguimiento";
 import { EN_CURSO } from "../solicitudes";
 
@@ -31,6 +32,25 @@ const SECCIONES: Record<string, string> = {
 const MOTIVOS_NO_ATENDIDA: Record<string, string> = {
   interrumpida: "La búsqueda se interrumpió por un reinicio del servidor. Vuelva a pedirla.",
 };
+
+function documento(cita: Cita): string {
+  const partes = [cita.autores, cita.anio === null ? null : `(${String(cita.anio)})`].filter(
+    (parte): parte is string => Boolean(parte),
+  );
+  return partes.length > 0 ? `${partes.join(" ")}. ` : "";
+}
+
+/** Fuente de la colección personal: los datos que aportó el caso (RF-21). */
+function DatosAportados({ aporte }: { aporte: NonNullable<Cita["aporte"]> }) {
+  return (
+    <p className="campo__descripcion">
+      Fuente que usted aportó el {fechaHora(aporte.aportada_en)}: «{aporte.titulo}»,{" "}
+      {aporte.autores.join(", ")}
+      {aporte.anio === null ? "" : `, ${String(aporte.anio)}`}
+      {aporte.doi ? `, DOI ${aporte.doi}` : ""}.
+    </p>
+  );
+}
 
 function paginas(cita: Cita): string {
   if (cita.pagina_inicio === null) return "";
@@ -287,6 +307,7 @@ function ListaAfirmaciones({
               </summary>
               <blockquote>{cita.texto}</blockquote>
               <p className="campo__descripcion">
+                {documento(cita)}
                 {SECCIONES[cita.seccion] ?? cita.seccion}
                 {paginas(cita)}
                 {cita.incompleto ? ". Documento con extracción incompleta" : ""}
@@ -297,10 +318,13 @@ function ListaAfirmaciones({
                       Ver la fuente en acceso abierto<span className="oculto"> (otra pestaña)</span>
                     </a>
                   </>
+                ) : cita.aporte ? (
+                  ""
                 ) : (
                   ". Sin acceso abierto comprobado"
                 )}
               </p>
+              {cita.aporte ? <DatosAportados aporte={cita.aporte} /> : null}
             </details>
           ))}
         </li>

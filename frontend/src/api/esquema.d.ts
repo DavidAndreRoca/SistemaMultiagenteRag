@@ -126,6 +126,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/historial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Historial cronológico del caso */
+        get: operations["historial_caso_historial_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/historial/resumen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resumen del historial para la declaración de herramientas */
+        get: operations["resumen_caso_historial_resumen_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/metodologia": {
         parameters: {
             query?: never;
@@ -868,6 +902,25 @@ export interface components {
             /** Citas */
             citas: components["schemas"]["CitaVista"][];
         };
+        /**
+         * AporteCitado
+         * @description Lo que el caso declaró al aportar la fuente (RF-21: fuente de su colección personal).
+         */
+        AporteCitado: {
+            /** Anio */
+            anio: number | null;
+            /**
+             * Aportada En
+             * Format: date-time
+             */
+            aportada_en: string;
+            /** Autores */
+            autores: string[];
+            /** Doi */
+            doi: string | null;
+            /** Titulo */
+            titulo: string;
+        };
         /** Body_aportar_caso_solicitudes__solicitud_id__aporte_post */
         Body_aportar_caso_solicitudes__solicitud_id__aporte_post: {
             /** Anio */
@@ -1001,6 +1054,13 @@ export interface components {
         CitaVista: {
             /** Acceso Abierto */
             acceso_abierto: boolean;
+            /** Anio */
+            anio: number | null;
+            aporte?: components["schemas"]["AporteCitado"] | null;
+            /** Autores */
+            autores: string | null;
+            /** Doi */
+            doi: string | null;
             /** Identificador */
             identificador: string;
             /** Incompleto */
@@ -1018,6 +1078,11 @@ export interface components {
             /** Url Acceso Abierto */
             url_acceso_abierto: string | null;
         };
+        /**
+         * ClaseEvento
+         * @enum {string}
+         */
+        ClaseEvento: "version" | "solicitud" | "resultado" | "decision" | "aporte";
         /**
          * CoherenciaFuente
          * @enum {string}
@@ -1230,6 +1295,29 @@ export interface components {
          * @enum {string}
          */
         Etiqueta: "verificada" | "con_advertencias" | "sin_evidencia_suficiente";
+        /** EventoHistorial */
+        EventoHistorial: {
+            clase: components["schemas"]["ClaseEvento"];
+            /** Descripcion */
+            descripcion: string;
+            estado?: components["schemas"]["EstadoSolicitud"] | null;
+            etiqueta?: components["schemas"]["Etiqueta"] | null;
+            /** Hito */
+            hito?: string | null;
+            /**
+             * Momento
+             * Format: date-time
+             */
+            momento: string;
+            /** Nombre Hito */
+            nombre_hito?: string | null;
+            opcion?: components["schemas"]["OpcionDecision"] | null;
+            /** Solicitud Id */
+            solicitud_id?: string | null;
+            tipo?: components["schemas"]["TipoSolicitud"] | null;
+            /** Vigente */
+            vigente?: boolean | null;
+        };
         /** ExclusionVista */
         ExclusionVista: {
             /** Duplicado De Id */
@@ -1288,6 +1376,11 @@ export interface components {
             severidad: string;
             /** Ubicacion */
             ubicacion: string;
+        };
+        /** Historial */
+        Historial: {
+            /** Eventos */
+            eventos: components["schemas"]["EventoHistorial"][];
         };
         /** HitoDelPlan */
         HitoDelPlan: {
@@ -1821,6 +1914,7 @@ export interface components {
             /** Entregada En */
             entregada_en: string | null;
             estado: components["schemas"]["EstadoSolicitud"];
+            etiqueta?: components["schemas"]["Etiqueta"] | null;
             /**
              * Id
              * Format: uuid
@@ -2753,6 +2847,150 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    historial_caso_historial_get: {
+        parameters: {
+            query?: {
+                /** @description Código del hito. */
+                hito?: string | null;
+                /** @description Fecha de Lima, AAAA-MM-DD. */
+                desde?: string | null;
+                /** @description Fecha de Lima, AAAA-MM-DD. */
+                hasta?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Historial"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    resumen_caso_historial_resumen_get: {
+        parameters: {
+            query?: {
+                /** @description Código del hito. */
+                hito?: string | null;
+                /** @description Fecha de Lima, AAAA-MM-DD. */
+                desde?: string | null;
+                /** @description Fecha de Lima, AAAA-MM-DD. */
+                hasta?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": components["schemas"]["RespuestaError"];
                 };
             };
         };
