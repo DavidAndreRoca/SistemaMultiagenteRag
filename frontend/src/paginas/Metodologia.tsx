@@ -9,7 +9,7 @@ import { useSearchParams } from "react-router";
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, AvisoInformativo, Boton, Selector } from "../componentes/controles";
 import { Marco } from "../componentes/Marco";
-import { AvanceSolicitud, NoAtendida, OtraRevision } from "../componentes/Seguimiento";
+import { AvanceSolicitud, NoAtendida, OtraRevision, Verificada } from "../componentes/Seguimiento";
 import { numero } from "../formato";
 import { EN_CURSO } from "../solicitudes";
 import { FilaHallazgo } from "./Estructura";
@@ -204,6 +204,7 @@ function Resultado({ vista, alReenviar }: { vista: Vista; alReenviar: (nueva: st
           ? `Diseño declarado: ${vista.diseno}. Se revisó con su lista de comprobación y con los elementos comunes a todos los diseños.`
           : "La sección no nombra su diseño: se revisó con los elementos comunes a todos los diseños."}
       </p>
+      {vista.etiqueta === "verificada" ? <Verificada /> : null}
       {vista.etiqueta === "con_advertencias" ? (
         <div className="aviso aviso--importante" role="status">
           <p>Con advertencias: revise estas observaciones antes de usar el diagnóstico.</p>

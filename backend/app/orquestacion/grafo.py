@@ -1,19 +1,25 @@
-"""Grafo de la orquestación con LangGraph (T28; RF-03, CU-02, CP-03, CP-04, CP-07, RN-01, RN-02).
+"""Grafo de la orquestación con LangGraph (T28 y T30; RF-03, RF-11, CU-02, CU-10, CP-03,
+CP-04, CP-06, CP-07, RN-01, RN-02, RN-05, RN-06).
 
-Toda solicitud recorre el mismo camino, en el orden de la Fase 1 (6.1):
+Toda solicitud recorre el mismo camino, en el orden de la Fase 1 (6.1 y 6.7):
 
     validar → enrutar → ejecutar → verificar → etiquetar → registrar → entregar
                                  ↘ (abstención) entregar
-    cualquier falla → no_atendida
+                       verificar → (falla corregible, intento 1) reintentar → verificar
+    cualquier falla técnica → no_atendida
 
 * ``validar``: la solicitud existe para el caso del contexto, está en cola y es de un tipo
-  conocido. Si viene de un intento cortado, borra lo que dejó (fragmentos y resultado).
+  conocido. Si viene de un intento cortado, borra lo que dejó (fragmentos y resultados).
 * ``enrutar``: tabla fija tipo a agente (``enrutamiento.py``), sin modelo.
 * ``ejecutar``: recuperar, decidir la suficiencia y abstenerse o generar, con el ejecutor
   del tipo (contrato de T18; ``app/agentes/ejecucion.py``).
-* ``verificar``: comprobaciones del tipo (1 y 3, y las propias de cada uno). T30 agrega el
-  evaluador y el reintento con los motivos de falla.
-* ``etiquetar`` y ``registrar``: etiqueta y resultado.
+* ``verificar``: las seis comprobaciones, las que aplican al tipo (T30): esquema, límites,
+  citas, existencia de fuentes, acceso abierto y fidelidad con el evaluador.
+* ``reintentar``: si alguna falla la puede corregir el agente y es el intento 1, registra el
+  intento con su verificación y genera una sola vez más con los motivos, los mismos
+  fragmentos y sin repetir la recuperación (RN-05).
+* ``etiquetar`` y ``registrar``: "Verificada" o "Con advertencias" (la abstención ya es "Sin
+  evidencia suficiente"), y el resultado final con su verificación (PI-04).
 * ``no_atendida``: una caída del proveedor (``ErrorDisponibilidad``) vuelve a la cola hasta
   agotar ``MAX_INTENTOS_TECNICOS``; cualquier otra falla deja la solicitud "no atendida"
   con su motivo, recuperable con el reenvío (T29).
@@ -37,8 +43,8 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.runtime import Runtime
 
-from app.agentes.ejecucion import Ejecucion, Ejecutor, cambiar_estado, etiqueta_de
-from app.bd.enumeraciones import EstadoSolicitud, TipoSolicitud
+from app.agentes.ejecucion import Ejecucion, Ejecutor, cambiar_estado
+from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoSolicitud
 from app.bd.modelos import EventoTecnico, Solicitud
 from app.comun.registro import obtener_registrador
 from app.llm.modelos import ErrorDisponibilidad, ErrorModelo
@@ -46,6 +52,7 @@ from app.orquestacion.enrutamiento import TipoDesconocido, enrutar
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.unidad import FabricaUnidades, UnidadDeTrabajo
 from app.verificacion.comprobaciones import Comprobacion
+from app.verificacion.registro import etiqueta_de, motivos_para_reintento, verificacion_de
 
 MAX_INTENTOS_TECNICOS = 3  # la base lo limita con un CHECK (0 a 3)
 EN_COLA = frozenset({EstadoSolicitud.RECIBIDA, EstadoSolicitud.ASIGNADA})
@@ -59,6 +66,9 @@ class EstadoGrafo(TypedDict, total=False):
     abstencion: bool
     comprobaciones: list[dict[str, Any]]
     etiqueta: str | None
+    intento: int
+    reintentar: bool
+    motivos_reintento: int
     fallo: str | None
     reintentable: bool
     estado_final: str | None
@@ -143,10 +153,24 @@ async def enrutar_solicitud(
     return {"agente": agente.value}
 
 
+async def _etapa(ctx: ContextoEjecucion, nombre: str, inicio: datetime) -> None:
+    """Duración de una etapa como evento técnico (T30: latencias por etapa, RNF-12)."""
+    assert ctx.solicitud is not None
+    duracion = round((ctx.reloj() - inicio).total_seconds() * 1000)
+    await ctx.unidad.eventos_tecnicos.agregar(
+        EventoTecnico(
+            solicitud_id=ctx.solicitud.id, etapa=nombre, inicio=inicio, duracion_ms=max(duracion, 0)
+        )
+    )
+    await ctx.unidad.confirmar()
+
+
 async def ejecutar(estado: EstadoGrafo, *, runtime: Runtime[ContextoEjecucion]) -> dict[str, Any]:
     ctx = runtime.context
     assert ctx.ejecutor is not None and ctx.solicitud is not None
+    inicio = ctx.reloj()
     ctx.ejecucion = await ctx.ejecutor.ejecutar(ctx.unidad, ctx.contexto, ctx.solicitud)
+    await _etapa(ctx, "ejecucion", inicio)
     return {"abstencion": ctx.ejecucion.abstencion}
 
 
@@ -156,27 +180,60 @@ async def verificar(estado: EstadoGrafo, *, runtime: Runtime[ContextoEjecucion])
     await cambiar_estado(
         ctx.unidad, ctx.contexto, ctx.solicitud.id, EstadoSolicitud.VERIFICANDO, ctx.reloj
     )
-    ctx.comprobaciones = ctx.ejecutor.verificar(ctx.ejecucion)
+    inicio = ctx.reloj()
+    ctx.comprobaciones = await ctx.ejecutor.verificar(
+        ctx.unidad, ctx.contexto, ctx.solicitud, ctx.ejecucion
+    )
+    await _etapa(ctx, "verificacion", inicio)
+    intento = ctx.ejecucion.intento
     return {
+        "intento": intento,
         "comprobaciones": [
             {"numero": c.numero, "nombre": c.nombre, "superada": c.superada}
             for c in ctx.comprobaciones
-        ]
+        ],
+        # Un solo reintento, y solo si alguna falla la puede corregir el agente (RN-05).
+        "reintentar": intento == 1 and bool(motivos_para_reintento(ctx.comprobaciones)),
     }
 
 
+async def _registrar_intento(ctx: ContextoEjecucion, etiqueta: Etiqueta) -> None:
+    """Resultado del intento y su verificación (PI-04: una verificación por intento)."""
+    assert ctx.ejecutor is not None and ctx.ejecucion is not None and ctx.solicitud is not None
+    resultado = await ctx.ejecutor.registrar(
+        ctx.unidad, ctx.contexto, ctx.solicitud, ctx.ejecucion, ctx.comprobaciones, etiqueta
+    )
+    await ctx.unidad.verificaciones.agregar(
+        ctx.contexto,
+        verificacion_de(resultado.id, ctx.ejecucion.intento, ctx.comprobaciones, ctx.reloj()),
+    )
+    await ctx.unidad.confirmar()
+
+
+async def reintentar(estado: EstadoGrafo, *, runtime: Runtime[ContextoEjecucion]) -> dict[str, Any]:
+    """El intento 1 no superó la verificación: queda registrado y el agente genera de nuevo
+    con los motivos, los mismos fragmentos y sin repetir la recuperación (Fase 1, 7.2)."""
+    ctx = runtime.context
+    assert ctx.ejecutor is not None and ctx.ejecucion is not None and ctx.solicitud is not None
+    await cambiar_estado(
+        ctx.unidad, ctx.contexto, ctx.solicitud.id, EstadoSolicitud.REINTENTANDO, ctx.reloj
+    )
+    motivos = motivos_para_reintento(ctx.comprobaciones)
+    await _registrar_intento(ctx, Etiqueta.CON_ADVERTENCIAS)
+    inicio = ctx.reloj()
+    ctx.ejecucion = await ctx.ejecutor.reintentar(
+        ctx.unidad, ctx.contexto, ctx.solicitud, ctx.ejecucion, motivos
+    )
+    await _etapa(ctx, "reintento", inicio)
+    return {"intento": 2, "motivos_reintento": len(motivos)}
+
+
 async def etiquetar(estado: EstadoGrafo, *, runtime: Runtime[ContextoEjecucion]) -> dict[str, Any]:
-    etiqueta = etiqueta_de(runtime.context.comprobaciones)
-    return {"etiqueta": etiqueta.value if etiqueta else None}
+    return {"etiqueta": etiqueta_de(runtime.context.comprobaciones).value}
 
 
 async def registrar(estado: EstadoGrafo, *, runtime: Runtime[ContextoEjecucion]) -> dict[str, Any]:
-    ctx = runtime.context
-    assert ctx.ejecutor is not None and ctx.ejecucion is not None and ctx.solicitud is not None
-    etiqueta = etiqueta_de(ctx.comprobaciones)
-    await ctx.ejecutor.registrar(
-        ctx.unidad, ctx.contexto, ctx.solicitud, ctx.ejecucion, ctx.comprobaciones, etiqueta
-    )
+    await _registrar_intento(runtime.context, etiqueta_de(runtime.context.comprobaciones))
     return {}
 
 
@@ -221,6 +278,12 @@ def _siguiente(normal: str) -> Callable[[EstadoGrafo], str]:
     return elegir
 
 
+def _tras_verificar(estado: EstadoGrafo) -> str:
+    if estado.get("fallo"):
+        return "no_atendida"
+    return "reintentar" if estado.get("reintentar") else "etiquetar"
+
+
 def _tras_ejecutar(estado: EstadoGrafo) -> str:
     if estado.get("fallo"):
         return "no_atendida"
@@ -234,6 +297,7 @@ def construir_grafo() -> StateGraph[EstadoGrafo, ContextoEjecucion, EstadoGrafo,
         ("enrutar", enrutar_solicitud),
         ("ejecutar", ejecutar),
         ("verificar", verificar),
+        ("reintentar", reintentar),
         ("etiquetar", etiquetar),
         ("registrar", registrar),
         ("entregar", entregar),
@@ -248,7 +312,10 @@ def construir_grafo() -> StateGraph[EstadoGrafo, ContextoEjecucion, EstadoGrafo,
     grafo.add_conditional_edges(
         "ejecutar", _tras_ejecutar, ["verificar", "entregar", "no_atendida"]
     )
-    grafo.add_conditional_edges("verificar", _siguiente("etiquetar"), ["etiquetar", "no_atendida"])
+    grafo.add_conditional_edges(
+        "verificar", _tras_verificar, ["reintentar", "etiquetar", "no_atendida"]
+    )
+    grafo.add_conditional_edges("reintentar", _siguiente("verificar"), ["verificar", "no_atendida"])
     grafo.add_conditional_edges("etiquetar", _siguiente("registrar"), ["registrar", "no_atendida"])
     grafo.add_conditional_edges("registrar", _siguiente("entregar"), ["entregar", "no_atendida"])
     grafo.add_conditional_edges("entregar", _siguiente(END), [END, "no_atendida"])
@@ -262,6 +329,9 @@ ESTADO_INICIAL: EstadoGrafo = {
     "abstencion": False,
     "comprobaciones": [],
     "etiqueta": None,
+    "intento": 1,
+    "reintentar": False,
+    "motivos_reintento": 0,
     "fallo": None,
     "reintentable": False,
     "estado_final": None,

@@ -17,7 +17,7 @@ from app.agentes.ejecucion import Ejecucion
 from app.agentes.metodologia import AtencionMetodologia
 from app.agentes.seccion import AtencionSeccion
 from app.bd.enumeraciones import Etiqueta, Rol, TipoSolicitud
-from app.bd.modelos import Solicitud
+from app.bd.modelos import Resultado, Solicitud
 from app.repositorios.contexto import ContextoAcceso
 from app.repositorios.unidad import UnidadDeTrabajo
 from app.verificacion.comprobaciones import Comprobacion
@@ -49,10 +49,12 @@ class EjecutorLento(EjecutorDoble):
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None:
+        etiqueta: Etiqueta,
+    ) -> Resultado:
         await asyncio.sleep(self.pausa)
-        await super().registrar(unidad, contexto, solicitud, ejecucion, comprobaciones, etiqueta)
+        return await super().registrar(
+            unidad, contexto, solicitud, ejecucion, comprobaciones, etiqueta
+        )
 
 
 @dataclass

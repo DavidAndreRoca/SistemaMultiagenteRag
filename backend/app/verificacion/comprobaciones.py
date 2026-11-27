@@ -35,6 +35,11 @@ class Comprobacion(BaseModel):
     nombre: str
     superada: bool
     motivos: list[str] = []
+    # T30: una falla que el agente puede corregir pide el reintento; la de un servicio caído
+    # (bibliográfico o el evaluador) no, porque regenerar no la arregla: da advertencia.
+    reintentable: bool = True
+    # Valores que se registran en la verificación (fuentes de la 4, fidelidad de la 6).
+    datos: dict[str, Any] = {}
 
 
 def comprobar_esquema(tipo: TipoSolicitud, salida: Any) -> Comprobacion:

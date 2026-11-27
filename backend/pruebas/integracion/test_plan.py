@@ -127,7 +127,9 @@ async def test_arma_el_plan_con_las_instrucciones_del_hito_y_el_estado_del_borra
     plan: Plan,
 ) -> None:
     vista = await plan.pedir("avance_1")
-    assert vista["estado"] == "entregada" and vista["etiqueta"] is None, vista["advertencias"]
+    assert vista["estado"] == "entregada" and vista["etiqueta"] == "verificada", vista[
+        "advertencias"
+    ]
     assert vista["hito"] == "Avance 1: Planteamiento"  # lo pone el sistema
     assert [(t["orden"], t["tarea"][:9]) for t in vista["tareas"]] == [
         (1, "Redactar "),

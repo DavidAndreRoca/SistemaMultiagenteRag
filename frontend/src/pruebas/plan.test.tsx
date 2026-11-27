@@ -34,7 +34,7 @@ const vista = {
   abstencion: false,
   aviso: null,
   motivo_abstencion: null,
-  etiqueta: null,
+  etiqueta: "verificada" as const,
   tareas: [
     {
       orden: 1,
@@ -131,6 +131,7 @@ describe("plan de tarea", () => {
     expect(within(tareas).getAllByRole("listitem")).toHaveLength(2);
     expect(within(tareas).getByText(/Redactar la formulación del problema/)).toBeVisible();
     expect(screen.getByRole("button", { name: "Descargar en texto" })).toBeVisible();
+    expect(screen.getByText("Verificada")).toBeVisible();
     const envio = llamadas.find((p) => p.method === "POST");
     expect(await envio?.json()).toEqual({ hito: "avance_1" });
   }, 10000);

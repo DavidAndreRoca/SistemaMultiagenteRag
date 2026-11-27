@@ -25,8 +25,8 @@ from datetime import datetime
 from typing import Any, ClassVar
 
 from app.administracion.parametros import ParametrosFuncionales
-from app.agentes.contrato import Agente, EstadoAgente
-from app.agentes.ejecucion import Ejecucion, advertencias_de, cambiar_estado
+from app.agentes.contrato import Agente, EstadoAgente, ResultadoAgente
+from app.agentes.ejecucion import Ejecucion, cambiar_estado
 from app.bd.enumeraciones import EstadoSolicitud, Etiqueta, TipoAlcance, TipoSolicitud
 from app.bd.modelos import Resultado, Solicitud, VersionBorrador
 from app.borradores.secciones import descendientes
@@ -41,6 +41,8 @@ from app.verificacion.comprobaciones import (
     comprobar_esquema,
     comprobar_no_reescritura,
 )
+from app.verificacion.evaluador import Evaluador
+from app.verificacion.registro import advertencias_de
 
 ORDEN_SEVERIDAD = {"alta": 0, "media": 1, "baja": 2}
 _registro = obtener_registrador("agentes")
@@ -120,10 +122,12 @@ class AtencionPorAlcance:
         tipo: TipoSolicitud,
         agente: Agente,
         reloj: Callable[[], datetime],
+        evaluador: Evaluador | None = None,
     ) -> None:
         self.tipo = tipo
         self._agente = agente
         self._reloj = reloj
+        self._evaluador = evaluador
 
     async def version_vigente(
         self, unidad: UnidadDeTrabajo, contexto: ContextoAcceso
@@ -226,19 +230,31 @@ class AtencionPorAlcance:
         resultado = await self._agente.atender(unidad, contexto, estado, generando)
         if resultado.abstencion:  # T16 ya registró la abstención
             return Ejecucion(abstencion=True)
-        assert resultado.salida is not None
-        salida = self.ajustar(resultado.salida.model_dump(mode="json"), texto)
         recuperados = {
             r.identificador_visible: f.texto
             for r, f, _ in await unidad.fragmentos_recuperados.detalle(contexto, solicitud.id)
         }
+        return self._ejecucion(resultado, texto, parametros, recuperados, intento=1)
+
+    def _ejecucion(
+        self,
+        resultado: ResultadoAgente,
+        texto: str,
+        parametros: ParametrosFuncionales,
+        recuperados: Mapping[str, str],
+        intento: int,
+    ) -> Ejecucion:
+        assert resultado.salida is not None
         return Ejecucion(
             abstencion=False,
-            salida=salida,
+            salida=self.ajustar(resultado.salida.model_dump(mode="json"), texto),
+            intento=intento,
             datos={
                 "texto": texto,
                 "parametros": parametros,
                 "recuperados": recuperados,
+                "estado": resultado.estado,
+                "evidencia": resultado.evidencia,
                 "modelo": {
                     "instruccion": resultado.instruccion,
                     "proveedor": resultado.proveedor,
@@ -247,12 +263,49 @@ class AtencionPorAlcance:
             },
         )
 
-    def verificar(self, ejecucion: Ejecucion) -> list[Comprobacion]:
+    async def reintentar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        anterior: Ejecucion,
+        motivos: Sequence[str],
+    ) -> Ejecucion:
+        datos = anterior.datos
+        resultado = await self._agente.reintentar(
+            unidad, datos["estado"], datos["evidencia"], motivos
+        )
+        return self._ejecucion(
+            resultado, datos["texto"], datos["parametros"], datos["recuperados"], intento=2
+        )
+
+    async def fidelidad(self, unidad: UnidadDeTrabajo, ejecucion: Ejecucion) -> Comprobacion | None:
+        """Comprobación 6 del tipo; sin evaluador (pruebas de otros pasos), no se aplica."""
+        if self._evaluador is None or ejecucion.salida is None:
+            return None
+        parametros: ParametrosFuncionales = ejecucion.datos["parametros"]
+        return await self._evaluador.fidelidad(
+            unidad,
+            self.tipo,
+            ejecucion.salida,
+            ejecucion.datos["recuperados"],
+            parametros.umbral_fidelidad,
+        )
+
+    async def verificar(
+        self,
+        unidad: UnidadDeTrabajo,
+        contexto: ContextoAcceso,
+        solicitud: Solicitud,
+        ejecucion: Ejecucion,
+    ) -> list[Comprobacion]:
         assert ejecucion.salida is not None
         datos = ejecucion.datos
-        return self.comprobaciones(
+        comprobaciones = self.comprobaciones(
             ejecucion.salida, datos["texto"], datos["parametros"], datos["recuperados"]
         )
+        sexta = await self.fidelidad(unidad, ejecucion)
+        return [*comprobaciones, sexta] if sexta is not None else comprobaciones
 
     async def registrar(
         self,
@@ -261,14 +314,14 @@ class AtencionPorAlcance:
         solicitud: Solicitud,
         ejecucion: Ejecucion,
         comprobaciones: Sequence[Comprobacion],
-        etiqueta: Etiqueta | None,
-    ) -> None:
+        etiqueta: Etiqueta,
+    ) -> Resultado:
         salida = ejecucion.salida or {}
-        await unidad.resultados.agregar(
+        resultado = await unidad.resultados.agregar(
             contexto,
             Resultado(
                 solicitud_id=solicitud.id,
-                intento=1,
+                intento=ejecucion.intento,
                 salida={
                     **salida,
                     "comprobaciones": [c.model_dump(mode="json") for c in comprobaciones],
@@ -279,19 +332,20 @@ class AtencionPorAlcance:
                 creado_en=self._reloj(),
             ),
         )
-        await unidad.confirmar()
         _registro.info(
             "solicitud sobre una parte del borrador registrada",
             extra={
                 "tipo_evento": "agentes",
                 "solicitud_id": str(solicitud.id),
                 "tipo": self.tipo.value,
+                "intento": ejecucion.intento,
                 "hallazgos": len(salida.get("hallazgos", [])),
                 "cambios": len(salida.get("cambios", [])),
                 "tareas": len(salida.get("tareas", [])),
                 "comprobaciones_fallidas": [c.nombre for c in comprobaciones if not c.superada],
             },
         )
+        return resultado
 
 
 class AtencionSeccion(AtencionPorAlcance):

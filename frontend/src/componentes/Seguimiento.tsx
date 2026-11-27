@@ -171,3 +171,14 @@ export function OtraRevision({
     </div>
   );
 }
+
+/** Etiqueta "Verificada" (T30): el resultado superó las comprobaciones que aplican a su tipo. */
+export function Verificada() {
+  return (
+    <p className="etiqueta-resultado">
+      <span className="insignia insignia--entregada">Verificada</span> Superó las comprobaciones del
+      sistema antes de entregarse: esquema, límites, citas a los fragmentos recuperados y fidelidad
+      a las fuentes, según el tipo.
+    </p>
+  );
+}

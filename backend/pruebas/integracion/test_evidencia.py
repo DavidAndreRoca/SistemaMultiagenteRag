@@ -173,7 +173,7 @@ async def test_la_evidencia_se_entrega_con_citas_desplegables_y_fuentes_abiertas
     evidencias.modelo.citas = [abierto]
     vista = await evidencias.ver((await evidencias.pedir(CONSULTA)).json()["id"])
     assert vista["estado"] == "entregada" and not vista["abstencion"]
-    assert vista["etiqueta"] is None and vista["advertencias"] == []
+    assert vista["etiqueta"] == "verificada" and vista["advertencias"] == []
     (afirmacion,) = vista["respuesta"]
     (cita,) = afirmacion["citas"]
     assert cita["titulo"] == ABIERTO and cita["acceso_abierto"] is True
@@ -185,6 +185,7 @@ async def test_la_evidencia_se_entrega_con_citas_desplegables_y_fuentes_abiertas
     assert {c["nombre"]: c["superada"] for c in vista["comprobaciones"]} == {
         "esquema": True,
         "citas": True,
+        "existencia_de_fuentes": True,
         "acceso_abierto": True,
     }
     # Lo enviado al modelo: la consulta como alcance y los fragmentos como datos (RNF-10).

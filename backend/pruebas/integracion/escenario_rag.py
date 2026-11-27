@@ -98,6 +98,9 @@ async def sembrar_documento(
     documento = Documento(
         coleccion_id=coleccion_id,
         titulo=titulo,
+        # T30: con autor y año, la comprobación 4 confirma la fuente por metadatos.
+        autores=[{"nombres": "Ana", "apellidos": "Ficticia"}],
+        anio=2024,
         huella_sha256=huella,
         estado=estado,
         origen=OrigenDocumento.INGESTA,

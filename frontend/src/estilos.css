@@ -745,3 +745,9 @@ a:hover {
   gap: 0.5rem;
   justify-items: start;
 }
+
+/* Etiqueta del resultado (T30) */
+.etiqueta-resultado {
+  margin: 0;
+  color: var(--texto-suave);
+}

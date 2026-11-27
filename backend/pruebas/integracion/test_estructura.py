@@ -3,6 +3,7 @@ CP-05, aislamiento)."""
 
 from __future__ import annotations
 
+import uuid
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -186,7 +187,7 @@ async def test_cp08_diagnostica_sin_reescribir_y_ordena_por_severidad(
     respuesta = await estructura.pedir(seccion)
     assert respuesta.status_code == 202
     vista = await estructura.ver(respuesta.json()["id"])
-    assert vista["estado"] == "entregada" and vista["etiqueta"] is None
+    assert vista["estado"] == "entregada" and vista["etiqueta"] == "verificada"
     assert vista["seccion_titulo"] == "1. Introducción"
     assert [h["severidad"] for h in vista["hallazgos"]] == ["alta", "baja"]
     hallazgo = vista["hallazgos"][0]
@@ -242,3 +243,52 @@ async def test_seccion_inexistente_y_aislamiento(
     assert (await otro.get(f"/caso/estructura/{respuesta.json()['id']}")).status_code == 404
     propias = (await estructura.cliente.get("/caso/solicitudes")).json()
     assert [s["tipo"] for s in propias] == ["revision_estructura"]
+
+
+async def test_t30_una_fidelidad_baja_pide_un_reintento_con_los_motivos(
+    estructura: Estructura,
+) -> None:
+    """CP-06 con el agente real: el evaluador rechaza el intento 1, el agente regenera con el
+    motivo y sin repetir la recuperación, y el intento 2 queda verificado (PI-04)."""
+    from app.verificacion.evaluador import Evaluador
+
+    juicios = iter([["no_respaldada", "respaldada"], ["respaldada", "respaldada"]])
+
+    def juicio(_: EntradaModelo) -> dict[str, Any]:
+        return {
+            "afirmaciones": [
+                {"afirmacion": f"afirmación {i}", "clasificacion": c}
+                for i, c in enumerate(next(juicios), 1)
+            ]
+        }
+
+    async def sin_espera(_: float) -> None:
+        return None
+
+    simulado = ProveedorSimulado(respuestas={"JuicioFidelidad": juicio})
+    cadena = CadenaModelos(
+        [Eslabon(simulado, LimitadorProveedor(Proveedor.SIMULADO, Limites()), Precio(), 0)],
+        dormir=sin_espera,
+    )
+    estructura.atencion._evaluador = Evaluador(cadena, versiones=lambda: {"evaluador": "v1"})
+    respuesta = await estructura.pedir(await estructura.introduccion())
+    vista = await estructura.ver(respuesta.json()["id"])
+    assert vista["etiqueta"] == "verificada"
+    primera, segunda = estructura.modelo.entradas
+    assert "Corrige estos problemas" not in primera.tarea
+    assert "fidelidad 0.50 menor que el umbral 0.90" in segunda.tarea
+    assert segunda.datos == primera.datos  # mismos fragmentos, sin repetir la recuperación
+    filas = consultar(
+        estructura.entorno.url_bd,
+        "SELECT r.intento, r.etiqueta, v.superada, v.fidelidad FROM resultado r"
+        " JOIN verificacion v ON v.resultado_id = r.id WHERE r.solicitud_id = %s"
+        " ORDER BY r.intento",
+        uuid.UUID(respuesta.json()["id"]),
+    )
+    assert filas == [(1, "con_advertencias", False, 0.5), (2, "verificada", True, 1.0)]
+    ((recuperaciones,),) = consultar(
+        estructura.entorno.url_bd,
+        "SELECT count(*) FROM evento_tecnico WHERE solicitud_id = %s AND etapa = 'recuperacion'",
+        uuid.UUID(respuesta.json()["id"]),
+    )
+    assert recuperaciones == 1

@@ -186,6 +186,7 @@ class ParametrosFuncionales(_Estricto):
             "redaccion": "v1",
             "metodologia": "v1",
             "plan": "v1",
+            "evaluador": "v1",
         }
     )
 

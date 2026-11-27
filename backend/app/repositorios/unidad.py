@@ -30,6 +30,7 @@ from app.repositorios.investigador import (
     RepositorioCasosInvestigador,
     RepositorioColeccionesInvestigador,
     RepositorioCuentasInvestigador,
+    RepositorioMonitoreo,
 )
 from app.repositorios.recuperacion import RepositorioRecuperacion
 from app.repositorios.sistema import (
@@ -62,6 +63,7 @@ class UnidadDeTrabajo:
         self.recuperacion = RepositorioRecuperacion(sesion)
         # Investigador (A2)
         self.casos_investigador = RepositorioCasosInvestigador(sesion)
+        self.monitoreo = RepositorioMonitoreo(sesion)
         self.colecciones_investigador = RepositorioColeccionesInvestigador(sesion)
         self.cuentas_investigador = RepositorioCuentasInvestigador(sesion)
         self.corpus = RepositorioCorpus(sesion)
