@@ -187,6 +187,7 @@ class ParametrosFuncionales(_Estricto):
             "metodologia": "v1",
             "plan": "v1",
             "evaluador": "v1",
+            "coherencia": "v1",
         }
     )
 

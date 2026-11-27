@@ -333,6 +333,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/caso/solicitudes/{solicitud_id}/aporte": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Aportar una fuente tras una búsqueda sin evidencia suficiente */
+        post: operations["aportar_caso_solicitudes__solicitud_id__aporte_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/caso/solicitudes/{solicitud_id}/aportes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fuentes aportadas tras una solicitud, con su desenlace */
+        get: operations["ver_aportes_caso_solicitudes__solicitud_id__aportes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/caso/solicitudes/{solicitud_id}/decision": {
         parameters: {
             query?: never;
@@ -834,6 +868,22 @@ export interface components {
             /** Citas */
             citas: components["schemas"]["CitaVista"][];
         };
+        /** Body_aportar_caso_solicitudes__solicitud_id__aporte_post */
+        Body_aportar_caso_solicitudes__solicitud_id__aporte_post: {
+            /** Anio */
+            anio: number;
+            /** Archivo */
+            archivo?: string | null;
+            /**
+             * Autores
+             * @description Apellidos de los autores, uno por línea.
+             */
+            autores: string;
+            /** Doi */
+            doi?: string | null;
+            /** Titulo */
+            titulo: string;
+        };
         /** Body_cargar_version_caso_versiones_post */
         Body_cargar_version_caso_versiones_post: {
             /** Archivo */
@@ -968,6 +1018,11 @@ export interface components {
             /** Url Acceso Abierto */
             url_acceso_abierto: string | null;
         };
+        /**
+         * CoherenciaFuente
+         * @enum {string}
+         */
+        CoherenciaFuente: "coherente" | "parcial" | "no_coherente" | "no_evaluada";
         /** ColeccionVista */
         ColeccionVista: {
             /**
@@ -1196,6 +1251,11 @@ export interface components {
              */
             registrada_en: string;
         };
+        /**
+         * ExistenciaFuente
+         * @enum {string}
+         */
+        ExistenciaFuente: "confirmada" | "no_localizada" | "no_comprobable";
         /** FuenteVista */
         FuenteVista: {
             /**
@@ -1280,6 +1340,12 @@ export interface components {
             total: number;
         };
         /**
+         * IndexacionAporte
+         * @description Qué pasó con una fuente aportada en la colección personal (T32; CP-14 a CP-17).
+         * @enum {string}
+         */
+        IndexacionAporte: "indexada" | "ya_indexada" | "no_indexada";
+        /**
          * InformeTema
          * @description Informe del corpus de un tema (RF-15, RF-20).
          */
@@ -1345,6 +1411,11 @@ export interface components {
          * @enum {string}
          */
         MetodoDeteccionSecciones: "estilos" | "manual";
+        /**
+         * MetodoExistencia
+         * @enum {string}
+         */
+        MetodoExistencia: "doi" | "metadatos";
         /**
          * MotivoExclusionCorpus
          * @description Motivo de exclusión del corpus (RF-15, CP-21; Fase 1, 18.3 y 18.9).
@@ -1871,6 +1942,41 @@ export interface components {
             tamano_bytes: number;
             /** Vigente */
             vigente: boolean;
+        };
+        /** VistaAporte */
+        VistaAporte: {
+            /** Anio */
+            anio: number | null;
+            /**
+             * Aportada En
+             * Format: date-time
+             */
+            aportada_en: string;
+            /** Cita Propuesta */
+            cita_propuesta: string | null;
+            coherencia: components["schemas"]["CoherenciaFuente"];
+            /** Con Pdf */
+            con_pdf: boolean;
+            /** Doi */
+            doi: string | null;
+            existencia: components["schemas"]["ExistenciaFuente"];
+            /** Explicacion Coherencia */
+            explicacion_coherencia: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            indexacion: components["schemas"]["IndexacionAporte"];
+            metodo_existencia: components["schemas"]["MetodoExistencia"] | null;
+            /** Motivo Indexacion */
+            motivo_indexacion: string | null;
+            /** Nueva Solicitud Id */
+            nueva_solicitud_id: string | null;
+            /** Texto Indexado */
+            texto_indexado: string | null;
+            /** Titulo */
+            titulo: string;
         };
         /** VistaDecision */
         VistaDecision: {
@@ -3458,6 +3564,165 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SolicitudResumen"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+        };
+    };
+    aportar_caso_solicitudes__solicitud_id__aporte_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_aportar_caso_solicitudes__solicitud_id__aporte_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaAporte"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Content Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RespuestaError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ver_aportes_caso_solicitudes__solicitud_id__aportes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitud_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VistaAporte"][];
                 };
             };
             /** @description Unauthorized */

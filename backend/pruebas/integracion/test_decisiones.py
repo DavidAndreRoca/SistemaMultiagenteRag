@@ -183,3 +183,12 @@ async def test_un_caso_no_decide_ni_ve_los_contadores_de_otro(
     assert (await otro.get(f"/caso/solicitudes/{solicitud_id}/decision")).status_code == 404
     assert (await otro.get("/caso/contadores")).json()["por_tipo"] == []
     await otro.aclose()
+
+
+async def test_tras_otra_abstencion_solo_se_continua(seguimiento: Seguimiento) -> None:
+    """Aportar una fuente solo sirve a la búsqueda de evidencia (T32): la colección personal
+    la recupera solo D4."""
+    solicitud_id = _entregada(seguimiento, TipoSolicitud.PLAN_TAREA, abstencion=True)
+    assert (await _vista(seguimiento, solicitud_id))["opciones"] == ["continuar"]
+    aportar = await _decidir(seguimiento, solicitud_id, "aportar")
+    assert aportar.status_code == 422 and aportar.json()["codigo"] == "opcion_no_admitida"

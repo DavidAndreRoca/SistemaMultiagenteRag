@@ -266,7 +266,20 @@ class RepositorioDecisiones(RepositorioDeCaso[Decision]):
 
 
 class RepositorioFuentesAportadas(RepositorioDeCaso[FuenteAportada]):
+    """Fuentes aportadas tras una abstención (T32; RF-13), con su desenlace."""
+
     modelo = FuenteAportada
+
+    async def de_solicitud(
+        self, contexto: ContextoAcceso, solicitud_id: uuid.UUID
+    ) -> Sequence[FuenteAportada]:
+        """Los aportes motivados por la solicitud, del más antiguo al más reciente."""
+        resultado = await self._sesion.scalars(
+            self._consulta(contexto)
+            .where(FuenteAportada.solicitud_id == solicitud_id)
+            .order_by(FuenteAportada.aportada_en, FuenteAportada.id)
+        )
+        return resultado.all()
 
 
 class RepositorioCasoPropio:

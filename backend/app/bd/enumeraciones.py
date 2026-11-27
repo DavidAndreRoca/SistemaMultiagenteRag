@@ -200,6 +200,14 @@ class CoherenciaFuente(StrEnum):
     NO_EVALUADA = "no_evaluada"
 
 
+class IndexacionAporte(StrEnum):
+    """Qué pasó con una fuente aportada en la colección personal (T32; CP-14 a CP-17)."""
+
+    INDEXADA = "indexada"
+    YA_INDEXADA = "ya_indexada"  # ya estaba en la colección: no se duplica (CP-17)
+    NO_INDEXADA = "no_indexada"  # existencia no confirmada, sin texto o servicio caído
+
+
 class Rol(StrEnum):
     """A1: caso (estudiante o pareja); A2: investigador."""
 

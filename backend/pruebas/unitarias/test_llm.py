@@ -20,7 +20,7 @@ from app.administracion.parametros import parametros_iniciales
 from app.configuracion import ErrorConfiguracion, cargar_ajustes
 from app.instrucciones import cargador
 from app.llm import mensajes
-from app.llm.cadena import CadenaModelos, Eslabon, EventoLlamada, Precio
+from app.llm.cadena import CadenaModelos, Eslabon, EventoLlamada, Precio, tope_de_salida
 from app.llm.esquema import esquema_estricto, validar
 from app.llm.fabrica import ConfiguracionModelosInvalida, crear_cadena, exigir_regla_de_entorno
 from app.llm.limitador import LimitadorProveedor, Limites
@@ -662,3 +662,30 @@ def test_instruccion_tiene_identificador_y_huella() -> None:
     assert INSTRUCCION.identificador == "contrato/v1"
     with pytest.raises(ValidationError):
         Instruccion(agente="a", version="v1", huella="corta", texto="x")
+
+
+def test_el_tope_de_salida_se_ajusta_a_los_tokens_por_minuto() -> None:
+    """T32: con Groq gratuito (8 000 por minuto) y el tope de 4 096, una entrada de 4 000
+    tokens nunca cabía y el limitador la rechazaba siempre."""
+    groq_gratuito = Eslabon(
+        ProveedorSimulado(),
+        LimitadorProveedor(Proveedor.SIMULADO, Limites(tpm=8000)),
+        Precio(),
+        4096,
+    )
+    assert tope_de_salida(groq_gratuito, 2000) == 4096  # cabe completo
+    assert tope_de_salida(groq_gratuito, 4000) == 4000  # se reduce a lo que cabe
+    assert tope_de_salida(groq_gratuito, 7500) == 4096  # menos de MIN_SALIDA: no se recorta
+    sin_limite = Eslabon(
+        ProveedorSimulado(), LimitadorProveedor(Proveedor.SIMULADO, Limites()), Precio(), 4096
+    )
+    assert tope_de_salida(sin_limite, 50_000) == 4096
+
+
+async def test_groq_envia_el_tope_de_salida_de_la_llamada() -> None:
+    registro = Registro()
+    cliente = registro.transporte(
+        lambda _: httpx.Response(200, json=chat(json.dumps(RESPUESTA_VALIDA)))
+    )
+    await groq(cliente).completar(INSTRUCCION, ENTRADA, Clasificacion, 3000)
+    assert registro.cuerpo()["max_tokens"] == 3000

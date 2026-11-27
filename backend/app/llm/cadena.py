@@ -40,6 +40,7 @@ from app.llm.proveedores import ProveedorModelo
 
 REINTENTOS = 2
 ESPERA_BASE_S = 1.0
+MIN_SALIDA = 1024  # tokens: menos dejaría cortada la respuesta de un modelo que razona
 ESPERA_MAXIMA_REINTENTO_S = 20.0
 MILLON = Decimal(1_000_000)
 
@@ -68,6 +69,20 @@ class Eslabon:
     limitador: LimitadorProveedor
     precio: Precio
     max_tokens_salida: int
+
+
+def tope_de_salida(eslabon: Eslabon, estimados: int) -> int:
+    """El tope de salida de la configuración, reducido a lo que cabe en el minuto si la
+    entrada más el tope superan los tokens por minuto del proveedor (Groq gratuito: 8 000).
+    Sin esto, una entrada de 4 000 tokens con el tope de 4 096 nunca cabe y el limitador la
+    rechaza siempre (T32, regresión de la migración 0018). Por debajo de ``MIN_SALIDA`` se
+    deja el tope: la respuesta saldría cortada."""
+    tope = eslabon.max_tokens_salida
+    tpm = eslabon.limitador.limites.tpm
+    if tpm is None or estimados + tope <= tpm:
+        return tope
+    cabe = tpm - estimados
+    return cabe if cabe >= MIN_SALIDA else tope
 
 
 @dataclass(frozen=True)
@@ -163,8 +178,9 @@ class CadenaModelos:
         error: ErrorModelo | None = None
         version: str | None = None
         try:
-            reserva = await eslabon.limitador.reservar(estimados + eslabon.max_tokens_salida)
-            respuesta = await proveedor.completar(instruccion, entrada, esquema)
+            salida = tope_de_salida(eslabon, estimados)
+            reserva = await eslabon.limitador.reservar(estimados + salida)
+            respuesta = await proveedor.completar(instruccion, entrada, esquema, salida)
             uso_entrada, uso_salida = respuesta.uso.tokens_entrada, respuesta.uso.tokens_salida
             version = respuesta.version_informada
             if uso_entrada is not None or uso_salida is not None:

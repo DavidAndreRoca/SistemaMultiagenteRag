@@ -111,6 +111,8 @@ Verificación (T30): `app/verificacion/` (`comprobaciones.py` con `Comprobacion.
 
 Decisiones (T31): `app/api/decisiones.py` (opciones según abstención, reemplazo sin editar con la solicitud bloqueada, historial por la cadena de reemplazos, `GET /caso/contadores` con decisiones vigentes por tipo y uso mínimo por hito), consultas en `RepositorioDecisiones` y `RepositorioSolicitudes.entregadas_por_hito`; en la interfaz, `frontend/src/componentes/Decision.tsx` bajo cada resultado entregado y "Su uso del sistema" en el panel.
 
+Aportes (T32): `app/aportes/` (`existencia.py` por DOI o metadatos, `coherencia.py` con instrucción `coherencia/v1`, `servicio.py` con `ServicioAportes`: duplicado, texto del PDF o del resumen segmentado por oraciones, cita sin modelo, indexación y nueva búsqueda enlazada), `RepositorioColeccionPersonal` (la colección siempre la del caso del contexto), ruta `POST /caso/solicitudes/{id}/aporte` en `app/api/aportes.py` (migración 0023), formulario `frontend/src/componentes/Aporte.tsx` desde la decisión en Evidencia. Las fuentes aportadas no pasan por la comprobación 5 (RN-14). En pruebas, `pruebas/dobles_aportes.py`.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

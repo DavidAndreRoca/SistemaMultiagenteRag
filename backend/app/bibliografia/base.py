@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+import re
 from collections.abc import Awaitable, Callable
 from typing import Any
 from urllib.parse import quote
@@ -25,6 +27,15 @@ def texto(valor: object) -> str | None:
         return None
     limpio = " ".join(str(valor).split())
     return limpio or None
+
+
+def texto_plano(valor: object, maximo: int = 6000) -> str | None:
+    """Texto sin marcas (el resumen JATS de Crossref trae etiquetas y entidades)."""
+    if not isinstance(valor, str):
+        return None
+    sin_marcas = html.unescape(re.sub(r"<[^>]+>", " ", valor))
+    limpio = " ".join(sin_marcas.split())
+    return limpio[:maximo] or None
 
 
 def anio_de_partes(fecha: object) -> int | None:

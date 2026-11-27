@@ -71,16 +71,19 @@ describe("decisión sobre un resultado", () => {
     expect(screen.getByText("Decisiones anteriores (1)")).toBeVisible();
   });
 
-  it("tras una abstención ofrece continuar y deja aportar como pendiente", async () => {
-    simular([
+  it("tras una abstención ofrece continuar y aportar, que abre el formulario", async () => {
+    const pedidos = simular([
       { solicitud_id: SOLICITUD, opciones: ["continuar", "aportar"], vigente: null, historial: [] },
     ]);
-    render(<DecisionSobreResultado solicitud={SOLICITUD} />);
+    const alAportar = vi.fn();
+    const usuario = userEvent.setup();
+    render(<DecisionSobreResultado solicitud={SOLICITUD} alAportar={alAportar} />);
     expect(
       await screen.findByRole("button", { name: "Continuar sin aportar una fuente" }),
     ).toBeEnabled();
-    expect(screen.getByRole("button", { name: "Aportar una fuente" })).toBeDisabled();
-    expect(screen.getByText("Pendiente")).toBeVisible();
+    await usuario.click(screen.getByRole("button", { name: "Aportar una fuente" }));
+    expect(alAportar).toHaveBeenCalledOnce();
+    expect(pedidos).toEqual([]); // el aporte registra la decisión, no este botón
     expect(screen.queryByRole("button", { name: "La acepto" })).toBeNull();
   });
 

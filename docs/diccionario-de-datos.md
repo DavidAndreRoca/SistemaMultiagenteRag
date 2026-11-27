@@ -292,7 +292,7 @@ Tabla con datos de caso: toda consulta filtra por `caso_id` (4.5).
 | Columna | Tipo | Nulo | Valores permitidos | Claves | Descripción | Alimenta |
 | --- | --- | --- | --- | --- | --- | --- |
 | `id` | uuid | no |  | PK | Identificador interno (UUID). |  |
-| `caso_id` | uuid | no |  | FK caso.id; FK compuesta (solicitud_id, caso_id) a solicitud | Caso dueño (filtro obligatorio de aislamiento). |  |
+| `caso_id` | uuid | no |  | FK caso.id; FK compuesta (solicitud_id, caso_id) a solicitud; FK compuesta (solicitud_recuperacion_id, caso_id) a solicitud | Caso dueño (filtro obligatorio de aislamiento). |  |
 | `solicitud_id` | uuid | no |  | FK compuesta (solicitud_id, caso_id) a solicitud | Solicitud con abstención que motivó el aporte. | M1 (lo resuelto solo tras un aporte cuenta como no cubierto; se reporta aparte) |
 | `datos_bibliograficos` | jsonb | no |  |  | Título, autores de la obra y año declarados por el caso. |  |
 | `doi` | varchar(255) | sí |  |  | DOI declarado. |  |
@@ -300,6 +300,10 @@ Tabla con datos de caso: toda consulta filtra por `caso_id` (4.5).
 | `metodo_existencia` | texto (enumeración) | sí | `doi`, `metadatos` |  | doi o metadatos. |  |
 | `coherencia` | texto (enumeración) | no | `coherente`, `parcial`, `no_coherente`, `no_evaluada` |  | Coherencia con la afirmación (informativa). |  |
 | `documento_id` | uuid | sí |  | FK documento.id | Documento indexado en la colección personal, si existe. |  |
+| `indexacion` | texto (enumeración) | no | `indexada`, `ya_indexada`, `no_indexada` |  | indexada, ya_indexada (no se duplica, CP-17) o no_indexada. |  |
+| `motivo_indexacion` | varchar(80) | sí |  |  | Por qué no se indexó: existencia no confirmada, sin texto, PDF excluido o servicio no disponible. |  |
+| `cita_propuesta` | text | sí |  |  | Cita en la norma del caso, del registro del DOI o del formateador CSL (RN-17: nunca de un modelo). |  |
+| `solicitud_recuperacion_id` | uuid | sí |  | FK compuesta (solicitud_recuperacion_id, caso_id) a solicitud | Nueva búsqueda de evidencia con la misma consulta, lanzada tras indexar. |  |
 | `aportada_en` | timestamp with time zone | no |  |  | Fecha y hora del aporte. |  |
 
 ## `importacion_referencias`

@@ -33,6 +33,20 @@ def _dic(valor: object) -> dict[str, Any]:
     return valor if isinstance(valor, dict) else {}
 
 
+def resumen_openalex(indice: object, maximo: int = 6000) -> str | None:
+    """Resumen a partir del índice invertido de OpenAlex (palabra: posiciones)."""
+    if not isinstance(indice, dict) or not indice:
+        return None
+    posiciones: dict[int, str] = {}
+    for palabra, lugares in indice.items():
+        if isinstance(palabra, str) and isinstance(lugares, list):
+            for lugar in lugares:
+                if isinstance(lugar, int):
+                    posiciones[lugar] = palabra
+    texto_completo = " ".join(posiciones[i] for i in sorted(posiciones))
+    return texto_completo[:maximo] or None
+
+
 def metadatos_openalex(obra: dict[str, Any]) -> MetadatosBibliograficos:
     autores = [
         Autor(nombre_completo=texto(_dic(a.get("author")).get("display_name")))
@@ -54,6 +68,7 @@ def metadatos_openalex(obra: dict[str, Any]) -> MetadatosBibliograficos:
         numero=texto(biblio.get("issue")),
         paginas=paginas,
         tipo=texto(obra.get("type")),
+        resumen=resumen_openalex(obra.get("abstract_inverted_index")),
     )
 
 

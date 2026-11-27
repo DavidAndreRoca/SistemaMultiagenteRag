@@ -36,6 +36,7 @@ from app.bd.enumeraciones import (
     EstadoSolicitud,
     Etiqueta,
     ExistenciaFuente,
+    IndexacionAporte,
     MetodoComprobacionFuentes,
     MetodoExistencia,
     OpcionDecision,
@@ -432,6 +433,10 @@ class FuenteAportada(Base):
         ForeignKeyConstraint(
             ["solicitud_id", "caso_id"], ["solicitud.id", "solicitud.caso_id"], ondelete="CASCADE"
         ),
+        ForeignKeyConstraint(
+            ["solicitud_recuperacion_id", "caso_id"],
+            ["solicitud.id", "solicitud.caso_id"],
+        ),
         {"comment": "Fuente aportada por el caso tras una abstención (RF-13)."},
     )
 
@@ -467,5 +472,28 @@ class FuenteAportada(Base):
         ForeignKey("documento.id", ondelete="SET NULL"),
         nullable=True,
         comentario="Documento indexado en la colección personal, si existe.",
+    )
+    indexacion: Mapped[IndexacionAporte] = col(
+        enumeracion(IndexacionAporte, "indexacion_aporte"),
+        default=IndexacionAporte.NO_INDEXADA,
+        server_default=IndexacionAporte.NO_INDEXADA.value,
+        comentario="indexada, ya_indexada (no se duplica, CP-17) o no_indexada.",
+    )
+    motivo_indexacion: Mapped[str | None] = col(
+        String(80),
+        nullable=True,
+        comentario="Por qué no se indexó: existencia no confirmada, sin texto, PDF excluido o"
+        " servicio no disponible.",
+    )
+    cita_propuesta: Mapped[str | None] = col(
+        Text,
+        nullable=True,
+        comentario="Cita en la norma del caso, del registro del DOI o del formateador CSL"
+        " (RN-17: nunca de un modelo).",
+    )
+    solicitud_recuperacion_id: Mapped[uuid.UUID | None] = col(
+        UUID(as_uuid=True),
+        nullable=True,
+        comentario="Nueva búsqueda de evidencia con la misma consulta, lanzada tras indexar.",
     )
     aportada_en: Mapped[datetime] = momento("Fecha y hora del aporte.")

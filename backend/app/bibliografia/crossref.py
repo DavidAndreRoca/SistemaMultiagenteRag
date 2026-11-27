@@ -9,7 +9,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.bibliografia.base import ClienteBase, anio_de_partes, autores_csl, doi_en_ruta, texto
+from app.bibliografia.base import (
+    ClienteBase,
+    anio_de_partes,
+    autores_csl,
+    doi_en_ruta,
+    texto,
+    texto_plano,
+)
 from app.bibliografia.cache import Cache
 from app.bibliografia.http import ClienteHttp, FallaDeServicio, json_de
 from app.bibliografia.limitador import CubetaDeFichas
@@ -48,6 +55,7 @@ def metadatos_crossref(item: dict[str, Any]) -> MetadatosBibliograficos:
         paginas=texto(item.get("page")),
         editorial=texto(item.get("publisher")),
         tipo=texto(item.get("type")),
+        resumen=texto_plano(item.get("abstract")),
     )
 
 

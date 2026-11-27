@@ -113,8 +113,14 @@ def _vista(decision: Decision) -> DecisionVista:
     )
 
 
-def opciones_para(resultado: Resultado) -> tuple[OpcionDecision, ...]:
-    return TRAS_ABSTENCION if resultado.abstencion else SOBRE_PROPUESTA
+def opciones_para(solicitud: Solicitud, resultado: Resultado) -> tuple[OpcionDecision, ...]:
+    """Tras una abstención, aportar una fuente solo sirve a la búsqueda de evidencia: la
+    colección personal la recupera solo D4 (T32). Las otras abstenciones, continuar."""
+    if not resultado.abstencion:
+        return SOBRE_PROPUESTA
+    if solicitud.tipo is TipoSolicitud.BUSQUEDA_EVIDENCIA:
+        return TRAS_ABSTENCION
+    return (OpcionDecision.CONTINUAR,)
 
 
 async def _resultado_final(
@@ -157,14 +163,14 @@ def _vigente(decisiones: list[Decision]) -> Decision | None:
 async def ver_decision(
     solicitud_id: uuid.UUID, contexto: ContextoCaso, unidad: Unidad
 ) -> VistaDecision:
-    _, resultado = await _resultado_final(unidad, contexto, solicitud_id)
+    solicitud, resultado = await _resultado_final(unidad, contexto, solicitud_id)
     if resultado is None:
         return VistaDecision(solicitud_id=solicitud_id, opciones=[], vigente=None, historial=[])
     decisiones = en_orden(list(await unidad.decisiones.de_resultado(contexto, resultado.id)))
     vigente = decisiones[-1] if decisiones else None
     return VistaDecision(
         solicitud_id=solicitud_id,
-        opciones=list(opciones_para(resultado)),
+        opciones=list(opciones_para(solicitud, resultado)),
         vigente=_vista(vigente) if vigente else None,
         historial=[_vista(d) for d in decisiones],
     )
@@ -187,7 +193,7 @@ async def decidir(
     solicitud, resultado = await _resultado_final(unidad, contexto, solicitud_id, bloquear=True)
     if resultado is None:
         raise SinResultadoQueDecidir()
-    admitidas = opciones_para(resultado)
+    admitidas = opciones_para(solicitud, resultado)
     if pedido.opcion not in admitidas:
         raise OpcionNoAdmitida(admitidas)
     vigente = _vigente(list(await unidad.decisiones.de_resultado(contexto, resultado.id)))

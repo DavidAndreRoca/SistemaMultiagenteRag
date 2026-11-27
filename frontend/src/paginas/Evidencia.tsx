@@ -8,6 +8,7 @@ import { Form } from "react-aria-components";
 
 import { api, errorDeValidacion, exigir, type Esquemas } from "../api/cliente";
 import { AvisoError, Boton, CampoTextoLargo } from "../componentes/controles";
+import { AporteDeFuente } from "../componentes/Aporte";
 import { DecisionSobreResultado } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { AvanceSolicitud, NoAtendida, Verificada } from "../componentes/Seguimiento";
@@ -48,6 +49,9 @@ export function Evidencia() {
   const [parametros, setParametros] = useSearchParams();
   const [solicitud, setSolicitud] = useState<string | null>(parametros.get("solicitud"));
   const [enviando, setEnviando] = useState(false);
+  // Aporte de una fuente tras una abstención (T32): el formulario se abre desde la decisión.
+  const [aportando, setAportando] = useState(false);
+  const [aportes, setAportes] = useState(0);
 
   const siguiendo = solicitud !== null && (vista === null || EN_CURSO.has(vista.estado));
 
@@ -79,6 +83,7 @@ export function Evidencia() {
   }, [solicitud, siguiendo, vista]);
 
   function seguir(nueva: string) {
+    setAportando(false);
     setVista(null);
     setSolicitud(nueva);
     setParametros({ solicitud: nueva }, { replace: true });
@@ -86,6 +91,7 @@ export function Evidencia() {
 
   async function enviar() {
     setError(null);
+    setAportando(false);
     setVista(null);
     setSolicitud(null);
     if (consulta.trim() === "") {
@@ -148,7 +154,28 @@ export function Evidencia() {
         <Resultado vista={vista} alReenviar={seguir} />
       ) : null}
       {vista?.estado === "entregada" && solicitud !== null ? (
-        <DecisionSobreResultado key={solicitud} solicitud={solicitud} />
+        <DecisionSobreResultado
+          key={`${solicitud}-${String(aportes)}`}
+          solicitud={solicitud}
+          alAportar={
+            vista.abstencion
+              ? () => {
+                  setAportando(true);
+                }
+              : undefined
+          }
+        />
+      ) : null}
+      {vista?.estado === "entregada" && vista.abstencion && solicitud !== null ? (
+        <AporteDeFuente
+          key={solicitud}
+          solicitud={solicitud}
+          abierto={aportando}
+          alAportado={() => {
+            setAportes((n) => n + 1);
+          }}
+          alNuevaBusqueda={seguir}
+        />
       ) : null}
     </Marco>
   );

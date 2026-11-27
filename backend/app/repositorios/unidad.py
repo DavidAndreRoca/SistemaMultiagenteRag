@@ -23,6 +23,7 @@ from app.repositorios.caso import (
     RepositorioVersiones,
 )
 from app.repositorios.cola import RepositorioCola
+from app.repositorios.coleccion_personal import RepositorioColeccionPersonal
 from app.repositorios.colecciones import RepositorioColecciones
 from app.repositorios.corpus import RepositorioCorpus
 from app.repositorios.importacion import RepositorioImportacion
@@ -59,6 +60,7 @@ class UnidadDeTrabajo:
         self.verificaciones = RepositorioVerificaciones(sesion)
         self.decisiones = RepositorioDecisiones(sesion)
         self.fuentes_aportadas = RepositorioFuentesAportadas(sesion)
+        self.coleccion_personal = RepositorioColeccionPersonal(sesion)
         self.colecciones = RepositorioColecciones(sesion)
         self.recuperacion = RepositorioRecuperacion(sesion)
         # Investigador (A2)
