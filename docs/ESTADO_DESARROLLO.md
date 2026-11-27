@@ -2165,3 +2165,33 @@ Rama `t32-aporte-fuentes`. Decisión: `docs/decisiones/T32-aporte-de-fuentes.md`
   - usar la consulta original como afirmación;
   - los textos de la interfaz;
   - no guardar la explicación de la coherencia.
+
+**Integración de T32:** solicitud de cambio DavidAndreRoca/SistemaMultiagenteRag#28, CI verde (ejecución 46071302988, 9 de 9 trabajos), integrada en `main`.
+
+## 34. Bloque 3: T33 (historial, evidencias y panel completo)
+
+Rama `t33-historial-panel`. Decisión: `docs/decisiones/T33-historial-y-panel.md`. Cierre ligero, según las reglas del equipo del 26 de noviembre de 2026.
+
+- **Historial** (`GET /caso/historial`):
+  - versiones, solicitudes, resultados con etiqueta, decisiones (con las reemplazadas) y fuentes aportadas, en orden cronológico;
+  - filtros por hito y por periodo, en fechas de Lima;
+  - pantalla `/panel/historial` con enlace al detalle de cada resultado.
+- **Resumen para la declaración de herramientas** (`GET /caso/historial/resumen`, texto plano descargable):
+  - caso, periodo, modelos usados, solicitudes por tipo, decisiones vigentes y detalle cronológico;
+  - sin el texto del borrador ni las salidas.
+- **Evidencias (RF-21):** cada cita muestra también autores, año y DOI del documento y, si es una fuente propia, los datos que aportó el caso.
+- **Panel (RF-19):** etiqueta de cada solicitud reciente, guía de cada tipo con ejemplos y enlace al historial.
+- **Pruebas:**
+  - 4 de integración: CP-20 con dos casos, filtros, resumen y etiquetas del panel. CP-14 también comprueba los datos de la cita de una fuente aportada;
+  - 3 de la interfaz;
+  - extremo a extremo con la accesibilidad del historial y el historial vacío del caso B;
+  - backend 956, frontend 50 y extremo a extremo 12 de 12.
+- **Prototipo (DEMO-01, datos reales del desarrollo):**
+  - el historial muestra la trayectoria de los dos días;
+  - el resumen se descargó con 24 solicitudes, el modelo usado (gpt-oss-120b de Groq) y las decisiones vigentes;
+  - la cita de la fuente aportada en T32 muestra sus datos.
+- **Provisional, sin revisión humana:**
+  - el contenido y la redacción del resumen;
+  - los ejemplos de la guía;
+  - las fechas del filtro como texto AAAA-MM-DD;
+  - incluir en el historial las solicitudes no admitidas.

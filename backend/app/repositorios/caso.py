@@ -9,7 +9,13 @@ from sqlalchemy import delete, exists, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, undefer
 
-from app.bd.enumeraciones import EstadoSolicitud, OpcionDecision, TipoColeccion, TipoSolicitud
+from app.bd.enumeraciones import (
+    EstadoSolicitud,
+    Etiqueta,
+    OpcionDecision,
+    TipoColeccion,
+    TipoSolicitud,
+)
 from app.bd.modelos import (
     Caso,
     Coleccion,
@@ -226,6 +232,22 @@ class RepositorioResultados(RepositorioDeCaso[Resultado]):
         encontrado: Resultado | None = resultado.scalar_one_or_none()
         return encontrado
 
+    async def etiquetas_finales(
+        self, contexto: ContextoAcceso, solicitudes: Sequence[uuid.UUID]
+    ) -> dict[uuid.UUID, Etiqueta | None]:
+        """La etiqueta del último intento de cada solicitud del caso (T33), sin la salida."""
+        if not solicitudes:
+            return {}
+        filas = await self._sesion.execute(
+            select(Resultado.solicitud_id, Resultado.intento, Resultado.etiqueta)
+            .where(
+                Resultado.caso_id == contexto.caso_exigido(),
+                Resultado.solicitud_id.in_(list(solicitudes)),
+            )
+            .order_by(Resultado.solicitud_id, Resultado.intento)
+        )
+        return {solicitud_id: etiqueta for solicitud_id, _, etiqueta in filas.all()}
+
 
 class RepositorioVerificaciones(RepositorioDeCaso[Verificacion]):
     modelo = Verificacion
@@ -280,6 +302,20 @@ class RepositorioFuentesAportadas(RepositorioDeCaso[FuenteAportada]):
             .order_by(FuenteAportada.aportada_en, FuenteAportada.id)
         )
         return resultado.all()
+
+    async def por_documentos(
+        self, contexto: ContextoAcceso, documentos: Sequence[uuid.UUID]
+    ) -> dict[uuid.UUID, FuenteAportada]:
+        """El primer aporte del caso que llevó a cada documento de su colección personal
+        (T33: la cita de una fuente propia muestra los datos que aportó)."""
+        if not documentos:
+            return {}
+        resultado = await self._sesion.scalars(
+            self._consulta(contexto)
+            .where(FuenteAportada.documento_id.in_(list(documentos)))
+            .order_by(FuenteAportada.aportada_en.desc())
+        )
+        return {a.documento_id: a for a in resultado.all() if a.documento_id is not None}
 
 
 class RepositorioCasoPropio:

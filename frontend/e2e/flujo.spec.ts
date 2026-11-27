@@ -244,11 +244,37 @@ test("un caso abre el plan de tarea con el hito de su versión (T24)", async ({ 
   await salir(page);
 });
 
+test("un caso abre su historial y el resumen para la declaración (T33)", async ({
+  page,
+}, info) => {
+  const caso = credenciales.get(CASO_A);
+  if (!caso) throw new Error("El caso A no se registró");
+  await entrar(page, caso.cuenta, CONTRASENA_NUEVA);
+  // Guía de cada tipo con ejemplos en el panel (RF-19).
+  await page.getByText("Ejemplos de Redacción").click();
+  await expect(page.getByText(/lenguaje coloquial/)).toBeVisible();
+  await page.getByRole("link", { name: "Ver su historial completo" }).click();
+  await expect(page.getByRole("heading", { name: "Historial del caso" })).toBeVisible();
+  const tabla = page.getByRole("table", { name: /Historial del caso/ });
+  await expect(tabla.getByRole("row", { name: /Cargó una versión/ })).toHaveCount(1);
+  await revisarAccesibilidad(page, "historial del caso", info);
+  const enlace = page.getByRole("link", { name: /Descargar el resumen/ });
+  const respuesta = await page.request.get((await enlace.getAttribute("href")) ?? "");
+  expect(respuesta.ok()).toBe(true);
+  expect(await respuesta.text()).toContain("RESUMEN DE USO DEL SISTEMA");
+  await salir(page);
+});
+
 test("un caso no ve las versiones de otro", async ({ page }) => {
   const caso = credenciales.get(CASO_B);
   if (!caso) throw new Error("El caso B no se registró");
   await entrar(page, caso.cuenta, caso.contrasena);
   await cambiarContrasena(page, caso.contrasena);
+  await expect(page.getByRole("heading", { name: "Panel del caso" })).toBeVisible();
+  // Su historial solo tiene lo suyo: ninguna versión todavía (CP-20).
+  await page.goto("/panel/historial");
+  await expect(page.getByText("No hay registros con este filtro.")).toBeVisible();
+  await page.goto("/panel");
   await expect(page.getByRole("heading", { name: "Panel del caso" })).toBeVisible();
   await expect(page.getByText(CASO_B, { exact: true })).toBeVisible();
   await expect(page.getByText(/Aún no ha cargado ninguna versión/)).toBeVisible();

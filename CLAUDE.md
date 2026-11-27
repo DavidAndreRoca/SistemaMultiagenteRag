@@ -113,6 +113,8 @@ Decisiones (T31): `app/api/decisiones.py` (opciones según abstención, reemplaz
 
 Aportes (T32): `app/aportes/` (`existencia.py` por DOI o metadatos, `coherencia.py` con instrucción `coherencia/v1`, `servicio.py` con `ServicioAportes`: duplicado, texto del PDF o del resumen segmentado por oraciones, cita sin modelo, indexación y nueva búsqueda enlazada), `RepositorioColeccionPersonal` (la colección siempre la del caso del contexto), ruta `POST /caso/solicitudes/{id}/aporte` en `app/api/aportes.py` (migración 0023), formulario `frontend/src/componentes/Aporte.tsx` desde la decisión en Evidencia. Las fuentes aportadas no pasan por la comprobación 5 (RN-14). En pruebas, `pruebas/dobles_aportes.py`.
 
+Historial (T33): `app/registro/historial.py` (`armar_historial` y `resumen_para_declaracion`, sin base), rutas `GET /caso/historial` y `/caso/historial/resumen` en `app/api/historial.py` (filtros por hito y fechas de Lima), pantalla `frontend/src/paginas/Historial.tsx`. El panel muestra la etiqueta de cada solicitud (`RepositorioResultados.etiquetas_finales`) y la guía de cada tipo con ejemplos; las citas de evidencia muestran el documento y, si es una fuente propia, lo que aportó el caso.
+
 ## Estructura
 
 Ver `docs/HOJA-DE-RUTA-TECNICA-DESARROLLO.md`, apartado 4.1. Las carpetas se crean en la fase que las usa.

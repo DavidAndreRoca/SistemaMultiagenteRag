@@ -14,6 +14,7 @@ import {
 import { TEXTOS_OPCION } from "../componentes/Decision";
 import { Marco } from "../componentes/Marco";
 import { fechaHora, numero, tamano } from "../formato";
+import { ETIQUETAS, NOMBRES_PEDIDO, PANTALLAS } from "../solicitudes";
 
 type Caso = Esquemas["CasoPropio"];
 type Version = Esquemas["VersionResumen"];
@@ -284,23 +285,6 @@ function ListaDeVersiones({ versiones }: { versiones: Version[] }) {
   );
 }
 
-const PANTALLAS: Record<string, string> = {
-  busqueda_evidencia: "/panel/evidencia",
-  verificacion_referencias: "/panel/referencias",
-  revision_estructura: "/panel/estructura",
-  propuesta_redaccion: "/panel/redaccion",
-  revision_metodologica: "/panel/metodologia",
-  plan_tarea: "/panel/plan",
-};
-const NOMBRES_PEDIDO: Record<string, string> = {
-  busqueda_evidencia: "Búsqueda de evidencia",
-  verificacion_referencias: "Verificación de referencias",
-  revision_estructura: "Revisión de estructura y coherencia",
-  propuesta_redaccion: "Propuesta de redacción",
-  revision_metodologica: "Revisión metodológica",
-  plan_tarea: "Plan de tarea",
-};
-
 const ESTADOS_SOLICITUD: Record<string, string> = {
   recibida: "En curso",
   asignada: "En curso",
@@ -312,11 +296,15 @@ const ESTADOS_SOLICITUD: Record<string, string> = {
   no_atendida: "No atendida",
 };
 
-/** Búsquedas de evidencia y verificaciones de referencias, para volver a abrir su resultado. */
+/** Solicitudes recientes con su etiqueta (RF-19), para volver a abrir su resultado. */
 function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }) {
   return (
     <section aria-labelledby="titulo-solicitudes">
       <h2 id="titulo-solicitudes">Sus solicitudes</h2>
+      <p>
+        <a href="/panel/historial">Ver su historial completo</a> y descargar un resumen para su
+        declaración de herramientas.
+      </p>
       {solicitudes.length === 0 ? (
         <p className="vacio">Todavía no hizo ninguna solicitud.</p>
       ) : (
@@ -327,6 +315,7 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
               <th scope="col">Pedido</th>
               <th scope="col">Fecha y hora</th>
               <th scope="col">Estado</th>
+              <th scope="col">Etiqueta</th>
               <th scope="col">Resultado</th>
             </tr>
           </thead>
@@ -346,6 +335,15 @@ function ListaDeSolicitudes({ solicitudes }: { solicitudes: SolicitudResumen[] }
                     <span className={`insignia insignia--${solicitud.estado}`}>
                       {ESTADOS_SOLICITUD[solicitud.estado] ?? solicitud.estado}
                     </span>
+                  </td>
+                  <td>
+                    {solicitud.etiqueta ? (
+                      <span className={`insignia ${ETIQUETAS[solicitud.etiqueta]?.clase ?? ""}`}>
+                        {ETIQUETAS[solicitud.etiqueta]?.texto ?? solicitud.etiqueta}
+                      </span>
+                    ) : (
+                      <span className="oculto">Sin etiqueta</span>
+                    )}
                   </td>
                   <td>
                     <a href={`${pantalla}?solicitud=${solicitud.id}`}>
@@ -438,6 +436,7 @@ function UsoDelSistema({ contadores }: { contadores: Contadores }) {
 interface Accion {
   titulo: string;
   descripcion: string;
+  ejemplos: string[]; // guía breve de cada tipo (RF-19)
   enlace?: { href: string; texto: string };
 }
 
@@ -446,31 +445,50 @@ interface Accion {
 const ACCIONES: Accion[] = [
   {
     titulo: "Evidencia",
+    ejemplos: [
+      '"El aprendizaje entre pares mejora la escritura académica en primer año."',
+      '"¿Qué riesgos para la integridad académica reportan los estudios sobre ChatGPT?"',
+    ],
     descripcion: "Respalde una afirmación o responda una pregunta con fragmentos citados.",
     enlace: { href: "/panel/evidencia", texto: "Buscar evidencia en las fuentes de su tema" },
   },
   {
     titulo: "Referencias",
+    ejemplos: [
+      "Cargue la versión con su lista de referencias y pida la verificación: verá cada referencia como verificada, con discrepancias, no localizada o no comprobable.",
+    ],
     descripcion: "Compruebe cada referencia en las bases bibliográficas y cruce sus citas.",
     enlace: { href: "/panel/referencias", texto: "Verificar las referencias de su borrador" },
   },
   {
     titulo: "Estructura y coherencia",
+    ejemplos: [
+      'Elija la sección "Introducción" para saber si presenta el problema, el vacío y el objetivo.',
+    ],
     descripcion: "Diagnóstico de una sección según las guías del programa.",
     enlace: { href: "/panel/estructura", texto: "Revisar la estructura de una sección" },
   },
   {
     titulo: "Metodología",
+    ejemplos: [
+      'Elija la sección "Método" para revisar si el diseño, la muestra y el análisis concuerdan con el objetivo.',
+    ],
     descripcion: "Diagnóstico del diseño, la muestra y el análisis.",
     enlace: { href: "/panel/metodologia", texto: "Revisar la metodología de una sección" },
   },
   {
     titulo: "Redacción",
+    ejemplos: [
+      "Elija un párrafo con lenguaje coloquial para recibir una versión formal que conserva sus ideas.",
+    ],
     descripcion: "Propuesta acotada para un párrafo, con cada cambio justificado.",
     enlace: { href: "/panel/redaccion", texto: "Proponer una redacción para un párrafo" },
   },
   {
     titulo: "Plan de tarea",
+    ejemplos: [
+      "Elija el hito que está trabajando para recibir las tareas ordenadas con su criterio de logro.",
+    ],
     descripcion: "Tareas ordenadas para el hito, cada una con su criterio de logro.",
     enlace: { href: "/panel/plan", texto: "Preparar el plan de tarea del hito" },
   },
@@ -485,6 +503,16 @@ function Acciones() {
           <li key={accion.titulo} className={accion.enlace ? "accion" : "accion accion--pendiente"}>
             <h3>{accion.titulo}</h3>
             <p>{accion.descripcion}</p>
+            <details className="accion__ejemplos">
+              <summary>
+                Ejemplos<span className="oculto">{` de ${accion.titulo}`}</span>
+              </summary>
+              <ul>
+                {accion.ejemplos.map((ejemplo) => (
+                  <li key={ejemplo}>{ejemplo}</li>
+                ))}
+              </ul>
+            </details>
             {accion.enlace ? (
               <a className="accion__enlace" href={accion.enlace.href}>
                 {accion.enlace.texto}

@@ -75,6 +75,9 @@ MATRIZ: dict[tuple[str, str], Entrada] = {
         admite_propio=frozenset({404}),
     ),
     ("GET", "/caso/contadores"): Entrada(Politica.CASO, datos_de_caso=True),
+    # Historial y resumen para la declaración de herramientas (T33).
+    ("GET", "/caso/historial"): Entrada(Politica.CASO, datos_de_caso=True),
+    ("GET", "/caso/historial/resumen"): Entrada(Politica.CASO, datos_de_caso=True),
     # Aporte de fuentes (T32): la solicitud ficticia no existe; sin el formulario, 422.
     ("POST", "/caso/solicitudes/{solicitud_id}/aporte"): Entrada(
         Politica.CASO,

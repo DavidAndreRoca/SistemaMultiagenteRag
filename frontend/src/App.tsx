@@ -8,6 +8,7 @@ import { CambiarContrasena } from "./paginas/CambiarContrasena";
 import { Entrar } from "./paginas/Entrar";
 import { Estructura } from "./paginas/Estructura";
 import { Evidencia } from "./paginas/Evidencia";
+import { Historial } from "./paginas/Historial";
 import { ImportacionReferencias } from "./paginas/Importacion";
 import { Investigador } from "./paginas/Investigador";
 import { Metodologia } from "./paginas/Metodologia";
@@ -123,6 +124,14 @@ export function App() {
         element={
           <Protegida rol={ROL_CASO}>
             <Redaccion />
+          </Protegida>
+        }
+      />
+      <Route
+        path="/panel/historial"
+        element={
+          <Protegida rol={ROL_CASO}>
+            <Historial />
           </Protegida>
         }
       />
